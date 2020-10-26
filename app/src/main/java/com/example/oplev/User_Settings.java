@@ -24,7 +24,6 @@ public class User_Settings extends Fragment implements View.OnClickListener{
 
 
         getFragmentManager().beginTransaction().replace(R.id.mainFragmentBox, new User_Settings_Main(), "uSettingMainBox")
-                .addToBackStack(null)
                 .commit();
 
 
