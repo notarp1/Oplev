@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".createEvent3_frag">
+
+    <TextView
+        android:id="@+id/create3_congrat_txt"
+        android:layout_width="353dp"
+        android:layout_height="163dp"
+        android:gravity="center"
+        android:text="Tillykke dit opslag er tilføjet"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/create3_askfriends_txt"
+        android:layout_width="353dp"
+        android:layout_height="136dp"
+        android:layout_marginTop="28dp"
+        android:gravity="center"
+        android:text="Hør dine venner om de har lyst til at dele oplevelsen med dig"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/create3_congrat_txt" />
+
+    <TextView
+        android:id="@+id/create3_shareby_txt"
+        android:layout_width="340dp"
+        android:layout_height="52dp"
+        android:layout_marginTop="28dp"
+        android:gravity="center"
+        android:text="Fortæl dem om oplevelsen via:"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/create3_skip_btn" />
+
+    <Button
+        android:id="@+id/create3_skip_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="Spring over"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/create3_askfriends_txt" />
+
+    <ImageView
+        android:id="@+id/create3_fb_img"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        app:layout_constraintEnd_toStartOf="@+id/create3_fbmsg_img"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/create3_shareby_txt"
+        tools:src="@drawable/fb_icon" />
+
+    <ImageView
+        android:id="@+id/create3_fbmsg_img"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        app:layout_constraintBottom_toBottomOf="@+id/create3_fb_img"
+        app:layout_constraintEnd_toStartOf="@+id/create3_sms_img"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/create3_fb_img"
+        app:layout_constraintTop_toTopOf="@+id/create3_fb_img"
+        app:layout_constraintVertical_bias="0.0"
+        tools:src="@drawable/messenger_icon" />
+
+    <ImageView
+        android:id="@+id/create3_sms_img"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        app:layout_constraintBottom_toBottomOf="@+id/create3_fbmsg_img"
+        app:layout_constraintEnd_toStartOf="@+id/create3_email_img"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/create3_fbmsg_img"
+        app:layout_constraintTop_toTopOf="@+id/create3_fbmsg_img"
+        app:layout_constraintVertical_bias="0.0"
+        tools:src="@drawable/sms_icon" />
+
+    <ImageView
+        android:id="@+id/create3_email_img"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        app:layout_constraintBottom_toBottomOf="@+id/create3_sms_img"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/create3_sms_img"
+        app:layout_constraintTop_toTopOf="@+id/create3_sms_img"
+        app:layout_constraintVertical_bias="0.0"
+        tools:src="@drawable/email_icon" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
