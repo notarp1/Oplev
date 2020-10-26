@@ -24,7 +24,6 @@ public class User_Settings extends Fragment implements View.OnClickListener{
 
 
         getFragmentManager().beginTransaction().replace(R.id.mainFragmentBox, new User_Settings_Main(), "uSettingMainBox")
-                .addToBackStack(null)
                 .commit();
 
 
@@ -40,7 +39,6 @@ public class User_Settings extends Fragment implements View.OnClickListener{
     @Override
     public void onClick(View v) {
         if(v == back){
-
             getFragmentManager().popBackStack();
         }
 
