@@ -12,7 +12,11 @@ import androidx.fragment.app.Fragment;
 
 public class User_Settings extends Fragment implements View.OnClickListener{
     ImageView back;
-    TextView title;
+    static TextView title;
+
+    public  User_Settings (){
+
+    }
 
     public View onCreateView(LayoutInflater i, ViewGroup container, Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -29,14 +33,15 @@ public class User_Settings extends Fragment implements View.OnClickListener{
 
 
 
-
         return root;
 
 
     }
 
 
-
+    public static void changeTitle(String name){
+        title.setText(name);
+    }
     @Override
     public void onClick(View v) {
         if(v == back){

@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 public class Start_frag extends Fragment implements View.OnClickListener {
 
@@ -20,6 +21,7 @@ public class Start_frag extends Fragment implements View.OnClickListener {
         options = root.findViewById(R.id.options_btn);
         match = root.findViewById(R.id.match_btn);
         user = root.findViewById(R.id.user_btn);
+
 
         options.setOnClickListener(this);
         match.setOnClickListener(this);

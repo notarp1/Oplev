@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
 
@@ -21,6 +22,7 @@ public class User_Settings_Main extends Fragment implements View.OnClickListener
         visProfil = root.findViewById(R.id.box_profil);
         rediger = root.findViewById(R.id.box_rediger);
         indstillinger = root.findViewById(R.id.box_indstillinger);
+
 
 
         indstillinger.setOnClickListener(this);
