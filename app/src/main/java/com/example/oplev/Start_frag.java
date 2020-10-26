@@ -36,6 +36,11 @@ public class Start_frag extends Fragment implements View.OnClickListener {
         if(v == options){
 
         } else if(v == match){
+            System.out.println("hello there");
+            getFragmentManager().beginTransaction()
+                    .replace(R.id.main_frag, new Likeside_frag())
+                    .addToBackStack(null)
+                    .commit();
 
         } else if(v == user){
 
