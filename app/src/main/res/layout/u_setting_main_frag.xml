@@ -29,7 +29,7 @@
     <LinearLayout
         android:id="@+id/linearLayout"
         android:layout_width="match_parent"
-        android:layout_height="157dp"
+        android:layout_height="175dp"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -79,7 +79,7 @@
                 app:layout_constraintHorizontal_bias="1.0"
                 app:layout_constraintStart_toStartOf="@+id/box_menu5"
                 app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/arrowBlack" />
+                app:srcCompat="@drawable/arrowblack" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -123,14 +123,14 @@
                 app:layout_constraintHorizontal_bias="1.0"
                 app:layout_constraintStart_toStartOf="@+id/box_menu1"
                 app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/arrowBlack" />
+                app:srcCompat="@drawable/arrowblack" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/indstillinger"
             android:layout_width="match_parent"
-            android:layout_height="50dp">
+            android:layout_height="60dp">
 
             <ImageView
                 android:id="@+id/box_menu2"
@@ -167,7 +167,7 @@
                 app:layout_constraintStart_toStartOf="@id/box_menu2"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_bias="0.0"
-                app:srcCompat="@drawable/arrowBlack" />
+                app:srcCompat="@drawable/arrowblack" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
