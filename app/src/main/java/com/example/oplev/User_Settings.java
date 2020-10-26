@@ -13,6 +13,7 @@ import androidx.fragment.app.Fragment;
 public class User_Settings extends Fragment implements View.OnClickListener{
     ImageView back;
     TextView title;
+
     public View onCreateView(LayoutInflater i, ViewGroup container, Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         View root = i.inflate(R.layout.u_settings_frag, container, false);
@@ -39,10 +40,8 @@ public class User_Settings extends Fragment implements View.OnClickListener{
     @Override
     public void onClick(View v) {
         if(v == back){
-
             getFragmentManager().popBackStack();
         }
-
 
     }
 }
