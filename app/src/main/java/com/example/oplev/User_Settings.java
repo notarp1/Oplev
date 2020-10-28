@@ -12,7 +12,12 @@ import androidx.fragment.app.Fragment;
 
 public class User_Settings extends Fragment implements View.OnClickListener{
     ImageView back;
-    TextView title;
+    static TextView title;
+
+    public  User_Settings (){
+
+    }
+
     public View onCreateView(LayoutInflater i, ViewGroup container, Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         View root = i.inflate(R.layout.u_settings_frag, container, false);
@@ -24,9 +29,7 @@ public class User_Settings extends Fragment implements View.OnClickListener{
 
 
         getFragmentManager().beginTransaction().replace(R.id.mainFragmentBox, new User_Settings_Main(), "uSettingMainBox")
-                .addToBackStack(null)
                 .commit();
-
 
 
 
@@ -36,14 +39,14 @@ public class User_Settings extends Fragment implements View.OnClickListener{
     }
 
 
-
+    public static void changeTitle(String name){
+        title.setText(name);
+    }
     @Override
     public void onClick(View v) {
         if(v == back){
-
             getFragmentManager().popBackStack();
         }
-
 
     }
 }

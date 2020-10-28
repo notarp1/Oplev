@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/beskedListElement"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#EEEEEE">
+
+    <ImageView
+        android:id="@+id/beskeder_profilbillede1"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginTop="30dp"
+        tools:srcCompat="@tools:sample/avatars" />
+
+    <TextView
+        android:id="@+id/beskeder_overskrift"
+        android:layout_width="131dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="130dp"
+        android:layout_marginTop="45dp"
+        android:gravity="center"
+        android:text="Overskrift"
+        android:textColor="#000000"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/beskeder_antal_anmodninger"
+        android:layout_width="113dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="130dp"
+        android:layout_marginTop="70dp"
+        android:gravity="left"
+        android:text="Antal anmodninger"
+        android:textSize="9sp"
+
+        />
+
+    <TextView
+        android:id="@+id/beskeder_dato"
+        android:layout_width="113dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="300dp"
+        android:layout_marginTop="50dp"
+        android:gravity="right"
+        android:text="Dato"
+        android:textSize="9sp" />
+
+
+    <ImageView
+        android:id="@+id/beskeder_profilbillede2"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_marginLeft="135dp"
+        android:layout_marginTop="100dp"
+        tools:srcCompat="@tools:sample/avatars" />
+
+    <ImageView
+        android:id="@+id/beskeder_profilbillede3"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_marginLeft="150dp"
+        android:layout_marginTop="100dp"
+        tools:srcCompat="@tools:sample/avatars" />
+
+</RelativeLayout>
