@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#EEEEEE"
@@ -16,10 +17,12 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
         android:background="@drawable/top_bar"
-        app:layout_constraintBottom_toTopOf="@+id/frameLayout"
+        app:layout_constraintBottom_toBottomOf="@+id/likeside_frameLayout"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0">
 
         <ImageView
             android:id="@+id/topbar_arrow"
@@ -34,7 +37,7 @@
             app:srcCompat="@drawable/arrow" />
 
         <ImageView
-            android:id="@+id/imageView9"
+            android:id="@+id/likeside_hjertbillede"
             android:layout_width="27dp"
             android:layout_height="26dp"
             android:layout_marginStart="10dp"
@@ -48,7 +51,7 @@
             app:srcCompat="@drawable/heart" />
 
         <ImageView
-            android:id="@+id/imageView10"
+            android:id="@+id/likeside_beskedbillede"
             android:layout_width="42dp"
             android:layout_height="25dp"
             android:layout_marginStart="123dp"
@@ -58,7 +61,7 @@
             android:layout_marginBottom="3dp"
             android:background="#6CD9F4"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/imageView9"
+            app:layout_constraintEnd_toStartOf="@+id/likeside_hjertbillede"
             app:layout_constraintStart_toEndOf="@+id/topbar_arrow"
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/message" />
@@ -80,7 +83,7 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <FrameLayout
-        android:id="@+id/frameLayout"
+        android:id="@+id/likeside_frameLayout"
         android:layout_width="413dp"
         android:layout_height="691dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -93,4 +96,4 @@
             android:layout_height="match_parent" />
     </FrameLayout>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>
