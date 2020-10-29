@@ -27,6 +27,10 @@ public class Create_Button_frag extends Fragment implements View.OnClickListener
     public void onClick(View v) {
         if (v == opret){
             // do something
+            getFragmentManager().beginTransaction()
+                    .replace(R.id.main_frag, new createEvent1_frag())
+                    .addToBackStack(null)
+                    .commit();
         }
 
     }
