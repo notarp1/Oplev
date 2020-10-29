@@ -24,7 +24,6 @@ public class User_Settings_Main extends Fragment implements View.OnClickListener
         indstillinger = root.findViewById(R.id.box_indstillinger);
 
 
-
         indstillinger.setOnClickListener(this);
 
 
