@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 
@@ -14,10 +15,12 @@ import java.util.ArrayList;
 
 public class Likeside_frag extends Fragment implements View.OnClickListener{
     ImageView hjerte, besked, tilbage;
+    Button opret;
 
     public View onCreateView(LayoutInflater i, ViewGroup container, Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         View root = i.inflate(R.layout.likeside, container, false);
+        opret = root.findViewById(R.id.opretOpslag_Knap2);
 
         hjerte = root.findViewById(R.id.likeside_hjertbillede);
         besked = root.findViewById(R.id.likeside_beskedbillede);
@@ -29,6 +32,7 @@ public class Likeside_frag extends Fragment implements View.OnClickListener{
         hjerte.setOnClickListener(this);
         besked.setOnClickListener(this);
         tilbage.setOnClickListener(this);
+        opret.setOnClickListener(this);
 
 
 
@@ -51,6 +55,12 @@ public class Likeside_frag extends Fragment implements View.OnClickListener{
         }
         else if (v == tilbage){
             getFragmentManager().popBackStack();
+        }
+        else if(v == opret){
+            getFragmentManager().beginTransaction()
+                    .replace(R.id.main_frag, new createEvent1_frag())
+                    .addToBackStack(null)
+                    .commit();
         }
 
     }
