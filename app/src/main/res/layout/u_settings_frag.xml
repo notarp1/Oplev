@@ -11,11 +11,11 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/top_bar"
         android:layout_width="match_parent"
-        android:layout_height="60dp"
+        android:layout_height="65dp"
         android:layout_alignParentStart="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
-        android:background="@drawable/top_bar"
+        android:background="#0B124E"
         app:layout_constraintBottom_toTopOf="@+id/mainFragmentBox"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -51,12 +51,15 @@
     <FrameLayout
         android:id="@+id/mainFragmentBox"
         android:layout_width="match_parent"
-        android:layout_height="599dp"
+        android:layout_height="647dp"
+        android:layout_marginTop="1dp"
         android:background="#E5E5E5"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.4"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/top_bar" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
 
 
