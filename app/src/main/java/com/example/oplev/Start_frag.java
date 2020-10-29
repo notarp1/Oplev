@@ -7,7 +7,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 public class Start_frag extends Fragment implements View.OnClickListener {
 
@@ -29,13 +28,16 @@ public class Start_frag extends Fragment implements View.OnClickListener {
 
 
         return root;
-
-
     }
+
 
     @Override
     public void onClick(View v) {
         if(v == options){
+            getFragmentManager().beginTransaction()
+                    .replace(R.id.main_frag, new Search_filter_top_frag())
+                    .addToBackStack(null)
+                    .commit();
 
         } else if(v == match){
             System.out.println("hello there");
