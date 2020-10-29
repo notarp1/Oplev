@@ -59,7 +59,7 @@ public class createEvent1_frag extends Fragment implements View.OnClickListener 
             b.putString("date_in", date_in.getText().toString());
             b.putString("city_in", city_in.getText().toString());
             //set int (price)
-            b.putInt("price_in", Integer.parseInt(price_in.getText().toString()));
+            //b.putInt("price_in", Integer.parseInt(price_in.getText().toString()));
 
             //create fragment and add bundle to arguments
             Fragment create2_frag = new createEvent2_frag();
@@ -67,7 +67,7 @@ public class createEvent1_frag extends Fragment implements View.OnClickListener 
 
             //transaction to next
             getFragmentManager().beginTransaction()
-                    .replace(R.id.mainFragmentBox, create2_frag, "deleteme")
+                    .replace(R.id.main_frag, create2_frag, "deleteme")
                     .addToBackStack("deleteme")
                     .commit();
         }

@@ -57,10 +57,11 @@ public class createEvent2_frag extends Fragment implements View.OnClickListener 
 
             //remove last frag from backstack
             //(shouldnt be able to change event settings when "done" is pressed)
-            getFragmentManager().popBackStack();
+
+
             //transaction to final create frag
             getFragmentManager().beginTransaction()
-                    .replace(R.id.mainFragmentBox, new createEvent3_frag())
+                    .replace(R.id.main_frag, new createEvent3_frag())
                     .commit();
         }
     }
