@@ -26,6 +26,7 @@ public class User_Settings_Main extends Fragment implements View.OnClickListener
 
 
         indstillinger.setOnClickListener(this);
+        rediger.setOnClickListener(this);
 
 
         return root;
@@ -43,6 +44,11 @@ public class User_Settings_Main extends Fragment implements View.OnClickListener
                 .addToBackStack(null)
                 .commit();
 
-        }
+        } else if (v == rediger){
+             getFragmentManager().beginTransaction()
+                     .replace(R.id.mainFragmentBox, new User_Setting_Edit())
+                     .addToBackStack(null)
+                     .commit();
+         }
     }
 }
