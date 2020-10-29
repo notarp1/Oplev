@@ -51,13 +51,12 @@
         android:id="@+id/mainFragmentBox"
         android:layout_width="match_parent"
         android:layout_height="690dp"
+        android:background="#E5E5E5"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/top_bar">
-
-    </FrameLayout>
+        app:layout_constraintTop_toBottomOf="@+id/top_bar"/>
 </androidx.constraintlayout.widget.ConstraintLayout>
 
 
