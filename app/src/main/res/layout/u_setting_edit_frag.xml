@@ -32,27 +32,27 @@
                         android:id="@+id/rectangle_1"
                         android:layout_width="100dp"
                         android:layout_height="100dp"
-                        android:layout_gravity="center"
+                        android:layout_gravity="center|left"
                         android:layout_marginStart="16dp"
-                        android:layout_marginLeft="16dp"
+                        android:layout_marginLeft="0dp"
                         android:background="#DC923C" />
 
                     <View
                         android:id="@+id/rectangle_5"
                         android:layout_width="100dp"
                         android:layout_height="100dp"
-                        android:layout_gravity="center"
+                        android:layout_gravity="center|left"
                         android:layout_marginStart="16dp"
-                        android:layout_marginLeft="16dp"
+                        android:layout_marginLeft="0dp"
                         android:background="#2055A5" />
 
                     <View
                         android:id="@+id/rectangle_6"
                         android:layout_width="100dp"
                         android:layout_height="100dp"
-                        android:layout_gravity="center"
+                        android:layout_gravity="center|left"
                         android:layout_marginStart="16dp"
-                        android:layout_marginLeft="16dp"
+                        android:layout_marginLeft="0dp"
                         android:background="#DEE137" />
 
                 </TableRow>
@@ -66,27 +66,27 @@
                         android:id="@+id/rectangle_2"
                         android:layout_width="100dp"
                         android:layout_height="100dp"
-                        android:layout_gravity="center"
+                        android:layout_gravity="center|left"
                         android:layout_marginStart="16dp"
-                        android:layout_marginLeft="16dp"
+                        android:layout_marginLeft="0dp"
                         android:background="#2C7D3E" />
 
                     <View
                         android:id="@+id/rectangle_3"
                         android:layout_width="100dp"
                         android:layout_height="100dp"
-                        android:layout_gravity="center"
+                        android:layout_gravity="center|left"
                         android:layout_marginStart="16dp"
-                        android:layout_marginLeft="16dp"
+                        android:layout_marginLeft="0dp"
                         android:background="#B813BB" />
 
                     <View
                         android:id="@+id/rectangle_4"
                         android:layout_width="100dp"
                         android:layout_height="100dp"
-                        android:layout_gravity="center"
+                        android:layout_gravity="center|left"
                         android:layout_marginStart="16dp"
-                        android:layout_marginLeft="16dp"
+                        android:layout_marginLeft="0dp"
                         android:background="#BD2727" />
 
                 </TableRow>
