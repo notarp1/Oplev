@@ -9,7 +9,7 @@ import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
 
-public class User_Settings_Main extends Fragment implements View.OnClickListener {
+public class  User_Settings_Main extends Fragment implements View.OnClickListener {
 
     ImageView visProfil, rediger, indstillinger;
 

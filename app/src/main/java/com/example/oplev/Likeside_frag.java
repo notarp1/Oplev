@@ -13,7 +13,6 @@ import androidx.fragment.app.Fragment;
 import java.util.ArrayList;
 
 public class Likeside_frag extends Fragment implements View.OnClickListener{
-    ListView listView;
     ImageView hjerte, besked, tilbage;
 
     public View onCreateView(LayoutInflater i, ViewGroup container, Bundle savedInstanceState) {
@@ -24,19 +23,8 @@ public class Likeside_frag extends Fragment implements View.OnClickListener{
         besked = root.findViewById(R.id.likeside_beskedbillede);
         tilbage = root.findViewById(R.id.topbar_arrow);
 
-        String[] navne = {"John", "abc", "Bente", "AGE", "Yes", "whoDis?", "yubrakit yubotit"};
-        String[] dato = {"Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"};
-
-        ArrayAdapter adapter = new ArrayAdapter(getActivity(), R.layout.besked_liste_element, R.id.beskeder_overskrift, navne);
-
-        getFragmentManager().beginTransaction().replace(R.id.opretopslag_box, new Create_Button_frag())
-                //.addToBackStack(null)
+        getFragmentManager().beginTransaction().replace(R.id.likeside_frameLayout,new LikesideList_frag())
                 .commit();
-
-
-        listView = root.findViewById(R.id.beskedListView);
-        //listView.setOnItemClickListener(this);
-        listView.setAdapter(adapter);
 
         hjerte.setOnClickListener(this);
         besked.setOnClickListener(this);
@@ -52,13 +40,13 @@ public class Likeside_frag extends Fragment implements View.OnClickListener{
     @Override
     public void onClick(View v) {
         if (v == hjerte){
-            listView.setAdapter(null);
             getFragmentManager().beginTransaction().replace(R.id.likeside_frameLayout,new HjerteSide_frag())
                     .addToBackStack(null)
                     .commit();
         }
         else if (v == besked){
-            getFragmentManager().beginTransaction().replace(R.id.likeside_frameLayout,new Likeside_frag())
+            getFragmentManager().beginTransaction().replace(R.id.likeside_frameLayout,new LikesideList_frag())
+                    .addToBackStack(null)
                     .commit();
         }
         else if (v == tilbage){
