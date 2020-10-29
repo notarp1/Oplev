@@ -29,6 +29,11 @@ public class Likeside_frag extends Fragment implements View.OnClickListener{
 
         ArrayAdapter adapter = new ArrayAdapter(getActivity(), R.layout.besked_liste_element, R.id.beskeder_overskrift, navne);
 
+        getFragmentManager().beginTransaction().replace(R.id.opretopslag_box, new Create_Button_frag())
+                //.addToBackStack(null)
+                .commit();
+
+
         listView = root.findViewById(R.id.beskedListView);
         //listView.setOnItemClickListener(this);
         listView.setAdapter(adapter);
@@ -36,6 +41,9 @@ public class Likeside_frag extends Fragment implements View.OnClickListener{
         hjerte.setOnClickListener(this);
         besked.setOnClickListener(this);
         tilbage.setOnClickListener(this);
+
+
+
 
         return root;
     }
