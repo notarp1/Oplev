@@ -7,58 +7,69 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.TextView;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link createEvent1_frag#newInstance} factory method to
- * create an instance of this fragment.
- */
-public class createEvent1_frag extends Fragment {
-
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
-    public createEvent1_frag() {
-        // Required empty public constructor
-    }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment createEvent_frag.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static createEvent1_frag newInstance(String param1, String param2) {
-        createEvent1_frag fragment = new createEvent1_frag();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
-    }
+public class createEvent1_frag extends Fragment implements View.OnClickListener {
+    //topbar text
+    TextView topbar_txt;
+    //fragment elements
+    ImageView pic;
+    EditText title_in, desc_in, price_in, date_in, city_in;
+    TextView price_txt, date_txt, city_txt;
+    Button next_btn;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_create_event1_frag, container, false);
+        View root = inflater.inflate(R.layout.fragment_create_event1_frag, container, false);
+        //fix top bar text:
+        //topbar_txt = root.findViewById(R.id.topbar_text);
+        //topbar_txt.setText("Lav nyt opslag");
+
+        //get elements
+        pic = root.findViewById(R.id.create_pic);
+        title_in = root.findViewById(R.id.create_title_input);
+        desc_in = root.findViewById(R.id.create_desc_input);
+        price_in = root.findViewById(R.id.create_price_input);
+        date_in = root.findViewById(R.id.create_date_input);
+        city_in = root.findViewById(R.id.create__city_input);
+        next_btn = root.findViewById(R.id.create_next_btn);
+
+        //set onclick listeners
+        pic.setOnClickListener(this);
+        next_btn.setOnClickListener(this);
+
+
+        return root;
+    }
+
+    @Override
+    public void onClick(View v) {
+        if(v == pic){
+            //gør noget smart for at kunne udskifte billedet
+        }
+        else if(v == next_btn){
+            Bundle b = new Bundle();
+            //set strings
+            b.putString("title_in", title_in.getText().toString());
+            b.putString("desc_in", desc_in.getText().toString());
+            b.putString("date_in", date_in.getText().toString());
+            b.putString("city_in", city_in.getText().toString());
+            //set int (price)
+            b.putInt("price_in", Integer.parseInt(price_in.getText().toString()));
+
+            //create fragment and add bundle to arguments
+            Fragment create2_frag = new createEvent2_frag();
+            create2_frag.setArguments(b);
+
+            //transaction to next
+            getFragmentManager().beginTransaction()
+                    .replace(R.id.mainFragmentBox, create2_frag, "deleteme")
+                    .addToBackStack("deleteme")
+                    .commit();
+        }
     }
 }
