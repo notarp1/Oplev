@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/hjerteside_medhvem"
+            android:layout_width="206dp"
+            android:layout_height="21dp"
+            android:layout_marginTop="4dp"
+            android:text="Med mig :)"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.008"
+            app:layout_constraintStart_toEndOf="@+id/hjerteside_profilbillede"
+            app:layout_constraintTop_toBottomOf="@+id/hjertside_overskrift" />
+
+        <ImageView
+            android:id="@+id/hjerteside_profilbillede"
+            android:layout_width="69dp"
+            android:layout_height="68dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="24dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/user_icon" />
+
+        <TextView
+            android:id="@+id/hjertside_overskrift"
+            android:layout_width="206dp"
+            android:layout_height="36dp"
+            android:layout_marginTop="24dp"
+            android:text="Party Hard"
+            android:textSize="24sp"
+            app:layout_constraintEnd_toStartOf="@+id/hjerteside_bin"
+            app:layout_constraintHorizontal_bias="0.166"
+            app:layout_constraintStart_toEndOf="@+id/hjerteside_profilbillede"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/hjerteside_billede"
+            android:layout_width="413dp"
+            android:layout_height="296dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/hjerteside_medhvem"
+            app:layout_constraintVertical_bias="0.044"
+            tools:srcCompat="@tools:sample/backgrounds/scenic" />
+
+        <ImageView
+            android:id="@+id/hjerteside_bin"
+            android:layout_width="46dp"
+            android:layout_height="55dp"
+            android:layout_marginTop="15dp"
+            app:layout_constraintEnd_toStartOf="@+id/hjerteside_share"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/trashbin" />
+
+        <ImageView
+            android:id="@+id/hjerteside_share"
+            android:layout_width="46dp"
+            android:layout_height="55dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginRight="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/share" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</RelativeLayout>
