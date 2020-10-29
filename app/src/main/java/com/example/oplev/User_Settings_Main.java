@@ -22,10 +22,8 @@ public class User_Settings_Main extends Fragment implements View.OnClickListener
         visProfil = root.findViewById(R.id.box_profil);
         rediger = root.findViewById(R.id.box_rediger);
         indstillinger = root.findViewById(R.id.box_indstillinger);
-
-
-
         indstillinger.setOnClickListener(this);
+        visProfil.setOnClickListener(this);
 
 
         return root;
@@ -43,6 +41,11 @@ public class User_Settings_Main extends Fragment implements View.OnClickListener
                 .addToBackStack(null)
                 .commit();
 
-        }
+        }else if(v == visProfil){
+             getFragmentManager().beginTransaction()
+             .replace(R.id.mainFragmentBox, new User_settings_profile())
+                     .addToBackStack(null)
+                     .commit();
+         }
     }
 }
