@@ -7,58 +7,50 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.TextView;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link createEvent3_frag#newInstance} factory method to
- * create an instance of this fragment.
- */
-public class createEvent3_frag extends Fragment {
+import org.w3c.dom.Text;
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
-    public createEvent3_frag() {
-        // Required empty public constructor
-    }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment createEvent3_frag.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static createEvent3_frag newInstance(String param1, String param2) {
-        createEvent3_frag fragment = new createEvent3_frag();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
-    }
-
+public class createEvent3_frag extends Fragment implements View.OnClickListener {
+    TextView congrat_txt, askfriend_txt, shareby_txt;
+    Button done_btn;
+    ImageView fb_img, fbmsg_img, sms_img, email_img;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_create_event3_frag, container, false);
+
+        View root = inflater.inflate(R.layout.fragment_create_event3_frag, container, false);
+        done_btn = root.findViewById(R.id.create3_skip_btn);
+
+        fb_img = root.findViewById(R.id.create3_fb_img);
+        fbmsg_img = root.findViewById(R.id.create3_fbmsg_img);
+        sms_img = root.findViewById(R.id.create3_sms_img);
+        email_img = root.findViewById(R.id.create3_email_img);
+
+        fb_img.setOnClickListener(this);
+
+        return root;
+    }
+
+    @Override
+    public void onClick(View v) {
+        if(v == done_btn){
+            // go back to main fragment
+            getFragmentManager().popBackStack();
+        }
+        else if(v == fb_img){
+            //start sharing by facebook
+        }
+        else if(v==fbmsg_img){
+            //start sharing by messenger
+        }
+        else if(v == sms_img){
+            //start sharing by sms
+        }
+        else if(v == email_img){
+            //start sharing on email
+        }
     }
 }

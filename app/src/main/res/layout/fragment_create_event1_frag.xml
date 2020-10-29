@@ -7,7 +7,7 @@
     tools:context=".createEvent1_frag">
 
     <ImageView
-        android:id="@+id/imageView"
+        android:id="@+id/create_pic"
         android:layout_width="315dp"
         android:layout_height="155dp"
         android:layout_marginTop="36dp"
@@ -30,7 +30,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView" />
+        app:layout_constraintTop_toBottomOf="@+id/create_pic" />
 
     <EditText
         android:id="@+id/create_desc_input"
