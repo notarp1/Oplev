@@ -14,7 +14,7 @@ public class Search_filter_bottom_frag extends Fragment implements View.OnClickL
 
     public View onCreateView(LayoutInflater i, ViewGroup container, Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        View root = i.inflate(R.layout.search_filter_fragment, container, false);
+        View root = i.inflate(R.layout.search_filter_frag, container, false);
 
         return root;
     }

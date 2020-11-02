@@ -28,36 +28,46 @@
         app:srcCompat="@android:drawable/sym_def_app_icon" />
 
     <LinearLayout
-        android:id="@+id/noti_layout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:layout_marginBottom="24dp"
+        android:layout_height="200dp"
+        android:layout_marginBottom="32dp"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/u_profile_name"
-        app:layout_constraintVertical_bias="0.0">
+        app:layout_constraintVertical_bias="0.204">
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/visProfil"
             android:layout_width="match_parent"
-            android:layout_height="50dp">
+            android:layout_height="wrap_content">
 
-            <ImageView
+            <View
                 android:id="@+id/box_profil"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
+                android:background="#FFFFFF"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/arrow7"
+                android:layout_width="20dp"
+                android:layout_height="50dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginRight="16dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toStartOf="@+id/box_profil"
                 app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/menu_box" />
+                app:srcCompat="@drawable/arrowblack" />
 
             <TextView
-                android:id="@+id/beskeder_opt_text"
+                android:id="@+id/beskeder_opt_text3"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginStart="16dp"
@@ -69,56 +79,30 @@
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.0" />
-
-            <ImageView
-                android:id="@+id/arrow1"
-                android:layout_width="20dp"
-                android:layout_height="match_parent"
-                android:layout_marginEnd="16dp"
-                android:layout_marginRight="16dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="1.0"
-                app:layout_constraintStart_toStartOf="@+id/box_profil"
-                app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/arrowblack" />
+                app:layout_constraintVertical_bias="0.483" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/Rediger"
             android:layout_width="match_parent"
-            android:layout_height="50dp">
+            android:layout_height="wrap_content">
 
-            <ImageView
+            <View
                 android:id="@+id/box_rediger"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/menu_box" />
-
-            <TextView
-                android:id="@+id/anmod_opt_text"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginStart="16dp"
-                android:layout_marginLeft="16dp"
-                android:gravity="left|center_vertical"
-                android:text="Rediger"
+                android:layout_marginTop="16dp"
+                android:background="#FFFFFF"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <ImageView
-                android:id="@+id/arrow2"
+                android:id="@+id/arrow8"
                 android:layout_width="20dp"
-                android:layout_height="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp"
                 android:layout_marginRight="16dp"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -128,29 +112,43 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:srcCompat="@drawable/arrowblack" />
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/indstillinger"
-            android:layout_width="match_parent"
-            android:layout_height="60dp">
-
-            <ImageView
-                android:id="@+id/box_indstillinger"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/menu_box" />
-
             <TextView
-                android:id="@+id/indstillinger_text"
+                android:id="@+id/anmod_opt_text2"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginStart="16dp"
                 android:layout_marginLeft="16dp"
+                android:layout_marginTop="16dp"
+                android:gravity="left|center_vertical"
+                android:text="Rediger"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <View
+                android:id="@+id/box_indstillinger"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginTop="16dp"
+                android:background="#FFFFFF"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/indstillinger_text2"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginStart="16dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="16dp"
                 android:gravity="left|center_vertical"
                 android:text="Indstillinger"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -159,9 +157,10 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <ImageView
-                android:id="@+id/arrow3"
+                android:id="@+id/arrow9"
                 android:layout_width="20dp"
-                android:layout_height="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp"
                 android:layout_marginRight="16dp"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -171,9 +170,7 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_bias="0.0"
                 app:srcCompat="@drawable/arrowblack" />
-
         </androidx.constraintlayout.widget.ConstraintLayout>
-
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

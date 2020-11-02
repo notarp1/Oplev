@@ -24,7 +24,7 @@ public class createEvent1_frag extends Fragment implements View.OnClickListener 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View root = inflater.inflate(R.layout.fragment_create_event1_frag, container, false);
+        View root = inflater.inflate(R.layout.create_event1_frag, container, false);
         //fix top bar text:
         //topbar_txt = root.findViewById(R.id.topbar_text);
         //topbar_txt.setText("Lav nyt opslag");

@@ -7,14 +7,17 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 
-public class User_Settings_Opt extends Fragment implements View.OnClickListener {
+public class U_settings_opt extends Fragment implements View.OnClickListener {
 
 
     public View onCreateView(LayoutInflater i, ViewGroup container, Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        View root = i.inflate(R.layout.u_setting_setting_frag, container, false);
+        View root = i.inflate(R.layout.u_setting_opt_frag, container, false);
+
+        TextView textview = (TextView)getActivity().findViewById(R.id.topbar_text);
+        textview.setText("Indstillinger");
+
 
         return root;
 

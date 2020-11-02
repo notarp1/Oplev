@@ -1,5 +1,6 @@
 package com.example.oplev;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -34,7 +35,7 @@ public class Likeside_frag extends Fragment implements View.OnClickListener{
         tilbage.setOnClickListener(this);
         opret.setOnClickListener(this);
 
-
+        hjerte.setBackgroundColor(Color.LTGRAY);
 
 
         return root;
@@ -44,13 +45,15 @@ public class Likeside_frag extends Fragment implements View.OnClickListener{
     @Override
     public void onClick(View v) {
         if (v == hjerte){
+            besked.setBackgroundColor(Color.LTGRAY);
+            hjerte.setBackgroundColor(Color.CYAN);
             getFragmentManager().beginTransaction().replace(R.id.likeside_frameLayout,new HjerteSide_frag())
-                    .addToBackStack(null)
                     .commit();
         }
         else if (v == besked){
+            besked.setBackgroundColor(Color.CYAN);
+            hjerte.setBackgroundColor(Color.LTGRAY);
             getFragmentManager().beginTransaction().replace(R.id.likeside_frameLayout,new LikesideList_frag())
-                    .addToBackStack(null)
                     .commit();
         }
         else if (v == tilbage){

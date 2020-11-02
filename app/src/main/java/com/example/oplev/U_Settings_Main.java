@@ -9,9 +9,9 @@ import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
 
-public class  User_Settings_Main extends Fragment implements View.OnClickListener {
+public class U_Settings_Main extends Fragment implements View.OnClickListener {
 
-    ImageView visProfil, rediger, indstillinger;
+    View visProfil, rediger, indstillinger;
 
     public View onCreateView(LayoutInflater i, ViewGroup container, Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -19,9 +19,14 @@ public class  User_Settings_Main extends Fragment implements View.OnClickListene
         View root = i.inflate(R.layout.u_setting_main_frag, container, false);
 
 
+
+        TextView textview = (TextView)getActivity().findViewById(R.id.topbar_text);
+        textview.setText("Profil");
+
         visProfil = root.findViewById(R.id.box_profil);
         rediger = root.findViewById(R.id.box_rediger);
         indstillinger = root.findViewById(R.id.box_indstillinger);
+
         indstillinger.setOnClickListener(this);
         rediger.setOnClickListener(this);
 
@@ -37,13 +42,13 @@ public class  User_Settings_Main extends Fragment implements View.OnClickListene
 
          if (v == indstillinger){
             getFragmentManager().beginTransaction()
-                .replace(R.id.mainFragmentBox, new User_Settings_Opt())
+                .replace(R.id.mainFragmentBox, new U_settings_opt())
                 .addToBackStack(null)
                 .commit();
 
         } else if (v == rediger){
              getFragmentManager().beginTransaction()
-                     .replace(R.id.mainFragmentBox, new User_Setting_Edit())
+                     .replace(R.id.mainFragmentBox, new U_Setting_Edit())
                      .addToBackStack(null)
                      .commit();
          }

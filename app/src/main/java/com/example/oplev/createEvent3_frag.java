@@ -11,8 +11,6 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import org.w3c.dom.Text;
-
 public class createEvent3_frag extends Fragment implements View.OnClickListener {
     TextView congrat_txt, askfriend_txt, shareby_txt;
     Button done_btn;
@@ -21,7 +19,7 @@ public class createEvent3_frag extends Fragment implements View.OnClickListener 
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        View root = inflater.inflate(R.layout.fragment_create_event3_frag, container, false);
+        View root = inflater.inflate(R.layout.create_event3_frag, container, false);
         done_btn = root.findViewById(R.id.create3_skip_btn);
 
         fb_img = root.findViewById(R.id.create3_fb_img);

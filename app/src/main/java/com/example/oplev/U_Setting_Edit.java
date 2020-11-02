@@ -4,26 +4,31 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
+import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
 
-public class User_settings_profile extends Fragment implements View.OnClickListener {
-    static Button btn_insta;
+public class U_Setting_Edit extends Fragment implements View.OnClickListener {
+
+
     public View onCreateView(LayoutInflater i, ViewGroup container, Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        View root = i.inflate(R.layout.u_setting_edit_frag, container, false);
 
-        //btn_insta.setOnClickListener(this);
 
-        return  i.inflate(R.layout.u_settings_profile, container, false);
+
+        TextView textview = (TextView)getActivity().findViewById(R.id.topbar_text);
+        textview.setText("Rediger Profil");
+
+
+        return root;
 
 
     }
 
+
     @Override
     public void onClick(View view) {
-        if(view == btn_insta){
 
-        }
     }
 }

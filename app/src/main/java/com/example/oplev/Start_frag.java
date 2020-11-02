@@ -2,6 +2,7 @@ package com.example.oplev;
 
 import androidx.fragment.app.Fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -34,10 +35,9 @@ public class Start_frag extends Fragment implements View.OnClickListener {
     @Override
     public void onClick(View v) {
         if(v == options){
-            getFragmentManager().beginTransaction()
-                    .replace(R.id.main_frag, new Search_filter_top_frag())
-                    .addToBackStack(null)
-                    .commit();
+            Intent i = new Intent(getActivity(), Search_filter.class);
+            startActivity(i);
+
 
         } else if(v == match){
             System.out.println("hello there");
@@ -48,10 +48,8 @@ public class Start_frag extends Fragment implements View.OnClickListener {
 
         } else if(v == user){
 
-        getFragmentManager().beginTransaction()
-                .replace(R.id.main_frag, new User_Settings())
-                .addToBackStack(null)
-                .commit();
+            Intent i = new Intent(getActivity(), U_setting.class);
+            startActivity(i);
 
         }
     }
