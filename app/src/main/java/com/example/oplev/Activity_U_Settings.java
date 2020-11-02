@@ -27,9 +27,6 @@ public class Activity_U_Settings extends AppCompatActivity implements View.OnCli
 
     }
 
-    public static void changeTitle(String name){
-        title.setText(name);
-    }
 
     @Override
     public void onClick(View v) {
