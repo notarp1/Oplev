@@ -28,6 +28,7 @@ public class createEvent3_frag extends Fragment implements View.OnClickListener 
         email_img = root.findViewById(R.id.create3_email_img);
 
         fb_img.setOnClickListener(this);
+        done_btn.setOnClickListener(this);
 
         return root;
     }
@@ -36,7 +37,7 @@ public class createEvent3_frag extends Fragment implements View.OnClickListener 
     public void onClick(View v) {
         if(v == done_btn){
             // go back to main fragment
-            getFragmentManager().popBackStack();
+            getActivity().finish();
         }
         else if(v == fb_img){
             //start sharing by facebook

@@ -1,5 +1,6 @@
 package com.example.oplev;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -60,10 +61,8 @@ public class Likeside_frag extends Fragment implements View.OnClickListener{
             getFragmentManager().popBackStack();
         }
         else if(v == opret){
-            getFragmentManager().beginTransaction()
-                    .replace(R.id.main_frag, new createEvent1_frag())
-                    .addToBackStack(null)
-                    .commit();
+            Intent o = new Intent(getActivity(), Activity_Create_Event.class);
+            startActivity(o);
         }
 
     }

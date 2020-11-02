@@ -8,7 +8,7 @@ import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
 
-public class U_Setting_Edit extends Fragment implements View.OnClickListener {
+public class U_Settings_Edit extends Fragment implements View.OnClickListener {
 
 
     public View onCreateView(LayoutInflater i, ViewGroup container, Bundle savedInstanceState) {

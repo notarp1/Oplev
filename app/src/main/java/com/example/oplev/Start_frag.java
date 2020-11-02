@@ -35,7 +35,7 @@ public class Start_frag extends Fragment implements View.OnClickListener {
     @Override
     public void onClick(View v) {
         if(v == options){
-            Intent i = new Intent(getActivity(), Search_filter.class);
+            Intent i = new Intent(getActivity(), Activity_Search_Filter.class);
             startActivity(i);
 
 
@@ -48,7 +48,7 @@ public class Start_frag extends Fragment implements View.OnClickListener {
 
         } else if(v == user){
 
-            Intent i = new Intent(getActivity(), U_setting.class);
+            Intent i = new Intent(getActivity(), Activity_U_Settings.class);
             startActivity(i);
 
         }

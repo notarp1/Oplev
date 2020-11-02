@@ -7,9 +7,9 @@ import android.view.ViewGroup;
 
 import androidx.fragment.app.Fragment;
 
-public class Search_filter_bottom_frag extends Fragment implements View.OnClickListener {
+public class Search_filter_frag extends Fragment implements View.OnClickListener {
 
-    Search_filter_bottom_frag(){
+    Search_filter_frag(){
     }
 
     public View onCreateView(LayoutInflater i, ViewGroup container, Bundle savedInstanceState) {

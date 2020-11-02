@@ -19,8 +19,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".U_setting" />
-        <activity android:name=".Search_filter" />
+        <activity android:name=".Activity_U_Settings" />
+        <activity android:name=".Activity_Search_Filter" />
+        <activity android:name=".Activity_Create_Event" />
+
     </application>
 
 </manifest>

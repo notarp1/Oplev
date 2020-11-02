@@ -5,11 +5,13 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+
 import androidx.appcompat.app.AppCompatActivity;
 
-public class Search_filter extends AppCompatActivity implements View.OnClickListener {
+public class Activity_U_Settings extends AppCompatActivity implements View.OnClickListener{
     ImageView back;
     static TextView title;
+
 
     public void onCreate(Bundle saveInstanceState) {
         super.onCreate(saveInstanceState);
@@ -19,20 +21,23 @@ public class Search_filter extends AppCompatActivity implements View.OnClickList
 
         back.setOnClickListener(this);
 
-        title.setText("Søgefilter");
 
-        getSupportFragmentManager().beginTransaction().replace(R.id.mainFragmentBox,  new Search_filter_bottom_frag(), "uSettingMainBox")
+        getSupportFragmentManager().beginTransaction().replace(R.id.mainFragmentBox, new U_Settings_Main(), "uSettingMainBox")
                 .commit();
 
     }
 
-
+    public static void changeTitle(String name){
+        title.setText(name);
+    }
 
     @Override
     public void onClick(View v) {
-        if (v == back) {
-            getFragmentManager().popBackStack();
-
+        if(v == back){
+          if(getSupportFragmentManager().getBackStackEntryCount() > 0){
+              getSupportFragmentManager().popBackStack();
+          } else finish();
         }
+
     }
 }

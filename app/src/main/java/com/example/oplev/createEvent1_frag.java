@@ -65,10 +65,10 @@ public class createEvent1_frag extends Fragment implements View.OnClickListener 
             Fragment create2_frag = new createEvent2_frag();
             create2_frag.setArguments(b);
 
-            //transaction to next
+
             getFragmentManager().beginTransaction()
-                    .replace(R.id.main_frag, create2_frag, "deleteme")
-                    .addToBackStack("deleteme")
+                    .replace(R.id.mainFragmentBox, create2_frag)
+                    .addToBackStack(null)
                     .commit();
         }
     }
