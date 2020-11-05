@@ -1,5 +1,6 @@
 package com.example.oplev;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -28,6 +29,7 @@ public class U_Settings_Main extends Fragment implements View.OnClickListener {
 
         indstillinger.setOnClickListener(this);
         rediger.setOnClickListener(this);
+        visProfil.setOnClickListener(this);
 
 
         return root;
@@ -50,6 +52,9 @@ public class U_Settings_Main extends Fragment implements View.OnClickListener {
                      .replace(R.id.mainFragmentBox, new U_Settings_Edit())
                      .addToBackStack(null)
                      .commit();
+         } else if (v == visProfil){
+             Intent o = new Intent(getActivity(), Activity_profile.class);
+             startActivity(o);
          }
     }
 }
