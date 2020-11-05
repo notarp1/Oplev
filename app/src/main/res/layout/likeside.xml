@@ -110,8 +110,8 @@
 
         <FrameLayout
             android:id="@+id/likeside_frameLayout"
-            android:layout_width="match_parent"
-            android:layout_height="560dp"
+            android:layout_width="415dp"
+            android:layout_height="510dp"
             app:layout_constraintBottom_toTopOf="@+id/opretOpslag_Knap2"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
