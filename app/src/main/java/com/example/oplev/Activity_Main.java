@@ -25,7 +25,8 @@ public class Activity_Main extends AppCompatActivity implements View.OnClickList
         match.setOnClickListener(this);
         user.setOnClickListener(this);
 
-
+        getSupportFragmentManager().beginTransaction().replace(R.id.main_frag, new Startside_billede_frag())
+                .commit();
 
 
     }
