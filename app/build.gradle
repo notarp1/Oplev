@@ -32,4 +32,8 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
 
+    //range seekbar from https://android-arsenal.com/details/1/3976#!description
+    implementation 'io.apptik.widget:multislider:1.3'
+
+
 }
