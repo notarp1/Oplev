@@ -33,40 +33,33 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/create2_info_txt" />
 
-    <SeekBar
-        android:id="@+id/seekBar"
-        android:layout_width="230dp"
-        android:layout_height="41dp"
-        app:layout_constraintEnd_toStartOf="@+id/create2_ageVal_txt"
+
+    <io.apptik.widget.MultiSlider
+        android:id="@+id/create2_rangebar"
+        android:layout_width="268dp"
+        android:layout_height="34dp"
+        android:layout_marginTop="16dp"
+        app:drawThumbsApart="true"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/create2_ageInterval_txt"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/create2_age_txt" />
-
-    <TextView
-        android:id="@+id/create2_ageVal_txt"
-        android:layout_width="130dp"
-        android:layout_height="38dp"
-        android:gravity="center"
-        android:text="ageInterval"
-        android:textSize="24sp"
-        app:layout_constraintBottom_toBottomOf="@+id/seekBar"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/seekBar"
-        app:layout_constraintTop_toTopOf="@+id/seekBar" />
+        app:layout_constraintTop_toBottomOf="@+id/create2_age_txt"
+        app:rangeColor="#26A69A"
+        app:thumbNumber="2" />
 
     <TextView
         android:id="@+id/create2_sex_txt"
         android:layout_width="72dp"
         android:layout_height="35dp"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="64dp"
         android:text="Køn"
         android:textColor="#000000"
         android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.05"
+        app:layout_constraintHorizontal_bias="0.049"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/seekBar" />
+        app:layout_constraintTop_toBottomOf="@+id/create2_age_txt" />
 
     <TextView
         android:id="@+id/create2_female_txt"
@@ -126,4 +119,19 @@
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/create2_male_txt" />
+
+    <TextView
+        android:id="@+id/create2_ageInterval_txt"
+        android:layout_width="92dp"
+        android:layout_height="35dp"
+        android:gravity="center"
+        android:text="ageInterval"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="@+id/create2_rangebar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/create2_rangebar"
+        app:layout_constraintTop_toTopOf="@+id/create2_rangebar"
+        app:layout_constraintVertical_bias="0.0" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

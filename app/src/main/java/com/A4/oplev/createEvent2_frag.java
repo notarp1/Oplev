@@ -8,35 +8,55 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.SeekBar;
 import android.widget.Switch;
 import android.widget.TextView;
 
+import io.apptik.widget.MultiSlider;
 
 public class createEvent2_frag extends Fragment implements View.OnClickListener {
     //topbar element
     TextView topbar_txt;
     //frag element
     TextView info_txt, age_txt, ageVal_txt, sex_txt, female_txt, male_txt;
-    SeekBar age_bar;
     Switch femaleSwitch, maleSwitch;
     Button done_btn;
+    MultiSlider age_bar;
+
+    String currMinAge = "18", currMaxAge = "100";
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.create_event2_frag, container, false);
-        //set topbar text
-        //topbar_txt = root.findViewById(R.id.topbar_text);
-        //topbar_txt.setText("Sidste step");
 
         //get frag elements
-        ageVal_txt = root.findViewById(R.id.create2_ageVal_txt);
+
         femaleSwitch = root.findViewById(R.id.create2_female_switch);
         maleSwitch = root.findViewById(R.id.create2_male_switch);
         done_btn = root.findViewById(R.id.create2_done_btn);
 
         done_btn.setOnClickListener(this);
 
+        //
+        ageVal_txt = root.findViewById(R.id.create2_ageInterval_txt);
+        ageVal_txt.setText(currMinAge + " - " + currMaxAge);
+        age_bar = root.findViewById(R.id.create2_rangebar);
+        age_bar.setMin(18);
+        age_bar.setMax(100);
+        age_bar.setOnThumbValueChangeListener(new MultiSlider.OnThumbValueChangeListener() {
+            @Override
+            public void onValueChanged(MultiSlider multiSlider,
+                                       MultiSlider.Thumb thumb,
+                                       int thumbIndex,
+                                       int value)
+            {
+                if (thumbIndex == 0) {
+                    currMinAge = (String.valueOf(value));
+                } else {
+                    currMaxAge = (String.valueOf(value));
+                }
+                ageVal_txt.setText(currMinAge + " - " + currMaxAge);
+            }
+        });
 
         return root;
     }
