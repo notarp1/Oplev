@@ -1,4 +1,4 @@
-package com.example.oplev;
+package com.A4.oplev;
 
 import android.content.Intent;
 import android.os.Bundle;

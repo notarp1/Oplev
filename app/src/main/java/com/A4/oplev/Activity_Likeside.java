@@ -1,20 +1,13 @@
-package com.example.oplev;
+package com.A4.oplev;
 
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.ListView;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
-
-import java.util.ArrayList;
 
 public class Activity_Likeside extends AppCompatActivity implements View.OnClickListener{
     ImageView hjerte, besked, tilbage;

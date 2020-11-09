@@ -1,4 +1,4 @@
-package com.example.oplev;
+package com.A4.oplev;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -9,28 +9,30 @@ import android.widget.ListView;
 
 import androidx.fragment.app.Fragment;
 
-public class HjerteSide_frag extends Fragment implements View.OnClickListener{
+public class LikesideList_frag extends Fragment implements View.OnClickListener {
     ListView listView;
 
-
     public View onCreateView(LayoutInflater i, ViewGroup container, Bundle savedInstanceState) {
-        View root = i.inflate(R.layout.hjerteside_frag,container,false);
+        View root = i.inflate(R.layout.likeside_frag,container,false);
 
         String[] navne = {"John", "abc", "Bente", "AGE", "Yes", "whoDis?", "yubrakit yubotit"};
         String[] dato = {"Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"};
 
-        ArrayAdapter adapter = new ArrayAdapter(getActivity(), R.layout.hjerteside_liste_element, R.id.hjertside_overskrift, navne);
+        ArrayAdapter adapter = new ArrayAdapter(getActivity(), R.layout.besked_liste_element, R.id.beskeder_overskrift, navne);
 
-        listView = root.findViewById(R.id.hjerteside_listview);
+        listView = root.findViewById(R.id.beskedListView);
         //listView.setOnItemClickListener(this);
         listView.setAdapter(adapter);
-
 
         return root;
     }
 
-        @Override
+
+    @Override
     public void onClick(View v) {
 
     }
+
+
+
 }

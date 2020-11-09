@@ -1,32 +1,32 @@
-package com.example.oplev;
+package com.A4.oplev;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
 
-public class U_settings_profile extends Fragment implements View.OnClickListener {
-    static Button btn_insta;
+public class U_settings_opt extends Fragment implements View.OnClickListener {
+
+
     public View onCreateView(LayoutInflater i, ViewGroup container, Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        View root = i.inflate(R.layout.u_setting_opt_frag, container, false);
 
-        //btn_insta.setOnClickListener(this);
+        TextView textview = (TextView)getActivity().findViewById(R.id.topbar_text);
+        textview.setText("Indstillinger");
 
 
-
-        return  i.inflate(R.layout.u_settings_profile, container, false);
+        return root;
 
 
     }
 
+
     @Override
     public void onClick(View view) {
-        if(view == btn_insta){
 
-        }
     }
 }
