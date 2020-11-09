@@ -1,17 +1,15 @@
-package com.example.oplev;
+package com.A4.oplev;
 
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-
 import androidx.appcompat.app.AppCompatActivity;
 
-public class Activity_U_Settings extends AppCompatActivity implements View.OnClickListener{
+public class Activity_Search_Filter extends AppCompatActivity implements View.OnClickListener {
     ImageView back;
     static TextView title;
-
 
     public void onCreate(Bundle saveInstanceState) {
         super.onCreate(saveInstanceState);
@@ -21,20 +19,20 @@ public class Activity_U_Settings extends AppCompatActivity implements View.OnCli
 
         back.setOnClickListener(this);
 
+        title.setText("Søgefilter");
 
-        getSupportFragmentManager().beginTransaction().replace(R.id.mainFragmentBox, new U_Settings_Main(), "uSettingMainBox")
+        getSupportFragmentManager().beginTransaction().replace(R.id.mainFragmentBox,  new Search_filter_frag(), "uSettingMainBox")
                 .commit();
 
     }
 
 
+
     @Override
     public void onClick(View v) {
-        if(v == back){
-          if(getSupportFragmentManager().getBackStackEntryCount() > 0){
-              getSupportFragmentManager().popBackStack();
-          } else finish();
-        }
+        if (v == back) {
+            finish();
 
+        }
     }
 }

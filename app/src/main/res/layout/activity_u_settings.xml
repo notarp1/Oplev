@@ -52,6 +52,7 @@
             android:layout_weight="0"
             android:text="@string/profil"
             android:textColor="#FBFBFB"
+            android:textSize="18sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
