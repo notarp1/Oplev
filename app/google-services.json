@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "543122751125",
+    "firebase_url": "https://opleva4.firebaseio.com",
+    "project_id": "opleva4",
+    "storage_bucket": "opleva4.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:543122751125:android:3c1ea919d92542a580e59c",
+        "android_client_info": {
+          "package_name": "com.A4.oplev"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "543122751125-sme09j2lii607vg9mnp433ehjl5gqrat.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBHzfK4hqVvJtMHIQFx0p2zhGVWRGwLBqM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "543122751125-sme09j2lii607vg9mnp433ehjl5gqrat.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
