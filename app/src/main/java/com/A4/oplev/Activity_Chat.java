@@ -24,11 +24,14 @@ public class Activity_Chat extends AppCompatActivity  implements View.OnClickLis
     Button sendBesked;
     ArrayList<String> beskederStrings;
     TextInputLayout inputTekst;
-    ChatDTO dto = new ChatDTO();
+    ChatDTO dto;
+    ChatDAO dao = new ChatDAO();
 
 
     public void onCreate(Bundle saveInstanceState) {
         super.onCreate(saveInstanceState);
+
+        dto = dao.getChat("AK0f2km8vPwOcvKmlFdE");
         setContentView(R.layout.activity_chat_funktion);
 
         settings = findViewById(R.id.chat_settings);

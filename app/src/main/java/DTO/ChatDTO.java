@@ -5,37 +5,20 @@ import java.util.Date;
 
 public class ChatDTO {
 
-    private int chatId;
-    private String sender, receiver;
+    private String chatId;
     private ArrayList<Date> dates;
-    private ArrayList<String> messages;
+    private ArrayList<String> messages, sender, receiver;
 
     public ChatDTO() {
 
     }
 
-    public int getChatId() {
+    public String getChatId() {
         return chatId;
     }
 
-    public void setChatId(int chatId) {
+    public void setChatId(String chatId) {
         this.chatId = chatId;
-    }
-
-    public String getSender() {
-        return sender;
-    }
-
-    public void setSender(String sender) {
-        this.sender = sender;
-    }
-
-    public String getReceiver() {
-        return receiver;
-    }
-
-    public void setReceiver(String receiver) {
-        this.receiver = receiver;
     }
 
     public ArrayList<Date> getDates() {
@@ -52,5 +35,21 @@ public class ChatDTO {
 
     public void setMessages(ArrayList<String> messages) {
         this.messages = messages;
+    }
+
+    public ArrayList<String> getSender() {
+        return sender;
+    }
+
+    public void setSender(ArrayList<String> sender) {
+        this.sender = sender;
+    }
+
+    public ArrayList<String> getReceiver() {
+        return receiver;
+    }
+
+    public void setReceiver(ArrayList<String> receiver) {
+        this.receiver = receiver;
     }
 }

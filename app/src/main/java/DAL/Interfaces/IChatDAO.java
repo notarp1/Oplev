@@ -4,8 +4,8 @@ import DTO.ChatDTO;
 
 public interface IChatDAO {
 
-    IChatDAO getChat(int chatId);
+    ChatDTO getChat(String chatId);
     void createChat(ChatDTO chat);
     void updateChat(ChatDTO chat);
-    void deleteChat(int chatId);
+    void deleteChat(String chatId);
 }
