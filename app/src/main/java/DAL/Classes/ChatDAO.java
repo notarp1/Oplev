@@ -4,10 +4,14 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 
+import com.google.android.gms.common.api.Batch;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.WriteBatch;
+
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -32,6 +36,9 @@ public class ChatDAO implements IChatDAO {
     @Override
     public void createChat(ChatDTO chat) {
 
+        final String[] path = {"chats"};
+        final boolean[] firstChat = {true};
+
         for (int i = 0; i < chat.getMessages().size(); i++) {
             Map<String, Object> chatObject = new HashMap<>();
 
@@ -41,7 +48,7 @@ public class ChatDAO implements IChatDAO {
             chatObject.put("dato", chat.getDates().get(i));
 
 
-            db.collection("chats")
+            db.collection(path[0])
                     .add(chatObject)
                     .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                         private static final String TAG = "chat";
@@ -50,6 +57,9 @@ public class ChatDAO implements IChatDAO {
                         public void onSuccess(DocumentReference documentReference) {
                             Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId());
                             db.collection("chat").document(documentReference.getId()).update("chatId", documentReference.getId());
+                            if (firstChat[0]){
+                                path[0] = "chats/"+documentReference.getId();
+                                firstChat[0] = false ;}
                         }
                     })
                     .addOnFailureListener(new OnFailureListener() {
@@ -61,7 +71,6 @@ public class ChatDAO implements IChatDAO {
                         }
                     });
         }
-
     }
 
     @Override

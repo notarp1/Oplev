@@ -14,6 +14,9 @@ import com.google.android.material.textfield.TextInputLayout;
 
 import java.util.ArrayList;
 
+import DAL.Classes.ChatDAO;
+import DTO.ChatDTO;
+
 public class Activity_Chat extends AppCompatActivity  implements View.OnClickListener {
     ImageView settings, tilbage;
     TextView navn;
@@ -21,6 +24,7 @@ public class Activity_Chat extends AppCompatActivity  implements View.OnClickLis
     Button sendBesked;
     ArrayList<String> beskederStrings;
     TextInputLayout inputTekst;
+    ChatDTO dto = new ChatDTO();
 
 
     public void onCreate(Bundle saveInstanceState) {
@@ -41,8 +45,7 @@ public class Activity_Chat extends AppCompatActivity  implements View.OnClickLis
         inputTekst = findViewById(R.id.chat_inputBesked);
 
         beskederStrings = new ArrayList<>();
-        beskederStrings.add("Hejsa");
-        beskederStrings.add("hej med dig");
+        beskederStrings = dto.getMessages();
 
 
 

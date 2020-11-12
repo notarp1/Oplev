@@ -9,8 +9,13 @@ import android.widget.ImageView;
 
 import com.google.firebase.FirebaseApp;
 
+import java.util.ArrayList;
+import java.util.Date;
+
+import DAL.Classes.ChatDAO;
 import DAL.Classes.UserDAO;
 import DAL.DBAccess;
+import DTO.ChatDTO;
 import DTO.UserDTO;
 
 public class Activity_Main extends AppCompatActivity implements View.OnClickListener {
@@ -42,6 +47,24 @@ public class Activity_Main extends AppCompatActivity implements View.OnClickList
         test.setlName("Henriksen");
         test.setPhone("83827312");
         dao.createUser(test); */
+
+        ChatDAO dao = new ChatDAO();
+        ArrayList<Date> dates = new ArrayList<>();
+        dates.add(new Date());
+        dates.add(new Date());
+        dates.add(new Date());
+
+        ArrayList<String> messages = new ArrayList<>();
+        messages.add("hejsa");
+        messages.add("hejsa2");
+        messages.add("hejsa3");
+        ChatDTO dto = new ChatDTO();
+        dto.setDates(dates);
+        dto.setChatId(1);
+        dto.setMessages(messages);
+        dto.setReceiver("johnny");
+        dto.setSender("benny");
+        dao.createChat(dto);
 
 
         getSupportFragmentManager().beginTransaction().replace(R.id.main_frag, new Startside_billede_frag())

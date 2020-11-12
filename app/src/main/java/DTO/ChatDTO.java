@@ -10,12 +10,8 @@ public class ChatDTO {
     private ArrayList<Date> dates;
     private ArrayList<String> messages;
 
-    public ChatDTO(int chatId, String sender, String receiver, ArrayList<Date> dates, ArrayList<String> messages) {
-        this.chatId = chatId;
-        this.sender = sender;
-        this.receiver = receiver;
-        this.dates = dates;
-        this.messages = messages;
+    public ChatDTO() {
+
     }
 
     public int getChatId() {
