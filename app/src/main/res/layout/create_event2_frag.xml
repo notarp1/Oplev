@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".createEvent2_frag">
+
+    <TextView
+        android:id="@+id/create2_info_txt"
+        android:layout_width="390dp"
+        android:layout_height="161dp"
+        android:layout_marginTop="68dp"
+        android:gravity="center"
+        android:text="Rækkevidde\nHvem skal kunne se opslaget?"
+        android:textColor="#000000"
+        android:textSize="30sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/create2_age_txt"
+        android:layout_width="82dp"
+        android:layout_height="39dp"
+        android:layout_marginTop="36dp"
+        android:text="Alder"
+        android:textColor="#000000"
+        android:textSize="24sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.051"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/create2_info_txt" />
+
+
+    <io.apptik.widget.MultiSlider
+        android:id="@+id/create2_rangebar"
+        android:layout_width="268dp"
+        android:layout_height="34dp"
+        android:layout_marginTop="16dp"
+        app:drawThumbsApart="true"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/create2_ageInterval_txt"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/create2_age_txt"
+        app:rangeColor="#26A69A"
+        app:thumbNumber="2" />
+
+    <TextView
+        android:id="@+id/create2_sex_txt"
+        android:layout_width="72dp"
+        android:layout_height="35dp"
+        android:layout_marginTop="64dp"
+        android:text="Køn"
+        android:textColor="#000000"
+        android:textSize="24sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.049"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/create2_age_txt" />
+
+    <TextView
+        android:id="@+id/create2_female_txt"
+        android:layout_width="213dp"
+        android:layout_height="51dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="8dp"
+        android:gravity="center_vertical"
+        android:text="Vises for kvinder"
+        android:textColor="#000000"
+        android:textSize="24sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/create2_sex_txt" />
+
+    <TextView
+        android:id="@+id/create2_male_txt"
+        android:layout_width="213dp"
+        android:layout_height="51dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="8dp"
+        android:gravity="center_vertical"
+        android:text="Vises for mænd"
+        android:textColor="#000000"
+        android:textSize="24sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/create2_female_txt" />
+
+    <Switch
+        android:id="@+id/create2_female_switch"
+        android:layout_width="66dp"
+        android:layout_height="45dp"
+        android:layout_marginEnd="52dp"
+        android:layout_marginRight="52dp"
+        app:layout_constraintBottom_toBottomOf="@+id/create2_female_txt"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/create2_female_txt" />
+
+    <Switch
+        android:id="@+id/create2_male_switch"
+        android:layout_width="66dp"
+        android:layout_height="45dp"
+        android:layout_marginEnd="52dp"
+        android:layout_marginRight="52dp"
+        app:layout_constraintBottom_toBottomOf="@+id/create2_male_txt"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/create2_male_txt" />
+
+    <Button
+        android:id="@+id/create2_done_btn"
+        android:layout_width="129dp"
+        android:layout_height="47dp"
+        android:layout_marginTop="60dp"
+        android:text="Slå op"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/create2_male_txt" />
+
+    <TextView
+        android:id="@+id/create2_ageInterval_txt"
+        android:layout_width="92dp"
+        android:layout_height="35dp"
+        android:gravity="center"
+        android:text="ageInterval"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="@+id/create2_rangebar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/create2_rangebar"
+        app:layout_constraintTop_toTopOf="@+id/create2_rangebar"
+        app:layout_constraintVertical_bias="0.0" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
