@@ -11,7 +11,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name="com.A4.oplev.Activity_profile"></activity>
+        <activity android:name="com.A4.oplev.Activity_profile" />
         <activity
             android:name="com.A4.oplev.Activity_Main"
             android:configChanges="orientation|screenSize"
@@ -26,6 +26,7 @@
         <activity android:name="com.A4.oplev.Activity_Search_Filter" />
         <activity android:name="com.A4.oplev.Activity_Create_Event" />
         <activity android:name="com.A4.oplev.Activity_Likeside" />
+        <activity android:name=".Activity_Chat" />
     </application>
 
 </manifest>
