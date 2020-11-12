@@ -3,13 +3,13 @@ package com.A4.oplev;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.A4.oplev.adapters.ChatList_Adapter;
 import com.google.android.material.textfield.TextInputLayout;
 
 import java.util.ArrayList;
@@ -48,7 +48,6 @@ public class Activity_Chat extends AppCompatActivity  implements View.OnClickLis
 
         if (!beskederStrings.isEmpty()) {
             ChatList_Adapter adapter = new ChatList_Adapter(this,beskederStrings);
-            //ArrayAdapter adapter = new ArrayAdapter(this, R.layout.chat_besked_element, R.id.chat_besked_element_tekst, beskederStrings);
             beskeder.setAdapter(adapter);
         }
 
@@ -68,7 +67,6 @@ public class Activity_Chat extends AppCompatActivity  implements View.OnClickLis
             assert inputTekst.getEditText() != null;
             beskederStrings.add(inputTekst.getEditText().getText().toString());
             ChatList_Adapter adapter = new ChatList_Adapter(this,beskederStrings);
-            //ArrayAdapter adapter = new ArrayAdapter(this, R.layout.chat_besked_element, R.id.chat_besked_element_tekst, beskederStrings);
             beskeder.setAdapter(adapter);
             inputTekst.getEditText().setText("");
         }

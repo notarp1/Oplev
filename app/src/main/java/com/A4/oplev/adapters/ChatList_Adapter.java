@@ -1,4 +1,4 @@
-package com.A4.oplev;
+package com.A4.oplev.adapters;
 
 import android.content.Context;
 import android.view.Gravity;
@@ -11,8 +11,16 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.A4.oplev.R;
+
 import java.util.ArrayList;
 import java.util.List;
+
+
+/**
+ * inspiration from here
+ * https://medium.com/mindorks/custom-array-adapters-made-easy-b6c4930560dd
+ */
 
 public class ChatList_Adapter extends ArrayAdapter<String> {
     private Context mContext;
