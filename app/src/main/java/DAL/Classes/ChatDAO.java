@@ -4,7 +4,6 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 
-import com.google.android.gms.common.api.Batch;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -12,9 +11,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.WriteBatch;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -33,7 +30,7 @@ public class ChatDAO implements IChatDAO {
 
     @Override
     public ChatDTO getChat(String chatId) {
-        final ChatDTO[] dto = new ChatDTO[1];
+        final ChatDTO[] defaultDTO = {new ChatDTO(null, null, null, null, null)};
 
         DocumentReference docRef = db.collection("chats").document(chatId);
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
@@ -43,9 +40,11 @@ public class ChatDAO implements IChatDAO {
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                 if (task.isSuccessful()) {
                     DocumentSnapshot document = task.getResult();
+                    assert document != null;
                     if (document.exists()) {
                         Log.d(TAG, "DocumentSnapshot data: " + document.getData());
-                        dto[0] = document.toObject(ChatDTO.class);
+                        ChatDTO dto = document.toObject(ChatDTO.class);
+                        defaultDTO[0] = dto;
                     } else {
                         Log.d(TAG, "No such document");
                     }
@@ -54,17 +53,18 @@ public class ChatDAO implements IChatDAO {
                 }
             }
         });
-        return dto[0];
+        return defaultDTO[0];
     }
 
     @Override
     public void createChat(ChatDTO chat) {
         Map<String, Object> chatObject = new HashMap<>();
 
-        chatObject.put("afsender", chat.getSender());
-        chatObject.put("modtager", chat.getReceiver());
-        chatObject.put("besked", chat.getMessages());
-        chatObject.put("dato", chat.getDates());
+        chatObject.put("sender", chat.getSender());
+        chatObject.put("receiver", chat.getReceiver());
+        chatObject.put("messages", chat.getMessages());
+        chatObject.put("dates", chat.getDates());
+        chatObject.put("chatId",null);
 
 
         db.collection("chats")
@@ -75,7 +75,7 @@ public class ChatDAO implements IChatDAO {
                     @Override
                     public void onSuccess(DocumentReference documentReference) {
                         Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId());
-                        db.collection("chat").document(documentReference.getId()).update("chatId", documentReference.getId());
+                        db.collection("chats").document(documentReference.getId()).update("chatId", documentReference.getId());
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {

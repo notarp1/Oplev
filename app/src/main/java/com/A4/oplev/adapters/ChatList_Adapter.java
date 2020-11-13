@@ -45,6 +45,7 @@ public class ChatList_Adapter extends ArrayAdapter<String> {
         TextView name = (TextView) listItem.findViewById(R.id.chat_besked_element_tekst);
         name.setText(currentBesked);
 
+        // instead of doing every other then check the sender of the message and place correct
         if (position % 2 == 1){
             name.setGravity(Gravity.RIGHT);
         }

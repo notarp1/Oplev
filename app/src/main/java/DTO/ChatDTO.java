@@ -13,6 +13,14 @@ public class ChatDTO {
 
     }
 
+    public ChatDTO(ArrayList<String> sender, ArrayList<String> messages , String chatId, ArrayList<Date> dates, ArrayList<String> receiver) {
+        this.chatId = chatId;
+        this.dates = dates;
+        this.messages = messages;
+        this.sender = sender;
+        this.receiver = receiver;
+    }
+
     public String getChatId() {
         return chatId;
     }
@@ -51,5 +59,16 @@ public class ChatDTO {
 
     public void setReceiver(ArrayList<String> receiver) {
         this.receiver = receiver;
+    }
+
+    @Override
+    public String toString() {
+        return "ChatDTO{" +
+                "chatId='" + chatId + '\'' +
+                ", dates=" + dates +
+                ", messages=" + messages +
+                ", sender=" + sender +
+                ", receiver=" + receiver +
+                '}';
     }
 }

@@ -1,5 +1,6 @@
 package com.A4.oplev;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -11,9 +12,12 @@ import android.widget.ListView;
 
 import androidx.fragment.app.Fragment;
 
+import com.A4.oplev.listeners.OnSwipeTouchListener;
+
 public class LikesideList_frag extends Fragment{
     ListView listView;
 
+    @SuppressLint("ClickableViewAccessibility")
     public View onCreateView(LayoutInflater i, ViewGroup container, Bundle savedInstanceState) {
         View root = i.inflate(R.layout.likeside_frag,container,false);
 
@@ -34,6 +38,16 @@ public class LikesideList_frag extends Fragment{
                 startActivity(i);
             }
         });
+
+        listView.setOnTouchListener(new OnSwipeTouchListener(getContext()){
+            @Override
+            public void onSwipeLeft() {
+                getFragmentManager().beginTransaction().setCustomAnimations(R.anim.enter_from_right,
+                        R.anim.exit_to_left).replace(R.id.likeside_frameLayout,new HjerteSide_frag())
+                        .commit();
+            }
+        });
+
 
         return root;
     }
