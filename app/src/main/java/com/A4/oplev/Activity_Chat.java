@@ -59,6 +59,7 @@ public class Activity_Chat extends AppCompatActivity  implements View.OnClickLis
         dao.readChat(new ChatDAO.FirestoreCallback() {
             @Override
             public void onCallback(ChatDTO dto) {
+                setChatDTO(dto);
                 beskederStrings.addAll(dto.getMessages());
                 ChatList_Adapter adapter = new ChatList_Adapter(ctx,beskederStrings, dto,"johnny");
                 beskeder.setAdapter(adapter);
@@ -81,6 +82,10 @@ public class Activity_Chat extends AppCompatActivity  implements View.OnClickLis
         else if (v == sendBesked) {
             assert inputTekst != null;
             if (!inputTekst.getEditText().getText().toString().equals("")) {
+                ArrayList<String> temp = dto.getSender();
+                temp.add("johnny");
+                dto.setSender(temp);
+                System.out.println(dto.getSender());
                 beskederStrings.add(inputTekst.getEditText().getText().toString());
                 ChatList_Adapter adapter = new ChatList_Adapter(this, beskederStrings, dto, "johnny");
                 beskeder.setAdapter(adapter);
@@ -91,4 +96,11 @@ public class Activity_Chat extends AppCompatActivity  implements View.OnClickLis
             // gør noget her
         }
     }
+
+
+    // bruges til at sætte chatDTO objektet gennem oncallback
+    private void setChatDTO(ChatDTO dto){
+        this.dto = dto;
+    }
+
 }
