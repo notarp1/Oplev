@@ -16,6 +16,8 @@ import com.A4.oplev.R;
 import java.util.ArrayList;
 import java.util.List;
 
+import DTO.ChatDTO;
+
 
 /**
  * inspiration from here
@@ -25,12 +27,15 @@ import java.util.List;
 public class ChatList_Adapter extends ArrayAdapter<String> {
     private Context mContext;
     private List<String> beskederList = new ArrayList<>();
+    private ChatDTO dto;
+    private String thisUser;
 
-
-    public ChatList_Adapter(@NonNull Context context, @NonNull ArrayList<String> list) {
+    public ChatList_Adapter(@NonNull Context context, @NonNull ArrayList<String> list, ChatDTO dto, String thisUser) {
         super(context, 0 , list);
         mContext = context;
         beskederList = list;
+        this.dto = dto;
+        this.thisUser = thisUser;
     }
 
     @NonNull
@@ -46,7 +51,7 @@ public class ChatList_Adapter extends ArrayAdapter<String> {
         name.setText(currentBesked);
 
         // instead of doing every other then check the sender of the message and place correct
-        if (position % 2 == 1){
+        if (!dto.getSender().get(position).equals(thisUser)){
             name.setGravity(Gravity.RIGHT);
         }
 

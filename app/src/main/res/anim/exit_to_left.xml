@@ -1,5 +1,5 @@
-<!-- https://stackoverflow.com/questions/21026409/fragment-transaction-animation-slide-in-and-slide-out -->
 <?xml version="1.0" encoding="utf-8"?>
+<!-- https://stackoverflow.com/questions/21026409/fragment-transaction-animation-slide-in-and-slide-out -->
 <set xmlns:android="http://schemas.android.com/apk/res/android"
     android:shareInterpolator="false">
     <translate

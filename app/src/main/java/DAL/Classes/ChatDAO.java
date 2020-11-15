@@ -1,5 +1,6 @@
 package DAL.Classes;
 
+import android.os.SystemClock;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -12,6 +13,7 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -45,6 +47,7 @@ public class ChatDAO implements IChatDAO {
                         Log.d(TAG, "DocumentSnapshot data: " + document.getData());
                         ChatDTO dto = document.toObject(ChatDTO.class);
                         defaultDTO[0] = dto;
+                        System.out.println(defaultDTO[0].toString() + new Date());
                     } else {
                         Log.d(TAG, "No such document");
                     }
@@ -53,6 +56,9 @@ public class ChatDAO implements IChatDAO {
                 }
             }
         });
+
+
+        System.out.println(defaultDTO[0].toString() + new Date());
         return defaultDTO[0];
     }
 
@@ -97,4 +103,38 @@ public class ChatDAO implements IChatDAO {
     public void deleteChat(String chatId) {
 
     }
+
+    public void readChat(FirestoreCallback firestoreCallback, String chatId){
+        final ChatDTO[] defaultDTO = {new ChatDTO(null, null, null, null, null)};
+
+        DocumentReference docRef = db.collection("chats").document(chatId);
+        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            private static final String TAG = "chat";
+
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    assert document != null;
+                    if (document.exists()) {
+                        Log.d(TAG, "DocumentSnapshot data: " + document.getData());
+                        ChatDTO dto = document.toObject(ChatDTO.class);
+                        defaultDTO[0] = dto;
+                        System.out.println(defaultDTO[0].toString() + new Date());
+                        firestoreCallback.onCallback(dto);
+                    } else {
+                        Log.d(TAG, "No such document");
+                    }
+                } else {
+                    Log.d(TAG, "get failed with ", task.getException());
+                }
+            }
+        });
+    }
+
+
+    public interface FirestoreCallback {
+        void onCallback(ChatDTO dto);
+    }
+
 }
