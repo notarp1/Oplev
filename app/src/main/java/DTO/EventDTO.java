@@ -5,89 +5,103 @@ import java.util.Date;
 
 public class EventDTO {
 
-    int eventId, price, participant;
-    String name, city, description;
+    int owner, eventId, price, participant;
+    String name, city, description, headline;
     Date date;
     ArrayList<String> pictures;
-    ArrayList<java.lang.Integer> owner, applicants;
+    ArrayList<java.lang.Integer>  applicants;
+
+    public EventDTO setHeadline(String headline){this.headline = headline; return this;}
+
+    public String getHeadline(){return this.headline;}
 
     public int getEventId() {
         return eventId;
     }
 
-    public void setEventId(int eventId) {
+    public EventDTO setEventId(int eventId) {
         this.eventId = eventId;
+        return this;
     }
 
     public int getPrice() {
         return price;
     }
 
-    public void setPrice(int price) {
+    public EventDTO setPrice(int price) {
         this.price = price;
+        return this;
     }
 
     public String getName() {
         return name;
     }
 
-    public void setName(String name) {
+    public EventDTO setName(String name) {
         this.name = name;
+        return this;
     }
 
     public String getCity() {
         return city;
     }
 
-    public void setCity(String city) {
+    public EventDTO setCity(String city) {
         this.city = city;
+        return this;
     }
 
     public String getDescription() {
         return description;
     }
 
-    public void setDescription(String description) {
+    public EventDTO setDescription(String description) {
         this.description = description;
+        return this;
     }
 
     public Date getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public EventDTO setDate(Date date) {
         this.date = date;
+        return this;
     }
 
     public ArrayList<String> getPictures() {
         return pictures;
     }
 
-    public void setPictures(ArrayList<String> pictures) {
+    public EventDTO setPictures(ArrayList<String> pictures) {
         this.pictures = pictures;
+        return this;
     }
 
-    public ArrayList<java.lang.Integer> getOwner() {
+    public int getOwner() {
         return owner;
     }
 
-    public void setOwner(ArrayList<java.lang.Integer> owner) {
+    public EventDTO setOwner(int owner) {
         this.owner = owner;
+        return this;
     }
 
     public int getParticipant() {
         return participant;
     }
 
-    public void setParticipant(int participant) {
+    public EventDTO setParticipant(int participant) {
         this.participant = participant;
+        return this;
     }
 
     public ArrayList<java.lang.Integer> getApplicants() {
         return applicants;
     }
 
-    public void setApplicants(ArrayList<java.lang.Integer> applicants) {
+    public EventDTO setApplicants(ArrayList<java.lang.Integer> applicants) {
         this.applicants = applicants;
+        return this;
     }
 }
