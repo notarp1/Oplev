@@ -9,6 +9,8 @@ import android.widget.ImageView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.A4.oplev.Listeners.OnSwipeTouchListener;
+
 public class Activity_Likeside extends AppCompatActivity implements View.OnClickListener{
     ImageView hjerte, besked, tilbage;
     Button opret;
@@ -34,6 +36,16 @@ public class Activity_Likeside extends AppCompatActivity implements View.OnClick
         hjerte.setBackgroundColor(Color.LTGRAY);
 
 
+        getWindow().getDecorView().getRootView().setOnTouchListener(new OnSwipeTouchListener(this){
+            @Override
+            public void onSwipeLeft() {
+                besked.setBackgroundColor(Color.LTGRAY);
+                hjerte.setBackgroundColor(Color.CYAN);
+                getSupportFragmentManager().beginTransaction().setCustomAnimations(android.R.anim.slide_in_left,
+                        android.R.anim.slide_out_right).replace(R.id.likeside_frameLayout,new HjerteSide_frag())
+                        .commit();
+            }
+        });
 
     }
 

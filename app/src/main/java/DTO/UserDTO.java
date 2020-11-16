@@ -1,0 +1,96 @@
+package DTO;
+
+import java.util.ArrayList;
+
+public class UserDTO {
+
+    int age;
+    String fName, lName, city, email, phone, description, userId;
+    ArrayList<String> pictures;
+    ArrayList<Integer> events, joinedEvents;
+
+    public String getUserId() {
+        return userId;
+    }
+
+
+    public int getAge() {
+        return age;
+    }
+
+    public void setAge(int age) {
+        this.age = age;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getfName() {
+        return fName;
+    }
+
+    public void setfName(String fName) {
+        this.fName = fName;
+    }
+
+    public String getlName() {
+        return lName;
+    }
+
+    public void setlName(String lName) {
+        this.lName = lName;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public ArrayList<String> getPictures() {
+        return pictures;
+    }
+
+    public void setPictures(ArrayList<String> pictures) {
+        this.pictures = pictures;
+    }
+
+    public ArrayList<Integer> getEvents() {
+        return events;
+    }
+
+    public void setEvents(ArrayList<Integer> events) {
+        this.events = events;
+    }
+
+    public ArrayList<Integer> getJoinedEvents() {
+        return joinedEvents;
+    }
+
+    public void setJoinedEvents(ArrayList<Integer> joinedEvents) {
+        this.joinedEvents = joinedEvents;
+    }
+}
