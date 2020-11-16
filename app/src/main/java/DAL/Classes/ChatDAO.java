@@ -95,8 +95,32 @@ public class ChatDAO implements IChatDAO {
     }
 
     @Override
-    public void updateChat(ChatDTO chat) {
+    public void updateChat(FirestoreCallback firestoreCallback, ChatDTO chat) {
+        Map<String, Object> chatObject = new HashMap<>();
 
+        chatObject.put("sender", chat.getSender());
+        chatObject.put("receiver", chat.getReceiver());
+        chatObject.put("messages", chat.getMessages());
+        chatObject.put("dates", chat.getDates());
+        chatObject.put("chatId",chat.getChatId());
+
+
+        db.collection("chats").document(chat.getChatId())
+                .set(chatObject)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        firestoreCallback.onCallback(chat);
+                        Log.d("Update","Updated chat");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        firestoreCallback.onCallback(new ChatDTO(null,null,null,null,null));
+                        Log.d("Update","Not updated chat");
+                    }
+                });
     }
 
     @Override

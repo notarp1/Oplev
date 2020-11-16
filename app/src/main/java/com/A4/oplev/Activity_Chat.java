@@ -19,6 +19,7 @@ import com.A4.oplev.listeners.OnSwipeTouchListener;
 import com.google.android.material.textfield.TextInputLayout;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 import DAL.Classes.ChatDAO;
 import DTO.ChatDTO;
@@ -60,11 +61,12 @@ public class Activity_Chat extends AppCompatActivity  implements View.OnClickLis
             @Override
             public void onCallback(ChatDTO dto) {
                 setChatDTO(dto);
+                beskederStrings.clear();
                 beskederStrings.addAll(dto.getMessages());
-                ChatList_Adapter adapter = new ChatList_Adapter(ctx,beskederStrings, dto,"johnny");
+                ChatList_Adapter adapter = new ChatList_Adapter(ctx,beskederStrings, dto,"person1");
                 beskeder.setAdapter(adapter);
             }
-        },"huvc67lCMUyhHXcBksHg" );
+        },"60V6EddGhhZdY7pTGYRF" );
 
         SystemClock.sleep(1000);
 
@@ -82,14 +84,21 @@ public class Activity_Chat extends AppCompatActivity  implements View.OnClickLis
         else if (v == sendBesked) {
             assert inputTekst != null;
             if (!inputTekst.getEditText().getText().toString().equals("")) {
-                ArrayList<String> temp = dto.getSender();
-                temp.add("johnny");
-                dto.setSender(temp);
-                System.out.println(dto.getSender());
+
+                updateDTO("person1","person2",inputTekst.getEditText().getText().toString());
+
                 beskederStrings.add(inputTekst.getEditText().getText().toString());
-                ChatList_Adapter adapter = new ChatList_Adapter(this, beskederStrings, dto, "johnny");
-                beskeder.setAdapter(adapter);
-                inputTekst.getEditText().setText("");
+
+                dao.updateChat(new ChatDAO.FirestoreCallback() {
+                    @Override
+                    public void onCallback(ChatDTO dto) {
+                        if (dto.getChatId() != null){
+                            ChatList_Adapter adapter = new ChatList_Adapter(ctx, beskederStrings, dto, "person1");
+                            beskeder.setAdapter(adapter);
+                            inputTekst.getEditText().setText("");
+                        }
+                    }
+                }, dto);
             }
         }
         else if (v == settings){
@@ -103,4 +112,23 @@ public class Activity_Chat extends AppCompatActivity  implements View.OnClickLis
         this.dto = dto;
     }
 
+    private void updateDTO(String newSender, String newReciever, String newMessage){
+        ArrayList<String> tempSender = dto.getSender();
+        tempSender.add(newSender);
+        dto.setSender(tempSender);
+
+        ArrayList<String> tempReciever = dto.getReceiver();
+        tempReciever.add(newReciever);
+        dto.setReceiver(tempReciever);
+
+        ArrayList<String> tempMessage = dto.getMessages();
+        tempMessage.add(newMessage);
+        dto.setMessages(tempMessage);
+
+        ArrayList<Date> tempDate = dto.getDates();
+        tempDate.add(new Date());
+        dto.setDates(tempDate);
+
+
+    }
 }
