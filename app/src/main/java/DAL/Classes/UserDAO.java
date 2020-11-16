@@ -47,18 +47,20 @@ public class UserDAO implements IUserDAO {
 
         this.userId = userId;
 
-
          readData(new MyCallback() {
             @Override
             public void onCallback(UserDTO user) {
-                System.out.println("UserName = " + user.getfName());
+
+                System.out.println("City " + user.getCity());
                 Log.d(TAG, user.toString());
             }
         });
 
-        //I need to be able to return the user object here, so I can use it in my Controller!
+
         return null;
     }
+
+
 
     public void readData(MyCallback myCallback) {
         DocumentReference docRef = db.collection("users").document(userId);
@@ -68,9 +70,7 @@ public class UserDAO implements IUserDAO {
 
                 DocumentSnapshot documentSnapshot = task.getResult();
                 if(documentSnapshot != null){
-
                     UserDTO user = documentSnapshot.toObject(UserDTO.class);
-                    System.out.println("hej " + user.getfName());
                     myCallback.onCallback(user);
                 }
 
