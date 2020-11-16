@@ -7,4 +7,11 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="switchTheme" parent="Widget.AppCompat.CompoundButton.Switch">
+        <item name="colorControlActivated">@color/buttonBackground</item>
+        <item name="trackColorActive">@color/buttonBackground</item>
+        <item name="trackColorInactive">#8A8A8A</item>
+
+
+    </style>
 </resources>

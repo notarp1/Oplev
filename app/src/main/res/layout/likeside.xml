@@ -85,10 +85,10 @@
         android:id="@+id/opretOpslag_Knap2"
         android:layout_width="409dp"
         android:layout_height="81dp"
-        android:background="#00FAE4"
+        android:background="@color/buttonBackground"
         android:shadowColor="#FFFFFF"
         android:text="NYT OPSLAG"
-        android:textColor="#FFFFFF"
+        android:textColor="@color/buttonText"
         android:textSize="30sp" />
 
 </LinearLayout>
