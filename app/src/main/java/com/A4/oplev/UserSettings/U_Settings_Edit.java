@@ -23,14 +23,15 @@ public class U_Settings_Edit extends Fragment implements View.OnClickListener {
     ImageView accept;
     public EditText about, city, job, education;
     Controller controller;
-    UserDTO user;
-    Context ctx;
+
+
 
     public View onCreateView(LayoutInflater i, ViewGroup container, Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         View root = i.inflate(R.layout.u_setting_edit_frag, container, false);
 
-        ctx = getActivity();
+        controller =  Controller.getInstance();
+
         textview = (TextView)getActivity().findViewById(R.id.topbar_text);
         textview.setText("Rediger Profil");
 
@@ -38,19 +39,12 @@ public class U_Settings_Edit extends Fragment implements View.OnClickListener {
         accept.setVisibility(View.VISIBLE);
         accept.setOnClickListener(this);
 
-        controller =  Controller.getInstance();
-        user = controller.getCurrUser();
-
-
         about = root.findViewById(R.id.editText_description);
         city = root.findViewById(R.id.editText_city);
         job = root.findViewById(R.id.editText_job);
         education = root.findViewById(R.id.editText_edu);
 
-        about.setText(user.getDescription());
-        city.setText(user.getCity());
-        job.setText(user.getJob());
-        education.setText(user.getEducation());
+        controller.iniEditProfil(this);
 
 
 

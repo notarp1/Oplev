@@ -67,6 +67,12 @@ public class Controller {
         userDAO.deleteUser(userId);
     }
 
+    public void iniEditProfil(U_Settings_Edit ctx){
+        ctx.about.setText(user.getDescription());
+        ctx.city.setText(user.getCity());
+        ctx.job.setText(user.getJob());
+        ctx.education.setText(user.getEducation());
+    }
 
     public void iniProfile(Activity_Profile ctx){
         String aboutText = user.getfName() + ", " + user.getAge();
