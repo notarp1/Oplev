@@ -31,18 +31,17 @@ public class Controller {
 
     }
 
-    public UserDTO getCurrUser(){
-        return user;
+    public static Controller getInstance(){
+        if (instance == null) instance = new Controller();
+        return instance;
     }
 
     public void setCurrUser(UserDTO user){
         this.user = user;
     }
 
-
-    public static Controller getInstance(){
-        if (instance == null) instance = new Controller();
-        return instance;
+    public UserDTO getCurrUser(){
+        return user;
     }
 
 
@@ -70,7 +69,6 @@ public class Controller {
     public void deleteUser(String userId){
         userDAO.deleteUser(userId);
     }
-
 
 
     public void iniProfile(Activity_Profile ctx){

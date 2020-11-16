@@ -32,16 +32,18 @@ public class Activity_Ini extends AppCompatActivity implements Serializable {
         ctx = this;
         prefs = PreferenceManager.getDefaultSharedPreferences(this);
 
+
         controller.getUser(new CallbackUser() {
             @Override
             public void onCallback(UserDTO user) {
                 setUserDTO(user);
-                prefs.edit().putString("UserID",user.getUserId()).apply();
+                prefs.edit().putString("UserId",user.getUserId()).apply();
 
                 Intent i = new Intent(ctx, Activity_Main.class);
                 controller.setCurrUser(user);
 
                 startActivity(i);
+                finish();
             }
         }, "KHbc7vhvqHEd2bLjgTZM");
 
