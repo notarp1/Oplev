@@ -11,8 +11,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
-public class createEvent1_frag extends Fragment implements View.OnClickListener {
+public class createEvent1_frag extends Fragment implements View.OnClickListener{
     //topbar text
     TextView topbar_txt;
     //fragment elements
@@ -52,24 +53,57 @@ public class createEvent1_frag extends Fragment implements View.OnClickListener 
             //gør noget smart for at kunne udskifte billedet
         }
         else if(v == next_btn){
-            Bundle b = new Bundle();
-            //set strings
-            b.putString("title_in", title_in.getText().toString());
-            b.putString("desc_in", desc_in.getText().toString());
-            b.putString("date_in", date_in.getText().toString());
-            b.putString("city_in", city_in.getText().toString());
-            //set int (price)
-            //b.putInt("price_in", Integer.parseInt(price_in.getText().toString()));
+            //validate that inputs are entered
+            if(isInputValid()){
 
-            //create fragment and add bundle to arguments
-            Fragment create2_frag = new createEvent2_frag();
-            create2_frag.setArguments(b);
+                //setup bundle to transfer data to next frag
+                Bundle b = new Bundle();
+                //set strings
+                b.putString("title_in", title_in.getText().toString());
+                b.putString("desc_in", desc_in.getText().toString());
+                b.putString("date_in", date_in.getText().toString());
+                b.putString("city_in", city_in.getText().toString());
+                //set int (price)
+                //b.putInt("price_in", Integer.parseInt(price_in.getText().toString()));
+
+                //create fragment and add bundle to arguments
+                Fragment create2_frag = new createEvent2_frag();
+                create2_frag.setArguments(b);
 
 
-            getFragmentManager().beginTransaction()
-                    .replace(R.id.mainFragmentBox, create2_frag)
-                    .addToBackStack(null)
-                    .commit();
+                getFragmentManager().beginTransaction()
+                        .replace(R.id.mainFragmentBox, create2_frag)
+                        .addToBackStack(null)
+                        .commit();
+            };
+
         }
+    }
+
+    private boolean isInputValid() {
+        String invalidInputToast = "Manglende input: \r\n";
+        boolean inputIsValid = true;
+        if(title_in.getText().toString().equals("")){
+            inputIsValid = false;
+            title_in.setError("Indsæt titel");
+        }
+        if(desc_in.getText().toString().equals("")){
+            inputIsValid = false;
+            desc_in.setError("Indsæt beskrivelse");
+        }
+        if(price_in.getText().toString().equals("")){
+            inputIsValid = false;
+            price_in.setError("Indsæt pris");
+        }
+        if(date_in.getText().toString().equals("")){
+            inputIsValid = false;
+            date_in.setError("Indsæt dato");
+        }
+        if(city_in.getText().toString().equals("")){
+            inputIsValid = false;
+            city_in.setError("Indsæt by");
+        }
+
+        return inputIsValid;
     }
 }
