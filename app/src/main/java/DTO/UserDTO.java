@@ -6,7 +6,7 @@ import java.util.ArrayList;
 public class UserDTO implements Serializable {
 
     int age;
-    String fName, lName, city, email, phone, description, userId;
+    String fName, lName, city, email, phone, description, userId, job, education;
     ArrayList<String> pictures;
     ArrayList<Integer> events, joinedEvents;
 
@@ -29,6 +29,22 @@ public class UserDTO implements Serializable {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getJob() {
+        return job;
+    }
+
+    public void setJob(String job) {
+        this.job = job;
+    }
+
+    public void setEducation(String education) {
+        this.education = education;
+    }
+
+    public String getEducation() {
+        return education;
     }
 
     public String getfName() {

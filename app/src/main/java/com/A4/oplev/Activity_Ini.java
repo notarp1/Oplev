@@ -38,7 +38,7 @@ public class Activity_Ini extends AppCompatActivity implements Serializable {
                 prefs.edit().putString("UserID",user.getUserId()).apply();
 
                 Intent i = new Intent(ctx, Activity_Main.class);
-                i.putExtra("user", (Serializable) user);
+                controller.setCurrUser(user);
 
                 startActivity(i);
             }

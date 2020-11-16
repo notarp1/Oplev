@@ -7,19 +7,22 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
 
+import Controller.Controller;
 import DTO.UserDTO;
 
 public class Activity_Profile extends AppCompatActivity implements View.OnClickListener {
     TextView about, city, desc, aboutName;
-
+    Controller controller;
+    UserDTO user;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
-        Intent intent = getIntent();
-        UserDTO user = (UserDTO) intent.getSerializableExtra("user");
+
+        controller =  Controller.getInstance();
+        user = controller.getCurrUser();
 
 
         about = findViewById(R.id.text_information);

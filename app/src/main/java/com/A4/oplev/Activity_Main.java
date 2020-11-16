@@ -16,7 +16,6 @@ public class Activity_Main extends AppCompatActivity implements View.OnClickList
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        intent = getIntent();
 
         options = findViewById(R.id.options_btn);
         match = findViewById(R.id.match_btn);
@@ -26,7 +25,6 @@ public class Activity_Main extends AppCompatActivity implements View.OnClickList
         options.setOnClickListener(this);
         match.setOnClickListener(this);
         user.setOnClickListener(this);
-
 
 
         getSupportFragmentManager().beginTransaction().replace(R.id.main_frag, new Startside_billede_frag())
@@ -51,7 +49,6 @@ public class Activity_Main extends AppCompatActivity implements View.OnClickList
         } else if(v == user){
 
             Intent i = new Intent(this, Activity_U_Settings.class);
-            i.putExtra("user", intent.getSerializableExtra("user"));
             startActivity(i);
 
         }

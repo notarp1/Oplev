@@ -13,6 +13,7 @@ public class Controller {
     static ChatDAO chatDAO;
     static UserDAO userDAO;
     static EventDAO eventDAO;
+    private UserDTO curUser;
 
 
     private Controller(){
@@ -23,6 +24,14 @@ public class Controller {
 
         this.instance = this;
 
+    }
+
+    public UserDTO getCurrUser(){
+        return curUser;
+    }
+
+    public void setCurrUser(UserDTO user){
+        this.curUser = user;
     }
 
 
