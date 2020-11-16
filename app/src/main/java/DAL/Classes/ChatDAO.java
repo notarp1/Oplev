@@ -124,12 +124,22 @@ public class ChatDAO implements IChatDAO {
     }
 
     @Override
-    public void deleteChat(String chatId) {
-
+    public void deleteChat(FirestoreCallback firestoreCallback, String chatId) {
+        DocumentReference docRef = db.collection("chats").document(chatId);
+        docRef.delete().addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                firestoreCallback.onCallback(new ChatDTO(null,null,chatId,null,null));
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                firestoreCallback.onCallback(new ChatDTO(null,null,null,null,null));
+            }
+        });
     }
 
     public void readChat(FirestoreCallback firestoreCallback, String chatId){
-        final ChatDTO[] defaultDTO = {new ChatDTO(null, null, null, null, null)};
 
         DocumentReference docRef = db.collection("chats").document(chatId);
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
@@ -143,8 +153,6 @@ public class ChatDAO implements IChatDAO {
                     if (document.exists()) {
                         Log.d(TAG, "DocumentSnapshot data: " + document.getData());
                         ChatDTO dto = document.toObject(ChatDTO.class);
-                        defaultDTO[0] = dto;
-                        System.out.println(defaultDTO[0].toString() + new Date());
                         firestoreCallback.onCallback(dto);
                     } else {
                         Log.d(TAG, "No such document");

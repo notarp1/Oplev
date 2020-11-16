@@ -8,6 +8,6 @@ public interface IChatDAO {
     ChatDTO getChat(String chatId);
     void createChat(ChatDTO chat);
     void updateChat(ChatDAO.FirestoreCallback firestoreCallback, ChatDTO chat);
-    void deleteChat(String chatId);
+    void deleteChat(ChatDAO.FirestoreCallback firestoreCallback, String chatId);
     void readChat(ChatDAO.FirestoreCallback firestoreCallback, String chatId);
 }
