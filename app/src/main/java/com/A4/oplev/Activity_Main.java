@@ -1,5 +1,6 @@
 package com.A4.oplev;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -7,7 +8,12 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.FirebaseApp;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import DAL.Classes.UserDAO;
 import DAL.DBAccess;
@@ -31,18 +37,9 @@ public class Activity_Main extends AppCompatActivity implements View.OnClickList
         match.setOnClickListener(this);
         user.setOnClickListener(this);
 
-        /*
-        UserDAO dao = new UserDAO();
-        UserDTO test = new UserDTO();
-        test.setAge(18);
-        test.setCity("Odense");
-        test.setDescription("Jeg er en sød gut");
-        test.setEmail("chrisi@gmail.com");
-        test.setfName("Jonas");
-        test.setlName("Henriksen");
-        test.setPhone("83827312");
-        dao.createUser(test); */
+        UserDAO test = new UserDAO();
 
+        test.getUser("KHbc7vhvqHEd2bLjgTZM");
 
         getSupportFragmentManager().beginTransaction().replace(R.id.main_frag, new Startside_billede_frag())
                 .commit();

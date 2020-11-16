@@ -5,10 +5,10 @@ import DTO.UserDTO;
 
 public interface IUserDAO {
 
-    UserDTO getUser(int userId);
+    UserDTO getUser(String userId);
     void createUser(UserDTO user);
     void updateUser(UserDTO user);
-    void deleteUser(int userId);
+    void deleteUser(String userId);
 
 
 }
