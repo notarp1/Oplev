@@ -58,7 +58,7 @@ public class U_Settings_Main extends Fragment implements View.OnClickListener {
 
          if (v == indstillinger){
             getFragmentManager().beginTransaction()
-                .replace(R.id.mainFragmentBox, new U_settings_opt())
+                .replace(R.id.mainFragmentBox, new U_Settings_Options())
                 .addToBackStack(null)
                 .commit();
 

@@ -11,7 +11,7 @@ import androidx.fragment.app.Fragment;
 
 import com.A4.oplev.R;
 
-public class U_settings_opt extends Fragment implements View.OnClickListener {
+public class U_Settings_Options extends Fragment implements View.OnClickListener {
 
 
     public View onCreateView(LayoutInflater i, ViewGroup container, Bundle savedInstanceState) {
