@@ -9,6 +9,8 @@ import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
 
+import DTO.UserDTO;
+
 public class U_Settings_Main extends Fragment implements View.OnClickListener {
 
     View visProfil, rediger, indstillinger;
@@ -30,8 +32,8 @@ public class U_Settings_Main extends Fragment implements View.OnClickListener {
         indstillinger = root.findViewById(R.id.box_indstillinger);
         about = root.findViewById(R.id.u_profile_name);
 
-        String aboutText = bundle.getString("fName") + ", "+  bundle.getString("age");
-
+        UserDTO user = (UserDTO) bundle.getSerializable("user");
+        String aboutText = user.getfName() + ", " + user.getAge();
         about.setText(aboutText);
 
         indstillinger.setOnClickListener(this);
@@ -60,12 +62,8 @@ public class U_Settings_Main extends Fragment implements View.OnClickListener {
                      .addToBackStack(null)
                      .commit();
          } else if (v == visProfil){
-             Intent i = new Intent(getActivity(), Activity_profile.class);
-             i.putExtra("fName",bundle.getString("fName"));
-             i.putExtra("lName",bundle.getString("lName"));
-             i.putExtra("age",bundle.getString("age"));
-             i.putExtra("desc",bundle.getString("desc"));
-             i.putExtra("city",bundle.getString("city"));
+             Intent i = new Intent(getActivity(), Activity_Profile.class);
+             i.putExtra("user", bundle.getSerializable("user"));
              startActivity(i);
          }
     }

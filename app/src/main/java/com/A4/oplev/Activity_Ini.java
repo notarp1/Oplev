@@ -7,12 +7,17 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.service.controls.Control;
 
+import java.io.Serializable;
+
+import Controller.Controller;
 import DAL.Classes.UserDAO;
+import DAL.Interfaces.CallbackUser;
 import DTO.UserDTO;
 
-public class Activity_Ini extends AppCompatActivity {
-    UserDAO userDAO = new UserDAO();
+public class Activity_Ini extends AppCompatActivity implements Serializable {
+    Controller controller;
     UserDTO userDTO;
     SharedPreferences prefs;
     Context ctx;
@@ -21,20 +26,20 @@ public class Activity_Ini extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity__ini);
+
+        controller = Controller.getInstance();
         ctx = this;
         prefs = PreferenceManager.getDefaultSharedPreferences(this);
 
-        userDAO.getUser(new UserDAO.MyCallback() {
+        controller.getUser(new CallbackUser() {
             @Override
             public void onCallback(UserDTO user) {
                 setUserDTO(user);
                 prefs.edit().putString("UserID",user.getUserId()).apply();
+
                 Intent i = new Intent(ctx, Activity_Main.class);
-                i.putExtra("fName",user.getfName()+"");
-                i.putExtra("lName",user.getlName()+"");
-                i.putExtra("age",user.getAge()+"");
-                i.putExtra("desc",user.getDescription()+"");
-                i.putExtra("city",user.getCity()+"");
+                i.putExtra("user", (Serializable) user);
+
                 startActivity(i);
             }
         }, "KHbc7vhvqHEd2bLjgTZM");

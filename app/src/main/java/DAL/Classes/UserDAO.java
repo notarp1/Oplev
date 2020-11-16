@@ -1,40 +1,26 @@
 package DAL.Classes;
 
-import android.os.Handler;
-import android.os.Looper;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
 
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
-import com.google.firebase.firestore.Source;
-import com.google.firebase.firestore.auth.User;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.concurrent.Executor;
-import java.util.concurrent.Executors;
 
-import DAL.DBAccess;
+import DAL.Interfaces.CallbackUser;
 import DAL.Interfaces.IUserDAO;
 import DTO.UserDTO;
 
-public class UserDAO implements IUserDAO {
+public class UserDAO implements IUserDAO, CallbackUser {
 
     public FirebaseFirestore db;
     private static final String TAG = "userLog" ;
-    String userId;
-    UserDTO test;
-    static boolean pass = false;
 
 
     public UserDAO(){
@@ -42,8 +28,9 @@ public class UserDAO implements IUserDAO {
     }
 
 
+
     @Override
-    public void getUser(MyCallback myCallback, String userId) {
+    public void getUser(CallbackUser callbackUser, String userId) {
         DocumentReference docRef = db.collection("users").document(userId);
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
@@ -52,16 +39,12 @@ public class UserDAO implements IUserDAO {
                 DocumentSnapshot documentSnapshot = task.getResult();
                 if(documentSnapshot != null){
                     UserDTO user = documentSnapshot.toObject(UserDTO.class);
-                    myCallback.onCallback(user);
+                    callbackUser.onCallback(user);
                 }
 
 
             }
         });
-    }
-
-    public interface MyCallback {
-        void onCallback(UserDTO user);
     }
 
 
@@ -103,6 +86,8 @@ public class UserDAO implements IUserDAO {
     }
 
 
+    @Override
+    public void onCallback(UserDTO user) {
 
-
+    }
 }
