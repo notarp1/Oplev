@@ -10,7 +10,7 @@ import android.widget.ListView;
 
 import androidx.fragment.app.Fragment;
 
-import com.A4.oplev.listeners.OnSwipeTouchListener;
+import com.A4.oplev.Listeners.OnSwipeTouchListener;
 
 public class HjerteSide_frag extends Fragment implements View.OnClickListener{
     ListView listView;

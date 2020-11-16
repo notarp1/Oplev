@@ -12,7 +12,7 @@ import android.widget.ListView;
 
 import androidx.fragment.app.Fragment;
 
-import com.A4.oplev.listeners.OnSwipeTouchListener;
+import com.A4.oplev.Listeners.OnSwipeTouchListener;
 
 public class LikesideList_frag extends Fragment{
     ListView listView;

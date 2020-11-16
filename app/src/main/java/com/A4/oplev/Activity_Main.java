@@ -21,11 +21,13 @@ import DTO.UserDTO;
 public class Activity_Main extends AppCompatActivity implements View.OnClickListener {
 
     ImageView options, match, user;
+    Intent intent;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        intent = getIntent();
 
         options = findViewById(R.id.options_btn);
         match = findViewById(R.id.match_btn);
@@ -102,6 +104,11 @@ public class Activity_Main extends AppCompatActivity implements View.OnClickList
         } else if(v == user){
 
             Intent i = new Intent(this, Activity_U_Settings.class);
+            i.putExtra("fName",intent.getStringExtra("fName"));
+            i.putExtra("lName",intent.getStringExtra("lName"));
+            i.putExtra("age",intent.getStringExtra("age"));
+            i.putExtra("desc",intent.getStringExtra("desc"));
+            i.putExtra("city",intent.getStringExtra("city"));
             startActivity(i);
 
         }

@@ -43,26 +43,7 @@ public class UserDAO implements IUserDAO {
 
 
     @Override
-    public UserDTO getUser(String userId) {
-
-        this.userId = userId;
-
-         readData(new MyCallback() {
-            @Override
-            public void onCallback(UserDTO user) {
-
-                System.out.println("City " + user.getCity());
-                Log.d(TAG, user.toString());
-            }
-        });
-
-
-        return null;
-    }
-
-
-
-    public void readData(MyCallback myCallback) {
+    public void getUser(MyCallback myCallback, String userId) {
         DocumentReference docRef = db.collection("users").document(userId);
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override

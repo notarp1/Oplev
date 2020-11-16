@@ -9,7 +9,7 @@ import android.widget.ImageView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.A4.oplev.listeners.OnSwipeTouchListener;
+import com.A4.oplev.Listeners.OnSwipeTouchListener;
 
 public class Activity_Likeside extends AppCompatActivity implements View.OnClickListener{
     ImageView hjerte, besked, tilbage;

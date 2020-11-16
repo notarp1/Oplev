@@ -5,11 +5,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.View;
-import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -17,8 +14,7 @@ import android.widget.TextView;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.A4.oplev.adapters.ChatList_Adapter;
-import com.A4.oplev.listeners.OnSwipeTouchListener;
+import com.A4.oplev.Adapters.ChatList_Adapter;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
@@ -29,7 +25,6 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import DAL.Classes.ChatDAO;
-import DAL.DBAccess;
 import DTO.ChatDTO;
 
 public class Activity_Chat extends AppCompatActivity  implements View.OnClickListener {

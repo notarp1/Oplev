@@ -1,4 +1,4 @@
-package com.A4.oplev.adapters;
+package com.A4.oplev.Adapters;
 
 import android.content.Context;
 import android.view.Gravity;
