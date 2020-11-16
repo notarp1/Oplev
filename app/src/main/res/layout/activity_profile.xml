@@ -46,6 +46,24 @@
                 android:textColor="#FFFFFF" />
 
             <TextView
+                android:id="@+id/text_job"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5sp"
+                android:layout_marginLeft="5sp"
+                android:text="📍 København NV"
+                android:textColor="#FFFFFF" />
+
+            <TextView
+                android:id="@+id/text_edu"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5sp"
+                android:layout_marginLeft="5sp"
+                android:text="📍 København NV"
+                android:textColor="#FFFFFF" />
+
+            <TextView
                 android:id="@+id/text_about_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

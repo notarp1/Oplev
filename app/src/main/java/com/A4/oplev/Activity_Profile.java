@@ -2,7 +2,6 @@ package com.A4.oplev;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
@@ -11,9 +10,9 @@ import Controller.Controller;
 import DTO.UserDTO;
 
 public class Activity_Profile extends AppCompatActivity implements View.OnClickListener {
-    TextView about, city, desc, aboutName;
+    public TextView about, city, desc, aboutName, job, edu;
     Controller controller;
-    UserDTO user;
+
 
 
     @Override
@@ -22,24 +21,15 @@ public class Activity_Profile extends AppCompatActivity implements View.OnClickL
         setContentView(R.layout.activity_profile);
 
         controller =  Controller.getInstance();
-        user = controller.getCurrUser();
-
 
         about = findViewById(R.id.text_information);
         city = findViewById(R.id.text_city);
         desc = findViewById(R.id.text_description);
         aboutName = findViewById(R.id.text_about_name);
+        edu = findViewById(R.id.text_edu);
+        job = findViewById(R.id.text_job);
 
-
-        String aboutText = user.getfName() + ", " + user.getAge();
-        String cityText = "\uD83D\uDCCD " + user.getCity();
-        String descText = user.getDescription();
-        String aboutNameText = "Om "+ user.getfName();
-
-        about.setText(aboutText);
-        city.setText(cityText);
-        desc.setText(descText);
-        aboutName.setText(aboutNameText);
+        controller.iniProfile(this);
 
 
     }
