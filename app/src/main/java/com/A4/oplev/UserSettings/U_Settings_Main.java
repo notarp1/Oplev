@@ -18,7 +18,7 @@ import DTO.UserDTO;
 public class U_Settings_Main extends Fragment implements View.OnClickListener {
 
     View visProfil, rediger, indstillinger;
-    TextView about;
+    public TextView about;
     Controller controller;
     UserDTO user;
 
@@ -31,7 +31,7 @@ public class U_Settings_Main extends Fragment implements View.OnClickListener {
 
 
         controller =  Controller.getInstance();
-        user = controller.getCurrUser();
+
 
 
         visProfil = root.findViewById(R.id.box_profil);
@@ -39,8 +39,8 @@ public class U_Settings_Main extends Fragment implements View.OnClickListener {
         indstillinger = root.findViewById(R.id.box_indstillinger);
         about = root.findViewById(R.id.u_profile_name);
 
-        String aboutText = user.getfName() + ", " + user.getAge();
-        about.setText(aboutText);
+        controller.iniUserMainSettings(this);
+
 
         indstillinger.setOnClickListener(this);
         rediger.setOnClickListener(this);

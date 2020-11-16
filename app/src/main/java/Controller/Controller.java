@@ -2,6 +2,7 @@ package Controller;
 
 import com.A4.oplev.Activity_Profile;
 import com.A4.oplev.UserSettings.U_Settings_Edit;
+import com.A4.oplev.UserSettings.U_Settings_Main;
 
 import DAL.Classes.ChatDAO;
 import DAL.Classes.EventDAO;
@@ -67,12 +68,7 @@ public class Controller {
         userDAO.deleteUser(userId);
     }
 
-    public void iniEditProfil(U_Settings_Edit ctx){
-        ctx.about.setText(user.getDescription());
-        ctx.city.setText(user.getCity());
-        ctx.job.setText(user.getJob());
-        ctx.education.setText(user.getEducation());
-    }
+
 
     public void iniProfile(Activity_Profile ctx){
         String aboutText = user.getfName() + ", " + user.getAge();
@@ -100,5 +96,16 @@ public class Controller {
 
     }
 
+    public void iniEditProfile(U_Settings_Edit ctx){
+        ctx.about.setText(user.getDescription());
+        ctx.city.setText(user.getCity());
+        ctx.job.setText(user.getJob());
+        ctx.education.setText(user.getEducation());
+    }
 
+    public void iniUserMainSettings(U_Settings_Main ctx){
+        String aboutText = user.getfName() + ", " + user.getAge();
+        ctx.about.setText(aboutText);
+
+    }
 }
