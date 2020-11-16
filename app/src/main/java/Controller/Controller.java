@@ -10,6 +10,9 @@ import DAL.Classes.UserDAO;
 import DAL.Interfaces.CallbackUser;
 import DTO.UserDTO;
 
+import DAL.Classes.EventDAO;
+import DTO.EventDTO;
+
 public class Controller {
     private static Controller instance = null;
     static ChatDAO chatDAO;
@@ -107,5 +110,10 @@ public class Controller {
         String aboutText = user.getfName() + ", " + user.getAge();
         ctx.about.setText(aboutText);
 
+    }
+
+    public void createEvent(EventDTO event){
+        EventDAO eventDAO = new EventDAO();
+        eventDAO.createEvent(event);
     }
 }
