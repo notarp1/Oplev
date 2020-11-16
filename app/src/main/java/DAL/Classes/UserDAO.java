@@ -1,21 +1,28 @@
 package DAL.Classes;
 
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
 
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.firestore.Source;
+import com.google.firebase.firestore.auth.User;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 
 import DAL.DBAccess;
 import DAL.Interfaces.IUserDAO;
@@ -23,17 +30,41 @@ import DTO.UserDTO;
 
 public class UserDAO implements IUserDAO {
 
-    DBAccess dbAccess;
     public FirebaseFirestore db;
-    public UserDAO(){
+    private static final String TAG = "userLog" ;
+    String userId;
+    UserDTO test;
+    static boolean pass = false;
 
+
+    public UserDAO(){
         this.db = FirebaseFirestore.getInstance();
     }
 
+
     @Override
-    public UserDTO getUser(int userId) {
-        return null;
+    public void getUser(MyCallback myCallback, String userId) {
+        DocumentReference docRef = db.collection("users").document(userId);
+        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+
+                DocumentSnapshot documentSnapshot = task.getResult();
+                if(documentSnapshot != null){
+                    UserDTO user = documentSnapshot.toObject(UserDTO.class);
+                    myCallback.onCallback(user);
+                }
+
+
+            }
+        });
     }
+
+    public interface MyCallback {
+        void onCallback(UserDTO user);
+    }
+
+
 
     @Override
     public void createUser(UserDTO user) {
@@ -54,23 +85,11 @@ public class UserDAO implements IUserDAO {
 
         db.collection("users")
                 .add(userObject)
-                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                    private static final String TAG = "user" ;
-
-                    @Override
-                    public void onSuccess(DocumentReference documentReference) {
-                        Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId());
-                        db.collection("users").document(documentReference.getId()).update("userId", documentReference.getId());
-                    }
+                .addOnSuccessListener(documentReference -> {
+                    Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId());
+                    db.collection("users").document(documentReference.getId()).update("userId", documentReference.getId());
                 })
-                .addOnFailureListener(new OnFailureListener() {
-                    private static final String TAG = "userFail";
-
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.w(TAG, "Error adding document", e);
-                    }
-                });
+                .addOnFailureListener(e -> Log.w(TAG, "Error adding document", e));
     }
 
     @Override
@@ -79,7 +98,11 @@ public class UserDAO implements IUserDAO {
     }
 
     @Override
-    public void deleteUser(int userId) {
+    public void deleteUser(String userId) {
 
     }
+
+
+
+
 }

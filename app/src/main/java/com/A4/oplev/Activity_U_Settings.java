@@ -1,5 +1,6 @@
 package com.A4.oplev;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
@@ -7,6 +8,7 @@ import android.widget.TextView;
 
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 
 public class Activity_U_Settings extends AppCompatActivity implements View.OnClickListener{
     ImageView back;
@@ -21,8 +23,20 @@ public class Activity_U_Settings extends AppCompatActivity implements View.OnCli
 
         back.setOnClickListener(this);
 
+        Intent intent = getIntent();
 
-        getSupportFragmentManager().beginTransaction().replace(R.id.mainFragmentBox, new U_Settings_Main(), "uSettingMainBox")
+
+        Bundle bundle = new Bundle();
+        bundle.putString("fName",intent.getStringExtra("fName"));
+        bundle.putString("lName",intent.getStringExtra("lName"));
+        bundle.putString("age",intent.getStringExtra("age"));
+        bundle.putString("desc",intent.getStringExtra("desc"));
+        bundle.putString("city",intent.getStringExtra("city"));
+
+        Fragment fragment = new U_Settings_Main();
+        fragment.setArguments(bundle);
+
+        getSupportFragmentManager().beginTransaction().replace(R.id.mainFragmentBox, fragment, "uSettingMainBox")
                 .commit();
 
     }
