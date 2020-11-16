@@ -1,6 +1,5 @@
 package com.A4.oplev;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -8,15 +7,15 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.FirebaseApp;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.util.ArrayList;
+import java.util.Date;
+
+import DAL.Classes.ChatDAO;
 import DAL.Classes.UserDAO;
 import DAL.DBAccess;
+import DTO.ChatDTO;
 import DTO.UserDTO;
 
 public class Activity_Main extends AppCompatActivity implements View.OnClickListener {
@@ -37,10 +36,49 @@ public class Activity_Main extends AppCompatActivity implements View.OnClickList
         match.setOnClickListener(this);
         user.setOnClickListener(this);
 
+        /*
+        UserDAO dao = new UserDAO();
+        UserDTO test = new UserDTO();
+        test.setAge(18);
+        test.setCity("Odense");
+        test.setDescription("Jeg er en sød gut");
+        test.setEmail("chrisi@gmail.com");
+        test.setfName("Jonas");
+        test.setlName("Henriksen");
+        test.setPhone("83827312");
+        dao.createUser(test); */
 
-        UserDAO test = new UserDAO();
+/*
+        ChatDAO dao = new ChatDAO();
+        ChatDTO dto = new ChatDTO();
+        ArrayList<Date> dates = new ArrayList<>();
+        ArrayList<String> messages = new ArrayList<>();
+        ArrayList<String> reciever = new ArrayList<>();
+        ArrayList<String> sender = new ArrayList<>();
 
-        test.getUser("KHbc7vhvqHEd2bLjgTZM");
+
+        for (int i = 0; i<3;i++) {
+            messages.add("Hej"+(i+1));
+            dates.add(new Date());
+            if (i % 2 == 0){
+                reciever.add("person2");
+                sender.add("person1");
+            }
+            else {
+                reciever.add("person1");
+                sender.add("person2");
+            }
+
+        }
+
+        dto.setMessages(messages);
+        dto.setDates(dates);
+        dto.setReceiver(reciever);
+        dto.setSender(sender);
+        dao.createChat(dto);
+
+ */
+
 
         getSupportFragmentManager().beginTransaction().replace(R.id.main_frag, new Startside_billede_frag())
                 .commit();
