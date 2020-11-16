@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Activity_profile">
+    tools:context=".Activity_Profile">
 
     <ImageView
         android:id="@+id/imageView"
@@ -43,22 +43,6 @@
                 android:layout_marginStart="5sp"
                 android:layout_marginLeft="5sp"
                 android:text="📍 København NV"
-                android:textColor="#FFFFFF" />
-
-            <TextView
-                android:id="@+id/text_date_top"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="5sp"
-                android:text="⌚ Lørdag 4. juli Kl. 10.00"
-                android:textColor="#FFFFFF" />
-
-            <TextView
-                android:id="@+id/text_price_top"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="5sp"
-                android:text="💸 Gratis"
                 android:textColor="#FFFFFF" />
 
             <TextView

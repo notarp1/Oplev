@@ -13,7 +13,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".Activity_Main" />
-        <activity android:name=".Activity_profile" />
+        <activity android:name=".Activity_Profile" />
         <activity
             android:name=".Activity_Ini"
             android:configChanges="orientation|screenSize"

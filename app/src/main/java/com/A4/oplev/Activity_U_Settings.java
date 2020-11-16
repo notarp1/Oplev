@@ -27,11 +27,7 @@ public class Activity_U_Settings extends AppCompatActivity implements View.OnCli
 
 
         Bundle bundle = new Bundle();
-        bundle.putString("fName",intent.getStringExtra("fName"));
-        bundle.putString("lName",intent.getStringExtra("lName"));
-        bundle.putString("age",intent.getStringExtra("age"));
-        bundle.putString("desc",intent.getStringExtra("desc"));
-        bundle.putString("city",intent.getStringExtra("city"));
+        bundle.putSerializable("user", intent.getSerializableExtra("user"));
 
         Fragment fragment = new U_Settings_Main();
         fragment.setArguments(bundle);

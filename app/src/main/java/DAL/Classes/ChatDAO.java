@@ -1,6 +1,5 @@
 package DAL.Classes;
 
-import android.os.SystemClock;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -17,7 +16,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-import DAL.DBAccess;
 import DAL.Interfaces.IChatDAO;
 import DTO.ChatDTO;
 
