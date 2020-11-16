@@ -1,4 +1,4 @@
-package com.A4.oplev;
+package com.A4.oplev.Like_Hjerte_Side;
 
 import android.content.Intent;
 import android.graphics.Color;
@@ -9,7 +9,9 @@ import android.widget.ImageView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.A4.oplev.Listeners.OnSwipeTouchListener;
+import com.A4.oplev.CreateEvent.Activity_Create_Event;
+import Controller.Listeners.OnSwipeTouchListener;
+import com.A4.oplev.R;
 
 public class Activity_Likeside extends AppCompatActivity implements View.OnClickListener{
     ImageView hjerte, besked, tilbage;

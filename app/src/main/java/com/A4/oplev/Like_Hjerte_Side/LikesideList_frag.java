@@ -1,4 +1,4 @@
-package com.A4.oplev;
+package com.A4.oplev.Like_Hjerte_Side;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
@@ -12,7 +12,9 @@ import android.widget.ListView;
 
 import androidx.fragment.app.Fragment;
 
-import com.A4.oplev.Listeners.OnSwipeTouchListener;
+import com.A4.oplev.Chat.Activity_Chat;
+import Controller.Listeners.OnSwipeTouchListener;
+import com.A4.oplev.R;
 
 public class LikesideList_frag extends Fragment{
     ListView listView;

@@ -1,4 +1,4 @@
-package com.A4.oplev;
+package com.A4.oplev.CreateEvent;
 
 import android.os.Bundle;
 import android.view.View;
@@ -6,6 +6,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.A4.oplev.CreateEvent.createEvent1_frag;
+import com.A4.oplev.R;
 
 public class Activity_Create_Event extends AppCompatActivity implements View.OnClickListener {
     ImageView back;

@@ -1,4 +1,4 @@
-package com.A4.oplev;
+package com.A4.oplev.CreateEvent;
 
 import android.os.Bundle;
 
@@ -11,7 +11,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
+
+import com.A4.oplev.R;
 
 public class createEvent1_frag extends Fragment implements View.OnClickListener{
     //topbar text

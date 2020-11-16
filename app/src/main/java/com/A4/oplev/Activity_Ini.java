@@ -7,12 +7,13 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.service.controls.Control;
+
+import com.A4.oplev.R;
+import com.A4.oplev.__Main.Activity_Main;
 
 import java.io.Serializable;
 
 import Controller.Controller;
-import DAL.Classes.UserDAO;
 import DAL.Interfaces.CallbackUser;
 import DTO.UserDTO;
 

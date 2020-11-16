@@ -1,4 +1,4 @@
-package com.A4.oplev;
+package com.A4.oplev.__Main;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -6,6 +6,11 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
+
+import com.A4.oplev.Like_Hjerte_Side.Activity_Likeside;
+import com.A4.oplev.R;
+import com.A4.oplev.SearchFilter.Activity_Search_Filter;
+import com.A4.oplev.UserSettings.Activity_U_Settings;
 
 public class Activity_Main extends AppCompatActivity implements View.OnClickListener {
 

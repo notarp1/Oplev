@@ -1,9 +1,6 @@
 package Controller;
 
-import android.widget.TextView;
-
-import com.A4.oplev.R;
-import com.A4.oplev.U_Settings_Edit;
+import com.A4.oplev.UserSettings.U_Settings_Edit;
 
 import DAL.Classes.ChatDAO;
 import DAL.Classes.EventDAO;

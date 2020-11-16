@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".createEvent2_frag">
+    tools:context=".CreateEvent.createEvent2_frag">
 
     <TextView
         android:id="@+id/create2_info_txt"

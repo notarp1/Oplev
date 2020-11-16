@@ -1,4 +1,4 @@
-package com.A4.oplev;
+package com.A4.oplev.CreateEvent;
 
 import android.os.Bundle;
 
@@ -10,6 +10,8 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Switch;
 import android.widget.TextView;
+
+import com.A4.oplev.R;
 
 import io.apptik.widget.MultiSlider;
 

@@ -1,4 +1,4 @@
-package com.A4.oplev;
+package com.A4.oplev.Chat;
 
 import android.content.Context;
 import android.content.Intent;
@@ -14,7 +14,8 @@ import android.widget.TextView;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.A4.oplev.Adapters.ChatList_Adapter;
+import com.A4.oplev._Adapters.ChatList_Adapter;
+import com.A4.oplev.R;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;

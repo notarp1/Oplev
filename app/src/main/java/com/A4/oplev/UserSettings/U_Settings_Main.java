@@ -1,4 +1,4 @@
-package com.A4.oplev;
+package com.A4.oplev.UserSettings;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -8,6 +8,9 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
+
+import com.A4.oplev.Activity_Profile;
+import com.A4.oplev.R;
 
 import Controller.Controller;
 import DTO.UserDTO;

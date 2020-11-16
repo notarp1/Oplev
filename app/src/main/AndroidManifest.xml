@@ -12,7 +12,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Activity_Main" />
+        <activity android:name=".__Main.Activity_Main" />
         <activity android:name=".Activity_Profile" />
         <activity
             android:name=".Activity_Ini"
@@ -24,11 +24,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Activity_U_Settings" />
-        <activity android:name=".Activity_Search_Filter" />
-        <activity android:name=".Activity_Create_Event" />
-        <activity android:name=".Activity_Likeside" />
-        <activity android:name=".Activity_Chat" />
+        <activity android:name=".UserSettings.Activity_U_Settings" />
+        <activity android:name=".SearchFilter.Activity_Search_Filter" />
+        <activity android:name=".CreateEvent.Activity_Create_Event" />
+        <activity android:name=".Like_Hjerte_Side.Activity_Likeside" />
+        <activity android:name=".Chat.Activity_Chat" />
     </application>
 
 </manifest>

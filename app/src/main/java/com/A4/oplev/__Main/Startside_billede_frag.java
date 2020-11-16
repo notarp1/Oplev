@@ -1,4 +1,4 @@
-package com.A4.oplev;
+package com.A4.oplev.__Main;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -7,6 +7,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import androidx.fragment.app.Fragment;
+
+import com.A4.oplev.R;
 
 public class Startside_billede_frag extends Fragment{
     ImageView billede;

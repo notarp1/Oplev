@@ -1,4 +1,4 @@
-package com.A4.oplev;
+package com.A4.oplev.Like_Hjerte_Side;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
@@ -10,7 +10,8 @@ import android.widget.ListView;
 
 import androidx.fragment.app.Fragment;
 
-import com.A4.oplev.Listeners.OnSwipeTouchListener;
+import Controller.Listeners.OnSwipeTouchListener;
+import com.A4.oplev.R;
 
 public class HjerteSide_frag extends Fragment implements View.OnClickListener{
     ListView listView;
