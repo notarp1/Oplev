@@ -1,6 +1,9 @@
 package Controller;
 
-import com.google.firebase.firestore.auth.User;
+import android.widget.TextView;
+
+import com.A4.oplev.R;
+import com.A4.oplev.U_Settings_Edit;
 
 import DAL.Classes.ChatDAO;
 import DAL.Classes.EventDAO;
@@ -13,7 +16,7 @@ public class Controller {
     static ChatDAO chatDAO;
     static UserDAO userDAO;
     static EventDAO eventDAO;
-    private UserDTO curUser;
+    private UserDTO user;
 
 
     private Controller(){
@@ -27,11 +30,11 @@ public class Controller {
     }
 
     public UserDTO getCurrUser(){
-        return curUser;
+        return user;
     }
 
     public void setCurrUser(UserDTO user){
-        this.curUser = user;
+        this.user = user;
     }
 
 
@@ -50,8 +53,20 @@ public class Controller {
         userDAO.createUser(userDTO);
     }
 
-    public void updateUser(UserDTO userDTO){
-        userDAO.updateUser(userDTO);
+
+    public void updateUser(U_Settings_Edit ctx){
+
+
+        user.setDescription(ctx.about.getText().toString());
+        user.setCity(ctx.city.getText().toString());
+        user.setJob(ctx.job.getText().toString());
+        user.setEducation(ctx.education.getText().toString());
+
+
+        userDAO.updateUser(user);
+
+
+
     }
 
     public void deleteUser(String userId){

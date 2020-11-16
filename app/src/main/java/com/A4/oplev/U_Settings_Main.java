@@ -23,13 +23,13 @@ public class U_Settings_Main extends Fragment implements View.OnClickListener {
         super.onCreate(savedInstanceState);
 
         View root = i.inflate(R.layout.u_setting_main_frag, container, false);
+        TextView textview = (TextView)getActivity().findViewById(R.id.topbar_text);
+        textview.setText("Profil");
+
 
         controller =  Controller.getInstance();
         user = controller.getCurrUser();
 
-
-        TextView textview = (TextView)getActivity().findViewById(R.id.topbar_text);
-        textview.setText("Profil");
 
         visProfil = root.findViewById(R.id.box_profil);
         rediger = root.findViewById(R.id.box_rediger);

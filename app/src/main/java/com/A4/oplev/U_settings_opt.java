@@ -11,7 +11,7 @@ import androidx.fragment.app.Fragment;
 
 public class U_settings_opt extends Fragment implements View.OnClickListener {
 
-TextView test;
+
     public View onCreateView(LayoutInflater i, ViewGroup container, Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         View root = i.inflate(R.layout.u_setting_opt_frag, container, false);

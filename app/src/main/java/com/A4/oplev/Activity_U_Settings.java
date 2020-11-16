@@ -11,7 +11,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
 public class Activity_U_Settings extends AppCompatActivity implements View.OnClickListener{
-    ImageView back;
+    ImageView back, accept;
     static TextView title;
 
 
@@ -20,6 +20,7 @@ public class Activity_U_Settings extends AppCompatActivity implements View.OnCli
         setContentView(R.layout.activity_u_settings);
         title = findViewById(R.id.topbar_text);
         back = findViewById(R.id.topbar_arrow);
+        accept = findViewById(R.id.imageView_checkmark);
 
         back.setOnClickListener(this);
 
@@ -41,6 +42,7 @@ public class Activity_U_Settings extends AppCompatActivity implements View.OnCli
     @Override
     public void onClick(View v) {
         if(v == back){
+            accept.setVisibility(View.INVISIBLE);
           if(getSupportFragmentManager().getBackStackEntryCount() > 0){
               getSupportFragmentManager().popBackStack();
           } else finish();
