@@ -109,8 +109,6 @@ public class Activity_Chat extends AppCompatActivity  implements View.OnClickLis
                 }
             }
         });
-
-
     }
 
 

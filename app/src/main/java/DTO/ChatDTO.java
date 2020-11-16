@@ -3,6 +3,8 @@ package DTO;
 import java.util.ArrayList;
 import java.util.Date;
 
+import DAL.Classes.ChatDAO;
+
 public class ChatDTO {
 
     private String chatId;

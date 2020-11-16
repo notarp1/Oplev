@@ -22,7 +22,6 @@ import DAL.Interfaces.IChatDAO;
 import DTO.ChatDTO;
 
 public class ChatDAO implements IChatDAO {
-    DBAccess dbAccess;
     public FirebaseFirestore db;
 
     public ChatDAO(){
