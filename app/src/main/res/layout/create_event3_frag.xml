@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".createEvent3_frag">
+    tools:context=".CreateEvent.createEvent3_frag">
 
     <TextView
         android:id="@+id/create3_congrat_txt"
@@ -50,10 +50,12 @@
 
     <Button
         android:id="@+id/create3_skip_btn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="132dp"
+        android:layout_height="46dp"
         android:layout_marginTop="20dp"
+        android:background="@color/buttonBackground"
         android:text="Spring over"
+        android:textColor="@color/buttonText"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
@@ -63,23 +65,12 @@
         android:id="@+id/create3_fb_img"
         android:layout_width="60dp"
         android:layout_height="60dp"
+        android:layout_marginTop="16dp"
         app:layout_constraintEnd_toStartOf="@+id/create3_fbmsg_img"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/create3_shareby_txt"
         tools:src="@drawable/fb_icon" />
-
-    <ImageView
-        android:id="@+id/create3_fbmsg_img"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-        app:layout_constraintBottom_toBottomOf="@+id/create3_fb_img"
-        app:layout_constraintEnd_toStartOf="@+id/create3_sms_img"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/create3_fb_img"
-        app:layout_constraintTop_toTopOf="@+id/create3_fb_img"
-        app:layout_constraintVertical_bias="0.0"
-        tools:src="@drawable/messenger_icon" />
 
     <ImageView
         android:id="@+id/create3_sms_img"
@@ -104,5 +95,17 @@
         app:layout_constraintTop_toTopOf="@+id/create3_sms_img"
         app:layout_constraintVertical_bias="0.0"
         tools:src="@drawable/email_icon" />
+
+    <ImageView
+        android:id="@+id/create3_fbmsg_img"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        app:layout_constraintBottom_toBottomOf="@+id/create3_fb_img"
+        app:layout_constraintEnd_toStartOf="@+id/create3_sms_img"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/create3_fb_img"
+        app:layout_constraintTop_toTopOf="@+id/create3_fb_img"
+        app:layout_constraintVertical_bias="0.0"
+        tools:src="@drawable/messenger_icon" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

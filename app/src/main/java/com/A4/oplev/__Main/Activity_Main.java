@@ -1,4 +1,4 @@
-package com.A4.oplev;
+package com.A4.oplev.__Main;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -7,15 +7,15 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 
-import com.google.firebase.FirebaseApp;
-
-import DAL.Classes.UserDAO;
-import DAL.DBAccess;
-import DTO.UserDTO;
+import com.A4.oplev.Like_Hjerte_Side.Activity_Likeside;
+import com.A4.oplev.R;
+import com.A4.oplev.SearchFilter.Activity_Search_Filter;
+import com.A4.oplev.UserSettings.Activity_U_Settings;
 
 public class Activity_Main extends AppCompatActivity implements View.OnClickListener {
 
     ImageView options, match, user;
+    Intent intent;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,18 +30,6 @@ public class Activity_Main extends AppCompatActivity implements View.OnClickList
         options.setOnClickListener(this);
         match.setOnClickListener(this);
         user.setOnClickListener(this);
-
-        /*
-        UserDAO dao = new UserDAO();
-        UserDTO test = new UserDTO();
-        test.setAge(18);
-        test.setCity("Odense");
-        test.setDescription("Jeg er en sød gut");
-        test.setEmail("chrisi@gmail.com");
-        test.setfName("Jonas");
-        test.setlName("Henriksen");
-        test.setPhone("83827312");
-        dao.createUser(test); */
 
 
         getSupportFragmentManager().beginTransaction().replace(R.id.main_frag, new Startside_billede_frag())

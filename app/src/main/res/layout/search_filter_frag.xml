@@ -65,7 +65,9 @@
         app:layout_constraintBottom_toBottomOf="@+id/sf_textViewBackground1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/sf_textViewBackground1"
-        app:layout_constraintVertical_bias="0.636" />
+        app:layout_constraintVertical_bias="0.636"
+        android:theme="@style/switchTheme"
+        />
 
     <SeekBar
         android:id="@+id/sf_seekBarDistance"
@@ -160,7 +162,9 @@
         app:layout_constraintHorizontal_bias="0.988"
         app:layout_constraintStart_toEndOf="@+id/imageViewPlaceholder5"
         app:layout_constraintTop_toTopOf="@+id/imageViewPlaceholder5"
-        app:layout_constraintVertical_bias="0.571" />
+        app:layout_constraintVertical_bias="0.571"
+        android:theme="@style/switchTheme"
+        />
 
     <Switch
         android:id="@+id/sf_switchMad"
@@ -174,7 +178,9 @@
         app:layout_constraintHorizontal_bias="0.988"
         app:layout_constraintStart_toEndOf="@+id/imageViewplaceholder1"
         app:layout_constraintTop_toBottomOf="@+id/sf_textViewMad"
-        app:layout_constraintVertical_bias="0.625" />
+        app:layout_constraintVertical_bias="0.625"
+        android:theme="@style/switchTheme"
+        />
 
     <Switch
         android:id="@+id/sf_switchMusik"
@@ -188,7 +194,9 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.988"
         app:layout_constraintStart_toEndOf="@+id/imageViewplaceholder2"
-        app:layout_constraintTop_toBottomOf="@+id/sf_textViewMusik" />
+        app:layout_constraintTop_toBottomOf="@+id/sf_textViewMusik"
+        android:theme="@style/switchTheme"
+        />
 
     <ImageView
         android:id="@+id/imageViewplaceholder2"
@@ -272,7 +280,9 @@
         app:layout_constraintHorizontal_bias="0.988"
         app:layout_constraintStart_toEndOf="@+id/imageViewplaceholder3"
         app:layout_constraintTop_toTopOf="@+id/imageViewplaceholder3"
-        app:layout_constraintVertical_bias="0.571" />
+        app:layout_constraintVertical_bias="0.571"
+        android:theme="@style/switchTheme"
+        />
 
     <Switch
         android:id="@+id/sf_switchKultur"
@@ -286,7 +296,9 @@
         app:layout_constraintHorizontal_bias="0.988"
         app:layout_constraintStart_toEndOf="@+id/imageViewplaceholder2"
         app:layout_constraintTop_toTopOf="@+id/imageViewPlaceholder4"
-        app:layout_constraintVertical_bias="0.535" />
+        app:layout_constraintVertical_bias="0.535"
+        android:theme="@style/switchTheme"
+        />
 
     <TextView
         android:id="@+id/sf_textViewKultur"

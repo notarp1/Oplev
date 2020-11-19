@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Activity_profile">
+    tools:context=".Activity_Profile">
 
     <ImageView
         android:id="@+id/imageView"
@@ -37,7 +37,7 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/text_place_top"
+                android:id="@+id/text_city"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="5sp"
@@ -46,19 +46,21 @@
                 android:textColor="#FFFFFF" />
 
             <TextView
-                android:id="@+id/text_date_top"
+                android:id="@+id/text_job"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="5sp"
                 android:layout_marginLeft="5sp"
-                android:text="⌚ Lørdag 4. juli Kl. 10.00"
+                android:text="📍 København NV"
                 android:textColor="#FFFFFF" />
 
             <TextView
-                android:id="@+id/text_price_top"
+                android:id="@+id/text_edu"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="5sp"
                 android:layout_marginLeft="5sp"
-                android:text="💸 Gratis"
+                android:text="📍 København NV"
                 android:textColor="#FFFFFF" />
 
             <TextView
@@ -73,7 +75,7 @@
                 android:textStyle="bold" />
 
             <TextView
-                android:id="@+id/text_about"
+                android:id="@+id/text_description"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="5sp"

@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".createEvent2_frag">
+    tools:context=".CreateEvent.createEvent2_frag">
 
     <TextView
         android:id="@+id/create2_info_txt"
@@ -33,7 +33,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/create2_info_txt" />
 
-
     <io.apptik.widget.MultiSlider
         android:id="@+id/create2_rangebar"
         android:layout_width="268dp"
@@ -45,7 +44,8 @@
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/create2_age_txt"
-        app:rangeColor="#26A69A"
+        app:rangeColor="@color/buttonBackground"
+        app:thumbColor="@color/buttonBackground"
         app:thumbNumber="2" />
 
     <TextView
@@ -97,7 +97,9 @@
         android:layout_marginRight="52dp"
         app:layout_constraintBottom_toBottomOf="@+id/create2_female_txt"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/create2_female_txt" />
+        app:layout_constraintTop_toTopOf="@+id/create2_female_txt"
+        android:theme="@style/switchTheme"
+        />
 
     <Switch
         android:id="@+id/create2_male_switch"
@@ -107,14 +109,18 @@
         android:layout_marginRight="52dp"
         app:layout_constraintBottom_toBottomOf="@+id/create2_male_txt"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/create2_male_txt" />
+        app:layout_constraintTop_toTopOf="@+id/create2_male_txt"
+        android:theme="@style/switchTheme"
+        />
 
     <Button
         android:id="@+id/create2_done_btn"
         android:layout_width="129dp"
         android:layout_height="47dp"
         android:layout_marginTop="60dp"
+        android:background="@color/buttonBackground"
         android:text="Slå op"
+        android:textColor="@color/buttonText"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"

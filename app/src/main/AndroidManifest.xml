@@ -3,6 +3,7 @@
     package="com.A4.oplev">
 
     <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:allowBackup="true"
         android:hardwareAccelerated="false"
@@ -11,9 +12,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name="com.A4.oplev.Activity_profile"></activity>
+        <activity android:name=".__Main.Activity_Main" />
+        <activity android:name=".Activity_Profile" />
         <activity
-            android:name="com.A4.oplev.Activity_Main"
+            android:name=".Activity_Ini"
             android:configChanges="orientation|screenSize"
             android:screenOrientation="portrait">
             <intent-filter>
@@ -22,10 +24,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="com.A4.oplev.Activity_U_Settings" />
-        <activity android:name="com.A4.oplev.Activity_Search_Filter" />
-        <activity android:name="com.A4.oplev.Activity_Create_Event" />
-        <activity android:name="com.A4.oplev.Activity_Likeside" />
+        <activity android:name=".UserSettings.Activity_U_Settings" />
+        <activity android:name=".SearchFilter.Activity_Search_Filter" />
+        <activity android:name=".CreateEvent.Activity_Create_Event" />
+        <activity android:name=".Like_Hjerte_Side.Activity_Likeside" />
+        <activity android:name=".Chat.Activity_Chat" />
     </application>
 
 </manifest>

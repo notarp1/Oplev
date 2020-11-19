@@ -100,18 +100,17 @@
                 android:layout_marginLeft="10dp"
                 android:layout_marginTop="32dp"
                 android:layout_marginRight="10dp"
-                android:text="Om Mads" />
+                android:text="Om Dig" />
 
-            <View
-                android:id="@+id/om_box"
+            <EditText
+                android:id="@+id/editText_description"
                 android:layout_width="match_parent"
-                android:layout_height="100dp"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentTop="true"
-
+                android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
-                android:background="#BD2727" />
+                android:ems="10"
+                android:inputType="textPersonName"
+                android:text="Om" />
 
             <TextView
                 android:id="@+id/by_text"
@@ -122,16 +121,15 @@
                 android:layout_marginRight="10dp"
                 android:text="By" />
 
-            <View
-                android:id="@+id/by_box"
+            <EditText
+                android:id="@+id/editText_city"
                 android:layout_width="match_parent"
-                android:layout_height="100dp"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentTop="true"
-
+                android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
-                android:background="#BD2727" />
+                android:ems="10"
+                android:inputType="textPersonName"
+                android:text="By" />
 
             <TextView
                 android:id="@+id/job_text"
@@ -142,16 +140,15 @@
                 android:layout_marginRight="10dp"
                 android:text="Job" />
 
-            <View
-                android:id="@+id/job_box"
+            <EditText
+                android:id="@+id/editText_job"
                 android:layout_width="match_parent"
-                android:layout_height="100dp"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentTop="true"
-
+                android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
-                android:background="#BD2727" />
+                android:ems="10"
+                android:inputType="textPersonName"
+                android:text="Job" />
 
             <TextView
                 android:id="@+id/uddannelse_text"
@@ -162,16 +159,15 @@
                 android:layout_marginRight="10dp"
                 android:text="Uddanelse" />
 
-            <View
-                android:id="@+id/uddanelse_box"
+            <EditText
+                android:id="@+id/editText_edu"
                 android:layout_width="match_parent"
-                android:layout_height="100dp"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentTop="true"
-
+                android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
-                android:background="#BD2727" />
+                android:ems="10"
+                android:inputType="textPersonName"
+                android:text="Uddannelse" />
 
             <TextView
                 android:id="@+id/Instagram"

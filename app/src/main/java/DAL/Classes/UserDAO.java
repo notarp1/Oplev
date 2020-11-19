@@ -4,6 +4,7 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -17,23 +18,40 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.HashMap;
 import java.util.Map;
 
-import DAL.DBAccess;
+import DAL.Interfaces.CallbackUser;
 import DAL.Interfaces.IUserDAO;
 import DTO.UserDTO;
 
-public class UserDAO implements IUserDAO {
+public class UserDAO implements IUserDAO, CallbackUser {
 
-    DBAccess dbAccess;
     public FirebaseFirestore db;
-    public UserDAO(){
+    private static final String TAG = "userLog" ;
 
+
+    public UserDAO(){
         this.db = FirebaseFirestore.getInstance();
     }
 
+
+
     @Override
-    public UserDTO getUser(int userId) {
-        return null;
+    public void getUser(CallbackUser callbackUser, String userId) {
+        DocumentReference docRef = db.collection("users").document(userId);
+        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+
+                DocumentSnapshot documentSnapshot = task.getResult();
+                if(documentSnapshot != null){
+                    UserDTO user = documentSnapshot.toObject(UserDTO.class);
+                    callbackUser.onCallback(user);
+                }
+
+
+            }
+        });
     }
+
 
     @Override
     public void createUser(UserDTO user) {
@@ -42,6 +60,8 @@ public class UserDAO implements IUserDAO {
 
         userObject.put("fName", user.getfName());
         userObject.put("lName", user.getlName());
+        userObject.put("job", user.getJob());
+        userObject.put("education", user.getEducation());
         userObject.put("age", user.getAge());
         userObject.put("city", user.getCity());
         userObject.put("description", user.getDescription());
@@ -54,32 +74,44 @@ public class UserDAO implements IUserDAO {
 
         db.collection("users")
                 .add(userObject)
-                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                    private static final String TAG = "user" ;
-
-                    @Override
-                    public void onSuccess(DocumentReference documentReference) {
-                        Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId());
-                        db.collection("users").document(documentReference.getId()).update("userId", documentReference.getId());
-                    }
+                .addOnSuccessListener(documentReference -> {
+                    Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId());
+                    db.collection("users").document(documentReference.getId()).update("userId", documentReference.getId());
                 })
-                .addOnFailureListener(new OnFailureListener() {
-                    private static final String TAG = "userFail";
-
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.w(TAG, "Error adding document", e);
-                    }
-                });
+                .addOnFailureListener(e -> Log.w(TAG, "Error adding document", e));
     }
 
     @Override
     public void updateUser(UserDTO user) {
 
+        ObjectMapper oMapper = new ObjectMapper();
+        Map<String, Object> userObject = oMapper.convertValue(user, Map.class);
+
+        db.collection("users").document(user.getUserId())
+                .set(userObject)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d(TAG, "DocumentSnapshot successfully written!");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w(TAG, "Error writing document", e);
+                    }
+                });
+
     }
 
     @Override
-    public void deleteUser(int userId) {
+    public void deleteUser(String userId) {
+
+    }
+
+
+    @Override
+    public void onCallback(UserDTO user) {
 
     }
 }

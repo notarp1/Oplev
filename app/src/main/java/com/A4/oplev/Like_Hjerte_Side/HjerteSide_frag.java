@@ -1,5 +1,6 @@
-package com.A4.oplev;
+package com.A4.oplev.Like_Hjerte_Side;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,10 +10,13 @@ import android.widget.ListView;
 
 import androidx.fragment.app.Fragment;
 
+import Controller.Listeners.OnSwipeTouchListener;
+import com.A4.oplev.R;
+
 public class HjerteSide_frag extends Fragment implements View.OnClickListener{
     ListView listView;
 
-
+    @SuppressLint("ClickableViewAccessibility")
     public View onCreateView(LayoutInflater i, ViewGroup container, Bundle savedInstanceState) {
         View root = i.inflate(R.layout.hjerteside_frag,container,false);
 
@@ -25,6 +29,14 @@ public class HjerteSide_frag extends Fragment implements View.OnClickListener{
         //listView.setOnItemClickListener(this);
         listView.setAdapter(adapter);
 
+        listView.setOnTouchListener(new OnSwipeTouchListener(getContext()){
+            @Override
+            public void onSwipeRight() {
+                getFragmentManager().beginTransaction().setCustomAnimations(android.R.anim.slide_in_left,
+                        android.R.anim.slide_out_right).replace(R.id.likeside_frameLayout,new LikesideList_frag())
+                        .commit();
+            }
+        });
 
         return root;
     }

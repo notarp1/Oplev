@@ -1,4 +1,4 @@
-package com.A4.oplev;
+package com.A4.oplev.SearchFilter;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -6,6 +6,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.fragment.app.Fragment;
+
+import com.A4.oplev.R;
 
 public class Search_filter_frag extends Fragment implements View.OnClickListener {
 

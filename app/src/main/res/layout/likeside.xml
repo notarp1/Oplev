@@ -2,7 +2,6 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -11,111 +10,85 @@
 
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/top_bar"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="65dp"
+        android:background="#0B124E">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/top_bar"
-            android:layout_width="match_parent"
-            android:layout_height="65dp"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentTop="true"
-            android:background="#0B124E"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
+        <ImageView
+            android:id="@+id/topbar_arrow"
+            android:layout_width="20dp"
+            android:layout_height="25dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="20dp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/arrow" />
 
-            <ImageView
-                android:id="@+id/topbar_arrow"
-                android:layout_width="20dp"
-                android:layout_height="25dp"
-                android:layout_marginStart="16dp"
-                android:layout_marginLeft="16dp"
-                android:layout_marginTop="20dp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/arrow" />
+        <ImageView
+            android:id="@+id/likeside_beskedbillede"
+            android:layout_width="29dp"
+            android:layout_height="25dp"
+            android:layout_marginStart="32dp"
+            android:layout_marginLeft="32dp"
+            android:layout_marginTop="24dp"
+            android:layout_marginEnd="7dp"
+            android:layout_marginRight="7dp"
+            android:background="#6CD9F4"
+            android:scaleX="1.5"
+            android:scaleY="1.5"
+            app:layout_constraintEnd_toStartOf="@+id/likeside_hjertbillede"
+            app:layout_constraintHorizontal_bias="0.076"
+            app:layout_constraintStart_toStartOf="@+id/imageView3"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/message" />
 
-            <ImageView
-                android:id="@+id/likeside_beskedbillede"
-                android:layout_width="29dp"
-                android:layout_height="25dp"
-                android:layout_marginStart="32dp"
-                android:layout_marginLeft="32dp"
-                android:layout_marginTop="24dp"
-                android:layout_marginEnd="7dp"
-                android:layout_marginRight="7dp"
-                android:background="#6CD9F4"
-                android:scaleX="1.5"
-                android:scaleY="1.5"
-                app:layout_constraintEnd_toStartOf="@+id/likeside_hjertbillede"
-                app:layout_constraintHorizontal_bias="0.076"
-                app:layout_constraintStart_toStartOf="@+id/imageView3"
-                app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/message" />
+        <ImageView
+            android:id="@+id/likeside_hjertbillede"
+            android:layout_width="27dp"
+            android:layout_height="26dp"
+            android:layout_marginTop="24dp"
+            android:layout_marginEnd="32dp"
+            android:layout_marginRight="32dp"
+            android:background="#00FFFFFF"
+            android:scaleType="centerInside"
+            android:scaleX="1.5"
+            android:scaleY="1.5"
+            app:layout_constraintEnd_toEndOf="@+id/imageView3"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/heart" />
 
-            <ImageView
-                android:id="@+id/likeside_hjertbillede"
-                android:layout_width="27dp"
-                android:layout_height="26dp"
-                android:layout_marginTop="24dp"
-                android:layout_marginEnd="32dp"
-                android:layout_marginRight="32dp"
-                android:background="#00FFFFFF"
-                android:scaleType="centerInside"
-                android:scaleX="1.5"
-                android:scaleY="1.5"
-                app:layout_constraintEnd_toEndOf="@+id/imageView3"
-                app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/heart" />
-
-            <ImageView
-                android:id="@+id/imageView3"
-                android:layout_width="140dp"
-                android:layout_height="90dp"
-                android:scaleX="1.5"
-                android:scaleY="1.5"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.533"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.16"
-                app:srcCompat="@drawable/oval1" />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-        <Button
-            android:id="@+id/opretOpslag_Knap2"
-            android:layout_width="409dp"
-            android:layout_height="81dp"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentBottom="true"
-            android:background="#00FAE4"
-            android:shadowColor="#FFFFFF"
-            android:text="NYT OPSLAG"
-            android:textColor="#FFFFFF"
-            android:textSize="30sp"
+        <ImageView
+            android:id="@+id/imageView3"
+            android:layout_width="140dp"
+            android:layout_height="90dp"
+            android:scaleX="1.5"
+            android:scaleY="1.5"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.533"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/likeside_frameLayout" />
-
-        <FrameLayout
-            android:id="@+id/likeside_frameLayout"
-            android:layout_width="415dp"
-            android:layout_height="510dp"
-            app:layout_constraintBottom_toTopOf="@+id/opretOpslag_Knap2"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/top_bar" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.16"
+            app:srcCompat="@drawable/oval1" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <FrameLayout
+        android:id="@+id/likeside_frameLayout"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"/>
+
+    <Button
+        android:id="@+id/opretOpslag_Knap2"
+        android:layout_width="match_parent"
+        android:layout_height="81dp"
+        android:background="@color/buttonBackground"
+        android:shadowColor="#FFFFFF"
+        android:text="NYT OPSLAG"
+        android:textColor="@color/buttonText"
+        android:textSize="30sp" />
 
 </LinearLayout>

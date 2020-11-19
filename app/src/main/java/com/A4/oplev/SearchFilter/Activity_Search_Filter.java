@@ -1,4 +1,4 @@
-package com.A4.oplev;
+package com.A4.oplev.SearchFilter;
 
 import android.os.Bundle;
 import android.view.View;
@@ -6,6 +6,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.A4.oplev.R;
+import com.A4.oplev.SearchFilter.Search_filter_frag;
 
 public class Activity_Search_Filter extends AppCompatActivity implements View.OnClickListener {
     ImageView back;

@@ -1,4 +1,4 @@
-package com.A4.oplev;
+package com.A4.oplev.CreateEvent;
 
 import android.os.Bundle;
 
@@ -11,6 +11,8 @@ import android.widget.Button;
 import android.widget.Switch;
 import android.widget.TextView;
 
+import com.A4.oplev.R;
+
 import io.apptik.widget.MultiSlider;
 
 public class createEvent2_frag extends Fragment implements View.OnClickListener {
@@ -22,7 +24,7 @@ public class createEvent2_frag extends Fragment implements View.OnClickListener 
     Button done_btn;
     MultiSlider age_bar;
 
-    String currMinAge = "18", currMaxAge = "100";
+    String currMinAge = "18", currMaxAge = "99";
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -40,8 +42,8 @@ public class createEvent2_frag extends Fragment implements View.OnClickListener 
         ageVal_txt = root.findViewById(R.id.create2_ageInterval_txt);
         ageVal_txt.setText(currMinAge + " - " + currMaxAge);
         age_bar = root.findViewById(R.id.create2_rangebar);
-        age_bar.setMin(18);
-        age_bar.setMax(100);
+        age_bar.setMin(Integer.parseInt(currMinAge));
+        age_bar.setMax(Integer.parseInt(currMaxAge));
         age_bar.setOnThumbValueChangeListener(new MultiSlider.OnThumbValueChangeListener() {
             @Override
             public void onValueChanged(MultiSlider multiSlider,

@@ -1,14 +1,14 @@
 package DAL.Interfaces;
 
-import DTO.EventDTO;
+import DAL.Classes.UserDAO;
 import DTO.UserDTO;
 
 public interface IUserDAO {
 
-    UserDTO getUser(int userId);
+    void getUser(CallbackUser callback, String userId);
     void createUser(UserDTO user);
     void updateUser(UserDTO user);
-    void deleteUser(int userId);
+    void deleteUser(String userId);
 
 
 }
