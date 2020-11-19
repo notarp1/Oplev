@@ -7,7 +7,9 @@ import android.os.SystemClock;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -17,6 +19,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.A4.oplev._Adapters.ChatList_Adapter;
 import com.A4.oplev.R;
+import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
@@ -35,7 +38,7 @@ public class Activity_Chat extends AppCompatActivity  implements View.OnClickLis
     ListView beskeder;
     Button sendBesked;
     ArrayList<String> beskederStrings;
-    TextInputLayout inputTekst;
+    EditText inputTekst;
     ChatDTO dto;
     ChatDAO dao = new ChatDAO();
     Context ctx;
@@ -59,9 +62,36 @@ public class Activity_Chat extends AppCompatActivity  implements View.OnClickLis
         navn.setText(intent.getStringExtra("navn"));
         sendBesked = findViewById(R.id.chat_indsendBesked);
         beskeder = findViewById(R.id.chat_beskedList);
-        inputTekst = findViewById(R.id.chat_inputBesked);
+        inputTekst = findViewById(R.id.chat_inputBesked2);
 
+        inputTekst.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                System.out.println(event + "\t" + actionId);
+                boolean handled = false;
+                if (actionId == EditorInfo.IME_ACTION_GO) {
+                    if (!inputTekst.getText().toString().equals("")) {
 
+                        updateChatDTO(person1,person2,inputTekst.getText().toString());
+
+                        beskederStrings.add(inputTekst.getText().toString());
+
+                        dao.updateChat(new ChatDAO.FirestoreCallback() {
+                            @Override
+                            public void onCallback(ChatDTO dto) {
+                                if (dto.getChatId() != null){
+                                    ChatList_Adapter adapter = new ChatList_Adapter(ctx, beskederStrings, dto, person1);
+                                    beskeder.setAdapter(adapter);
+                                    inputTekst.setText("");
+                                }
+                            }
+                        }, dto);
+                    }
+                    handled = true;
+                }
+                return handled;
+            }
+        });
 
         beskederStrings = new ArrayList<>();
         dao.readChat(new ChatDAO.FirestoreCallback() {
@@ -120,11 +150,11 @@ public class Activity_Chat extends AppCompatActivity  implements View.OnClickLis
         }
         else if (v == sendBesked) {
             assert inputTekst != null;
-            if (!inputTekst.getEditText().getText().toString().equals("")) {
+            if (!inputTekst.getText().toString().equals("")) {
 
-                updateChatDTO(person1,person2,inputTekst.getEditText().getText().toString());
+                updateChatDTO(person1,person2,inputTekst.getText().toString());
 
-                beskederStrings.add(inputTekst.getEditText().getText().toString());
+                beskederStrings.add(inputTekst.getText().toString());
 
                 dao.updateChat(new ChatDAO.FirestoreCallback() {
                     @Override
@@ -132,7 +162,7 @@ public class Activity_Chat extends AppCompatActivity  implements View.OnClickLis
                         if (dto.getChatId() != null){
                             ChatList_Adapter adapter = new ChatList_Adapter(ctx, beskederStrings, dto, person1);
                             beskeder.setAdapter(adapter);
-                            inputTekst.getEditText().setText("");
+                            inputTekst.setText("");
                         }
                     }
                 }, dto);
