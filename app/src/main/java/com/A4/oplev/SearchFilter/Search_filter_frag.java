@@ -27,6 +27,7 @@ public class Search_filter_frag extends Fragment implements View.OnClickListener
     MultiSlider ageBar;
     Switch allSwitch, motionSwitch, underholdningSwitch, madDrikkeSwitch, kulturSwitch, musikNattelivSwitch, blivKlogereSwitch, gratisSwitch;
     TextView ageText, distanceText;
+    String currDistance = "30 km";
     String currMinAge = "18", currMaxAge = "99";
 
     public View onCreateView(LayoutInflater i, ViewGroup container, Bundle savedInstanceState) {
@@ -45,6 +46,25 @@ public class Search_filter_frag extends Fragment implements View.OnClickListener
         gratisSwitch = root.findViewById(R.id.sf_switchGratis);
         ageText = root.findViewById(R.id.sf_textViewAgeVal);
         distanceText = root.findViewById(R.id.sf_textViewDistanceVal);
+
+
+        distanceText.setText(currDistance);
+        distanceBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                distanceText.setText(progress + "km");
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
 
         ageText.setText(currMinAge + " - " + currMaxAge);
         ageBar.setMin(Integer.parseInt(currMinAge));

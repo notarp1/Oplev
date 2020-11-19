@@ -52,7 +52,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="18dp"
                         android:layout_marginLeft="18dp"
-                        android:text="20 km"
+                        android:text="30 km"
                         app:layout_constraintBottom_toBottomOf="@+id/sf_seekBarDistance"
                         app:layout_constraintStart_toEndOf="@+id/sf_seekBarDistance"
                         app:layout_constraintTop_toTopOf="@+id/sf_seekBarDistance" />
