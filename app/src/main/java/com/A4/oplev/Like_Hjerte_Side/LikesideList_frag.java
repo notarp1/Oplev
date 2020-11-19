@@ -7,7 +7,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import androidx.fragment.app.Fragment;
@@ -21,8 +20,7 @@ import com.A4.oplev.R;
 import com.A4.oplev._Adapters.LikeSide_Adapter;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+
 
 public class LikesideList_frag extends Fragment{
     ListView listView;
@@ -75,8 +73,13 @@ public class LikesideList_frag extends Fragment{
         });
 
         listView.setOnTouchListener(new OnSwipeTouchListener(getContext()){
+            @SuppressLint("ResourceAsColor")
             @Override
             public void onSwipeLeft() {
+                getActivity().findViewById(R.id.likeside_hjertbillede).setBackgroundColor(getContext().getResources().getColor(R.color.likesideBilleder));
+                getActivity().findViewById(R.id.likeside_beskedbillede).setBackgroundColor(getContext().getResources().getColor(R.color.chatColorGrey));
+
+
                 getFragmentManager().beginTransaction().setCustomAnimations(R.anim.enter_from_right,
                         R.anim.exit_to_left).replace(R.id.likeside_frameLayout,new HjerteSide_frag())
                         .commit();
