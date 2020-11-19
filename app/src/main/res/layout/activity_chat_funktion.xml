@@ -64,6 +64,7 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <ListView
+        android:dividerHeight="5.0sp"
         android:id="@+id/chat_beskedList"
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -82,7 +83,7 @@
             android:layout_marginStart="305dp"
             android:layout_marginLeft="305dp"
             android:background="@color/buttonBackground"
-            android:text="Button"
+            android:text="Send besked"
             android:textColor="@color/buttonText"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -38,8 +39,7 @@ public class Activity_Chat extends AppCompatActivity  implements View.OnClickLis
     ChatDTO dto;
     ChatDAO dao = new ChatDAO();
     Context ctx;
-    String person1, person2;
-    String chatDocumentPath;
+    String person1, person2, chatDocumentPath;
 
 
     public void onCreate(Bundle saveInstanceState) {

@@ -3,7 +3,6 @@ package com.A4.oplev._Adapters;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Build;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,7 +12,6 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.annotation.RequiresApi;
 
 import com.A4.oplev.R;
 
@@ -42,7 +40,6 @@ public class ChatList_Adapter extends ArrayAdapter<String> {
         this.thisUser = thisUser;
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @SuppressLint("ResourceAsColor")
     @NonNull
     @Override
@@ -57,19 +54,25 @@ public class ChatList_Adapter extends ArrayAdapter<String> {
         besked.setText(currentBesked);
 
         if (!dto.getSender().get(position).equals(thisUser)){
-            int width = getContext().getResources().getDisplayMetrics().widthPixels/2;
+            int width = getContext().getResources().getDisplayMetrics().widthPixels;
             RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
-            lp.setMargins(width, 0, 0, 0);
-            besked.setLayoutParams(new RelativeLayout.LayoutParams(lp));
-            besked.setBackgroundColor(R.color.colorPrimary);
+            lp.setMargins(width/4, 0, width/50, 0);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                besked.setLayoutParams(new RelativeLayout.LayoutParams(lp));
+                besked.setBackgroundColor(getContext().getResources().getColor(R.color.chatColorGrey));
+                besked.setTextColor(getContext().getResources().getColor(R.color.black));
+            }
         }
         else{
-            int width = getContext().getResources().getDisplayMetrics().widthPixels/2;
+            int width = getContext().getResources().getDisplayMetrics().widthPixels;
             RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
-            lp.setMargins(0, 0, width, 0);
-            besked.setLayoutParams(new RelativeLayout.LayoutParams(lp));
-            besked.setBackgroundColor(R.color.buttonBackground);
-            besked.setTextColor(R.color.white);
+            lp.setMargins(width/50, 0, width/4, 0);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                besked.setLayoutParams(new RelativeLayout.LayoutParams(lp));
+                besked.setBackgroundColor(getContext().getResources().getColor(R.color.chatColorBlue));
+                besked.setTextColor(getContext().getResources().getColor(R.color.white));
+
+            }
         }
 
         return listItem;
