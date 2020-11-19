@@ -66,6 +66,10 @@ public class eventAdapter extends RecyclerView.Adapter<eventAdapter.ViewHolder>i
 
     }
 
+    public void removeTopItem() {
+        
+    }
+
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         public ImageView mainPic, profilePic;

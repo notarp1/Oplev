@@ -2,11 +2,13 @@ package com.A4.oplev;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Adapter;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 
@@ -20,6 +22,10 @@ import DAL.Classes.UserDAO;
 import DAL.DBAccess;
 import DTO.EventDTO;
 import DTO.UserDTO;
+import swipeable.com.layoutmanager.OnItemSwiped;
+import swipeable.com.layoutmanager.SwipeableLayoutManager;
+import swipeable.com.layoutmanager.SwipeableTouchHelperCallback;
+import swipeable.com.layoutmanager.touchelper.ItemTouchHelper;
 
 public class Activity_Main extends AppCompatActivity implements View.OnClickListener {
 
@@ -32,19 +38,49 @@ public class Activity_Main extends AppCompatActivity implements View.OnClickList
 
         //skal optimeres og ændres til at vi skal hente data ude fra.
         List<EventDTO> eventList = new ArrayList<>();
-        EventDTO dto1,dto2;
+        EventDTO dto1,dto2, dto3;
         dto1 = new EventDTO().setOwner(12).setName("Stjæl en grusgrav");
-        dto2 = new EventDTO().setOwner(13).setName("Svøm i tørvejr");
+        dto2 = new EventDTO().setOwner(13).setName("Svøm i tsørvejr");
+        dto3 = new EventDTO().setOwner(14).setName("Slå en mink ned");
         eventList.add(dto1);
         eventList.add(dto2);
-        eventAdapter eventAdapter = new eventAdapter(eventList);
+        eventList.add(dto3);
+        rcEvent = findViewById(R.id.eventRecycleView);
+
+        final eventAdapter eventAdapter = new eventAdapter(eventList);
+        SwipeableTouchHelperCallback swipeableTouchHelperCallback =
+                new SwipeableTouchHelperCallback(new OnItemSwiped() {
+                    //Called after swiping view, place to remove top item from your recyclerview adapter
+                    @Override public void onItemSwiped() {
+                        eventAdapter.removeTopItem();
+                    }
+
+                    @Override public void onItemSwipedLeft() {
+
+                    }
+
+                    @Override public void onItemSwipedRight() {
+
+                    }
+
+                    @Override
+                    public void onItemSwipedUp() {
+
+                    }
+
+                    @Override
+                    public void onItemSwipedDown() {
+
+                    }
+                });
 
         LinearLayoutManager layoutManager
                 = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(swipeableTouchHelperCallback);
+        itemTouchHelper.attachToRecyclerView(rcEvent);
 
-        rcEvent = findViewById(R.id.eventRecycleView);
+        rcEvent.setLayoutManager(new SwipeableLayoutManager());
         rcEvent.setAdapter(eventAdapter);
-        rcEvent.setLayoutManager(layoutManager);
 
 
         options = findViewById(R.id.options_btn);
