@@ -87,20 +87,23 @@
             android:textColor="@color/buttonText"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="@+id/chat_inputBesked"
+            app:layout_constraintStart_toStartOf="@+id/chat_inputBesked1"
             app:layout_constraintTop_toTopOf="parent" />
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/chat_inputBesked"
+            android:id="@+id/chat_inputBesked1"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             tools:layout_editor_absoluteX="0dp"
             tools:layout_editor_absoluteY="0dp">
 
-            <com.google.android.material.textfield.TextInputEditText
+            <EditText
+                android:id="@+id/chat_inputBesked2"
                 android:layout_width="278dp"
                 android:layout_height="43dp"
-                android:hint="Indtast besked" />
+                android:hint="Indtast besked"
+                android:imeOptions="actionGo"
+                android:inputType="text"/>
 
         </com.google.android.material.textfield.TextInputLayout>
 
