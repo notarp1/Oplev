@@ -1,4 +1,4 @@
-package Adapters;
+package com.A4.oplev._Adapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;

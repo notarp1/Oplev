@@ -2,30 +2,25 @@ package com.A4.oplev.__Main;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Adapter;
-import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 
 import com.A4.oplev.Like_Hjerte_Side.Activity_Likeside;
 import com.A4.oplev.R;
 import com.A4.oplev.SearchFilter.Activity_Search_Filter;
 import com.A4.oplev.UserSettings.Activity_U_Settings;
-import com.google.firebase.FirebaseApp;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import Adapters.eventAdapter;
-import DAL.Classes.UserDAO;
-import DAL.DBAccess;
+import com.A4.oplev._Adapters.eventAdapter;
+
+//import DAL.DBAccess;
 import DTO.EventDTO;
-import DTO.UserDTO;
 import swipeable.com.layoutmanager.OnItemSwiped;
 import swipeable.com.layoutmanager.SwipeableLayoutManager;
 import swipeable.com.layoutmanager.SwipeableTouchHelperCallback;
