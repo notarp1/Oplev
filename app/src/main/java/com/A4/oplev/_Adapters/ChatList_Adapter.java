@@ -1,15 +1,19 @@
 package com.A4.oplev._Adapters;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
+import android.os.Build;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 
 import com.A4.oplev.R;
 
@@ -38,6 +42,8 @@ public class ChatList_Adapter extends ArrayAdapter<String> {
         this.thisUser = thisUser;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+    @SuppressLint("ResourceAsColor")
     @NonNull
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
@@ -47,12 +53,23 @@ public class ChatList_Adapter extends ArrayAdapter<String> {
 
         String currentBesked = beskederList.get(position);
 
-        TextView name = (TextView) listItem.findViewById(R.id.chat_besked_element_tekst);
-        name.setText(currentBesked);
+        TextView besked = (TextView) listItem.findViewById(R.id.chat_besked_element_tekst);
+        besked.setText(currentBesked);
 
-        // instead of doing every other then check the sender of the message and place correct
         if (!dto.getSender().get(position).equals(thisUser)){
-            name.setGravity(Gravity.RIGHT);
+            int width = getContext().getResources().getDisplayMetrics().widthPixels/2;
+            RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+            lp.setMargins(width, 0, 0, 0);
+            besked.setLayoutParams(new RelativeLayout.LayoutParams(lp));
+            besked.setBackgroundColor(R.color.colorPrimary);
+        }
+        else{
+            int width = getContext().getResources().getDisplayMetrics().widthPixels/2;
+            RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+            lp.setMargins(0, 0, width, 0);
+            besked.setLayoutParams(new RelativeLayout.LayoutParams(lp));
+            besked.setBackgroundColor(R.color.buttonBackground);
+            besked.setTextColor(R.color.white);
         }
 
         return listItem;

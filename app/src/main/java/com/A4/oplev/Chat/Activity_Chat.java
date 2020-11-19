@@ -38,10 +38,15 @@ public class Activity_Chat extends AppCompatActivity  implements View.OnClickLis
     ChatDTO dto;
     ChatDAO dao = new ChatDAO();
     Context ctx;
+    String person1, person2;
+    String chatDocumentPath;
 
 
     public void onCreate(Bundle saveInstanceState) {
         //dto = dao.getChat("huvc67lCMUyhHXcBksHg");
+        chatDocumentPath = "60V6EddGhhZdY7pTGYRF";
+        person1 = "person1";
+        person2 = "person2";
         super.onCreate(saveInstanceState);
         setContentView(R.layout.activity_chat_funktion);
 
@@ -68,10 +73,10 @@ public class Activity_Chat extends AppCompatActivity  implements View.OnClickLis
                     beskederStrings.addAll(dto.getMessages());
                 }
 
-                ChatList_Adapter adapter = new ChatList_Adapter(ctx,beskederStrings, dto,"person1");
+                ChatList_Adapter adapter = new ChatList_Adapter(ctx,beskederStrings, dto,person1);
                 beskeder.setAdapter(adapter);
             }
-        },"60V6EddGhhZdY7pTGYRF" );
+        },chatDocumentPath);
 
         SystemClock.sleep(1000);
 
@@ -80,7 +85,7 @@ public class Activity_Chat extends AppCompatActivity  implements View.OnClickLis
         settings.setOnClickListener(this);
 
         // til at opdatere listen af beskeder
-        FirebaseFirestore.getInstance().collection("chats").document("60V6EddGhhZdY7pTGYRF")
+        FirebaseFirestore.getInstance().collection("chats").document(chatDocumentPath)
                 .addSnapshotListener(new EventListener<DocumentSnapshot>() {
                     private static final String TAG = "chat fra telefon";
 
@@ -98,7 +103,7 @@ public class Activity_Chat extends AppCompatActivity  implements View.OnClickLis
                         beskederStrings.clear();
                         beskederStrings.addAll(dto.getMessages());
                     }
-                    ChatList_Adapter adapter = new ChatList_Adapter(ctx,beskederStrings, dto,"person1");
+                    ChatList_Adapter adapter = new ChatList_Adapter(ctx,beskederStrings, dto,person1);
                     beskeder.setAdapter(adapter);
                 } else {
                     Log.d(TAG, "Current data: null");
@@ -117,7 +122,7 @@ public class Activity_Chat extends AppCompatActivity  implements View.OnClickLis
             assert inputTekst != null;
             if (!inputTekst.getEditText().getText().toString().equals("")) {
 
-                updateChatDTO("person1","person2",inputTekst.getEditText().getText().toString());
+                updateChatDTO(person1,person2,inputTekst.getEditText().getText().toString());
 
                 beskederStrings.add(inputTekst.getEditText().getText().toString());
 
@@ -125,7 +130,7 @@ public class Activity_Chat extends AppCompatActivity  implements View.OnClickLis
                     @Override
                     public void onCallback(ChatDTO dto) {
                         if (dto.getChatId() != null){
-                            ChatList_Adapter adapter = new ChatList_Adapter(ctx, beskederStrings, dto, "person1");
+                            ChatList_Adapter adapter = new ChatList_Adapter(ctx, beskederStrings, dto, person1);
                             beskeder.setAdapter(adapter);
                             inputTekst.getEditText().setText("");
                         }

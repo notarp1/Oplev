@@ -14,19 +14,52 @@ import androidx.fragment.app.Fragment;
 
 import com.A4.oplev.Chat.Activity_Chat;
 import Controller.Listeners.OnSwipeTouchListener;
+import DAL.Classes.ChatDAO;
+import DTO.ChatDTO;
+
 import com.A4.oplev.R;
+import com.A4.oplev._Adapters.LikeSide_Adapter;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class LikesideList_frag extends Fragment{
     ListView listView;
+    ChatDTO dto;
 
     @SuppressLint("ClickableViewAccessibility")
     public View onCreateView(LayoutInflater i, ViewGroup container, Bundle savedInstanceState) {
         View root = i.inflate(R.layout.likeside_frag,container,false);
 
-        final String[] navne = {"John", "abc", "Bente", "AGE", "Yes", "whoDis?", "yubrakit yubotit"};
-        final String[] dato = {"Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"};
+        ArrayList<String> names = new ArrayList<>(), dates = new ArrayList<>(), lastMessage = new ArrayList<>(), headerList = new ArrayList<>();
+        final String[] navneArray = {"John", "abc", "Bente", "AGE", "Yes", "whoDis?", "yubrakit yubotit"};
+        final String[] datoArray = {"Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"};
+        final String[] lastMessagesArray = {"Ja", "Okay", "321", "Whoops", "Hej", "blabla", "Davs"};
+        final String[] headerListArray = {"Kanotur", "Spise is", "Tivoli", "Bjergbestigning", "Kakkerlakspisning", "Sovsekonkurrence", "Hospitalet"};
 
-        ArrayAdapter adapter = new ArrayAdapter(getActivity(), R.layout.besked_liste_element, R.id.beskeder_overskrift, navne);
+
+        for (int j = 0; j < navneArray.length; j++) {
+            names.add(navneArray[j]);
+            dates.add(datoArray[j]);
+            headerList.add(headerListArray[j]);
+            lastMessage.add(lastMessagesArray[j]);
+        }
+
+
+
+
+
+        ChatDAO dao = new ChatDAO();
+        dao.readChat(new ChatDAO.FirestoreCallback() {
+            @Override
+            public void onCallback(ChatDTO dto) {
+                setChatDTO(dto);
+            }
+        },"60V6EddGhhZdY7pTGYRF");
+
+
+        LikeSide_Adapter adapter = new LikeSide_Adapter(getContext(), names, dates, lastMessage,headerList);
 
         listView = root.findViewById(R.id.beskedListView);
         listView.setAdapter(adapter);
@@ -35,8 +68,8 @@ public class LikesideList_frag extends Fragment{
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent i = new Intent(getActivity(), Activity_Chat.class);
-                i.putExtra("navn",navne[position]);
-                i.putExtra("dato",dato[position]);
+                i.putExtra("navn",navneArray[position]);
+                i.putExtra("dato",datoArray[position]);
                 startActivity(i);
             }
         });
@@ -53,4 +86,9 @@ public class LikesideList_frag extends Fragment{
 
         return root;
     }
+
+    private void setChatDTO(ChatDTO dto){
+        this.dto = dto;
+    }
+
 }

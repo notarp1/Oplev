@@ -36,7 +36,7 @@
         android:textStyle="bold" />
 
     <TextView
-        android:id="@+id/beskeder_antal_anmodninger"
+        android:id="@+id/beskeder_name"
         android:layout_width="113dp"
         android:layout_height="wrap_content"
         android:layout_marginLeft="130dp"
@@ -66,33 +66,12 @@
         android:text="Dato"
         android:textSize="9sp" />
 
-    <ImageView
-        android:id="@+id/beskeder_profilbillede2"
-        android:layout_width="20dp"
-        android:layout_height="20dp"
-        android:layout_below="@+id/beskeder_antal_anmodninger"
-        android:layout_alignEnd="@+id/beskeder_profilbillede3"
-        android:layout_alignRight="@+id/beskeder_profilbillede3"
-        android:layout_marginStart="5dp"
-        android:layout_marginLeft="5dp"
-        android:layout_marginTop="17dp"
-        android:layout_marginEnd="15dp"
-        android:layout_marginRight="15dp"
-        android:layout_toEndOf="@+id/beskeder_profilbillede1"
-        android:layout_toRightOf="@+id/beskeder_profilbillede1"
-        tools:srcCompat="@tools:sample/avatars" />
-
-    <ImageView
-        android:id="@+id/beskeder_profilbillede3"
-        android:layout_width="20dp"
-        android:layout_height="20dp"
-        android:layout_below="@+id/beskeder_antal_anmodninger"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:layout_marginLeft="150dp"
-        android:layout_marginTop="17dp"
-        android:layout_marginEnd="241dp"
-        android:layout_marginRight="241dp"
-        tools:srcCompat="@tools:sample/avatars" />
+    <TextView
+        android:id="@+id/besked_liste_lastmessage"
+        android:layout_width="152dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="130dp"
+        android:layout_marginTop="80dp"
+        android:text="TextView" />
 
 </RelativeLayout>
