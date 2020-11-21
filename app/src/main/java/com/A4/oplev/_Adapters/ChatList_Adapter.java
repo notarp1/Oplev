@@ -71,7 +71,6 @@ public class ChatList_Adapter extends ArrayAdapter<String> {
                 besked.setLayoutParams(new RelativeLayout.LayoutParams(lp));
                 besked.setBackgroundColor(getContext().getResources().getColor(R.color.chatColorBlue));
                 besked.setTextColor(getContext().getResources().getColor(R.color.white));
-
             }
         }
 

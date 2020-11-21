@@ -30,11 +30,12 @@ public class LikesideList_frag extends Fragment{
     public View onCreateView(LayoutInflater i, ViewGroup container, Bundle savedInstanceState) {
         View root = i.inflate(R.layout.likeside_frag,container,false);
 
-        ArrayList<String> names = new ArrayList<>(), dates = new ArrayList<>(), lastMessage = new ArrayList<>(), headerList = new ArrayList<>();
+        ArrayList<String> names = new ArrayList<>(), dates = new ArrayList<>(), lastMessage = new ArrayList<>(), headerList = new ArrayList<>(), lastSender = new ArrayList<>();
         final String[] navneArray = {"John", "abc", "Bente", "AGE", "Yes", "whoDis?", "yubrakit yubotit"};
         final String[] datoArray = {"Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"};
         final String[] lastMessagesArray = {"Ja", "Okay", "321", "Whoops", "Hej", "blabla", "Davs"};
         final String[] headerListArray = {"Kanotur", "Spise is", "Tivoli", "Bjergbestigning", "Kakkerlakspisning", "Sovsekonkurrence", "Hospitalet"};
+        final String[] lastSenders = {"John", "123", "Bente", "123", "Yes", "whoDis?", "123"};
 
 
         for (int j = 0; j < navneArray.length; j++) {
@@ -42,6 +43,7 @@ public class LikesideList_frag extends Fragment{
             dates.add(datoArray[j]);
             headerList.add(headerListArray[j]);
             lastMessage.add(lastMessagesArray[j]);
+            lastSender.add(lastSenders[j]);
         }
 
 
@@ -57,7 +59,7 @@ public class LikesideList_frag extends Fragment{
         },"60V6EddGhhZdY7pTGYRF");
 
 
-        LikeSide_Adapter adapter = new LikeSide_Adapter(getContext(), names, dates, lastMessage,headerList);
+        LikeSide_Adapter adapter = new LikeSide_Adapter(getContext(), names, dates, lastMessage,headerList, lastSender);
 
         listView = root.findViewById(R.id.beskedListView);
         listView.setAdapter(adapter);
