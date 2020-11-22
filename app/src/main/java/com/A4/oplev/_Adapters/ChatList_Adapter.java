@@ -2,7 +2,16 @@ package com.A4.oplev._Adapters;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Build;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.SpannableStringBuilder;
+import android.text.style.ImageSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,9 +21,11 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 
 import com.A4.oplev.R;
 
+import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,13 +42,16 @@ public class ChatList_Adapter extends ArrayAdapter<String> {
     private List<String> beskederList = new ArrayList<>();
     private ChatDTO dto;
     private String thisUser;
+    private List<Intent> pictures = new ArrayList<>();
+    private int pictureCount = 0;
 
-    public ChatList_Adapter(@NonNull Context context, @NonNull ArrayList<String> list, ChatDTO dto, String thisUser) {
+    public ChatList_Adapter(@NonNull Context context, @NonNull ArrayList<String> list, ChatDTO dto, String thisUser, ArrayList<Intent> pictures) {
         super(context, 0 , list);
-        mContext = context;
-        beskederList = list;
+        this.mContext = context;
+        this.beskederList = list;
         this.dto = dto;
         this.thisUser = thisUser;
+        this.pictures = pictures;
     }
 
     @SuppressLint("ResourceAsColor")
@@ -48,10 +62,23 @@ public class ChatList_Adapter extends ArrayAdapter<String> {
         if(listItem == null)
             listItem = LayoutInflater.from(mContext).inflate(R.layout.chat_besked_element,parent,false);
 
-        String currentBesked = beskederList.get(position);
-
+        String currentBesked;
         TextView besked = (TextView) listItem.findViewById(R.id.chat_besked_element_tekst);
-        besked.setText(currentBesked);
+
+        if (beskederList.get(position).equals("pictureBlaBlaBla")) {
+            SpannableStringBuilder ssb = new SpannableStringBuilder();
+            int start = ssb.length()-1;
+            if (start < 0) {
+                start = 0;
+            }
+            ssb.setSpan(new ImageSpan(mContext, R.drawable._profiltest), start, ssb.length(), 0);
+            besked.setText(ssb);
+        } else {
+            currentBesked = beskederList.get(position);
+            besked.setText(currentBesked);
+        }
+
+
 
         if (!dto.getSender().get(position).equals(thisUser)){
             int width = getContext().getResources().getDisplayMetrics().widthPixels;
