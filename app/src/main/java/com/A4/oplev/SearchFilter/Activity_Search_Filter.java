@@ -1,5 +1,6 @@
 package com.A4.oplev.SearchFilter;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
@@ -15,6 +16,7 @@ public class Activity_Search_Filter extends AppCompatActivity implements View.On
     static TextView title;
 
     public void onCreate(Bundle saveInstanceState) {
+
         super.onCreate(saveInstanceState);
         setContentView(R.layout.activity_u_settings);
         title = findViewById(R.id.topbar_text);
@@ -23,6 +25,7 @@ public class Activity_Search_Filter extends AppCompatActivity implements View.On
         back.setOnClickListener(this);
 
         title.setText("Søgefilter");
+
 
         getSupportFragmentManager().beginTransaction().replace(R.id.mainFragmentBox,  new Search_filter_frag(), "uSettingMainBox")
                 .commit();

@@ -4,324 +4,383 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="#EEEEEEEE">
+    android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/sf_textViewBackground1"
-        android:layout_width="fill_parent"
-        android:layout_height="46dp"
-        android:layout_marginTop="36dp"
-        android:background="#FFFFFF"
-        app:layout_constraintBottom_toTopOf="@+id/sf_textViewbackground3"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/sf_textViewBackground2"
-        app:layout_constraintVertical_bias="0.0" />
-
-    <TextView
-        android:id="@+id/sf_textViewBackground2"
-        android:layout_width="fill_parent"
-        android:layout_height="122dp"
-        android:background="#FFFFFF"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/sf_textViewbackground3"
-        android:layout_width="fill_parent"
-        android:layout_height="491dp"
-        android:layout_marginTop="64dp"
-        android:background="#FFFFFF"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/sf_textViewAktiviteret" />
-
-    <SeekBar
-        android:id="@+id/sf_seekBarAge"
-        android:layout_width="233dp"
-        android:layout_height="32dp"
-        android:layout_marginTop="16dp"
-        android:max="100"
-        android:min="18"
-        android:progress="50"
-        app:layout_constraintBottom_toTopOf="@+id/sf_textViewDistance"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.505"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <Switch
-        android:id="@+id/sf_switchALLActivities"
-        android:layout_width="wrap_content"
+    <ScrollView
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="36dp"
-        android:layout_marginRight="36dp"
-        android:checked="true"
-        app:layout_constraintBottom_toBottomOf="@+id/sf_textViewBackground1"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/sf_textViewBackground1"
-        app:layout_constraintVertical_bias="0.636"
-        android:theme="@style/switchTheme"
-        />
+        tools:ignore="MissingConstraints">
 
-    <SeekBar
-        android:id="@+id/sf_seekBarDistance"
-        android:layout_width="233dp"
-        android:layout_height="32dp"
-        android:max="60"
-        android:min="1"
-        android:progress="30"
-        app:layout_constraintBottom_toBottomOf="@+id/sf_textViewBackground2"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.505"
-        app:layout_constraintStart_toStartOf="parent" />
 
-    <TextView
-        android:id="@+id/sf_textViewAge"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:text="Alder"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.235"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/sf_textViewDistance"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:text="Afstand"
-        app:layout_constraintBottom_toTopOf="@+id/sf_seekBarDistance"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.246"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/sf_seekBarAge" />
 
-    <TextView
-        android:id="@+id/sf_textViewAktiviteret"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:text="Aktiviteter"
-        android:textSize="18sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.504"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/sf_textViewBackground2" />
+                <TextView
+                    android:id="@+id/sf_textViewDistance"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="Afstand"
+                    app:layout_constraintBottom_toTopOf="@+id/sf_seekBarDistance"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.246"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/sf_seekBarAge" />
 
-    <TextView
-        android:id="@+id/sf_textViewChooseAll"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="28dp"
-        android:layout_marginLeft="28dp"
-        android:text="Vælg alle aktiviteter"
-        app:layout_constraintBottom_toBottomOf="@+id/sf_textViewBackground1"
-        app:layout_constraintStart_toStartOf="@+id/sf_textViewBackground1"
-        app:layout_constraintTop_toTopOf="@+id/sf_textViewBackground1"
-        app:layout_constraintVertical_bias="0.482" />
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
 
-    <TextView
-        android:id="@+id/sf_textViewMotion"
-        android:layout_width="88dp"
-        android:layout_height="22dp"
-        android:gravity="center"
-        android:text="Motion"
-        android:textSize="16sp"
-        app:layout_constraintBottom_toTopOf="@+id/imageViewPlaceholder5"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent" />
+                    <SeekBar
+                        android:id="@+id/sf_seekBarDistance"
+                        android:layout_width="233dp"
+                        android:layout_height="32dp"
+                        android:max="60"
+                        android:min="1"
+                        android:progress="30"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintVertical_bias="0.0" />
 
-    <ImageView
-        android:id="@+id/imageViewplaceholder1"
-        android:layout_width="59dp"
-        android:layout_height="54dp"
-        android:layout_marginTop="4dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/sf_textViewMad"
-        app:srcCompat="@android:drawable/ic_menu_add" />
+                    <TextView
+                        android:id="@+id/sf_textViewDistanceVal"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="18dp"
+                        android:layout_marginLeft="18dp"
+                        android:text="30 km"
+                        app:layout_constraintBottom_toBottomOf="@+id/sf_seekBarDistance"
+                        app:layout_constraintStart_toEndOf="@+id/sf_seekBarDistance"
+                        app:layout_constraintTop_toTopOf="@+id/sf_seekBarDistance" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <Switch
-        android:id="@+id/sf_switchMotion"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="36dp"
-        android:layout_marginRight="36dp"
-        android:checked="true"
-        app:layout_constraintBottom_toBottomOf="@+id/imageViewPlaceholder5"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.988"
-        app:layout_constraintStart_toEndOf="@+id/imageViewPlaceholder5"
-        app:layout_constraintTop_toTopOf="@+id/imageViewPlaceholder5"
-        app:layout_constraintVertical_bias="0.571"
-        android:theme="@style/switchTheme"
-        />
+                <TextView
+                    android:id="@+id/sf_textViewAge"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="Alder" />
 
-    <Switch
-        android:id="@+id/sf_switchMad"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="36dp"
-        android:layout_marginRight="36dp"
-        android:checked="true"
-        app:layout_constraintBottom_toBottomOf="@+id/imageViewplaceholder1"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.988"
-        app:layout_constraintStart_toEndOf="@+id/imageViewplaceholder1"
-        app:layout_constraintTop_toBottomOf="@+id/sf_textViewMad"
-        app:layout_constraintVertical_bias="0.625"
-        android:theme="@style/switchTheme"
-        />
 
-    <Switch
-        android:id="@+id/sf_switchMusik"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="36dp"
-        android:layout_marginRight="36dp"
-        android:checked="true"
-        app:layout_constraintBottom_toBottomOf="@+id/imageViewplaceholder2"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.988"
-        app:layout_constraintStart_toEndOf="@+id/imageViewplaceholder2"
-        app:layout_constraintTop_toBottomOf="@+id/sf_textViewMusik"
-        android:theme="@style/switchTheme"
-        />
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
 
-    <ImageView
-        android:id="@+id/imageViewplaceholder2"
-        android:layout_width="59dp"
-        android:layout_height="54dp"
-        android:layout_marginTop="4dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/sf_textViewMusik"
-        app:srcCompat="@android:drawable/ic_menu_add" />
+                    <io.apptik.widget.MultiSlider
+                        android:id="@+id/sf_seekBarAge"
+                        android:layout_width="233dp"
+                        android:layout_height="32dp"
+                        app:scaleMin="18"
+                        app:scaleMax="99"
+                        app:drawThumbsApart="true"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:rangeColor="#26A69A"
+                        app:thumbNumber="2" />
 
-    <TextView
-        android:id="@+id/sf_textViewMad"
-        android:layout_width="109dp"
-        android:layout_height="19dp"
-        android:layout_marginTop="16dp"
-        android:gravity="center"
-        android:text="Mad og drikke"
-        android:textSize="16sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.503"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageViewplaceholder3" />
+                    <TextView
+                        android:id="@+id/sf_textViewAgeVal"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="18dp"
+                        android:layout_marginLeft="18dp"
+                        android:text="18-99"
+                        app:layout_constraintBottom_toBottomOf="@+id/sf_seekBarAge"
+                        app:layout_constraintStart_toEndOf="@+id/sf_seekBarAge"
+                        app:layout_constraintTop_toTopOf="@+id/sf_seekBarAge" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <ImageView
-        android:id="@+id/imageViewplaceholder3"
-        android:layout_width="59dp"
-        android:layout_height="54dp"
-        android:layout_marginTop="4dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.502"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/sf_textViewUnderholdning"
-        app:srcCompat="@android:drawable/ic_menu_add" />
+                <TextView
+                    android:id="@+id/sf_textViewAktiviteter"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5sp"
+                    android:layout_weight="1"
+                    android:background="@color/colorAccent"
+                    android:gravity="center_horizontal"
+                    android:text="Aktiviteter"
+                    android:textAlignment="center"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
 
-    <TextView
-        android:id="@+id/sf_textViewUnderholdning"
-        android:layout_width="110dp"
-        android:layout_height="19dp"
-        android:layout_marginTop="16dp"
-        android:gravity="center"
-        android:text="Underholdning"
-        android:textSize="16sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.501"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageViewPlaceholder5" />
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
 
-    <TextView
-        android:id="@+id/sf_textViewMusik"
-        android:layout_width="129dp"
-        android:layout_height="25dp"
-        android:layout_marginTop="16dp"
-        android:gravity="center"
-        android:text="Musik og natteliv"
-        android:textSize="16sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.492"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageViewplaceholder1" />
+                    <Switch
+                        android:id="@+id/sf_switchALLActivities"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="25sp"
+                        android:layout_marginRight="25sp"
+                        android:checked="false"
+                        app:layout_constraintBottom_toBottomOf="@+id/sf_textViewAllEventTypes"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="@+id/sf_textViewAllEventTypes"
+                        app:layout_constraintVertical_bias="0.0" />
 
-    <ImageView
-        android:id="@+id/imageViewPlaceholder4"
-        android:layout_width="59dp"
-        android:layout_height="54dp"
-        android:layout_marginTop="4dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/sf_textViewKultur"
-        app:srcCompat="@android:drawable/ic_menu_add" />
+                    <TextView
+                        android:id="@+id/sf_textViewAllEventTypes"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="25dp"
+                        android:layout_marginLeft="25dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_weight="1"
+                        android:text="Vælg alle aktiviteter"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <Switch
-        android:id="@+id/sf_switchUnderholdning"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="36dp"
-        android:layout_marginRight="36dp"
-        android:checked="true"
-        app:layout_constraintBottom_toBottomOf="@+id/imageViewplaceholder3"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.988"
-        app:layout_constraintStart_toEndOf="@+id/imageViewplaceholder3"
-        app:layout_constraintTop_toTopOf="@+id/imageViewplaceholder3"
-        app:layout_constraintVertical_bias="0.571"
-        android:theme="@style/switchTheme"
-        />
+                <TextView
+                    android:id="@+id/sf_textViewBackgroundBar"
+                    android:layout_width="match_parent"
+                    android:layout_height="15sp"
+                    android:layout_marginTop="5sp"
+                    android:layout_weight="1"
+                    android:background="@color/colorAccent"
+                    android:gravity="center_horizontal"
+                    android:textAlignment="center"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
 
-    <Switch
-        android:id="@+id/sf_switchKultur"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="36dp"
-        android:layout_marginRight="36dp"
-        android:checked="true"
-        app:layout_constraintBottom_toBottomOf="@+id/imageViewPlaceholder4"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.988"
-        app:layout_constraintStart_toEndOf="@+id/imageViewplaceholder2"
-        app:layout_constraintTop_toTopOf="@+id/imageViewPlaceholder4"
-        app:layout_constraintVertical_bias="0.535"
-        android:theme="@style/switchTheme"
-        />
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
 
-    <TextView
-        android:id="@+id/sf_textViewKultur"
-        android:layout_width="85dp"
-        android:layout_height="22dp"
-        android:layout_marginTop="16dp"
-        android:gravity="center"
-        android:text="Kultur"
-        android:textSize="16sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.503"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageViewplaceholder2" />
+                    <TextView
+                        android:id="@+id/sf_textView_BlivKlogere"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:text="Bliv klogere"
+                        android:textSize="16sp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/sf_imageMusikogNatteliv" />
 
-    <ImageView
-        android:id="@+id/imageViewPlaceholder5"
-        android:layout_width="59dp"
-        android:layout_height="54dp"
-        android:layout_marginTop="24dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.502"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/sf_textViewbackground3"
-        app:srcCompat="@android:drawable/ic_menu_add" />
+                    <ImageView
+                        android:id="@+id/sf_imageBlivKlogere"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/sf_textView_BlivKlogere"
+                        app:srcCompat="@android:drawable/ic_menu_add" />
+
+                    <Switch
+                        android:id="@+id/sf_switchMusikogNatteliv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="25dp"
+                        android:layout_marginRight="25dp"
+                        android:checked="true"
+                        app:layout_constraintBottom_toBottomOf="@+id/sf_imageMusikogNatteliv"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/sf_textView_MusikogNatteliv" />
+
+                    <TextView
+                        android:id="@+id/sf_textView_MusikogNatteliv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:text="Musik og natteliv"
+                        android:textSize="16sp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/sf_imageKultur" />
+
+                    <Switch
+                        android:id="@+id/sf_switchGratis"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="25dp"
+                        android:layout_marginRight="25dp"
+                        android:checked="true"
+                        app:layout_constraintBottom_toBottomOf="@+id/sf_imageGratis"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/sf_textView_Gratis" />
+
+                    <Switch
+                        android:id="@+id/sf_switchBlivKlogere"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="25dp"
+                        android:layout_marginRight="25dp"
+                        android:checked="true"
+                        app:layout_constraintBottom_toBottomOf="@+id/sf_imageBlivKlogere"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/sf_textView_BlivKlogere" />
+
+                    <TextView
+                        android:id="@+id/sf_textView_Kultur"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:text="Kultur"
+                        android:textSize="16sp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/sf_imageMadogDrikke" />
+
+                    <Switch
+                        android:id="@+id/sf_switchKultur"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="25dp"
+                        android:layout_marginRight="25dp"
+                        android:checked="true"
+                        app:layout_constraintBottom_toBottomOf="@+id/sf_imageKultur"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="@+id/sf_imageKultur" />
+
+                    <ImageView
+                        android:id="@+id/sf_imageMadogDrikke"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/sf_textView_MadDrikke"
+                        app:srcCompat="@android:drawable/ic_menu_add" />
+
+                    <Switch
+                        android:id="@+id/sf_switchUnderholdning"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="25dp"
+                        android:layout_marginRight="25dp"
+                        android:checked="true"
+                        app:layout_constraintBottom_toBottomOf="@+id/sf_imageUnderholdning"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/sf_textViewUnderholdning" />
+
+                    <ImageView
+                        android:id="@+id/sf_imageMtotion"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/sf_textViewMotion"
+                        app:srcCompat="@android:drawable/ic_menu_add" />
+
+                    <ImageView
+                        android:id="@+id/sf_imageKultur"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/sf_textView_Kultur"
+                        app:srcCompat="@android:drawable/ic_menu_add" />
+
+                    <ImageView
+                        android:id="@+id/sf_imageUnderholdning"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/sf_textViewUnderholdning"
+                        app:srcCompat="@android:drawable/ic_menu_add" />
+
+                    <ImageView
+                        android:id="@+id/sf_imageMusikogNatteliv"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/sf_textView_MusikogNatteliv"
+                        app:srcCompat="@android:drawable/ic_menu_add" />
+
+                    <Switch
+                        android:id="@+id/sf_switchMadDrikke"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="25dp"
+                        android:layout_marginRight="25dp"
+                        android:checked="true"
+                        app:layout_constraintBottom_toBottomOf="@+id/sf_imageMadogDrikke"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="@+id/sf_imageMadogDrikke" />
+
+                    <Switch
+                        android:id="@+id/sf_switchMotion"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="25dp"
+                        android:layout_marginRight="25dp"
+                        android:checked="true"
+                        app:layout_constraintBottom_toBottomOf="@+id/sf_imageMtotion"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="@+id/sf_imageMtotion" />
+
+                    <TextView
+                        android:id="@+id/sf_textViewMotion"
+                        android:layout_width="88dp"
+                        android:layout_height="22dp"
+                        android:layout_marginTop="10dp"
+                        android:gravity="center"
+                        android:text="Motion"
+                        android:textSize="16sp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/sf_textView_MadDrikke"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:text="Mad og drikke"
+                        android:textSize="16sp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/sf_imageUnderholdning" />
+
+                    <TextView
+                        android:id="@+id/sf_textViewUnderholdning"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:text="Underholdning"
+                        android:textSize="16sp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/sf_imageMtotion"
+                        tools:ignore="MissingConstraints" />
+
+                    <TextView
+                        android:id="@+id/sf_textView_Gratis"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:text="Gratis"
+                        android:textSize="16sp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/sf_imageBlivKlogere" />
+
+                    <ImageView
+                        android:id="@+id/sf_imageGratis"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:layout_marginBottom="15dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/sf_textView_Gratis"
+                        app:srcCompat="@android:drawable/ic_menu_add" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+            </LinearLayout>
+    </ScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

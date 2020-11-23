@@ -1,6 +1,7 @@
 package com.A4.oplev.SearchFilter;
-
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,7 +9,6 @@ import android.widget.CompoundButton;
 import android.widget.SeekBar;
 import android.widget.Switch;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 
@@ -17,22 +17,23 @@ import com.A4.oplev.R;
 import io.apptik.widget.MultiSlider;
 
 public class Search_filter_frag extends Fragment{
-    // todo Beslut hvordan searchfilter data skal vidergives til resten af appen. (kostruktor, indholdende boolean værdier?)
-    boolean motion, underholdning, madDrikke, kultur, musikNatteliv, blivKlogere, gratis;
 
-    public Search_filter_frag() {}
-
-    SeekBar distanceBar;
-    MultiSlider ageBar;
-    Switch allSwitch, motionSwitch, underholdningSwitch, madDrikkeSwitch, kulturSwitch, musikNattelivSwitch, blivKlogereSwitch, gratisSwitch;
-    TextView ageText, distanceText;
-    int currDistance = 30;
-    int currMinAge = 18;
-    int currMaxAge = 99;
+    private SeekBar distanceBar;
+    private MultiSlider ageBar;
+    private Switch allSwitch, motionSwitch, underholdningSwitch, madDrikkeSwitch, kulturSwitch, musikNattelivSwitch, blivKlogereSwitch, gratisSwitch;
+    private TextView ageText, distanceText;
+    private int currDistance = 30;
+    private int currMinAge = 18;
+    private int currMaxAge = 99;
 
     public View onCreateView(LayoutInflater i, ViewGroup container, Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        View root = i.inflate(R.layout.search_filter_frag2, container, false);
+        View root = i.inflate(R.layout.search_filter_frag, container, false);
+
+        // Load data from previous instance of app (age and distance) with SharedPreferences.
+        loadData();
+
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
 
         distanceBar = root.findViewById(R.id.sf_seekBarDistance);
         ageBar = root.findViewById(R.id.sf_seekBarAge);
@@ -47,7 +48,13 @@ public class Search_filter_frag extends Fragment{
         ageText = root.findViewById(R.id.sf_textViewAgeVal);
         distanceText = root.findViewById(R.id.sf_textViewDistanceVal);
 
-        distanceText.setText(Integer.toString(currDistance)+ "km");
+        // Load switches (settings basically) from previous instances.
+        updateSwitches();
+
+        // Instantiating the distanceBar and distanceText in accordance with the method loadData().
+        distanceText.setText(Integer.toString(currDistance)+ " km");
+        distanceBar.setProgress(currDistance);
+
 
         distanceBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
@@ -59,14 +66,12 @@ public class Search_filter_frag extends Fragment{
             public void onStartTrackingTouch(SeekBar seekBar) {}
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-                distanceBar.setProgress(currDistance);
-                System.out.println(currDistance);
+                prefs.edit().putInt("distance",currDistance).apply();
             }
         });
 
         ageText.setText(currMinAge + " - " + currMaxAge + "år");
-        ageBar.setMin(currMinAge);
-        ageBar.setMax(currMaxAge);
+        // todo Find ud af hvordan man sætter thumbs til specifikke punkter?
         ageBar.setOnThumbValueChangeListener(new MultiSlider.OnThumbValueChangeListener() {
             @Override
             public void onValueChanged(MultiSlider multiSlider,
@@ -75,11 +80,13 @@ public class Search_filter_frag extends Fragment{
                                        int value) {
                 if (thumbIndex == 0) {
                     currMinAge = (value);
+                    prefs.edit().putInt("minAge",currMinAge).apply();
+
                 } else {
                     currMaxAge = (value);
+                    prefs.edit().putInt("maxAge",currMaxAge).apply();
                 }
                 ageText.setText(currMinAge + " - " + currMaxAge);
-
             }
         });
 
@@ -96,76 +103,84 @@ public class Search_filter_frag extends Fragment{
                     musikNattelivSwitch.setChecked(true);
                     blivKlogereSwitch.setChecked(true);
                     gratisSwitch.setChecked(true);
+
+                    prefs.edit().putBoolean("Motionswitch", motionSwitch.isChecked()).apply();
+                    prefs.edit().putBoolean("underholdningSwitch", underholdningSwitch.isChecked()).apply();
+                    prefs.edit().putBoolean("madDrikkeSwitch", madDrikkeSwitch.isChecked()).apply();
+                    prefs.edit().putBoolean("kulturSwitch", kulturSwitch.isChecked()).apply();
+                    prefs.edit().putBoolean("musikNattelivSwitch", musikNattelivSwitch.isChecked()).apply();
+                    prefs.edit().putBoolean("blivKlogereSwitch", blivKlogereSwitch.isChecked()).apply();
+                    prefs.edit().putBoolean("gratisSwitch", gratisSwitch.isChecked()).apply();
                 }
             }
         });
 
         motionSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked){
-                if(isChecked){
-                    motion = true;
-                }
-                else motion = false;
+                prefs.edit().putBoolean("motionswitch", motionSwitch.isChecked()).apply();
             }
         });
 
         underholdningSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked){
-                if(isChecked){
-                    underholdning = true;
-                }
-                else underholdning = false;
+                prefs.edit().putBoolean("underholdningSwitch", underholdningSwitch.isChecked()).apply();
             }
         });
 
         madDrikkeSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked){
-                if(isChecked){
-                    madDrikke = true;
-                }
-                else madDrikke = false;
+                prefs.edit().putBoolean("madDrikkeSwitch", madDrikkeSwitch.isChecked()).apply();
             }
         });
 
 
         kulturSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked){
-                if(isChecked){
-                    kultur = true;
-                }
-                else kultur = false;
+                prefs.edit().putBoolean("kulturSwitch", kulturSwitch.isChecked()).apply();
             }
         });
 
         musikNattelivSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked){
-                if(isChecked){
-                     musikNatteliv = true;
-                }
-                else musikNatteliv = false;
+                prefs.edit().putBoolean("musikNattelivSwitch", musikNattelivSwitch.isChecked()).apply();
             }
         });
 
 
         blivKlogereSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked){
-                if(isChecked){
-                    blivKlogere = true;
-                }
-                else blivKlogere = false;
+                prefs.edit().putBoolean("blivKlogereSwitch", blivKlogereSwitch.isChecked()).apply();
             }
         });
 
         gratisSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked){
-                if(isChecked){
-                    gratis = true;
-                }
-                else gratis = false;
+                prefs.edit().putBoolean("gratisSwitch", gratisSwitch.isChecked()).apply();
             }
         });
 
-
             return root;
     }
+
+
+    public void loadData(){
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        currDistance = prefs.getInt("distance",45);
+        currMinAge = prefs.getInt("minAge", 18);
+        currMaxAge = prefs.getInt("maxAge", 99);
+    }
+
+    public void updateSwitches(){
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        motionSwitch.setChecked(prefs.getBoolean("motionswitch",true));
+        underholdningSwitch.setChecked(prefs.getBoolean("underholdningSwitch",true));
+        madDrikkeSwitch.setChecked(prefs.getBoolean("madDrikkeSwitch",true));
+        kulturSwitch.setChecked(prefs.getBoolean("kulturSwitch",true));
+        musikNattelivSwitch.setChecked(prefs.getBoolean("musikNattelivSwitch",true));
+        blivKlogereSwitch.setChecked(prefs.getBoolean("blivKlogereSwitch",true));
+        gratisSwitch.setChecked(prefs.getBoolean("gratisSwitch",true));
+
+        System.out.println(prefs.getBoolean("gratisSwitch",true));
+    }
 }
+
