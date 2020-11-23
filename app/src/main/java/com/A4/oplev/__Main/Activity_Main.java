@@ -40,9 +40,9 @@ public class Activity_Main extends AppCompatActivity implements View.OnClickList
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-
         prefs = PreferenceManager.getDefaultSharedPreferences(this);
+
+        //Tjekker om hvorvidt man er logget ind
         onInstance = prefs.getBoolean("onInstance", false);
 
         //skal optimeres og ændres til at vi skal hente data ude fra.
