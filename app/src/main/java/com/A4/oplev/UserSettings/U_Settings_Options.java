@@ -7,15 +7,12 @@ import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
 import com.A4.oplev.Activity_Ini;
-import com.A4.oplev.Activity_Login;
-import com.A4.oplev.Activity_Profile;
 import com.A4.oplev.R;
 import com.google.firebase.auth.FirebaseAuth;
 

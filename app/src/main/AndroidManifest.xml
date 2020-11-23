@@ -16,8 +16,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".Activity_NoInstance"></activity>
-        <activity android:name=".Activity_CreateUser" />
-        <activity android:name=".Activity_Login" />
+        <activity android:name=".Login.Activity_CreateUser" />
+        <activity android:name=".Login.Activity_Login" />
         <activity android:name=".__Main.Activity_Main" />
         <activity android:name=".Activity_Profile" />
         <activity

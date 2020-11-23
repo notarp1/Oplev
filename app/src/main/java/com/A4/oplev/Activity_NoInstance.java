@@ -8,6 +8,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.A4.oplev.Login.Activity_Login;
+
 public class Activity_NoInstance extends AppCompatActivity implements View.OnClickListener {
 
     Button create;

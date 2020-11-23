@@ -1,12 +1,9 @@
 package Controller;
 
-import android.content.Intent;
-
-import com.A4.oplev.Activity_CreateUser;
+import com.A4.oplev.Login.Activity_CreateUser;
 import com.A4.oplev.Activity_Profile;
 import com.A4.oplev.UserSettings.U_Settings_Edit;
 import com.A4.oplev.UserSettings.U_Settings_Main;
-import com.A4.oplev.__Main.Activity_Main;
 
 import DAL.Classes.ChatDAO;
 import DAL.Classes.EventDAO;
@@ -14,7 +11,6 @@ import DAL.Classes.UserDAO;
 import DAL.Interfaces.CallbackUser;
 import DTO.UserDTO;
 
-import DAL.Classes.EventDAO;
 import DTO.EventDTO;
 
 public class Controller {
