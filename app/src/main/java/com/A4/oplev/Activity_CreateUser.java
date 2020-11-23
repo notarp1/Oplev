@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.A4.oplev.__Main.Activity_Main;
@@ -27,6 +28,7 @@ public class Activity_CreateUser extends AppCompatActivity implements View.OnCli
     private static final String TAG = "login";
     public EditText fName, lName, city, email, password, age;
     Button createUser;
+    ImageView back;
     Context ctx;
     Controller controller;
 
@@ -47,14 +49,21 @@ public class Activity_CreateUser extends AppCompatActivity implements View.OnCli
         email = findViewById(R.id.editEmail);
         password = findViewById(R.id.editPassword);
         createUser = findViewById(R.id.buttonCreate);
+        back = findViewById(R.id.imgView_back);
 
+        back.setOnClickListener(this);
         createUser.setOnClickListener(this);
 
     }
 
     @Override
     public void onClick(View v) {
-        createAccount();
+
+        if(v==back){
+            finish();
+        } else if (v == createUser) {
+            createAccount();
+        }
 
     }
 

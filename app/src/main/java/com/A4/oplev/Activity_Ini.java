@@ -25,6 +25,7 @@ public class Activity_Ini extends AppCompatActivity implements Serializable {
     UserDTO userDTO;
     SharedPreferences prefs;
     Context ctx;
+    boolean onInstance;
 
     private FirebaseAuth mAuth;
 
@@ -45,26 +46,44 @@ public class Activity_Ini extends AppCompatActivity implements Serializable {
     @Override
     public void onStart() {
         super.onStart();
-        // Check if user is signed in (non-null) and update UI accordingly.
 
+        // Check if user is signed in (non-null) and update UI accordingly.
         FirebaseUser currentUser = mAuth.getCurrentUser();
         controller = Controller.getInstance();
         ctx = this;
         prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        onInstance = prefs.getBoolean("onInstance", false);
+
 
         if(currentUser == null){
             prefs.edit().putBoolean("onInstance", false).apply();
             Intent i = new Intent(this, Activity_Main.class);
             startActivity(i);
+        } else if( onInstance){
+            Intent i = new Intent(this, Activity_Main.class);
+            controller.getUser(new CallbackUser() {
+                @Override
+                public void onCallback(UserDTO user) {
+                    setUserDTO(user);
+                    prefs.edit().putString("userId",user.getUserId()).apply();
+
+                    Intent i = new Intent(ctx, Activity_Main.class);
+                    controller.setCurrUser(user);
+
+                    startActivity(i);
+                    finish();
+                }
+            }, prefs.getString("userId", "null"));
+
         } else {
-            prefs.edit().putBoolean("onInstance", true).apply();
             Intent thisIntent = getIntent();
+            prefs.edit().putBoolean("onInstance", true).apply();
 
             controller.getUser(new CallbackUser() {
                 @Override
                 public void onCallback(UserDTO user) {
                     setUserDTO(user);
-                    prefs.edit().putString("UserId",user.getUserId()).apply();
+                    prefs.edit().putString("userId",user.getUserId()).apply();
 
                     Intent i = new Intent(ctx, Activity_Main.class);
                     controller.setCurrUser(user);
