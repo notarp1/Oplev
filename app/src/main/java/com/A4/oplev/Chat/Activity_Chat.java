@@ -5,13 +5,16 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.SystemClock;
 import android.provider.MediaStore;
+import android.util.Base64;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -33,7 +36,11 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
+
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Date;
 import DAL.Classes.ChatDAO;
@@ -46,16 +53,17 @@ public class Activity_Chat extends AppCompatActivity  implements View.OnClickLis
     ListView beskeder;
     Button sendBesked;
     ArrayList<String> beskederStrings;
+    ArrayList<Bitmap> bitmaps = new ArrayList<>();
     EditText inputTekst;
     ChatDTO dto;
     ChatDAO dao = new ChatDAO();
     Context ctx;
     String person1, person2, chatDocumentPath;
-    //private static final int REQUEST_CAMERARESULT=201;
+    private static final int REQUEST_CAMERARESULT=201;
+    private static int RESULT_LOAD_IMAGE = 1;
 
 
     public void onCreate(Bundle saveInstanceState) {
-        //dto = dao.getChat("huvc67lCMUyhHXcBksHg");
         chatDocumentPath = "60V6EddGhhZdY7pTGYRF";
         person1 = "person1";
         person2 = "person2";
@@ -88,6 +96,8 @@ public class Activity_Chat extends AppCompatActivity  implements View.OnClickLis
                             @Override
                             public void onCallback(ChatDTO dto) {
                                 if (dto.getChatId() != null){
+                                    System.out.println("Update");
+                                    setChatDTO(dto);
                                     ChatList_Adapter adapter = new ChatList_Adapter(ctx, beskederStrings, dto, person1, new ArrayList<>());
                                     beskeder.setAdapter(adapter);
                                     inputTekst.setText("");
@@ -105,6 +115,7 @@ public class Activity_Chat extends AppCompatActivity  implements View.OnClickLis
         dao.readChat(new ChatDAO.FirestoreCallback() {
             @Override
             public void onCallback(ChatDTO dto) {
+                System.out.println("Read");
                 setChatDTO(dto);
                 if (dto.getMessages() != null){
                     beskederStrings.clear();
@@ -113,6 +124,7 @@ public class Activity_Chat extends AppCompatActivity  implements View.OnClickLis
 
                 ChatList_Adapter adapter = new ChatList_Adapter(ctx,beskederStrings, dto,person1, new ArrayList<>());
                 beskeder.setAdapter(adapter);
+                System.out.println("Hejsa 11" + dto.toString());
             }
         },chatDocumentPath);
 
@@ -136,10 +148,14 @@ public class Activity_Chat extends AppCompatActivity  implements View.OnClickLis
                 }
 
                 if (snapshot != null && snapshot.exists()) {
-                    setChatDTO(snapshot.toObject(ChatDTO.class));
+                    System.out.println("EventListener");
                     if (dto.getMessages() != null) {
+                        ChatDTO temp = snapshot.toObject(ChatDTO.class);
+                        if (temp.getChatId() != null){
+                        setChatDTO(snapshot.toObject(ChatDTO.class));
                         beskederStrings.clear();
                         beskederStrings.addAll(dto.getMessages());
+                    }
                     }
                     ChatList_Adapter adapter = new ChatList_Adapter(ctx,beskederStrings, dto,person1, new ArrayList<>());
                     beskeder.setAdapter(adapter);
@@ -153,39 +169,23 @@ public class Activity_Chat extends AppCompatActivity  implements View.OnClickLis
 
     @Override
     public void onClick(View v) {
-        if (v == tilbage){
+        if (v == tilbage) {
             finish();
-        }
-        else if (v == sendBesked) {
-//            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-//                if (this.checkSelfPermission(Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
-//                    ///method to get Images
-//                    takePic();
-//                } else {
-//                    if (shouldShowRequestPermissionRationale(Manifest.permission.CAMERA)) {
-//                        Toast.makeText(this, "Your Permission is needed to get access the camera", Toast.LENGTH_LONG).show();
-//                    }
-//                    requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.CAMERA}, REQUEST_CAMERARESULT);
-//                }
-//            } else {
-//                takePic();
-//            }
-
-
-                beskederStrings.add("pictureBlaBlaBla");
-
-                dao.updateChat(new ChatDAO.FirestoreCallback() {
-                    @Override
-                    public void onCallback(ChatDTO dto) {
-                        if (dto.getChatId() != null){
-                            ChatList_Adapter adapter = new ChatList_Adapter(ctx, beskederStrings, dto, person1,new ArrayList<>());
-                            beskeder.setAdapter(adapter);
-                            inputTekst.setText("");
-                        }
+        } else if (v == sendBesked) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                if (this.checkSelfPermission(Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
+                    ///method to get Images
+                    takePic();
+                } else {
+                    if (shouldShowRequestPermissionRationale(Manifest.permission.CAMERA)) {
+                        Toast.makeText(this, "Your Permission is needed to get access the camera", Toast.LENGTH_LONG).show();
                     }
-                }, dto);
+                    requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.CAMERA}, REQUEST_CAMERARESULT);
+                }
+            } else {
+                takePic();
             }
-        else if (v == settings){
+        } else if (v == settings) {
             // gør noget her
         }
     }
@@ -194,6 +194,7 @@ public class Activity_Chat extends AppCompatActivity  implements View.OnClickLis
     // bruges til at sætte chatDTO objektet gennem oncallback
     private void setChatDTO(ChatDTO dto){
         this.dto = dto;
+        System.out.println("Hejsa blabla" + this.dto);
     }
 
     // bruges til at opdatere ens chat objekt
@@ -218,16 +219,64 @@ public class Activity_Chat extends AppCompatActivity  implements View.OnClickLis
         tempDate.add(new Date());
         dto.setDates(tempDate);
     }
-/*
+
 
     public void takePic(){
-        Intent imageIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        //Intent imageIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         File imagesFolder = new File(Environment.getExternalStorageDirectory(), "MyImages");
         imagesFolder.mkdirs(); // <----
         File image = new File(imagesFolder, "image_001.jpg");
         Uri uri = FileProvider.getUriForFile(this, BuildConfig.APPLICATION_ID + ".provider",image);
-        imageIntent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
-        imageIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-        startActivityForResult(imageIntent,0);
-    }*/
+        //imageIntent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
+        //imageIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        //startActivityForResult(imageIntent,0);
+
+        Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
+        photoPickerIntent.setType("image/*");
+        startActivityForResult(photoPickerIntent, RESULT_LOAD_IMAGE);
+
+    }
+
+
+    // https://stackoverflow.com/questions/38352148/get-image-from-the-gallery-and-show-in-imageview
+    @Override
+    protected void onActivityResult(int reqCode, int resultCode, Intent data) {
+        super.onActivityResult(reqCode, resultCode, data);
+        if (resultCode == RESULT_OK) {
+            try {
+                final Uri imageUri = data.getData();
+                final InputStream imageStream = getContentResolver().openInputStream(imageUri);
+                final Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);
+
+                updateChatDTO(person1,person2,"pictureBlaBlaBla!:" + BitMapToString(selectedImage));
+
+                dao.updateChat(new ChatDAO.FirestoreCallback() {
+                    @Override
+                    public void onCallback(ChatDTO dto) {
+                        if (dto.getChatId() != null){
+                            ChatList_Adapter adapter = new ChatList_Adapter(ctx, beskederStrings, dto, person1,bitmaps);
+                            beskeder.setAdapter(adapter);
+                            inputTekst.setText("");
+                        }
+                    }
+                }, this.dto);
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+                Toast.makeText(Activity_Chat.this, "Something went wrong", Toast.LENGTH_LONG).show();
+            }
+
+        }else {
+            Toast.makeText(Activity_Chat.this, "You haven't picked Image",Toast.LENGTH_LONG).show();
+        }
+    }
+
+    public String BitMapToString(Bitmap bitmap){
+
+        ByteArrayOutputStream baos=new  ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.PNG,100, baos);
+        byte [] b=baos.toByteArray();
+        String temp= Base64.encodeToString(b, Base64.DEFAULT);
+        return temp;
+    }
+
 }

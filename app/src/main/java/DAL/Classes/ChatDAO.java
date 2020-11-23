@@ -12,6 +12,7 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -150,7 +151,13 @@ public class ChatDAO implements IChatDAO {
                     if (document.exists()) {
                         Log.d(TAG, "DocumentSnapshot data: " + document.getData());
                         ChatDTO dto = document.toObject(ChatDTO.class);
-                        firestoreCallback.onCallback(dto);
+                        if (dto.getChatId() == null){
+                            dto = new ChatDTO(new ArrayList<>(), new ArrayList<>(), chatId, new ArrayList<>(), new ArrayList<>());
+                            firestoreCallback.onCallback(dto);
+                        }
+                        else {
+                            firestoreCallback.onCallback(dto);
+                        }
                     } else {
                         Log.d(TAG, "No such document");
                     }
