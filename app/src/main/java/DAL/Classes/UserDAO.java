@@ -67,7 +67,6 @@ public class UserDAO implements IUserDAO, CallbackUser {
         userObject.put("city", user.getCity());
         userObject.put("description", user.getDescription());
         userObject.put("email", user.getEmail());
-        userObject.put("phone", user.getPhone());
         userObject.put("joinedEvents", user.getJoinedEvents());
         userObject.put("events", user.getEvents());
         userObject.put("pictures", user.getPictures());

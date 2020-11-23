@@ -82,9 +82,10 @@ public class Activity_CreateUser extends AppCompatActivity implements View.OnCli
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "createUserWithEmail:success");
                             FirebaseUser user = mAuth.getCurrentUser();
-
                             controller.createUser(user.getUid(), (Activity_CreateUser) ctx);
-                            finish();
+                            Intent i = new Intent(ctx, Activity_Ini.class);
+                            i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                            startActivity(i);
 
 
                         } else {

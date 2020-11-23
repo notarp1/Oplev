@@ -33,13 +33,7 @@ public class Activity_Ini extends AppCompatActivity implements Serializable {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity__ini);
-
-
         mAuth = FirebaseAuth.getInstance();
-
-
-
-
 
     }
 
@@ -58,40 +52,22 @@ public class Activity_Ini extends AppCompatActivity implements Serializable {
         if(currentUser == null){
             prefs.edit().putBoolean("onInstance", false).apply();
             Intent i = new Intent(this, Activity_Main.class);
+            i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(i);
-        } else if( onInstance){
-            Intent i = new Intent(this, Activity_Main.class);
-            controller.getUser(new CallbackUser() {
-                @Override
-                public void onCallback(UserDTO user) {
-                    setUserDTO(user);
-                    prefs.edit().putString("userId",user.getUserId()).apply();
 
-                    Intent i = new Intent(ctx, Activity_Main.class);
-                    controller.setCurrUser(user);
-
-                    startActivity(i);
-                    finish();
-                }
-            }, prefs.getString("userId", "null"));
-
-        } else {
-            Intent thisIntent = getIntent();
+        }else {
             prefs.edit().putBoolean("onInstance", true).apply();
-
             controller.getUser(new CallbackUser() {
                 @Override
                 public void onCallback(UserDTO user) {
                     setUserDTO(user);
                     prefs.edit().putString("userId",user.getUserId()).apply();
-
                     Intent i = new Intent(ctx, Activity_Main.class);
                     controller.setCurrUser(user);
-
+                    i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     startActivity(i);
-                    finish();
                 }
-            }, thisIntent.getStringExtra("userId"));
+            }, currentUser.getUid());
 
         }
 

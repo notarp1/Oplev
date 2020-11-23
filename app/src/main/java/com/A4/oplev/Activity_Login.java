@@ -67,8 +67,18 @@ public class Activity_Login extends AppCompatActivity implements View.OnClickLis
     }
 
     private void signIn(){
-        String emailInput = String.valueOf(email.getText());
-        String passInput = String.valueOf(pass.getText());
+
+        String emailInput;
+        String passInput;
+
+        if(pass.getText().toString().equals("")){
+            passInput = " ";
+        } else passInput = String.valueOf(pass.getText());
+
+        if(email.getText().toString().equals("")){
+            emailInput = " ";
+        } else emailInput = String.valueOf(email.getText());
+
 
         mAuth.signInWithEmailAndPassword(emailInput, passInput)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
@@ -77,17 +87,13 @@ public class Activity_Login extends AppCompatActivity implements View.OnClickLis
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "signInWithEmail:success");
-                            FirebaseUser user = mAuth.getCurrentUser();
 
                             controller = Controller.getInstance();
-                            prefs = PreferenceManager.getDefaultSharedPreferences(ctx);
-
-                            String id = user.getUid();
+                            //prefs = PreferenceManager.getDefaultSharedPreferences(ctx);
 
                             Intent i = new Intent(ctx, Activity_Ini.class);
-                            i.putExtra("userId", id);
+                            i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                             startActivity(i);
-                            finish();
 
 
                     } else {
