@@ -91,8 +91,8 @@ public class Search_filter_frag extends Fragment{
         });
 
 
-
-        // set onCheckedListener
+        // Set onCheckedListener
+        // Following listeners are all saving a boolean (search settings basiclly) which can be accessed through SharedPreferences.
         allSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked){
                 if(isChecked){
