@@ -15,9 +15,6 @@
         <activity android:name=".Activity_NoInstance"></activity>
         <activity android:name=".Activity_CreateUser" />
         <activity android:name=".Activity_Login" />
-        <activity
-            android:name=".ui.login.LoginActivity"
-            android:label="@string/title_activity_login" />
         <activity android:name=".__Main.Activity_Main" />
         <activity android:name=".Activity_Profile" />
         <activity
