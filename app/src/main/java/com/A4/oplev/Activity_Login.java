@@ -42,7 +42,7 @@ public class Activity_Login extends AppCompatActivity implements View.OnClickLis
 
         this.ctx = this;
 
-        email = findViewById(R.id.username);
+        email = findViewById(R.id.email);
         pass = findViewById(R.id.password);
         loginButton = findViewById(R.id.login);
         createButton = findViewById(R.id.create);
