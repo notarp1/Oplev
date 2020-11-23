@@ -70,13 +70,15 @@ public class UserDAO implements IUserDAO, CallbackUser {
         userObject.put("joinedEvents", user.getJoinedEvents());
         userObject.put("events", user.getEvents());
         userObject.put("pictures", user.getPictures());
+        userObject.put("userId", user.getUserId());
 
 
         db.collection("users")
-                .add(userObject)
+                .document(user.getUserId())
+                .set(userObject)
                 .addOnSuccessListener(documentReference -> {
-                    Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId());
-                    db.collection("users").document(documentReference.getId()).update("userId", documentReference.getId());
+                    Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference);
+
                 })
                 .addOnFailureListener(e -> Log.w(TAG, "Error adding document", e));
     }
