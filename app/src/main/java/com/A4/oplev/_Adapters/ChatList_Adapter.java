@@ -2,19 +2,14 @@ package com.A4.oplev._Adapters;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
-import android.text.Spannable;
-import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
-import android.text.style.DynamicDrawableSpan;
 import android.text.style.ImageSpan;
-import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,11 +19,11 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.content.ContextCompat;
 
 import com.A4.oplev.R;
 
-import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -45,16 +40,15 @@ public class ChatList_Adapter extends ArrayAdapter<String> {
     private List<String> beskederList = new ArrayList<>();
     private ChatDTO dto;
     private String thisUser;
-    private List<Bitmap> pictures = new ArrayList<>();
-    private int pictureCount = 0;
+    private int pictureCount;
 
-    public ChatList_Adapter(@NonNull Context context, @NonNull ArrayList<String> list, ChatDTO dto, String thisUser, ArrayList<Bitmap> pictures) {
+    public ChatList_Adapter(@NonNull Context context, @NonNull ArrayList<String> list, ChatDTO dto, String thisUser) {
         super(context, 0 , list);
         this.mContext = context;
         this.beskederList = list;
         this.dto = dto;
         this.thisUser = thisUser;
-        this.pictures = pictures;
+        this.pictureCount = 0;
     }
 
     @SuppressLint("ResourceAsColor")
@@ -66,26 +60,34 @@ public class ChatList_Adapter extends ArrayAdapter<String> {
         if(listItem == null)
             listItem = LayoutInflater.from(mContext).inflate(R.layout.chat_besked_element,parent,false);
 
-        String[] currentBesked = beskederList.get(position).split("!:");
+        String currentBesked = beskederList.get(position);
         TextView besked = (TextView) listItem.findViewById(R.id.chat_besked_element_tekst);
 
-        if (currentBesked[0].equals("pictureBlaBlaBla")) {
+        if (currentBesked.equals("pictureBlaBlaBla!:")) {
             SpannableStringBuilder ssb = new SpannableStringBuilder();
             ssb.append(" ");
-            int start = ssb.length()-1;
-            if (start < 0) {
-                start = 0;
+
+
+            final Bitmap[] pictureBitMap = {null};
+            uriToBitMap(dto.getPictures().get(pictureCount), new BitMapCallback() {
+                @Override
+                public void onCallBack(Bitmap bitmap) {
+                    pictureBitMap[0] = bitmap;
+                }
+            });
+
+            if (pictureBitMap[0] != null) {
+                Drawable drawable = new BitmapDrawable(mContext.getResources(), pictureBitMap[0]);
+                drawable.setBounds(0, 0, mContext.getResources().getDisplayMetrics().widthPixels / 2, mContext.getResources().getDisplayMetrics().heightPixels / 2);
+                ImageSpan span = new ImageSpan(drawable);
+                ssb.setSpan(span, ssb.length() - 1, ssb.length(), 0);
+                besked.setText(ssb);
+                besked.setBackgroundColor(mContext.getResources().getColor(R.color.backgroundColor));
+                isPic = true;
             }
-            Drawable drawable = new BitmapDrawable(mContext.getResources(), StringToBitMap(currentBesked[1]));
-            drawable.setBounds(0, 0, mContext.getResources().getDisplayMetrics().widthPixels/2, mContext.getResources().getDisplayMetrics().heightPixels/2);
-            ImageSpan span = new ImageSpan(drawable);
-            ssb.setSpan(span, start, ssb.length(), 0);
-            besked.setText(ssb);
-            besked.setBackgroundColor(mContext.getResources().getColor(R.color.backgroundColor));
-            isPic = true;
         } else {
-            currentBesked[0] = beskederList.get(position);
-            besked.setText(currentBesked[0]);
+            currentBesked = beskederList.get(position);
+            besked.setText(currentBesked);
         }
 
 
@@ -118,16 +120,25 @@ public class ChatList_Adapter extends ArrayAdapter<String> {
         return listItem;
     }
 
-    public Bitmap StringToBitMap(String encodedString){
-        try{
-            byte [] encodeByte = Base64.decode(encodedString,Base64.DEFAULT);
-            Bitmap bitmap = BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.length);
-            return bitmap;
-        }
-        catch(Exception e){
-            e.getMessage();
-            return null;
-        }
+
+    public void uriToBitMap(Uri url, BitMapCallback bitMapCallback){
+        final Bitmap[] bitmap = {null};
+        Runnable r = new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    bitmap[0] = BitmapFactory.decodeStream(new URL(url.toString()).openConnection().getInputStream());
+                    bitMapCallback.onCallBack(bitmap[0]);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+        new Thread(r).start();
     }
 
+
+    private interface BitMapCallback{
+        void onCallBack(Bitmap bitmap);
+    }
 }
