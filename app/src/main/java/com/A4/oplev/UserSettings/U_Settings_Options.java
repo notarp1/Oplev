@@ -7,6 +7,7 @@ import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
@@ -20,6 +21,7 @@ public class U_Settings_Options extends Fragment implements View.OnClickListener
 
     TextView logud;
     SharedPreferences prefs;
+    ImageView back;
 
     public View onCreateView(LayoutInflater i, ViewGroup container, Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,6 +32,8 @@ public class U_Settings_Options extends Fragment implements View.OnClickListener
         logud = root.findViewById(R.id.logud_txt);
         logud.setOnClickListener(this);
 
+        back = (ImageView) getActivity().findViewById(R.id.topbar_arrow);
+        back.setOnClickListener(this);
 
         return root;
 
@@ -50,6 +54,8 @@ public class U_Settings_Options extends Fragment implements View.OnClickListener
             Intent i = new Intent(getActivity(), Activity_Ini.class);
             startActivity(i);
 
+        } else if (view == back){
+            getActivity().getSupportFragmentManager().popBackStack();
         }
     }
 }

@@ -5,6 +5,8 @@ import com.A4.oplev.Activity_Profile;
 import com.A4.oplev.UserSettings.U_Settings_Edit;
 import com.A4.oplev.UserSettings.U_Settings_Main;
 
+import java.util.ArrayList;
+
 import DAL.Classes.ChatDAO;
 import DAL.Classes.EventDAO;
 import DAL.Classes.UserDAO;
@@ -66,15 +68,20 @@ public class Controller {
     }
 
 
-    public void updateUser(U_Settings_Edit ctx){
+    public void updateUser(U_Settings_Edit ctx, ArrayList<String> pictures){
+
 
         user.setDescription(ctx.about.getText().toString());
         user.setCity(ctx.city.getText().toString());
         user.setJob(ctx.job.getText().toString());
         user.setEducation(ctx.education.getText().toString());
-
+        user.setPictures(pictures);
         userDAO.updateUser(user);
 
+    }
+
+    public ArrayList<String> getUserPictures(){
+        return user.getPictures();
     }
 
     public void deleteUser(String userId){
