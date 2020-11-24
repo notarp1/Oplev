@@ -109,12 +109,6 @@ public class U_Settings_Edit extends Fragment implements View.OnClickListener {
         job = root.findViewById(R.id.editText_job);
         education = root.findViewById(R.id.editText_edu);
 
-
-
-
-
-
-
         iniPictures(root);
         controller.iniEditProfile(this);
 
@@ -135,18 +129,7 @@ public class U_Settings_Edit extends Fragment implements View.OnClickListener {
                 Picasso.get().load(pictures.get(i)).into(avatar);
             }
         }
-        /*
-        ContextWrapper cw = new ContextWrapper(getContext());
-        File directory = cw.getDir("imageDir", Context.MODE_PRIVATE);
 
-        for(int j = 0; j<6; j++){
-            if(pictures.get(j) != null) {
-                File myImageFile = new File(directory, "ppic"+j+".png");
-                System.out.println("HEJ");
-                ImageView pic = getPictureNumber(j);
-                Picasso.get().load(myImageFile).into(pic);
-            }
-        } */
     }
 
     private void iniPictures(View root) {
@@ -178,48 +161,31 @@ public class U_Settings_Edit extends Fragment implements View.OnClickListener {
         } else if (v == accept) {
             updateUserAndGUI();
         } else if (v==p0){
-            picNumber = 0;
-            picBool();
+            picBool(0);
         } else if (v == p1) {
-            picNumber = 1;
-            picBool();
+            picBool(1);
         } else if (v == p2) {
-            picNumber = 2;
-            picBool();
+            picBool(2);
         } else if (v == p3) {
-            picNumber = 3;
-            picBool();
+            picBool(3);
         } else if (v == p4) {
-            picNumber = 4;
-            picBool();
+            picBool(4);
         } else if (v == p5) {
-            picNumber = 5;
-            picBool();
+            picBool(5);
         }
 
     }
 
     private void onAccept() {
 
-        for (Uri a : uris) {
-            if (a != null) {
-                pictureCount += 1;
-
-            }
-        }
         if(pictureCount > 0 )
         for (int i = 0; i < 6; i++) {
-
-            System.out.println(uris[i]);
-            System.out.println(i);
 
             if (uris[i] != null) {
                 indexPlace = i;
 
                 Uri file = uris[i];
                 picRef = mStorageRef.child("users/" + currentUser.getUid() + "/" + i);
-
-
                 picRef.putFile(file)
                         .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                             @Override
@@ -230,18 +196,10 @@ public class U_Settings_Edit extends Fragment implements View.OnClickListener {
                                     @Override
                                     public void onSuccess(Uri uri) {
                                         Uri downloadUrl = uri;
-
-                                        //indexNumbers += 1;
                                         setPictures(indexPlace, downloadUrl);
                                         updateUserAndGUI();
-
-                                        //if (indexNumbers == pictureCount)updateUserAndGUI();
-
                                     }
-
                                 });
-
-
                             }
                         })
                         .addOnFailureListener(new OnFailureListener() {
@@ -261,9 +219,7 @@ public class U_Settings_Edit extends Fragment implements View.OnClickListener {
 
     private void updateUserAndGUI() {
 
-
         controller.updateUser(this, pictures);
-
         Toast.makeText(getContext(), "Profil opdateret!", Toast.LENGTH_SHORT).show();
     }
 
@@ -278,7 +234,8 @@ public class U_Settings_Edit extends Fragment implements View.OnClickListener {
 
         pictures.set(index, address);
     }
-    private void picBool() {
+    private void picBool(int number) {
+        picNumber = number;
         picturePermission();
 
     }
@@ -335,6 +292,7 @@ public class U_Settings_Edit extends Fragment implements View.OnClickListener {
             pictures.set(picNumber, String.valueOf(uri));
             uris[picNumber] = uri;
             picture.setImageURI(uri);
+
             onAccept();
 
         }
