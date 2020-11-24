@@ -166,8 +166,10 @@ public class Activity_Chat extends AppCompatActivity  implements View.OnClickLis
                             ChatDTO temp = snapshot.toObject(ChatDTO.class);
                             if (temp.getChatId() != null) {
                                 setChatDTO(snapshot.toObject(ChatDTO.class));
-                                beskederStrings.clear();
-                                beskederStrings.addAll(dto.getMessages());
+                                if (dto.getMessages() != null) {
+                                    beskederStrings.clear();
+                                    beskederStrings.addAll(dto.getMessages());
+                                }
                             }
 
                             ChatList_Adapter adapter = new ChatList_Adapter(ctx, beskederStrings, dto, person1);
