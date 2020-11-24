@@ -8,6 +8,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
+import android.os.SystemClock;
 import android.text.SpannableStringBuilder;
 import android.text.style.ImageSpan;
 import android.view.LayoutInflater;
@@ -42,6 +43,7 @@ public class ChatList_Adapter extends ArrayAdapter<String> {
     private ChatDTO dto;
     private String thisUser;
     private int pictureCount;
+    private List<Bitmap> bitmapList = new ArrayList<>();
 
     public ChatList_Adapter(@NonNull Context context, @NonNull ArrayList<String> list, ChatDTO dto, String thisUser) {
         super(context, 0 , list);
@@ -50,6 +52,7 @@ public class ChatList_Adapter extends ArrayAdapter<String> {
         this.dto = dto;
         this.thisUser = thisUser;
         this.pictureCount = 0;
+        this.bitmapList = new ArrayList<>();
     }
 
     // Den her funktion vil lave vores listview for chatsne
@@ -74,19 +77,22 @@ public class ChatList_Adapter extends ArrayAdapter<String> {
             // Billedet kunne ikke indsættet uden den her tomme streng af en eller anden grund
             ssb.append(" ");
 
-            final Bitmap[] pictureBitMap = {null};
             // Det her er en metode som skal hente et billede fra firestore storage og siden den nye måde at hente et billede på med URI så skal vi køre det asynkront med et callback
+            if (pictureCount > dto.getPictures().size() -1 ) {
+                pictureCount = dto.getPictures().size()-1;
+            }
             uriToBitMap(dto.getPictures().get(pictureCount), new BitMapCallback() {
                 @Override
                 public void onCallBack(Bitmap bitmap) {
-                    pictureBitMap[0] = bitmap;
+                    pictureCount++;
+                    bitmapList.add(bitmap);
                 }
             });
 
             // Vi gør os sikre på at billedet er blevet læst ind ellers vil programmet crashe
-            if (pictureBitMap[0] != null) {
+            if (bitmapList.get(bitmapList.size()-1) != null) {
                 // Vi kreerer et drawable fra det bitmap vi lige har fået fra firestore
-                Drawable drawable = new BitmapDrawable(mContext.getResources(), pictureBitMap[0]);
+                Drawable drawable = new BitmapDrawable(mContext.getResources(), bitmapList.get(bitmapList.size()-1));
                 // Vi sætter dens dimensioner med denne funktion som nok skal ændres lidt
                 drawable.setBounds(0, 0, mContext.getResources().getDisplayMetrics().widthPixels / 2, mContext.getResources().getDisplayMetrics().heightPixels / 2);
                 // Vi laver et imagespan ud af det som kan placeres i vores spannable string
@@ -140,6 +146,7 @@ public class ChatList_Adapter extends ArrayAdapter<String> {
         return listItem;
     }
 
+
     // Den her funktion tager en URI som den skal hente et billede fra og returnerer bitmappen af billedet
     public void uriToBitMap(Uri url, BitMapCallback bitMapCallback){
         final Bitmap[] bitmap = {null};
@@ -152,6 +159,9 @@ public class ChatList_Adapter extends ArrayAdapter<String> {
             }
         };
         new Thread(r).start();
+        while (bitmap[0] == null){
+            SystemClock.sleep(1);
+        }
     }
 
 
