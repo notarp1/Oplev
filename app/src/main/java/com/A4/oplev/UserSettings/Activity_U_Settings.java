@@ -44,12 +44,7 @@ public class Activity_U_Settings extends AppCompatActivity implements View.OnCli
 
     @Override
     public void onClick(View v) {
-        if(v == back){
-            accept.setVisibility(View.INVISIBLE);
-          if(getSupportFragmentManager().getBackStackEntryCount() > 0){
-              getSupportFragmentManager().popBackStack();
-          } else finish();
-        }
+
 
     }
 }

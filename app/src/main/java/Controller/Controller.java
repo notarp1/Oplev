@@ -68,19 +68,20 @@ public class Controller {
     }
 
 
-    public void updateUser(U_Settings_Edit ctx){
+    public void updateUser(U_Settings_Edit ctx, ArrayList<String> pictures){
 
-        /*
-        if(pics == null){
-            pics = new ArrayList<String>();
-        } */
+
         user.setDescription(ctx.about.getText().toString());
         user.setCity(ctx.city.getText().toString());
         user.setJob(ctx.job.getText().toString());
         user.setEducation(ctx.education.getText().toString());
-
+        user.setPictures(pictures);
         userDAO.updateUser(user);
 
+    }
+
+    public ArrayList<String> getUserPictures(){
+        return user.getPictures();
     }
 
     public void deleteUser(String userId){

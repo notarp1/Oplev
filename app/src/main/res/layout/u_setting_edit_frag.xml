@@ -29,6 +29,14 @@
                     android:layout_height="match_parent">
 
                     <ImageView
+                        android:id="@+id/pb0"
+                        android:layout_width="100dp"
+                        android:layout_height="100dp"
+                        android:layout_weight="1"
+                        android:tag="0"
+                        app:srcCompat="@drawable/uploadpng" />
+
+                    <ImageView
                         android:id="@+id/pb1"
                         android:layout_width="100dp"
                         android:layout_height="100dp"
@@ -44,6 +52,13 @@
                         android:tag="0"
                         app:srcCompat="@drawable/uploadpng" />
 
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="15dp">
+
                     <ImageView
                         android:id="@+id/pb3"
                         android:layout_width="100dp"
@@ -51,13 +66,6 @@
                         android:layout_weight="1"
                         android:tag="0"
                         app:srcCompat="@drawable/uploadpng" />
-
-                </TableRow>
-
-                <TableRow
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginTop="15dp">
 
                     <ImageView
                         android:id="@+id/pb4"
@@ -69,14 +77,6 @@
 
                     <ImageView
                         android:id="@+id/pb5"
-                        android:layout_width="100dp"
-                        android:layout_height="100dp"
-                        android:layout_weight="1"
-                        android:tag="0"
-                        app:srcCompat="@drawable/uploadpng" />
-
-                    <ImageView
-                        android:id="@+id/pb6"
                         android:layout_width="100dp"
                         android:layout_height="100dp"
                         android:layout_weight="1"
