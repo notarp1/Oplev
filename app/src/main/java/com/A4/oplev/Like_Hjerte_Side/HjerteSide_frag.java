@@ -20,15 +20,18 @@ public class HjerteSide_frag extends Fragment implements View.OnClickListener{
     public View onCreateView(LayoutInflater i, ViewGroup container, Bundle savedInstanceState) {
         View root = i.inflate(R.layout.hjerteside_frag,container,false);
 
+        // Auto genereret information som senere hen skal hentes ind fra firestore af
         String[] navne = {"John", "abc", "Bente", "AGE", "Yes", "whoDis?", "yubrakit yubotit"};
         String[] dato = {"Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"};
 
+        // opsætter adapteren af det listview der skal blive vist på skærmen
         ArrayAdapter adapter = new ArrayAdapter(getActivity(), R.layout.hjerteside_liste_element, R.id.hjertside_overskrift, navne);
 
         listView = root.findViewById(R.id.hjerteside_listview);
         //listView.setOnItemClickListener(this);
         listView.setAdapter(adapter);
 
+        // Sætter en swipelistener op for at kunne swipe til siden og kunne gå tilbage til likesiden (med chatsne)
         listView.setOnTouchListener(new OnSwipeTouchListener(getContext()){
             @Override
             public void onSwipeRight() {

@@ -10,6 +10,7 @@ import android.view.View;
  * https://stackoverflow.com/questions/4139288/android-how-to-handle-right-to-left-swipe-gestures
  */
 
+// Hele den her klasse er en listener der finder ud af om man har swipet til en side og derefter kan man så override left/right metoderne til at gøre hvad man vil
 public class OnSwipeTouchListener implements View.OnTouchListener {
 
     private final GestureDetector gestureDetector;

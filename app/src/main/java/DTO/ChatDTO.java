@@ -12,6 +12,7 @@ public class ChatDTO {
     private ArrayList<String> messages, sender, receiver;
     private ArrayList<Uri> pictures;
 
+    // Firestore skal bruge en tom konstruktør til at bruge toObject på
     public ChatDTO() {
 
     }
