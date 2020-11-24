@@ -35,64 +35,80 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Date;
 
-import Controller.PictureBitmapConverter;
+import Controller.PictureMaker;
 import DAL.Classes.ChatDAO;
 import DTO.ChatDTO;
 
 
 public class Activity_Chat extends AppCompatActivity  implements View.OnClickListener {
-    ImageView settings, tilbage;
-    TextView navn;
-    ListView beskeder;
-    Button sendBesked;
-    ArrayList<String> beskederStrings;
-    ArrayList<Bitmap> bitmaps = new ArrayList<>();
-    EditText inputTekst;
-    ChatDTO dto;
-    ChatDAO dao = new ChatDAO();
-    Context ctx;
-    String person1, person2, chatDocumentPath;
+    private ImageView settings, tilbage;
+    private TextView navn;
+    private ListView beskeder;
+    private Button sendBillede;
+    private ArrayList<String> beskederStrings;
+    private ArrayList<Bitmap> bitmaps = new ArrayList<>();
+    private EditText inputTekst;
+    private ChatDTO dto;
+    private ChatDAO dao = new ChatDAO();
+    private Context ctx;
+    private String person1, person2, chatDocumentPath;
     private static final int REQUEST_CAMERARESULT=201;
-    private PictureBitmapConverter pictureBitmapConverter;
+    private PictureMaker pictureMaker;
 
 
     public void onCreate(Bundle saveInstanceState) {
+        // De her parametre er predefined lige nu men skal blive genereret efter brugerens valg senere hen
         chatDocumentPath = "60V6EddGhhZdY7pTGYRF";
         person1 = "person1";
         person2 = "person2";
-        pictureBitmapConverter = PictureBitmapConverter.getInstance();
+        pictureMaker = PictureMaker.getInstance();
+
+
+        // Vi instantierer layoutet
         super.onCreate(saveInstanceState);
         setContentView(R.layout.activity_chat_funktion);
-
         ctx = this;
+
+        // her får vi intentet med navnet på den man skriver med
         Intent intent = getIntent();
 
+        // finder elementerne i layoutet
         settings = findViewById(R.id.chat_settings);
         tilbage = findViewById(R.id.chat_topbar_arrow);
         navn = findViewById(R.id.chat_topbar_text);
         navn.setText(intent.getStringExtra("navn"));
-        sendBesked = findViewById(R.id.chat_indsendBesked);
+        sendBillede = findViewById(R.id.chat_indsendBesked);
         beskeder = findViewById(R.id.chat_beskedList);
         inputTekst = findViewById(R.id.chat_inputBesked2);
 
+
+        // For at kunne sende besked med enter på IME tastaturet så bruger vi den her funktion
         inputTekst.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 boolean handled = false;
+                // Checker hvis man har trykket GO (enter)
                 if (actionId == EditorInfo.IME_ACTION_GO) {
+                    // Vi gider kun sende teksten hvis den ikke er tom
                     if (!inputTekst.getText().toString().equals("")) {
 
-                        updateChatDTO(person1,person2,inputTekst.getText().toString(), null);
-
+                        // Selvlavet funktion til at opdatere attributterne i vores ChatDTO objekt
+                        updateChatDTO(person1, person2, inputTekst.getText().toString(), null);
+                        // vi adder beskeden til vores liste af beskeder
                         beskederStrings.add(inputTekst.getText().toString());
 
+                        // Nu når vi har sendt en besked vil vi gerne opdatere den i firestore
                         dao.updateChat(new ChatDAO.FirestoreCallback() {
                             @Override
+                            // Der skal ventes på et callback for at få det nye objekt fra databasen
                             public void onCallback(ChatDTO dto) {
-                                if (dto.getChatId() != null){
+                                if (dto.getChatId() != null) {
+                                    // Sætter klassens objekt til at være det nye (kan åbenbart ikke gøres inde fra funktionen)
                                     setChatDTO(dto);
+                                    // Selvlavet adapter der tager listen af beskeder, Chat-objektet og den nuværende brugers navn som input og laver listviewet over chatten
                                     ChatList_Adapter adapter = new ChatList_Adapter(ctx, beskederStrings, dto, person1);
                                     beskeder.setAdapter(adapter);
+                                    // clear tekstboksen
                                     inputTekst.setText("");
                                 }
                             }
@@ -104,56 +120,63 @@ public class Activity_Chat extends AppCompatActivity  implements View.OnClickLis
             }
         });
 
+
         beskederStrings = new ArrayList<>();
+
+        // Her indlæser vi en chat fra firestore af
         dao.readChat(new ChatDAO.FirestoreCallback() {
             @Override
+            // Venter igen på callback fra metoden
             public void onCallback(ChatDTO dto) {
+                // Sætter klassens ChatDTO objekt til det man har fået ind fra databasen
                 setChatDTO(dto);
-                if (dto.getMessages() != null){
+                // Hvis der er nogle beskeder i den liste man har så skal den cleares (nok redundant lige her men bruges også senere)
+                if (dto.getMessages() != null) {
                     beskederStrings.clear();
                     beskederStrings.addAll(dto.getMessages());
                 }
 
-                ChatList_Adapter adapter = new ChatList_Adapter(ctx,beskederStrings, dto,person1);
+                // Opsætter listviewet med chatten der skal være der
+                ChatList_Adapter adapter = new ChatList_Adapter(ctx, beskederStrings, dto, person1);
                 beskeder.setAdapter(adapter);
             }
-        },chatDocumentPath);
+        }, chatDocumentPath);
 
+        // Vi sleeper bare 1 sek for at det ikke ser mærkeligt ud når den bliver loadet (måske skal det fjernes eller ændres)
         SystemClock.sleep(1000);
 
-        sendBesked.setOnClickListener(this);
+        sendBillede.setOnClickListener(this);
         tilbage.setOnClickListener(this);
         settings.setOnClickListener(this);
 
-        // til at opdatere listen af beskeder
+        // Vi opstiller en eventlistener på den chat som vi er inde i lige nu, som vil opdatere listviewet hvis der kommer en opdatering fra databasen
         FirebaseFirestore.getInstance().collection("chats").document(chatDocumentPath)
                 .addSnapshotListener(new EventListener<DocumentSnapshot>() {
-                    private static final String TAG = "chat fra telefon";
+                    private static final String TAG = "update from firestore";
 
                     @Override
-            public void onEvent(@Nullable DocumentSnapshot snapshot,
-                                @Nullable FirebaseFirestoreException e) {
-                if (e != null) {
-                    Log.w(TAG, "Listen failed.", e);
-                    return;
-                }
+                    public void onEvent(@Nullable DocumentSnapshot snapshot,
+                                        @Nullable FirebaseFirestoreException e) {
+                        if (e != null) {
+                            Log.w(TAG, "Listen failed.", e);
+                            return;
+                        }
 
-                if (snapshot != null && snapshot.exists()) {
-                    if (dto.getMessages() != null) {
-                        ChatDTO temp = snapshot.toObject(ChatDTO.class);
-                        if (temp.getChatId() != null){
-                        setChatDTO(snapshot.toObject(ChatDTO.class));
-                        beskederStrings.clear();
-                        beskederStrings.addAll(dto.getMessages());
+                        if (snapshot != null && snapshot.exists()) {
+                            ChatDTO temp = snapshot.toObject(ChatDTO.class);
+                            if (temp.getChatId() != null) {
+                                setChatDTO(snapshot.toObject(ChatDTO.class));
+                                beskederStrings.clear();
+                                beskederStrings.addAll(dto.getMessages());
+                            }
+
+                            ChatList_Adapter adapter = new ChatList_Adapter(ctx, beskederStrings, dto, person1);
+                            beskeder.setAdapter(adapter);
+                        } else {
+                            Log.d(TAG, "Current data: null");
+                        }
                     }
-                    }
-                    ChatList_Adapter adapter = new ChatList_Adapter(ctx,beskederStrings, dto,person1);
-                    beskeder.setAdapter(adapter);
-                } else {
-                    Log.d(TAG, "Current data: null");
-                }
-            }
-        });
+                });
     }
 
 
@@ -161,19 +184,22 @@ public class Activity_Chat extends AppCompatActivity  implements View.OnClickLis
     public void onClick(View v) {
         if (v == tilbage) {
             finish();
-        } else if (v == sendBesked) {
+        } else if (v == sendBillede) {
+            // For at kunne sende et billede skal der fås adgang fra brugeren
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 if (this.checkSelfPermission(Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
-                    ///method to get Images
-                    pictureBitmapConverter.uploadPic(this);
+                    // Vi bruger en klasse som vil starte aktiviteten til at få et billede
+                    pictureMaker.uploadPic(this);
                 } else {
+                    // Hvis vi ikke har fået adgang så lav en toast der siger man har brug for adgang til den funktion
                     if (shouldShowRequestPermissionRationale(Manifest.permission.CAMERA)) {
                         Toast.makeText(this, "Your Permission is needed to get access the camera", Toast.LENGTH_LONG).show();
                     }
                     requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.CAMERA}, REQUEST_CAMERARESULT);
                 }
             } else {
-                pictureBitmapConverter.uploadPic(this);
+                // Hvis SDK'en er mindre end M (ikke lige sikker hvilken version) så behøves adgang ikke fra brugeren
+                pictureMaker.uploadPic(this);
             }
         } else if (v == settings) {
             // gør noget her
@@ -218,21 +244,26 @@ public class Activity_Chat extends AppCompatActivity  implements View.OnClickLis
 
 
     // https://stackoverflow.com/questions/38352148/get-image-from-the-gallery-and-show-in-imageview
+    // Den her funktion bruges til at hente dataen fra når man uploader eller tager et billede hvor vi vil gemme billedet i chatten og firestore
     @Override
     protected void onActivityResult(int reqCode, int resultCode, Intent data) {
         super.onActivityResult(reqCode, resultCode, data);
         if (resultCode == RESULT_OK) {
             try {
+                // Først konverterer vi URI'en om til et bitmap som vi kan sende til firestore
                 final Uri imageUri = data.getData();
                 final InputStream imageStream = getContentResolver().openInputStream(imageUri);
                 final Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);
 
+                // Vi prøver på at uploade vores bitmap/fil
                 dao.uploadFile(selectedImage, new ChatDAO.FirestoreCallbackPic() {
                     @Override
+                    // Vi har brug for et callback til at vide om det lykkesdes
                     public void onCallBackPic(Uri url) {
-                        System.out.println(url);
+                        // Nu skal vi opdatere vores klasse objekt (lige nu skelner vi forskel med at et billede har messagen nedenunder men er meget ustabilt og skal ændres)
                         updateChatDTO(person1,person2,"pictureBlaBlaBla!:",url);
 
+                        // Vi opdaterer vores chatobjekt i firestore
                         dao.updateChat(new ChatDAO.FirestoreCallback() {
                             @Override
                             public void onCallback(ChatDTO dto) {

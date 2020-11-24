@@ -38,6 +38,7 @@ public class Activity_Likeside extends AppCompatActivity implements View.OnClick
         hjerte.setBackgroundColor(Color.LTGRAY);
 
 
+        // Sætter en swipe listener op på skærmen for at kunne swipe til siden
         getWindow().getDecorView().getRootView().setOnTouchListener(new OnSwipeTouchListener(this){
             @Override
             public void onSwipeLeft() {

@@ -1,7 +1,6 @@
 package Controller;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -18,36 +17,28 @@ import java.io.File;
 
 import static androidx.core.app.ActivityCompat.startActivityForResult;
 
-public class PictureBitmapConverter {
-    private static PictureBitmapConverter instance = null;
+public class PictureMaker {
+    private static PictureMaker instance = null;
     private static int RESULT_LOAD_IMAGE = 1;
 
-
-    private PictureBitmapConverter(){
+    // Vi laver en singleton for at kunne uploade eller tage billeder
+    private PictureMaker(){
         instance = this;
     }
 
-    public static PictureBitmapConverter getInstance(){
-        if (instance == null) new PictureBitmapConverter();
+    public static PictureMaker getInstance(){
+        if (instance == null) new PictureMaker();
         return instance;
     }
 
-
-    public String BitMapToString(Bitmap bitmap){
-
-        ByteArrayOutputStream baos=new  ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.PNG,100, baos);
-        byte [] b=baos.toByteArray();
-        String temp= Base64.encodeToString(b, Base64.DEFAULT);
-        return temp;
-    }
-
+    // Hvis man har et billedet liggende på telefonen bruges denne funktion
     public void uploadPic(Activity activity){
         Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
         photoPickerIntent.setType("image/*");
         startActivityForResult(activity,photoPickerIntent, RESULT_LOAD_IMAGE, null);
     }
 
+    // Hvis man vil tage et nyt billede og sende det videre bruges denne funktion
     public void takePic(Activity activity){
         Intent imageIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         File imagesFolder = new File(Environment.getExternalStorageDirectory(), "MyImages");
