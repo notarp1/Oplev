@@ -36,7 +36,7 @@ public class ChatDAO implements IChatDAO {
 
     @Override
     public ChatDTO getChat(String chatId) {
-        final ChatDTO[] defaultDTO = {new ChatDTO(null, null, null, null, null)};
+        final ChatDTO[] defaultDTO = {new ChatDTO(null, null, null, null, null, null)};
 
         DocumentReference docRef = db.collection("chats").document(chatId);
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
@@ -69,12 +69,17 @@ public class ChatDAO implements IChatDAO {
     @Override
     public void createChat(ChatDTO chat) {
         Map<String, Object> chatObject = new HashMap<>();
+        ArrayList<String> tempPics = new ArrayList<>();
+        for (int i = 0; i < chat.getPictures().size(); i++) {
+            tempPics.add(i,chat.getPictures().get(i).toString());
+        }
 
         chatObject.put("sender", chat.getSender());
         chatObject.put("receiver", chat.getReceiver());
         chatObject.put("messages", chat.getMessages());
         chatObject.put("dates", chat.getDates());
         chatObject.put("chatId",null);
+        chatObject.put("pictures",tempPics);
 
 
         db.collection("chats")
@@ -101,12 +106,17 @@ public class ChatDAO implements IChatDAO {
     @Override
     public void updateChat(FirestoreCallback firestoreCallback, ChatDTO chat) {
         Map<String, Object> chatObject = new HashMap<>();
+        ArrayList<String> tempPics = new ArrayList<>();
+        for (int i = 0; i < chat.getPictures().size(); i++) {
+            tempPics.add(i,chat.getPictures().get(i).toString());
+        }
 
         chatObject.put("sender", chat.getSender());
         chatObject.put("receiver", chat.getReceiver());
         chatObject.put("messages", chat.getMessages());
         chatObject.put("dates", chat.getDates());
         chatObject.put("chatId",chat.getChatId());
+        chatObject.put("pictures",tempPics);
 
 
         db.collection("chats").document(chat.getChatId())
@@ -121,7 +131,7 @@ public class ChatDAO implements IChatDAO {
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        firestoreCallback.onCallback(new ChatDTO(null,null,null,null,null));
+                        firestoreCallback.onCallback(new ChatDTO(null,null,null,null,null, null));
                         Log.d("Update","Not updated chat");
                     }
                 });
@@ -133,12 +143,12 @@ public class ChatDAO implements IChatDAO {
         docRef.delete().addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
-                firestoreCallback.onCallback(new ChatDTO(null,null,chatId,null,null));
+                firestoreCallback.onCallback(new ChatDTO(null,null,chatId,null,null, null));
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                firestoreCallback.onCallback(new ChatDTO(null,null,null,null,null));
+                firestoreCallback.onCallback(new ChatDTO(null,null,null,null,null, null));
             }
         });
     }
@@ -158,7 +168,7 @@ public class ChatDAO implements IChatDAO {
                         Log.d(TAG, "DocumentSnapshot data: " + document.getData());
                         ChatDTO dto = document.toObject(ChatDTO.class);
                         if (dto.getChatId() == null){
-                            dto = new ChatDTO(new ArrayList<>(), new ArrayList<>(), chatId, new ArrayList<>(), new ArrayList<>());
+                            dto = new ChatDTO(new ArrayList<>(), new ArrayList<>(), chatId, new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
                             firestoreCallback.onCallback(dto);
                         }
                         else {
@@ -176,7 +186,7 @@ public class ChatDAO implements IChatDAO {
 
     public void uploadFile(Bitmap bitmap, FirestoreCallbackPic firestoreCallbackPic, String chat_id) {
         FirebaseStorage storage = FirebaseStorage.getInstance();
-        StorageReference storageRef = storage.getReferenceFromUrl("Your url for storage");
+        StorageReference storageRef = storage.getReference();
         StorageReference mountainImagesRef = storageRef.child("images/" + chat_id + new Date().getDate() + ".jpg");
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.JPEG, 20, baos);
@@ -190,13 +200,16 @@ public class ChatDAO implements IChatDAO {
         }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                // taskSnapshot.getMetadata() contains file metadata such as size, content-type, and download URL.
-                Uri downloadUrl = taskSnapshot.getUploadSessionUri();
-                firestoreCallbackPic.onCallBackPic(downloadUrl);
-                Log.d("downloadUrl-->", "" + downloadUrl);
+                mountainImagesRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                    @Override
+                    public void onSuccess(Uri uri) {
+                        System.out.println(uri);
+                        Log.d("downloadUrl-->", "" + uri);
+                        firestoreCallbackPic.onCallBackPic(uri);
+                    }
+                });
             }
         });
-
     }
 
 

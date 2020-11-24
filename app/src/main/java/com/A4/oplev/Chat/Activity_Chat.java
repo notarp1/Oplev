@@ -1,20 +1,15 @@
 package com.A4.oplev.Chat;
 
 import android.Manifest;
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
 import android.os.SystemClock;
-import android.provider.MediaStore;
-import android.util.Base64;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -27,9 +22,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.FileProvider;
 
-import com.A4.oplev.BuildConfig;
 import com.A4.oplev._Adapters.ChatList_Adapter;
 import com.A4.oplev.R;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -37,8 +30,6 @@ import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 
-import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -91,7 +82,7 @@ public class Activity_Chat extends AppCompatActivity  implements View.OnClickLis
                 if (actionId == EditorInfo.IME_ACTION_GO) {
                     if (!inputTekst.getText().toString().equals("")) {
 
-                        updateChatDTO(person1,person2,inputTekst.getText().toString());
+                        updateChatDTO(person1,person2,inputTekst.getText().toString(), null);
 
                         beskederStrings.add(inputTekst.getText().toString());
 
@@ -99,9 +90,8 @@ public class Activity_Chat extends AppCompatActivity  implements View.OnClickLis
                             @Override
                             public void onCallback(ChatDTO dto) {
                                 if (dto.getChatId() != null){
-                                    System.out.println("Update");
                                     setChatDTO(dto);
-                                    ChatList_Adapter adapter = new ChatList_Adapter(ctx, beskederStrings, dto, person1, new ArrayList<>());
+                                    ChatList_Adapter adapter = new ChatList_Adapter(ctx, beskederStrings, dto, person1);
                                     beskeder.setAdapter(adapter);
                                     inputTekst.setText("");
                                 }
@@ -118,16 +108,14 @@ public class Activity_Chat extends AppCompatActivity  implements View.OnClickLis
         dao.readChat(new ChatDAO.FirestoreCallback() {
             @Override
             public void onCallback(ChatDTO dto) {
-                System.out.println("Read");
                 setChatDTO(dto);
                 if (dto.getMessages() != null){
                     beskederStrings.clear();
                     beskederStrings.addAll(dto.getMessages());
                 }
 
-                ChatList_Adapter adapter = new ChatList_Adapter(ctx,beskederStrings, dto,person1, new ArrayList<>());
+                ChatList_Adapter adapter = new ChatList_Adapter(ctx,beskederStrings, dto,person1);
                 beskeder.setAdapter(adapter);
-                System.out.println("Hejsa 11" + dto.toString());
             }
         },chatDocumentPath);
 
@@ -151,7 +139,6 @@ public class Activity_Chat extends AppCompatActivity  implements View.OnClickLis
                 }
 
                 if (snapshot != null && snapshot.exists()) {
-                    System.out.println("EventListener");
                     if (dto.getMessages() != null) {
                         ChatDTO temp = snapshot.toObject(ChatDTO.class);
                         if (temp.getChatId() != null){
@@ -160,7 +147,7 @@ public class Activity_Chat extends AppCompatActivity  implements View.OnClickLis
                         beskederStrings.addAll(dto.getMessages());
                     }
                     }
-                    ChatList_Adapter adapter = new ChatList_Adapter(ctx,beskederStrings, dto,person1, new ArrayList<>());
+                    ChatList_Adapter adapter = new ChatList_Adapter(ctx,beskederStrings, dto,person1);
                     beskeder.setAdapter(adapter);
                 } else {
                     Log.d(TAG, "Current data: null");
@@ -200,7 +187,7 @@ public class Activity_Chat extends AppCompatActivity  implements View.OnClickLis
     }
 
     // bruges til at opdatere ens chat objekt
-    private void updateChatDTO(String newSender, String newReciever, String newMessage, String newPic){
+    private void updateChatDTO(String newSender, String newReciever, String newMessage, Uri newPic){
         ArrayList<String> tempSender = dto.getSender();
         if (tempSender == null) tempSender = new ArrayList<>();
         tempSender.add(newSender);
@@ -221,8 +208,12 @@ public class Activity_Chat extends AppCompatActivity  implements View.OnClickLis
         tempDate.add(new Date());
         dto.setDates(tempDate);
 
-
-
+        if (newPic != null) {
+            ArrayList<Uri> tempPics = dto.getPictures();
+            if (tempPics == null) tempPics = new ArrayList<>();
+            tempPics.add(newPic);
+            dto.setPics(tempPics);
+        }
     }
 
 
@@ -239,13 +230,14 @@ public class Activity_Chat extends AppCompatActivity  implements View.OnClickLis
                 dao.uploadFile(selectedImage, new ChatDAO.FirestoreCallbackPic() {
                     @Override
                     public void onCallBackPic(Uri url) {
-                        updateChatDTO(person1,person2,);
+                        System.out.println(url);
+                        updateChatDTO(person1,person2,"pictureBlaBlaBla!:",url);
 
                         dao.updateChat(new ChatDAO.FirestoreCallback() {
                             @Override
                             public void onCallback(ChatDTO dto) {
                                 if (dto.getChatId() != null){
-                                    ChatList_Adapter adapter = new ChatList_Adapter(ctx, beskederStrings, dto, person1,bitmaps);
+                                    ChatList_Adapter adapter = new ChatList_Adapter(ctx, beskederStrings, dto, person1);
                                     beskeder.setAdapter(adapter);
                                     inputTekst.setText("");
                                 }
