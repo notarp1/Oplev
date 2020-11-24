@@ -70,6 +70,7 @@ public class UserDAO implements IUserDAO, CallbackUser {
         userObject.put("joinedEvents", user.getJoinedEvents());
         userObject.put("events", user.getEvents());
         userObject.put("pictures", user.getPictures());
+        userObject.put("chatId", user.getChatId());
         userObject.put("userId", user.getUserId());
 
 

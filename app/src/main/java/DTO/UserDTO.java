@@ -7,7 +7,7 @@ public class UserDTO implements Serializable {
 
     int age;
     String fName, lName, city, email, phone, description, userId, job, education;
-    ArrayList<String> pictures;
+    ArrayList<String> pictures, chatId;
     ArrayList<Integer> events, joinedEvents;
 
     public String getUserId() {
@@ -84,6 +84,14 @@ public class UserDTO implements Serializable {
 
     public ArrayList<String> getPictures() {
         return pictures;
+    }
+
+    public ArrayList<String> getChatId() {
+        return chatId;
+    }
+
+    public void setChatId(ArrayList<String> chatId) {
+        this.chatId = chatId;
     }
 
     public void setPictures(ArrayList<String> pictures) {
