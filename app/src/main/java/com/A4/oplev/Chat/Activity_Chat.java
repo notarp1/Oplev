@@ -43,6 +43,8 @@ import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Date;
+
+import Controller.PictureBitmapConverter;
 import DAL.Classes.ChatDAO;
 import DTO.ChatDTO;
 
@@ -60,13 +62,14 @@ public class Activity_Chat extends AppCompatActivity  implements View.OnClickLis
     Context ctx;
     String person1, person2, chatDocumentPath;
     private static final int REQUEST_CAMERARESULT=201;
-    private static int RESULT_LOAD_IMAGE = 1;
+    private PictureBitmapConverter pictureBitmapConverter;
 
 
     public void onCreate(Bundle saveInstanceState) {
         chatDocumentPath = "60V6EddGhhZdY7pTGYRF";
         person1 = "person1";
         person2 = "person2";
+        pictureBitmapConverter = PictureBitmapConverter.getInstance();
         super.onCreate(saveInstanceState);
         setContentView(R.layout.activity_chat_funktion);
 
@@ -175,7 +178,7 @@ public class Activity_Chat extends AppCompatActivity  implements View.OnClickLis
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 if (this.checkSelfPermission(Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
                     ///method to get Images
-                    takePic();
+                    pictureBitmapConverter.uploadPic(this);
                 } else {
                     if (shouldShowRequestPermissionRationale(Manifest.permission.CAMERA)) {
                         Toast.makeText(this, "Your Permission is needed to get access the camera", Toast.LENGTH_LONG).show();
@@ -183,7 +186,7 @@ public class Activity_Chat extends AppCompatActivity  implements View.OnClickLis
                     requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.CAMERA}, REQUEST_CAMERARESULT);
                 }
             } else {
-                takePic();
+                pictureBitmapConverter.uploadPic(this);
             }
         } else if (v == settings) {
             // gør noget her
@@ -194,11 +197,10 @@ public class Activity_Chat extends AppCompatActivity  implements View.OnClickLis
     // bruges til at sætte chatDTO objektet gennem oncallback
     private void setChatDTO(ChatDTO dto){
         this.dto = dto;
-        System.out.println("Hejsa blabla" + this.dto);
     }
 
     // bruges til at opdatere ens chat objekt
-    private void updateChatDTO(String newSender, String newReciever, String newMessage){
+    private void updateChatDTO(String newSender, String newReciever, String newMessage, String newPic){
         ArrayList<String> tempSender = dto.getSender();
         if (tempSender == null) tempSender = new ArrayList<>();
         tempSender.add(newSender);
@@ -218,22 +220,8 @@ public class Activity_Chat extends AppCompatActivity  implements View.OnClickLis
         if (tempDate == null) tempDate = new ArrayList<>();
         tempDate.add(new Date());
         dto.setDates(tempDate);
-    }
 
 
-    public void takePic(){
-        //Intent imageIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        File imagesFolder = new File(Environment.getExternalStorageDirectory(), "MyImages");
-        imagesFolder.mkdirs(); // <----
-        File image = new File(imagesFolder, "image_001.jpg");
-        Uri uri = FileProvider.getUriForFile(this, BuildConfig.APPLICATION_ID + ".provider",image);
-        //imageIntent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
-        //imageIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-        //startActivityForResult(imageIntent,0);
-
-        Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
-        photoPickerIntent.setType("image/*");
-        startActivityForResult(photoPickerIntent, RESULT_LOAD_IMAGE);
 
     }
 
@@ -248,35 +236,29 @@ public class Activity_Chat extends AppCompatActivity  implements View.OnClickLis
                 final InputStream imageStream = getContentResolver().openInputStream(imageUri);
                 final Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);
 
-                updateChatDTO(person1,person2,"pictureBlaBlaBla!:" + BitMapToString(selectedImage));
-
-                dao.updateChat(new ChatDAO.FirestoreCallback() {
+                dao.uploadFile(selectedImage, new ChatDAO.FirestoreCallbackPic() {
                     @Override
-                    public void onCallback(ChatDTO dto) {
-                        if (dto.getChatId() != null){
-                            ChatList_Adapter adapter = new ChatList_Adapter(ctx, beskederStrings, dto, person1,bitmaps);
-                            beskeder.setAdapter(adapter);
-                            inputTekst.setText("");
-                        }
+                    public void onCallBackPic(Uri url) {
+                        updateChatDTO(person1,person2,);
+
+                        dao.updateChat(new ChatDAO.FirestoreCallback() {
+                            @Override
+                            public void onCallback(ChatDTO dto) {
+                                if (dto.getChatId() != null){
+                                    ChatList_Adapter adapter = new ChatList_Adapter(ctx, beskederStrings, dto, person1,bitmaps);
+                                    beskeder.setAdapter(adapter);
+                                    inputTekst.setText("");
+                                }
+                            }
+                        }, dto);
                     }
-                }, this.dto);
+                },chatDocumentPath);
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
                 Toast.makeText(Activity_Chat.this, "Something went wrong", Toast.LENGTH_LONG).show();
             }
-
         }else {
             Toast.makeText(Activity_Chat.this, "You haven't picked Image",Toast.LENGTH_LONG).show();
         }
     }
-
-    public String BitMapToString(Bitmap bitmap){
-
-        ByteArrayOutputStream baos=new  ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.PNG,100, baos);
-        byte [] b=baos.toByteArray();
-        String temp= Base64.encodeToString(b, Base64.DEFAULT);
-        return temp;
-    }
-
 }

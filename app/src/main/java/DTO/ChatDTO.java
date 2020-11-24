@@ -1,5 +1,7 @@
 package DTO;
 
+import android.net.Uri;
+
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -10,17 +12,19 @@ public class ChatDTO {
     private String chatId;
     private ArrayList<Date> dates;
     private ArrayList<String> messages, sender, receiver;
+    private ArrayList<Uri> pics;
 
     public ChatDTO() {
 
     }
 
-    public ChatDTO(ArrayList<String> sender, ArrayList<String> messages , String chatId, ArrayList<Date> dates, ArrayList<String> receiver) {
+    public ChatDTO(ArrayList<String> sender, ArrayList<String> messages , String chatId, ArrayList<Date> dates, ArrayList<String> receiver, ArrayList<Uri> pics) {
         this.chatId = chatId;
         this.dates = dates;
         this.messages = messages;
         this.sender = sender;
         this.receiver = receiver;
+        this.pics = pics;
     }
 
     public String getChatId() {
