@@ -231,14 +231,12 @@ public class U_Settings_Edit extends Fragment implements View.OnClickListener {
                                     public void onSuccess(Uri uri) {
                                         Uri downloadUrl = uri;
 
-                                        indexNumbers += 1;
+                                        //indexNumbers += 1;
                                         setPictures(indexPlace, downloadUrl);
+                                        updateUserAndGUI();
 
+                                        //if (indexNumbers == pictureCount)updateUserAndGUI();
 
-                                        if (indexNumbers == pictureCount){
-
-                                            updateUserAndGUI();
-                                        };
                                     }
 
                                 });
