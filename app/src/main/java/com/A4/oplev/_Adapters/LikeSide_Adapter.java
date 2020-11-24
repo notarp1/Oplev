@@ -32,16 +32,24 @@ public class LikeSide_Adapter extends ArrayAdapter<String> {
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
         View listItem = convertView;
         if(listItem == null)
+            // Vi inflater det relative layout som vi har lavet i xml filen
             listItem = LayoutInflater.from(mContext).inflate(R.layout.besked_liste_element,parent,false);
 
+        // Vi får nogle værdier som vi skal bruge til at sætte ind i layoutet
         String currentName = nameList.get(position);
         String currentDate = dateList.get(position);
         String currentLastMessage;
+
+        // Vi checker om den besked der sidst blev sendt er fra den man chatter med
         if (lastMessageSender.get(position).equals(currentName)) {
+            // Sæt stringen til dette hvis sidste besked er fra anden person
             currentLastMessage = currentName + ": " + lastMessage.get(position);
         } else {
+            // Sæt stringen til dette hvis sidste besked er fra en selv
             currentLastMessage = "Dig: " + lastMessage.get(position);
         }
+
+        // Indsæt nogle værdier ind layoutet (skal ændres senere hen til at hente billeder osv)
         String currentHeader = headerList.get(position);
 
         TextView lastMessage = (TextView) listItem.findViewById(R.id.besked_liste_lastmessage);
