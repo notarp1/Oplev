@@ -28,35 +28,29 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
 
-                    <View
-                        android:id="@+id/rectangle_1"
+                    <ImageView
+                        android:id="@+id/pb1"
                         android:layout_width="100dp"
                         android:layout_height="100dp"
-                        android:layout_gravity="center|start|right"
-                        android:layout_marginStart="16dp"
-                        android:layout_marginLeft="0dp"
                         android:layout_weight="1"
-                        android:background="#DC923C" />
+                        android:tag="0"
+                        app:srcCompat="@drawable/uploadpng" />
 
-                    <View
-                        android:id="@+id/rectangle_5"
+                    <ImageView
+                        android:id="@+id/pb2"
                         android:layout_width="100dp"
                         android:layout_height="100dp"
-                        android:layout_gravity="center|start|right"
-                        android:layout_marginStart="16dp"
-                        android:layout_marginLeft="0dp"
                         android:layout_weight="1"
-                        android:background="#2055A5" />
+                        android:tag="0"
+                        app:srcCompat="@drawable/uploadpng" />
 
-                    <View
-                        android:id="@+id/rectangle_6"
+                    <ImageView
+                        android:id="@+id/pb3"
                         android:layout_width="100dp"
                         android:layout_height="100dp"
-                        android:layout_gravity="center|start|right"
-                        android:layout_marginStart="16dp"
-                        android:layout_marginLeft="0dp"
                         android:layout_weight="1"
-                        android:background="#DEE137" />
+                        android:tag="0"
+                        app:srcCompat="@drawable/uploadpng" />
 
                 </TableRow>
 
@@ -65,36 +59,29 @@
                     android:layout_height="match_parent"
                     android:layout_marginTop="15dp">
 
-                    <View
-                        android:id="@+id/rectangle_2"
+                    <ImageView
+                        android:id="@+id/pb4"
                         android:layout_width="100dp"
                         android:layout_height="100dp"
-                        android:layout_gravity="center|start|right"
-                        android:layout_marginStart="16dp"
-                        android:layout_marginLeft="0dp"
                         android:layout_weight="1"
-                        android:background="#2C7D3E" />
+                        android:tag="0"
+                        app:srcCompat="@drawable/uploadpng" />
 
-                    <View
-                        android:id="@+id/rectangle_3"
+                    <ImageView
+                        android:id="@+id/pb5"
                         android:layout_width="100dp"
                         android:layout_height="100dp"
-                        android:layout_gravity="center|start|right"
-                        android:layout_marginStart="16dp"
-                        android:layout_marginLeft="0dp"
                         android:layout_weight="1"
-                        android:background="#B813BB" />
+                        android:tag="0"
+                        app:srcCompat="@drawable/uploadpng" />
 
-                    <View
-                        android:id="@+id/rectangle_4"
+                    <ImageView
+                        android:id="@+id/pb6"
                         android:layout_width="100dp"
                         android:layout_height="100dp"
-                        android:layout_gravity="center|start|right"
-                        android:layout_marginStart="16dp"
-                        android:layout_marginLeft="0dp"
                         android:layout_weight="1"
-                        android:background="#BD2727" />
-
+                        android:tag="0"
+                        app:srcCompat="@drawable/uploadpng" />
                 </TableRow>
 
             </TableLayout>
