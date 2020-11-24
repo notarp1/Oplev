@@ -31,6 +31,7 @@ public class U_Settings_Main extends Fragment implements View.OnClickListener {
     ImageView back, profilepic;
     ArrayList<String> pictures;
 
+
     public View onCreateView(LayoutInflater i, ViewGroup container, Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 

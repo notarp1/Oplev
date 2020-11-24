@@ -109,7 +109,8 @@ public class Controller {
             eduText = "\uD83C\uDF93 " + "Ikke angivet";
             ctx.edu.setText(eduText);
 
-        } else if(user.getJob() == null || user.getJob().equals("")){
+        }
+        if(user.getJob() == null || user.getJob().equals("")){
             jobText = "\uD83D\uDCBC " + "Ikke angivet";
             ctx.job.setText(jobText);
         }
