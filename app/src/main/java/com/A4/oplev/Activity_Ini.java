@@ -37,8 +37,8 @@ public class Activity_Ini extends AppCompatActivity implements Serializable {
         mAuth = FirebaseAuth.getInstance();
 
         //KØR NEDENSTÅENDE FOR AT RESETTE OG UDKOMMENTER EFTER
-        FirebaseAuth.getInstance().signOut();
-        PreferenceManager.getDefaultSharedPreferences(ctx).edit().clear().apply();
+        //FirebaseAuth.getInstance().signOut();
+        //PreferenceManager.getDefaultSharedPreferences(ctx).edit().clear().apply();
 
 
 
