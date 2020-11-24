@@ -11,7 +11,7 @@ public class UserDTO implements Serializable {
 
     ArrayList<String> pictures = new ArrayList<>(Arrays.asList(null, null, null, null, null, null));
 
-    ArrayList<String> pictures, chatId;
+    ArrayList<String> chatId;
     ArrayList<Integer> events, joinedEvents;
 
     public String getUserId() {
