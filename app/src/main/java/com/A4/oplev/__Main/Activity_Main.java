@@ -17,7 +17,7 @@ import com.A4.oplev.UserSettings.Activity_U_Settings;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.A4.oplev._Adapters.eventAdapter;
+import com.A4.oplev._Adapters.Event_Adapter;
 
 //import DAL.DBAccess;
 import DTO.EventDTO;
@@ -47,12 +47,12 @@ public class Activity_Main extends AppCompatActivity implements View.OnClickList
         eventList.add(dto3);
         rcEvent = findViewById(R.id.eventRecycleView);
 
-        final eventAdapter eventAdapter = new eventAdapter(eventList);
+        final Event_Adapter Event_Adapter = new Event_Adapter(eventList);
         SwipeableTouchHelperCallback swipeableTouchHelperCallback =
                 new SwipeableTouchHelperCallback(new OnItemSwiped() {
                     //Called after swiping view, place to remove top item from your recyclerview adapter
                     @Override public void onItemSwiped() {
-                        eventAdapter.removeTopItem();
+                        Event_Adapter.removeTopItem();
                     }
 
                     @Override public void onItemSwipedLeft() {
@@ -80,7 +80,7 @@ public class Activity_Main extends AppCompatActivity implements View.OnClickList
         itemTouchHelper.attachToRecyclerView(rcEvent);
 
         rcEvent.setLayoutManager(new SwipeableLayoutManager());
-        rcEvent.setAdapter(eventAdapter);
+        rcEvent.setAdapter(Event_Adapter);
 
 
         options = findViewById(R.id.options_btn);

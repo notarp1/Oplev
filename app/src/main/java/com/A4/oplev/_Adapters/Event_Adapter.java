@@ -16,11 +16,11 @@ import java.util.List;
 
 import DTO.EventDTO;
 
-public class eventAdapter extends RecyclerView.Adapter<eventAdapter.ViewHolder>implements View.OnClickListener {
+public class Event_Adapter extends RecyclerView.Adapter<Event_Adapter.ViewHolder>implements View.OnClickListener {
 
     List<EventDTO> eventList;
 
-    public eventAdapter(List<EventDTO> scoreList) {
+    public Event_Adapter(List<EventDTO> scoreList) {
         this.eventList = scoreList;
     }
 
@@ -67,7 +67,7 @@ public class eventAdapter extends RecyclerView.Adapter<eventAdapter.ViewHolder>i
     }
 
     public void removeTopItem() {
-        
+
     }
 
 
