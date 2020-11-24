@@ -5,10 +5,13 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.View;
 import android.widget.ImageView;
 
+import com.A4.oplev.Activity_NoInstance;
 import com.A4.oplev.Like_Hjerte_Side.Activity_Likeside;
 import com.A4.oplev.R;
 import com.A4.oplev.SearchFilter.Activity_Search_Filter;
@@ -31,10 +34,16 @@ public class Activity_Main extends AppCompatActivity implements View.OnClickList
     ImageView options, match, user;
     Intent intent;
     RecyclerView rcEvent;
+    SharedPreferences prefs;
+    Boolean onInstance;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        prefs = PreferenceManager.getDefaultSharedPreferences(this);
+
+        //Tjekker om hvorvidt man er logget ind
+        onInstance = prefs.getBoolean("onInstance", false);
 
         //skal optimeres og ændres til at vi skal hente data ude fra.
         List<EventDTO> eventList = new ArrayList<>();
@@ -92,30 +101,17 @@ public class Activity_Main extends AppCompatActivity implements View.OnClickList
         match.setOnClickListener(this);
         user.setOnClickListener(this);
 
-        /*
-        UserDAO dao = new UserDAO();
-        UserDTO test = new UserDTO();
-        test.setAge(18);
-        test.setCity("Odense");
-        test.setDescription("Jeg er en sød gut");
-        test.setEmail("chrisi@gmail.com");
-        test.setfName("Jonas");
-        test.setlName("Henriksen");
-        test.setPhone("83827312");
-        dao.createUser(test); */
-
-
-      //  getSupportFragmentManager().beginTransaction().replace(R.id.main_frag, new Startside_billede_frag())
-             //   .commit();
-
-
-
 
     }
 
     @Override
     public void onClick(View v) {
-        if(v == options){
+        if(!onInstance){
+            Intent i = new Intent(this, Activity_NoInstance.class);
+            startActivity(i);
+
+
+        } else if(v == options){
             Intent i = new Intent(this, Activity_Search_Filter.class);
             startActivity(i);
 

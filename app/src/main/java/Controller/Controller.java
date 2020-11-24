@@ -1,5 +1,6 @@
 package Controller;
 
+import com.A4.oplev.Login.Activity_CreateUser;
 import com.A4.oplev.Activity_Profile;
 import com.A4.oplev.UserSettings.U_Settings_Edit;
 import com.A4.oplev.UserSettings.U_Settings_Main;
@@ -10,7 +11,6 @@ import DAL.Classes.UserDAO;
 import DAL.Interfaces.CallbackUser;
 import DTO.UserDTO;
 
-import DAL.Classes.EventDAO;
 import DTO.EventDTO;
 
 public class Controller {
@@ -50,8 +50,19 @@ public class Controller {
 
     }
 
-    public void createUser(UserDTO userDTO){
-        userDAO.createUser(userDTO);
+    public void createUser(String userId, Activity_CreateUser ctx){
+
+        UserDTO user = new UserDTO();
+
+        user.setfName(String.valueOf(ctx.fName.getText()));
+        user.setlName(String.valueOf(ctx.lName.getText()));
+        user.setCity(String.valueOf(ctx.city.getText()));
+        user.setEmail(String.valueOf(ctx.email.getText()));
+        user.setAge(Integer.parseInt(String.valueOf(ctx.age.getText())));
+        user.setUserId(userId);
+
+        userDAO.createUser(user);
+
     }
 
 

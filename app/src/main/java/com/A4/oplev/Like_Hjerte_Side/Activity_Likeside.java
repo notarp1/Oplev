@@ -20,7 +20,7 @@ public class Activity_Likeside extends AppCompatActivity implements View.OnClick
 
     public void onCreate(Bundle saveInstanceState) {
         super.onCreate(saveInstanceState);
-        setContentView(R.layout.likeside);
+        setContentView(R.layout.activity_likeside);
         opret = findViewById(R.id.opretOpslag_Knap2);
 
         hjerte = findViewById(R.id.likeside_hjertbillede);

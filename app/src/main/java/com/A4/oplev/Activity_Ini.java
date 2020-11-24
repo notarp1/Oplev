@@ -6,10 +6,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.preference.PreferenceManager;
 
 import com.A4.oplev.R;
 import com.A4.oplev.__Main.Activity_Main;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import java.io.Serializable;
 
@@ -22,32 +25,51 @@ public class Activity_Ini extends AppCompatActivity implements Serializable {
     UserDTO userDTO;
     SharedPreferences prefs;
     Context ctx;
+    boolean onInstance;
+
+    private FirebaseAuth mAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity__ini);
+        mAuth = FirebaseAuth.getInstance();
 
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        // Check if user is signed in (non-null) and update UI accordingly.
+        FirebaseUser currentUser = mAuth.getCurrentUser();
         controller = Controller.getInstance();
         ctx = this;
         prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        onInstance = prefs.getBoolean("onInstance", false);
 
 
-        controller.getUser(new CallbackUser() {
-            @Override
-            public void onCallback(UserDTO user) {
-                setUserDTO(user);
-                prefs.edit().putString("UserId",user.getUserId()).apply();
+        if(currentUser == null){
+            prefs.edit().putBoolean("onInstance", false).apply();
+            Intent i = new Intent(this, Activity_Main.class);
+            i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(i);
 
-                Intent i = new Intent(ctx, Activity_Main.class);
-                controller.setCurrUser(user);
+        }else {
+            prefs.edit().putBoolean("onInstance", true).apply();
+            controller.getUser(new CallbackUser() {
+                @Override
+                public void onCallback(UserDTO user) {
+                    setUserDTO(user);
+                    prefs.edit().putString("userId",user.getUserId()).apply();
+                    Intent i = new Intent(ctx, Activity_Main.class);
+                    controller.setCurrUser(user);
+                    i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    startActivity(i);
+                }
+            }, currentUser.getUid());
 
-                startActivity(i);
-                finish();
-            }
-        }, "KHbc7vhvqHEd2bLjgTZM");
-
-
+        }
 
     }
 
