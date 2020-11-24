@@ -76,19 +76,15 @@ public class U_Settings_Edit extends Fragment implements View.OnClickListener {
         super.onCreate(savedInstanceState);
         View root = i.inflate(R.layout.u_setting_edit_frag, container, false);
 
-        this.ctx = getContext();
+        mStorageRef = FirebaseStorage.getInstance().getReference();
 
-        uris = new Uri[]{null, null, null, null, null, null};
         controller = Controller.getInstance();
         mAuth = FirebaseAuth.getInstance();
         currentUser = mAuth.getCurrentUser();
-
         pictures = controller.getUserPictures();
 
-
-        mStorageRef = FirebaseStorage.getInstance().getReference();
-
-
+        this.ctx = getContext();
+        uris = new Uri[]{null, null, null, null, null, null};
 
         //Gem stockphoto bitmap
         stockphotoBit = BitmapFactory.decodeResource(getContext().getResources(), R.drawable.uploadpng);
