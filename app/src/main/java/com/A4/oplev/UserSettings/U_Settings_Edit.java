@@ -219,11 +219,6 @@ public class U_Settings_Edit extends Fragment implements View.OnClickListener {
         Toast.makeText(getContext(), "Profil opdateret!", Toast.LENGTH_SHORT).show();
     }
 
-    private ArrayList<String> getPictures(){
-       pictures = controller.getUserPictures();
-       return pictures;
-    }
-
     private void setPictures(int index, Uri uri){
 
         String address = String.valueOf(uri);
