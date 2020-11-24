@@ -4,8 +4,10 @@ import android.content.Context;
 import android.content.ContextWrapper;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
+import android.preference.PreferenceManager;
 import android.util.Log;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
@@ -96,7 +98,13 @@ public class PicassoFunc {
     public void getUserPictures(Context ctx) {
         controller = Controller.getInstance();
 
-        pictures = controller.getUserPictures();
+        try {
+            pictures = controller.getUserPictures();
+        }catch (Exception e){
+        FirebaseAuth.getInstance().signOut();
+        PreferenceManager.getDefaultSharedPreferences(ctx).edit().clear().apply();
+        }
+
 
         for(int i = 0; i<pictures.size(); i++){
 

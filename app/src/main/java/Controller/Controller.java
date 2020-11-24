@@ -60,6 +60,7 @@ public class Controller {
         user.setlName(String.valueOf(ctx.lName.getText()));
         user.setCity(String.valueOf(ctx.city.getText()));
         user.setEmail(String.valueOf(ctx.email.getText()));
+        user.setChatId(null);
         user.setAge(Integer.parseInt(String.valueOf(ctx.age.getText())));
         user.setUserId(userId);
 

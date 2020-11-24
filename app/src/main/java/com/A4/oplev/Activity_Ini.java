@@ -37,8 +37,7 @@ public class Activity_Ini extends AppCompatActivity implements Serializable {
         mAuth = FirebaseAuth.getInstance();
 
         //KØR NEDENSTÅENDE FOR AT RESETTE OG UDKOMMENTER EFTER
-        //FirebaseAuth.getInstance().signOut();
-        //PreferenceManager.getDefaultSharedPreferences(this).edit().clear().apply();
+
 
 
 
@@ -63,18 +62,26 @@ public class Activity_Ini extends AppCompatActivity implements Serializable {
 
         }else {
             prefs.edit().putBoolean("onInstance", true).apply();
-            controller.getUser(new CallbackUser() {
-                @Override
-                public void onCallback(UserDTO user) {
-                    setUserDTO(user);
-                    prefs.edit().putString("userId",user.getUserId()).apply();
-                    Intent i = new Intent(ctx, Activity_Main.class);
-                    controller.setCurrUser(user);
-                    picasso.getUserPictures(ctx);
-                    i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                    startActivity(i);
-                }
-            }, currentUser.getUid());
+
+                controller.getUser(new CallbackUser() {
+                    @Override
+                    public void onCallback(UserDTO user) {
+                        setUserDTO(user);
+                        try {
+                            prefs.edit().putString("userId",user.getUserId()).apply();
+                        }catch (Exception e){
+                            FirebaseAuth.getInstance().signOut();
+                            PreferenceManager.getDefaultSharedPreferences(ctx).edit().clear().apply();
+                        }
+                        Intent i = new Intent(ctx, Activity_Main.class);
+                        controller.setCurrUser(user);
+                        picasso.getUserPictures(ctx);
+                        i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        startActivity(i);
+                    }
+                }, currentUser.getUid());
+
+
 
         }
 
