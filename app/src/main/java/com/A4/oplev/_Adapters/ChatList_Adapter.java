@@ -46,13 +46,13 @@ public class ChatList_Adapter extends ArrayAdapter<String> {
     private String thisUser;
     private int pictureCount;
 
-    public ChatList_Adapter(@NonNull Context context, @NonNull ArrayList<String> list, ChatDTO dto, String thisUser) {
+    public ChatList_Adapter(@NonNull Context context, @NonNull ArrayList<String> list, ChatDTO dto, String thisUser, int pictureCount) {
         super(context, 0 , list);
         this.mContext = context;
         this.beskederList = list;
         this.dto = dto;
         this.thisUser = thisUser;
-        this.pictureCount = 0;
+        this.pictureCount = pictureCount;
     }
 
     // Den her funktion vil lave vores listview for chatsne
