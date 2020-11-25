@@ -3,6 +3,7 @@ package com.A4.oplev;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -18,6 +19,8 @@ public class Activity_Profile extends AppCompatActivity implements View.OnClickL
     ImageView pb;
     userController userController;
     ArrayList<String> pictures;
+    int height;
+    int width;
 
 
     @Override
@@ -28,6 +31,8 @@ public class Activity_Profile extends AppCompatActivity implements View.OnClickL
         userController =  userController.getInstance();
         pictures = userController.getUserPictures();
 
+
+
         about = findViewById(R.id.text_information);
         city = findViewById(R.id.text_city);
         desc = findViewById(R.id.text_description);
@@ -35,6 +40,12 @@ public class Activity_Profile extends AppCompatActivity implements View.OnClickL
         edu = findViewById(R.id.text_edu);
         job = findViewById(R.id.text_job);
         pb = findViewById(R.id.imageView_pb);
+
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        height = displayMetrics.heightPixels;
+        width = displayMetrics.widthPixels;
+        pb.setMaxHeight(height/2 + 200);
 
         userController.iniProfile(this);
 
@@ -45,6 +56,8 @@ public class Activity_Profile extends AppCompatActivity implements View.OnClickL
         super.onStart();
 
         Picasso.get().load(pictures.get(0))
+                .resize(width, height/2 + 200)
+                .centerCrop()
                 .placeholder(R.drawable.question)
                 .into(pb);
 

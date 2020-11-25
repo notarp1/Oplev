@@ -8,7 +8,7 @@
 
     <ImageView
         android:id="@+id/imageView_pb"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:adjustViewBounds="true"
         android:scaleType="fitXY"
@@ -27,7 +27,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/view">
+        app:layout_constraintTop_toBottomOf="@+id/imageView_pb">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -257,9 +257,8 @@
         android:id="@+id/view"
         android:layout_width="match_parent"
         android:layout_height="57dp"
-        android:layout_marginBottom="72dp"
         android:background="@drawable/gradient"
-        app:layout_constraintBottom_toBottomOf="@+id/imageView_pb"
+        app:layout_constraintBottom_toTopOf="@+id/scrollView2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent" />
@@ -270,6 +269,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
+        android:layout_marginTop="14dp"
         android:text="Søndags-is med Pia, 22"
         android:textColor="#FFFFFF"
         android:textSize="24sp"
