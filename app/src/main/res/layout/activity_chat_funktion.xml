@@ -63,7 +63,7 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <ListView
+    <ScrollView
         android:dividerHeight="5.0sp"
         android:id="@+id/chat_beskedList"
         android:layout_width="match_parent"
@@ -71,8 +71,14 @@
         android:layout_weight="1"
         android:listSelector="@android:color/transparent"
         android:divider="@null"
-        android:transcriptMode="alwaysScroll"
-        android:stackFromBottom="true"/>
+        android:transcriptMode="alwaysScroll" >
+
+        <LinearLayout
+            android:id="@+id/chat_besked_linearlayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" />
+    </ScrollView>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -82,22 +88,21 @@
             android:id="@+id/chat_indsendBesked"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="305dp"
-            android:layout_marginLeft="305dp"
             android:background="@color/buttonBackground"
-            android:text="Tag billede"
+            android:text="Upload billede"
             android:textColor="@color/buttonText"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="@+id/chat_inputBesked1"
+            app:layout_constraintStart_toEndOf="@+id/chat_inputBesked1"
             app:layout_constraintTop_toTopOf="parent" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/chat_inputBesked1"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            tools:layout_editor_absoluteX="0dp"
-            tools:layout_editor_absoluteY="0dp">
+            android:layout_width="279dp"
+            android:layout_height="55dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
             <EditText
                 android:id="@+id/chat_inputBesked2"
@@ -105,7 +110,7 @@
                 android:layout_height="43dp"
                 android:hint="Indtast besked"
                 android:imeOptions="actionGo"
-                android:inputType="text"/>
+                android:inputType="text" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
