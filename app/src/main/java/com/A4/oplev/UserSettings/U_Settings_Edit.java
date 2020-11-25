@@ -174,42 +174,60 @@ public class U_Settings_Edit extends Fragment implements View.OnClickListener {
 
     private void onAccept() {
 
-        if(pictureCount > 0 )
-        for (int i = 0; i < 6; i++) {
-
-            if (uris[i] != null) {
-                indexPlace = i;
-
-                Uri file = uris[i];
-                picRef = mStorageRef.child("users/" + currentUser.getUid() + "/" + i);
-                picRef.putFile(file)
-                        .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                            @Override
-                            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                                // Get a URL to the uploaded content
-
-                                picRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                                    @Override
-                                    public void onSuccess(Uri uri) {
-                                        Uri downloadUrl = uri;
-                                        setPictures(indexPlace, downloadUrl);
-                                        updateUserAndGUI();
-                                    }
-                                });
-                            }
-                        })
-                        .addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception exception) {
-                                // Handle unsuccessful uploads
-                                // ...
-                            }
-                        });
+        for (Uri a : uris) {
+            if (a != null) {
+                pictureCount += 1;
 
             }
+        }
+        if(pictureCount > 0 )
+            for (int i = 0; i < 6; i++) {
+
+                System.out.println(uris[i]);
+                System.out.println(i);
+
+                if (uris[i] != null) {
+                    indexPlace = i;
+
+                    Uri file = uris[i];
+                    picRef = mStorageRef.child("users/" + currentUser.getUid() + "/" + i);
 
 
-        } else updateUserAndGUI();
+                    picRef.putFile(file)
+                            .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                                @Override
+                                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                                    // Get a URL to the uploaded content
+
+                                    picRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                        @Override
+                                        public void onSuccess(Uri uri) {
+                                            Uri downloadUrl = uri;
+
+                                            indexNumbers += 1;
+                                            setPictures(indexPlace, downloadUrl);
+
+                                            updateUserAndGUI();
+
+                                        }
+
+                                    });
+
+
+                                }
+                            })
+                            .addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception exception) {
+                                    // Handle unsuccessful uploads
+                                    // ...
+                                }
+                            });
+
+                }
+
+
+            } else updateUserAndGUI();
     }
 
 
