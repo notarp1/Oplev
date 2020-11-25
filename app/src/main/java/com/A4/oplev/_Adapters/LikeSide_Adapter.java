@@ -16,10 +16,10 @@ import java.util.List;
 
 public class LikeSide_Adapter extends ArrayAdapter<String> {
     private Context mContext;
-    private List<String> nameList = new ArrayList<>(), lastMessage = new ArrayList<>(), headerList = new ArrayList<>(), lastMessageSender = new ArrayList<>();
+    private List<String> nameList = new ArrayList<>(), lastMessage = new ArrayList<>(), headerList = new ArrayList<>(), lastMessageSender = new ArrayList<>(), isInitialized = new ArrayList<>();
     private List<Date> dateList = new ArrayList<>();
 
-    public LikeSide_Adapter(@NonNull Context context, @NonNull ArrayList<String> names, @NonNull ArrayList<Date> dates, @NonNull ArrayList<String> lastMessage, @NonNull ArrayList<String> headerList, @NonNull ArrayList<String> lastMessageSender) {
+    public LikeSide_Adapter(@NonNull Context context, @NonNull ArrayList<String> names, @NonNull ArrayList<Date> dates, @NonNull ArrayList<String> lastMessage, @NonNull ArrayList<String> headerList, @NonNull ArrayList<String> lastMessageSender, ArrayList<String> isInitialized) {
         super(context, 0 , names);
         this.mContext = context;
         this.nameList = names;
@@ -27,6 +27,7 @@ public class LikeSide_Adapter extends ArrayAdapter<String> {
         this.lastMessage = lastMessage;
         this.headerList = headerList;
         this.lastMessageSender = lastMessageSender;
+        this.isInitialized = isInitialized;
     }
 
     @NonNull
@@ -40,11 +41,12 @@ public class LikeSide_Adapter extends ArrayAdapter<String> {
         // Vi får nogle værdier som vi skal bruge til at sætte ind i layoutet
         String currentName = nameList.get(position);
         String currentDate;
-        if (dateList.isEmpty()) currentDate = "";
+        System.out.println("BLABLA" + isInitialized.toString());
+        if (isInitialized.get(position).equals("false")) currentDate = "";
         else currentDate = dateList.get(position).toString().substring(0,3);
         String currentLastMessage;
 
-        if (!lastMessageSender.isEmpty()) {
+        if (isInitialized.get(position).equals("true")) {
             // Vi checker om den besked der sidst blev sendt er fra den man chatter med
             if (lastMessageSender.get(position).equals(currentName)) {
                 if (lastMessage.get(position).equals("pictureBlaBlaBla!:"))
