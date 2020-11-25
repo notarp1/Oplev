@@ -2,18 +2,25 @@ package DTO;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class UserDTO implements Serializable {
 
     int age;
     String fName, lName, city, email, phone, description, userId, job, education;
-    ArrayList<String> pictures;
+
+    ArrayList<String> pictures = new ArrayList<>(Arrays.asList(null, null, null, null, null, null));
+
+    ArrayList<String> chatId;
     ArrayList<Integer> events, joinedEvents;
 
     public String getUserId() {
         return userId;
     }
 
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
 
     public int getAge() {
         return age;
@@ -79,16 +86,17 @@ public class UserDTO implements Serializable {
         this.email = email;
     }
 
-    public String getPhone() {
-        return phone;
-    }
-
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
-
     public ArrayList<String> getPictures() {
+
         return pictures;
+    }
+
+    public ArrayList<String> getChatId() {
+        return chatId;
+    }
+
+    public void setChatId(ArrayList<String> chatId) {
+        this.chatId = chatId;
     }
 
     public void setPictures(ArrayList<String> pictures) {

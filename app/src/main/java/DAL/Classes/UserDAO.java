@@ -36,6 +36,7 @@ public class UserDAO implements IUserDAO, CallbackUser {
 
     @Override
     public void getUser(CallbackUser callbackUser, String userId) {
+        System.out.println("userId = " + userId);
         DocumentReference docRef = db.collection("users").document(userId);
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
@@ -66,17 +67,19 @@ public class UserDAO implements IUserDAO, CallbackUser {
         userObject.put("city", user.getCity());
         userObject.put("description", user.getDescription());
         userObject.put("email", user.getEmail());
-        userObject.put("phone", user.getPhone());
         userObject.put("joinedEvents", user.getJoinedEvents());
         userObject.put("events", user.getEvents());
         userObject.put("pictures", user.getPictures());
+        userObject.put("chatId", user.getChatId());
+        userObject.put("userId", user.getUserId());
 
 
         db.collection("users")
-                .add(userObject)
+                .document(user.getUserId())
+                .set(userObject)
                 .addOnSuccessListener(documentReference -> {
-                    Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId());
-                    db.collection("users").document(documentReference.getId()).update("userId", documentReference.getId());
+                    Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference);
+
                 })
                 .addOnFailureListener(e -> Log.w(TAG, "Error adding document", e));
     }

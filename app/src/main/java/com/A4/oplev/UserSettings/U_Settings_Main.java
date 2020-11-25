@@ -1,16 +1,23 @@
 package com.A4.oplev.UserSettings;
 
+import android.content.Context;
+import android.content.ContextWrapper;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
 
 import com.A4.oplev.Activity_Profile;
 import com.A4.oplev.R;
+import com.squareup.picasso.Picasso;
+
+import java.io.File;
+import java.util.ArrayList;
 
 import Controller.Controller;
 import DTO.UserDTO;
@@ -21,6 +28,9 @@ public class U_Settings_Main extends Fragment implements View.OnClickListener {
     public TextView about;
     Controller controller;
     UserDTO user;
+    ImageView back, profilepic;
+    ArrayList<String> pictures;
+
 
     public View onCreateView(LayoutInflater i, ViewGroup container, Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,13 +41,17 @@ public class U_Settings_Main extends Fragment implements View.OnClickListener {
 
 
         controller =  Controller.getInstance();
+        pictures = controller.getUserPictures();
 
+        back = (ImageView) getActivity().findViewById(R.id.topbar_arrow);
+        back.setOnClickListener(this);
 
 
         visProfil = root.findViewById(R.id.box_profil);
         rediger = root.findViewById(R.id.box_rediger);
         indstillinger = root.findViewById(R.id.box_indstillinger);
         about = root.findViewById(R.id.u_profile_name);
+        profilepic = root.findViewById(R.id.profile_pic);
 
         controller.iniUserMainSettings(this);
 
@@ -51,6 +65,19 @@ public class U_Settings_Main extends Fragment implements View.OnClickListener {
 
 
     }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        Picasso.get().load(pictures.get(0))
+                    .placeholder(R.drawable.question)
+                    .into(profilepic);
+
+
+
+        }
+
 
 
     @Override
@@ -71,6 +98,9 @@ public class U_Settings_Main extends Fragment implements View.OnClickListener {
          } else if (v == visProfil){
              Intent i = new Intent(getActivity(), Activity_Profile.class);
              startActivity(i);
-         }
+         } else if(v == back){
+             System.out.println("HEJ");
+                getActivity().finish();
+        }
     }
 }

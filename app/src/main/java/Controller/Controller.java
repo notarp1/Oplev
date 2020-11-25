@@ -1,8 +1,11 @@
 package Controller;
 
+import com.A4.oplev.Login.Activity_CreateUser;
 import com.A4.oplev.Activity_Profile;
 import com.A4.oplev.UserSettings.U_Settings_Edit;
 import com.A4.oplev.UserSettings.U_Settings_Main;
+
+import java.util.ArrayList;
 
 import DAL.Classes.ChatDAO;
 import DAL.Classes.EventDAO;
@@ -10,7 +13,6 @@ import DAL.Classes.UserDAO;
 import DAL.Interfaces.CallbackUser;
 import DTO.UserDTO;
 
-import DAL.Classes.EventDAO;
 import DTO.EventDTO;
 
 public class Controller {
@@ -50,20 +52,37 @@ public class Controller {
 
     }
 
-    public void createUser(UserDTO userDTO){
-        userDAO.createUser(userDTO);
+    public void createUser(String userId, Activity_CreateUser ctx){
+
+        UserDTO user = new UserDTO();
+
+        user.setfName(String.valueOf(ctx.fName.getText()));
+        user.setlName(String.valueOf(ctx.lName.getText()));
+        user.setCity(String.valueOf(ctx.city.getText()));
+        user.setEmail(String.valueOf(ctx.email.getText()));
+        user.setChatId(null);
+        user.setAge(Integer.parseInt(String.valueOf(ctx.age.getText())));
+        user.setUserId(userId);
+
+        userDAO.createUser(user);
+
     }
 
 
-    public void updateUser(U_Settings_Edit ctx){
+    public void updateUser(U_Settings_Edit ctx, ArrayList<String> pictures){
+
 
         user.setDescription(ctx.about.getText().toString());
         user.setCity(ctx.city.getText().toString());
         user.setJob(ctx.job.getText().toString());
         user.setEducation(ctx.education.getText().toString());
-
+        user.setPictures(pictures);
         userDAO.updateUser(user);
 
+    }
+
+    public ArrayList<String> getUserPictures(){
+        return user.getPictures();
     }
 
     public void deleteUser(String userId){
@@ -90,7 +109,8 @@ public class Controller {
             eduText = "\uD83C\uDF93 " + "Ikke angivet";
             ctx.edu.setText(eduText);
 
-        } else if(user.getJob() == null || user.getJob().equals("")){
+        }
+        if(user.getJob() == null || user.getJob().equals("")){
             jobText = "\uD83D\uDCBC " + "Ikke angivet";
             ctx.job.setText(jobText);
         }

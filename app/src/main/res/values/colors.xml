@@ -9,4 +9,5 @@
     <color name="black">#000000</color>
     <color name="chatColorBlue">#3684E3</color>
     <color name="likesideBilleder">#6CD9F4</color>
+    <color name="backgroundColor">#EEEEEE</color>
 </resources>

@@ -4,15 +4,21 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.squareup.picasso.Picasso;
+
+import java.util.ArrayList;
 
 import Controller.Controller;
 import DTO.UserDTO;
 
 public class Activity_Profile extends AppCompatActivity implements View.OnClickListener {
     public TextView about, city, desc, aboutName, job, edu;
+    ImageView pb;
     Controller controller;
-
+    ArrayList<String> pictures;
 
 
     @Override
@@ -21,6 +27,7 @@ public class Activity_Profile extends AppCompatActivity implements View.OnClickL
         setContentView(R.layout.activity_profile);
 
         controller =  Controller.getInstance();
+        pictures = controller.getUserPictures();
 
         about = findViewById(R.id.text_information);
         city = findViewById(R.id.text_city);
@@ -28,11 +35,24 @@ public class Activity_Profile extends AppCompatActivity implements View.OnClickL
         aboutName = findViewById(R.id.text_about_name);
         edu = findViewById(R.id.text_edu);
         job = findViewById(R.id.text_job);
+        pb = findViewById(R.id.imageView_pb);
 
         controller.iniProfile(this);
 
 
     }
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        Picasso.get().load(pictures.get(0))
+                .placeholder(R.drawable.question)
+                .into(pb);
+
+
+
+    }
+
 
     @Override
     public void onClick(View v) {

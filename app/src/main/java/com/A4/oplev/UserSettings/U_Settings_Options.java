@@ -1,18 +1,27 @@
 package com.A4.oplev.UserSettings;
 
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
+import com.A4.oplev.Activity_Ini;
 import com.A4.oplev.R;
+import com.google.firebase.auth.FirebaseAuth;
 
 public class U_Settings_Options extends Fragment implements View.OnClickListener {
 
+    TextView logud;
+    SharedPreferences prefs;
+    ImageView back;
 
     public View onCreateView(LayoutInflater i, ViewGroup container, Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -20,8 +29,11 @@ public class U_Settings_Options extends Fragment implements View.OnClickListener
 
         TextView textview = (TextView)getActivity().findViewById(R.id.topbar_text);
         textview.setText("Indstillinger");
+        logud = root.findViewById(R.id.logud_txt);
+        logud.setOnClickListener(this);
 
-
+        back = (ImageView) getActivity().findViewById(R.id.topbar_arrow);
+        back.setOnClickListener(this);
 
         return root;
 
@@ -32,5 +44,18 @@ public class U_Settings_Options extends Fragment implements View.OnClickListener
     @Override
     public void onClick(View view) {
 
+        if(view == logud){
+            FirebaseAuth.getInstance().signOut();
+            PreferenceManager.getDefaultSharedPreferences(getActivity()).edit().clear().apply();
+            FragmentManager fm = getActivity().getSupportFragmentManager();
+            for(int i = 0; i < fm.getBackStackEntryCount(); ++i) {
+                fm.popBackStack();
+            }
+            Intent i = new Intent(getActivity(), Activity_Ini.class);
+            startActivity(i);
+
+        } else if (view == back){
+            getActivity().getSupportFragmentManager().popBackStack();
+        }
     }
 }

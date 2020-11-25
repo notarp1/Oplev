@@ -41,8 +41,10 @@ public class Hjerteside_Adapter extends ArrayAdapter<String> {
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
         View listItem = convertView;
         if(listItem == null)
+            // Vi inflater layoutet som vi har lavet i xml
             listItem = LayoutInflater.from(mContext).inflate(R.layout.hjerteside_liste_element,parent,false);
 
+        // Vi sætter nogle værdier ind i layoutet (dette er ikke færddigjort og skal ændres senere hen, så siden ser lidt tom ud lige nu)
         String currentHeader = headerList.get(position);
         String currentName = nameList.get(position);
         String currentAge = ageList.get(position);

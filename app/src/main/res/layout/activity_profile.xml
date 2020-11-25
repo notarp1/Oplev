@@ -7,17 +7,15 @@
     tools:context=".Activity_Profile">
 
     <ImageView
-        android:id="@+id/imageView"
+        android:id="@+id/imageView_pb"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:adjustViewBounds="true"
         android:scaleType="fitXY"
-        app:layout_constraintBottom_toTopOf="@+id/scrollView2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0"
         app:srcCompat="@drawable/_profiltest" />
 
     <ScrollView
@@ -105,24 +103,6 @@
                     android:orientation="horizontal">
 
                     <View
-                        android:id="@+id/ellipse_9"
-                        android:layout_width="47dp"
-                        android:layout_height="47dp"
-                        android:layout_marginStart="20dp"
-                        android:layout_marginLeft="20dp"
-                        android:layout_marginEnd="15dp"
-                        android:layout_marginRight="15dp"
-                        android:background="@drawable/ellipse2" />
-
-                    <View
-                        android:id="@+id/ellipse_8"
-                        android:layout_width="47dp"
-                        android:layout_height="47dp"
-                        android:layout_marginStart="20dp"
-                        android:layout_marginLeft="20dp"
-                        android:background="@drawable/ellipse3" />
-
-                    <View
                         android:id="@+id/ellipse_7"
                         android:layout_width="47dp"
                         android:layout_height="47dp"
@@ -130,6 +110,7 @@
                         android:layout_alignParentTop="true"
                         android:layout_marginStart="20dp"
                         android:layout_marginLeft="20dp"
+                        android:layout_weight="1"
                         android:background="@drawable/ellipse4" />
 
                     <View
@@ -140,6 +121,7 @@
                         android:layout_alignParentTop="true"
                         android:layout_marginStart="20dp"
                         android:layout_marginLeft="20dp"
+                        android:layout_weight="1"
                         android:background="@drawable/ellipse5" />
 
                     <View
@@ -150,6 +132,7 @@
                         android:layout_alignParentTop="true"
                         android:layout_marginStart="20dp"
                         android:layout_marginLeft="20dp"
+                        android:layout_weight="1"
                         android:background="@drawable/ellipse" />
 
                     <View
@@ -161,7 +144,18 @@
                         android:layout_alignParentTop="true"
                         android:layout_marginStart="15dp"
                         android:layout_marginLeft="15dp"
+                        android:layout_weight="1"
                         android:background="@drawable/ellipse2" />
+
+                    <View
+                        android:id="@+id/ellipse_8"
+                        android:layout_width="47dp"
+                        android:layout_height="47dp"
+                        android:layout_marginStart="20dp"
+                        android:layout_marginLeft="20dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/ellipse3" />
+
                 </LinearLayout>
             </HorizontalScrollView>
 
@@ -193,6 +187,7 @@
                         android:layout_gravity="center|start|right"
                         android:layout_marginStart="16dp"
                         android:layout_marginLeft="0dp"
+                        android:layout_weight="1"
                         android:background="#DC923C" />
 
                     <View
@@ -202,6 +197,7 @@
                         android:layout_gravity="center|start|right"
                         android:layout_marginStart="16dp"
                         android:layout_marginLeft="0dp"
+                        android:layout_weight="1"
                         android:background="#2055A5" />
 
                     <View
@@ -211,6 +207,7 @@
                         android:layout_gravity="center|start|right"
                         android:layout_marginStart="16dp"
                         android:layout_marginLeft="0dp"
+                        android:layout_weight="1"
                         android:background="#DEE137" />
 
                 </TableRow>
@@ -227,6 +224,7 @@
                         android:layout_gravity="center|start|right"
                         android:layout_marginStart="16dp"
                         android:layout_marginLeft="0dp"
+                        android:layout_weight="1"
                         android:background="#2C7D3E" />
 
                     <View
@@ -236,6 +234,7 @@
                         android:layout_gravity="center|start|right"
                         android:layout_marginStart="16dp"
                         android:layout_marginLeft="0dp"
+                        android:layout_weight="1"
                         android:background="#B813BB" />
 
                     <View
@@ -245,6 +244,7 @@
                         android:layout_gravity="center|start|right"
                         android:layout_marginStart="16dp"
                         android:layout_marginLeft="0dp"
+                        android:layout_weight="1"
                         android:background="#BD2727" />
 
                 </TableRow>
@@ -257,9 +257,9 @@
         android:id="@+id/view"
         android:layout_width="match_parent"
         android:layout_height="57dp"
-        android:layout_marginBottom="112dp"
+        android:layout_marginBottom="72dp"
         android:background="@drawable/gradient"
-        app:layout_constraintBottom_toBottomOf="@+id/imageView"
+        app:layout_constraintBottom_toBottomOf="@+id/imageView_pb"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent" />
