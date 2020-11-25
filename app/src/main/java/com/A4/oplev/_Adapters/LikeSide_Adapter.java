@@ -10,14 +10,16 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import com.A4.oplev.R;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 
 public class LikeSide_Adapter extends ArrayAdapter<String> {
     private Context mContext;
-    private List<String> nameList = new ArrayList<>(), dateList = new ArrayList<>(), lastMessage = new ArrayList<>(), headerList = new ArrayList<>(), lastMessageSender = new ArrayList<>();
+    private List<String> nameList = new ArrayList<>(), lastMessage = new ArrayList<>(), headerList = new ArrayList<>(), lastMessageSender = new ArrayList<>();
+    private List<Date> dateList = new ArrayList<>();
 
-    public LikeSide_Adapter(@NonNull Context context, @NonNull ArrayList<String> names, @NonNull ArrayList<String> dates, @NonNull ArrayList<String> lastMessage, @NonNull ArrayList<String> headerList, @NonNull ArrayList<String> lastMessageSender) {
+    public LikeSide_Adapter(@NonNull Context context, @NonNull ArrayList<String> names, @NonNull ArrayList<Date> dates, @NonNull ArrayList<String> lastMessage, @NonNull ArrayList<String> headerList, @NonNull ArrayList<String> lastMessageSender) {
         super(context, 0 , names);
         this.mContext = context;
         this.nameList = names;
@@ -37,17 +39,26 @@ public class LikeSide_Adapter extends ArrayAdapter<String> {
 
         // Vi får nogle værdier som vi skal bruge til at sætte ind i layoutet
         String currentName = nameList.get(position);
-        String currentDate = dateList.get(position);
+        String currentDate;
+        if (dateList.isEmpty()) currentDate = "";
+        else currentDate = dateList.get(position).toString().substring(0,3);
         String currentLastMessage;
 
-        // Vi checker om den besked der sidst blev sendt er fra den man chatter med
-        if (lastMessageSender.get(position).equals(currentName)) {
-            // Sæt stringen til dette hvis sidste besked er fra anden person
-            currentLastMessage = currentName + ": " + lastMessage.get(position);
-        } else {
-            // Sæt stringen til dette hvis sidste besked er fra en selv
-            currentLastMessage = "Dig: " + lastMessage.get(position);
+        if (!lastMessageSender.isEmpty()) {
+            // Vi checker om den besked der sidst blev sendt er fra den man chatter med
+            if (lastMessageSender.get(position).equals(currentName)) {
+                if (lastMessage.get(position).equals("pictureBlaBlaBla!:"))
+                    currentLastMessage = currentName + ": " + "[Picture]";
+                    // Sæt stringen til dette hvis sidste besked er fra anden person
+                else currentLastMessage = currentName + ": " + lastMessage.get(position);
+            } else {
+                if (lastMessage.get(position).equals("pictureBlaBlaBla!:"))
+                    currentLastMessage = "Dig: " + "[Picture]";
+                    // Sæt stringen til dette hvis sidste besked er fra en selv
+                else currentLastMessage = "Dig: " + lastMessage.get(position);
+            }
         }
+        else currentLastMessage = "";
 
         // Indsæt nogle værdier ind layoutet (skal ændres senere hen til at hente billeder osv)
         String currentHeader = headerList.get(position);

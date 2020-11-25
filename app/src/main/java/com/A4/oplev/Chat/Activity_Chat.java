@@ -37,9 +37,11 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Date;
 
+import Controller.Controller;
 import Controller.PictureMaker;
 import DAL.Classes.ChatDAO;
 import DTO.ChatDTO;
+import DTO.UserDTO;
 
 
 public class Activity_Chat extends AppCompatActivity  implements View.OnClickListener {
@@ -61,9 +63,6 @@ public class Activity_Chat extends AppCompatActivity  implements View.OnClickLis
 
     public void onCreate(Bundle saveInstanceState) {
         // De her parametre er predefined lige nu men skal blive genereret efter brugerens valg senere hen
-        chatDocumentPath = "60V6EddGhhZdY7pTGYRF";
-        person1 = "person1";
-        person2 = "person2";
         pictureMaker = PictureMaker.getInstance();
 
 
@@ -74,12 +73,16 @@ public class Activity_Chat extends AppCompatActivity  implements View.OnClickLis
 
         // her får vi intentet med navnet på den man skriver med
         Intent intent = getIntent();
+        chatDocumentPath = intent.getStringExtra("chatId");
+        person1 = intent.getStringExtra("currentUser");
+        person2 = intent.getStringExtra("otherUser");
+
 
         // finder elementerne i layoutet
         settings = findViewById(R.id.chat_settings);
         tilbage = findViewById(R.id.chat_topbar_arrow);
         navn = findViewById(R.id.chat_topbar_text);
-        navn.setText(intent.getStringExtra("navn"));
+        navn.setText(person2);
         sendBillede = findViewById(R.id.chat_indsendBesked);
         beskeder = findViewById(R.id.chat_beskedList);
         inputTekst = findViewById(R.id.chat_inputBesked2);
@@ -187,9 +190,11 @@ public class Activity_Chat extends AppCompatActivity  implements View.OnClickLis
                             ChatList_Adapter adapter = new ChatList_Adapter(ctx, beskederStrings, dto, person1);
                             //linearLayout.removeAllViews();
                             for (int i = adapter.getCount()-1; i < adapter.getCount(); i++) {
-                                if (dto.getSender().get(i).equals(person2)) {
-                                    View item = adapter.getView(adapter.getCount() - 1, null, null);
-                                    linearLayout.addView(item);
+                                if (dto.getSender() != null) {
+                                    if (dto.getSender().get(i).equals(person2)) {
+                                        View item = adapter.getView(adapter.getCount() - 1, null, null);
+                                        linearLayout.addView(item);
+                                    }
                                 }
                             }
                         } else {
