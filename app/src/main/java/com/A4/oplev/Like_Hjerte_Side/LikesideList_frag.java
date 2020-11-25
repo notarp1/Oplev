@@ -13,7 +13,7 @@ import androidx.fragment.app.Fragment;
 
 import com.A4.oplev.Chat.Activity_Chat;
 
-import Controller.Controller;
+import Controller.userController;
 import Controller.Listeners.OnSwipeTouchListener;
 import DAL.Classes.ChatDAO;
 import DTO.ChatDTO;
@@ -30,15 +30,15 @@ public class LikesideList_frag extends Fragment{
     private ListView listView;
     private ChatDAO chatDAO;
     private UserDTO userDTO;
-    private Controller controller;
+    private userController userController;
     private String currentUser;
 
     // Den her klasse bruges til at få lave chatlisten ude fra likesiden af (hvor man kan vælge den chat man vil ind i)
     @SuppressLint("ClickableViewAccessibility")
     public View onCreateView(LayoutInflater i, ViewGroup container, Bundle savedInstanceState) {
         View root = i.inflate(R.layout.likeside_frag,container,false);
-        controller = Controller.getInstance();
-        userDTO = controller.getCurrUser();
+        userController = userController.getInstance();
+        userDTO = userController.getCurrUser();
         chatDAO = new ChatDAO();
 
         listView = root.findViewById(R.id.beskedListView);

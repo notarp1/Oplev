@@ -11,13 +11,12 @@ import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
-import Controller.Controller;
-import DTO.UserDTO;
+import Controller.userController;
 
 public class Activity_Profile extends AppCompatActivity implements View.OnClickListener {
     public TextView about, city, desc, aboutName, job, edu;
     ImageView pb;
-    Controller controller;
+    userController userController;
     ArrayList<String> pictures;
 
 
@@ -26,8 +25,8 @@ public class Activity_Profile extends AppCompatActivity implements View.OnClickL
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
 
-        controller =  Controller.getInstance();
-        pictures = controller.getUserPictures();
+        userController =  userController.getInstance();
+        pictures = userController.getUserPictures();
 
         about = findViewById(R.id.text_information);
         city = findViewById(R.id.text_city);
@@ -37,7 +36,7 @@ public class Activity_Profile extends AppCompatActivity implements View.OnClickL
         job = findViewById(R.id.text_job);
         pb = findViewById(R.id.imageView_pb);
 
-        controller.iniProfile(this);
+        userController.iniProfile(this);
 
 
     }

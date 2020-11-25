@@ -1,7 +1,5 @@
 package com.A4.oplev.UserSettings;
 
-import android.content.Context;
-import android.content.ContextWrapper;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -16,17 +14,16 @@ import com.A4.oplev.Activity_Profile;
 import com.A4.oplev.R;
 import com.squareup.picasso.Picasso;
 
-import java.io.File;
 import java.util.ArrayList;
 
-import Controller.Controller;
+import Controller.userController;
 import DTO.UserDTO;
 
 public class U_Settings_Main extends Fragment implements View.OnClickListener {
 
     View visProfil, rediger, indstillinger;
     public TextView about;
-    Controller controller;
+    userController userController;
     UserDTO user;
     ImageView back, profilepic;
     ArrayList<String> pictures;
@@ -40,8 +37,8 @@ public class U_Settings_Main extends Fragment implements View.OnClickListener {
         textview.setText("Profil");
 
 
-        controller =  Controller.getInstance();
-        pictures = controller.getUserPictures();
+        userController =  userController.getInstance();
+        pictures = userController.getUserPictures();
 
         back = (ImageView) getActivity().findViewById(R.id.topbar_arrow);
         back.setOnClickListener(this);
@@ -53,7 +50,7 @@ public class U_Settings_Main extends Fragment implements View.OnClickListener {
         about = root.findViewById(R.id.u_profile_name);
         profilepic = root.findViewById(R.id.profile_pic);
 
-        controller.iniUserMainSettings(this);
+        userController.iniUserMainSettings(this);
 
 
         indstillinger.setOnClickListener(this);

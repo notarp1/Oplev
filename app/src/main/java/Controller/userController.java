@@ -15,15 +15,15 @@ import DTO.UserDTO;
 
 import DTO.EventDTO;
 
-public class Controller {
-    private static Controller instance = null;
+public class userController {
+    private static userController instance = null;
     static ChatDAO chatDAO;
     static UserDAO userDAO;
     static EventDAO eventDAO;
     private UserDTO user;
 
 
-    private Controller(){
+    private userController(){
 
         chatDAO = new ChatDAO();
         userDAO = new UserDAO();
@@ -33,8 +33,8 @@ public class Controller {
 
     }
 
-    public static Controller getInstance(){
-        if (instance == null) instance = new Controller();
+    public static userController getInstance(){
+        if (instance == null) instance = new userController();
         return instance;
     }
 

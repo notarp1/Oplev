@@ -15,12 +15,12 @@ import com.google.firebase.auth.FirebaseUser;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-import Controller.Controller;
+import Controller.userController;
 import DAL.Interfaces.CallbackUser;
 import DTO.UserDTO;
 
 public class Activity_Ini extends AppCompatActivity implements Serializable {
-    Controller controller;
+    userController userController;
     UserDTO userDTO;
     SharedPreferences prefs;
     Context ctx;
@@ -49,7 +49,7 @@ public class Activity_Ini extends AppCompatActivity implements Serializable {
 
         // Check if user is signed in (non-null) and update UI accordingly.
         FirebaseUser currentUser = mAuth.getCurrentUser();
-        controller = Controller.getInstance();
+        userController = userController.getInstance();
         ctx = this;
         prefs = PreferenceManager.getDefaultSharedPreferences(this);
         onInstance = prefs.getBoolean("onInstance", false);
@@ -63,7 +63,7 @@ public class Activity_Ini extends AppCompatActivity implements Serializable {
         }else {
             prefs.edit().putBoolean("onInstance", true).apply();
 
-                controller.getUser(new CallbackUser() {
+                userController.getUser(new CallbackUser() {
                     @Override
                     public void onCallback(UserDTO user) {
                         setUserDTO(user);
@@ -74,7 +74,7 @@ public class Activity_Ini extends AppCompatActivity implements Serializable {
                             PreferenceManager.getDefaultSharedPreferences(ctx).edit().clear().apply();
                         }
                         Intent i = new Intent(ctx, Activity_Main.class);
-                        controller.setCurrUser(user);
+                        userController.setCurrUser(user);
                         i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                         startActivity(i);
                     }

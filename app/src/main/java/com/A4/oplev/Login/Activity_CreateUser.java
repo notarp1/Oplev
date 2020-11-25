@@ -21,7 +21,7 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
-import Controller.Controller;
+import Controller.userController;
 
 public class Activity_CreateUser extends AppCompatActivity implements View.OnClickListener {
 
@@ -31,14 +31,14 @@ public class Activity_CreateUser extends AppCompatActivity implements View.OnCli
     Button createUser;
     ImageView back;
     Context ctx;
-    Controller controller;
+    userController userController;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity__create_user);
 
-        controller = Controller.getInstance();
+        userController = userController.getInstance();
         mAuth = FirebaseAuth.getInstance();
 
         this.ctx = this;
@@ -83,7 +83,7 @@ public class Activity_CreateUser extends AppCompatActivity implements View.OnCli
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "createUserWithEmail:success");
                             FirebaseUser user = mAuth.getCurrentUser();
-                            controller.createUser(user.getUid(), (Activity_CreateUser) ctx);
+                            userController.createUser(user.getUid(), (Activity_CreateUser) ctx);
                             Intent i = new Intent(ctx, Activity_Ini.class);
                             i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                             startActivity(i);

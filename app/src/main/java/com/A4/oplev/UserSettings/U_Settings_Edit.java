@@ -2,7 +2,6 @@ package com.A4.oplev.UserSettings;
 
 import android.Manifest;
 import android.content.Context;
-import android.content.ContextWrapper;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -10,7 +9,6 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,7 +21,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import com.A4.oplev.PicassoFunc;
 import com.A4.oplev.R;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -34,10 +31,9 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
 
-import java.io.File;
 import java.util.ArrayList;
 
-import Controller.Controller;
+import Controller.userController;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -48,7 +44,7 @@ public class U_Settings_Edit extends Fragment implements View.OnClickListener {
     TextView textview;
     public ImageView accept, back, p0, p1, p2, p3, p4, p5;
 
-    Controller controller;
+    userController userController;
     Bitmap stockphotoBit;
 
     static public boolean[] picBoolean = new boolean[]{false, false, false, false, false, false};
@@ -78,10 +74,10 @@ public class U_Settings_Edit extends Fragment implements View.OnClickListener {
 
         mStorageRef = FirebaseStorage.getInstance().getReference();
 
-        controller = Controller.getInstance();
+        userController = userController.getInstance();
         mAuth = FirebaseAuth.getInstance();
         currentUser = mAuth.getCurrentUser();
-        pictures = controller.getUserPictures();
+        pictures = userController.getUserPictures();
 
         this.ctx = getContext();
         uris = new Uri[]{null, null, null, null, null, null};
@@ -106,7 +102,7 @@ public class U_Settings_Edit extends Fragment implements View.OnClickListener {
         education = root.findViewById(R.id.editText_edu);
 
         iniPictures(root);
-        controller.iniEditProfile(this);
+        userController.iniEditProfile(this);
 
 
         return root;
@@ -233,7 +229,7 @@ public class U_Settings_Edit extends Fragment implements View.OnClickListener {
 
     private void updateUserAndGUI() {
 
-        controller.updateUser(this, pictures);
+        userController.updateUser(this, pictures);
         Toast.makeText(getContext(), "Profil opdateret!", Toast.LENGTH_SHORT).show();
     }
 

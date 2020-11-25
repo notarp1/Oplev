@@ -18,7 +18,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -37,11 +36,9 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Date;
 
-import Controller.Controller;
 import Controller.PictureMaker;
 import DAL.Classes.ChatDAO;
 import DTO.ChatDTO;
-import DTO.UserDTO;
 
 
 public class Activity_Chat extends AppCompatActivity  implements View.OnClickListener {

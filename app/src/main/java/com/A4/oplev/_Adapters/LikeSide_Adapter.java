@@ -14,7 +14,7 @@ import java.util.Date;
 import java.util.List;
 
 
-public class LikeSide_Adapter extends ArrayAdapter<String> {
+public class  LikeSide_Adapter extends ArrayAdapter<String> {
     private Context mContext;
     private List<String> nameList = new ArrayList<>(), lastMessage = new ArrayList<>(), headerList = new ArrayList<>(), lastMessageSender = new ArrayList<>(), isInitialized = new ArrayList<>();
     private List<Date> dateList = new ArrayList<>();
