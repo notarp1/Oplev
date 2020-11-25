@@ -32,7 +32,6 @@ public class Activity_Ini extends AppCompatActivity implements Serializable {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        picasso = PicassoFunc.getInstance();
         setContentView(R.layout.activity__ini);
         mAuth = FirebaseAuth.getInstance();
 
@@ -76,7 +75,6 @@ public class Activity_Ini extends AppCompatActivity implements Serializable {
                         }
                         Intent i = new Intent(ctx, Activity_Main.class);
                         controller.setCurrUser(user);
-                        picasso.getUserPictures(ctx);
                         i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                         startActivity(i);
                     }
