@@ -26,7 +26,7 @@ public class U_Settings_Main extends Fragment implements View.OnClickListener {
     public TextView about;
     userController userController;
     UserDTO user;
-    ImageView back, profilepic;
+    ImageView back, profilepic, accept;
     ArrayList<String> pictures;
     int height, width;
 
@@ -37,6 +37,9 @@ public class U_Settings_Main extends Fragment implements View.OnClickListener {
         View root = i.inflate(R.layout.u_setting_main_frag, container, false);
         TextView textview = (TextView)getActivity().findViewById(R.id.topbar_text);
         textview.setText("Profil");
+
+        accept = (ImageView) getActivity().findViewById(R.id.imageView_checkmark);
+        accept.setVisibility(View.INVISIBLE);
 
 
         userController =  userController.getInstance();

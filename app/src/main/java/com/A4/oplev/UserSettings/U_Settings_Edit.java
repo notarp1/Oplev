@@ -9,6 +9,7 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -103,6 +104,7 @@ public class U_Settings_Edit extends Fragment implements View.OnClickListener, V
 
         iniPictures(root);
         userController.iniEditProfile(this);
+
 
 
         return root;
