@@ -38,7 +38,7 @@ import Controller.userController;
 import static android.app.Activity.RESULT_OK;
 
 
-public class U_Settings_Edit extends Fragment implements View.OnClickListener {
+public class U_Settings_Edit extends Fragment implements View.OnClickListener, View.OnLongClickListener {
 
     public EditText about, city, job, education;
     TextView textview;
@@ -139,6 +139,14 @@ public class U_Settings_Edit extends Fragment implements View.OnClickListener {
         p3.setOnClickListener(this);
         p4.setOnClickListener(this);
         p5.setOnClickListener(this);
+
+        p0.setOnLongClickListener(this);
+        p1.setOnLongClickListener(this);
+        p2.setOnLongClickListener(this);
+        p3.setOnLongClickListener(this);
+        p4.setOnLongClickListener(this);
+
+
     }
 
 
@@ -166,6 +174,39 @@ public class U_Settings_Edit extends Fragment implements View.OnClickListener {
             picBool(5);
         }
 
+    }
+
+    @Override
+    public boolean onLongClick(View v) {
+        if (v==p0){
+            deletePicture(0);
+            return true;
+        } else if (v == p1) {
+            deletePicture(1);
+            return true;
+        } else if (v == p2) {
+            deletePicture(2);
+            return true;
+        } else if (v == p3) {
+            deletePicture(3);
+            return true;
+        } else if (v == p4) {
+            deletePicture(4);
+            return true;
+        } else if (v == p5) {
+            deletePicture(5);
+            return true;
+        }
+        return false;
+    }
+
+    private void deletePicture(int number) {
+        if(pictures.get(number) != null){
+            pictures.set(number, null);
+            updateUserAndGUI();
+            ImageView pic = getPictureNumber(number);
+            pic.setImageBitmap(stockphotoBit);
+        }
     }
 
     private void onAccept() {
@@ -327,9 +368,6 @@ public class U_Settings_Edit extends Fragment implements View.OnClickListener {
         }
         return  returnPic;
     }
-
-
-
 
 
 

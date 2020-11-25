@@ -2,27 +2,34 @@ package com.A4.oplev;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
+import android.view.ContextThemeWrapper;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.A4.oplev.Like_Hjerte_Side.HjerteSide_frag;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
+import Controller.Listeners.OnSwipeTouchListener;
 import Controller.userController;
 
 public class Activity_Profile extends AppCompatActivity implements View.OnClickListener {
-    public TextView about, city, desc, aboutName, job, edu;
+    public TextView about, city, desc, aboutName, job, edu, picNumber;
     ImageView pb;
     userController userController;
-    ArrayList<String> pictures;
-    int height;
-    int width;
+    ArrayList<String> pictures, currPics;
+
+    int height, width, currentPic, maxPic, minPic, maxPicPrint;
 
 
+
+
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,7 +39,6 @@ public class Activity_Profile extends AppCompatActivity implements View.OnClickL
         pictures = userController.getUserPictures();
 
 
-
         about = findViewById(R.id.text_information);
         city = findViewById(R.id.text_city);
         desc = findViewById(R.id.text_description);
@@ -40,6 +46,7 @@ public class Activity_Profile extends AppCompatActivity implements View.OnClickL
         edu = findViewById(R.id.text_edu);
         job = findViewById(R.id.text_job);
         pb = findViewById(R.id.imageView_pb);
+        picNumber = findViewById(R.id.text_curPic);
 
         DisplayMetrics displayMetrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
@@ -47,10 +54,67 @@ public class Activity_Profile extends AppCompatActivity implements View.OnClickL
         width = displayMetrics.widthPixels;
         pb.setMaxHeight(height/2 + 200);
 
+        getPictures();
+
+
+        pb.setOnTouchListener(new OnSwipeTouchListener(getApplicationContext()){
+            @SuppressLint("ResourceAsColor")
+            @Override
+            public void onSwipeLeft() {
+                System.out.println(maxPic);
+                System.out.println(currentPic);
+                if(currentPic != maxPic){
+                    Picasso.get().load(currPics.get(currentPic+1))
+                            .resize(width, height/2 + 200)
+                            .centerCrop()
+                            .placeholder(R.drawable.question)
+                            .into(pb);
+                    currentPic = currentPic + 1;
+                    String text = currentPic+1 + "/" + maxPicPrint;
+                    picNumber.setText(text);
+                }
+            }
+            @Override
+            public void onSwipeRight(){
+                if(currentPic != minPic){
+                    Picasso.get().load(currPics.get(currentPic-1))
+                            .resize(width, height/2 + 200)
+                            .centerCrop()
+                            .placeholder(R.drawable.question)
+                            .into(pb);
+                    currentPic = currentPic - 1;
+                    String text = currentPic + "/" + maxPicPrint;
+                    picNumber.setText(text);
+                }
+
+            }
+        });
+
         userController.iniProfile(this);
 
 
     }
+
+    private void getPictures() {
+        currPics = new ArrayList<>();
+        maxPic = 0;
+        minPic = 0;
+        currentPic = 0;
+
+        int counter = 0;
+        for(int i=0; i<6; i++){
+            if(pictures.get(i) != null){
+                counter += 1;
+
+                currPics.add(pictures.get(i));
+            }
+        }
+        maxPic = counter-1;
+        maxPicPrint = maxPic +1;
+        String text = currentPic+1 + "/" + maxPicPrint;
+        picNumber.setText(text);
+    }
+
     @Override
     public void onStart() {
         super.onStart();
