@@ -16,16 +16,18 @@ public class Activity_Create_Event extends AppCompatActivity implements View.OnC
 
     public void onCreate(Bundle saveInstanceState) {
         super.onCreate(saveInstanceState);
+        // uses the same topbar with empty frag below as u_settings...
         setContentView(R.layout.activity_u_settings);
-
-
+        // get elements from activity
         title = findViewById(R.id.topbar_text);
         back = findViewById(R.id.topbar_arrow);
-
+        //set onlick listner
         back.setOnClickListener(this);
 
+        //set value of title text in topbar
         title.setText("Opret Event");
 
+        //fill fragment holder with createvent 1
         getSupportFragmentManager().beginTransaction().replace(R.id.mainFragmentBox,  new createEvent1_frag(), "uSettingMainBox")
                 .commit();
 

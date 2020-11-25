@@ -22,14 +22,19 @@ public class createEvent3_frag extends Fragment implements View.OnClickListener 
                              Bundle savedInstanceState) {
 
         View root = inflater.inflate(R.layout.create_event3_frag, container, false);
+        //get elements from fragment
         done_btn = root.findViewById(R.id.create3_skip_btn);
-
         fb_img = root.findViewById(R.id.create3_fb_img);
         fbmsg_img = root.findViewById(R.id.create3_fbmsg_img);
         sms_img = root.findViewById(R.id.create3_sms_img);
         email_img = root.findViewById(R.id.create3_email_img);
 
+        //set onclicklisteners (only "done-button" implemented so far)
         fb_img.setOnClickListener(this);
+        fbmsg_img.setOnClickListener(this);
+        sms_img.setOnClickListener(this);
+        email_img.setOnClickListener(this);
+
         done_btn.setOnClickListener(this);
 
         return root;
@@ -51,7 +56,7 @@ public class createEvent3_frag extends Fragment implements View.OnClickListener 
             //start sharing by sms
         }
         else if(v == email_img){
-            //start sharing on email
+            //start sharing by email
         }
     }
 }
