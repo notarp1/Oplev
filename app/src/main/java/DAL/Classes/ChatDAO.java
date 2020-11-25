@@ -49,6 +49,7 @@ public class ChatDAO implements IChatDAO {
         chatObject.put("dates", chat.getDates());
         chatObject.put("chatId",null);
         chatObject.put("pictures",tempPics);
+        chatObject.put("header",chat.getHeader());
 
 
         // Dernæst vil vi adde objektet i vores chats collection
@@ -96,6 +97,7 @@ public class ChatDAO implements IChatDAO {
         chatObject.put("pictures",tempPics);
         chatObject.put("user1", chat.getUser1());
         chatObject.put("user2",chat.getUser2());
+        chatObject.put("header", chat.getHeader());
 
 
         // Vi opdaterer en chat der eksisterer i forvejen og derfor bruger vi documentreference ved chatid'et hvor vi indsætter det chatobjekt vii har lavet

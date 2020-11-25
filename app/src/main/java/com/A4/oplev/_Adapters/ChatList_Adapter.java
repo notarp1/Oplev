@@ -117,7 +117,7 @@ public class ChatList_Adapter extends ArrayAdapter<String> {
             int width = mContext.getResources().getDisplayMetrics().widthPixels;
             RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
             // Sætter nogle marginer alt efter bredden af skærmen
-            lp.setMargins(width/4, 0, width/50, 0);
+            lp.setMargins(width/4, 0, width/50, width/50);
             // Kun SDK 19 eller efter kan gøre dette her derfor checker vi om det er sandt
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
                 besked.setLayoutParams(new RelativeLayout.LayoutParams(lp));
@@ -133,7 +133,7 @@ public class ChatList_Adapter extends ArrayAdapter<String> {
             // Helt det samme gøres for hvis beskeden er sendt fra en selv bare med andre farver og en anden margine på textviewet
             int width = mContext.getResources().getDisplayMetrics().widthPixels;
             RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
-            lp.setMargins(width/50, 0, width/4, 0);
+            lp.setMargins(width/50, 0, width/4, width/50);
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
                 besked.setLayoutParams(new RelativeLayout.LayoutParams(lp));
                 if (!isPic) {
