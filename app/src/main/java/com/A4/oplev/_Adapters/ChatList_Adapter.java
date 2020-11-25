@@ -44,15 +44,13 @@ public class ChatList_Adapter extends ArrayAdapter<String> {
     private List<String> beskederList = new ArrayList<>();
     private ChatDTO dto;
     private String thisUser;
-    private int pictureCount;
 
-    public ChatList_Adapter(@NonNull Context context, @NonNull ArrayList<String> list, ChatDTO dto, String thisUser, int pictureCount) {
+    public ChatList_Adapter(@NonNull Context context, @NonNull ArrayList<String> list, ChatDTO dto, String thisUser) {
         super(context, 0 , list);
         this.mContext = context;
         this.beskederList = list;
         this.dto = dto;
         this.thisUser = thisUser;
-        this.pictureCount = pictureCount;
     }
 
     // Den her funktion vil lave vores listview for chatsne
@@ -60,6 +58,7 @@ public class ChatList_Adapter extends ArrayAdapter<String> {
     @NonNull
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+        System.out.println(position);
         View listItem = convertView;
         boolean isPic = false;
         if(listItem == null)
@@ -78,13 +77,9 @@ public class ChatList_Adapter extends ArrayAdapter<String> {
             ssb.append(" ");
 
             // Det her er en metode som skal hente et billede fra firestore storage og siden den nye måde at hente et billede på med URI så skal vi køre det asynkront med et callback
-            if (pictureCount > dto.getPictures().size() -1 ) {
-                pictureCount = dto.getPictures().size()-1;
-            }
-            uriToBitMap(dto.getPictures().get(pictureCount), new BitMapCallback() {
+            uriToBitMap(dto.getPictures().get(getPictureCount(position)), new BitMapCallback() {
                 @Override
                 public void onCallBack(Bitmap bitmap) {
-                    pictureCount++;
                     // Vi gør os sikre på at billedet er blevet læst ind ellers vil programmet crashe
                     if (bitmap != null) {
                         // Vi kreerer et drawable fra det bitmap vi lige har fået fra firestore
@@ -167,5 +162,15 @@ public class ChatList_Adapter extends ArrayAdapter<String> {
     // Interface til callback når man skal hente billeder
     private interface BitMapCallback{
         void onCallBack(Bitmap bitmap);
+    }
+
+    private int getPictureCount(int position){
+        int pics = 0;
+        for (int i = 0; i < position; i++) {
+            if (beskederList.get(i).equals("pictureBlaBlaBla!:")){
+                pics++;
+            }
+        }
+        return Math.max(pics-1,0);
     }
 }

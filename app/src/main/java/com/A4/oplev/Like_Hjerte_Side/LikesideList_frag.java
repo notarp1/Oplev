@@ -49,7 +49,6 @@ public class LikesideList_frag extends Fragment{
 
 
         if (userDTO.getChatId() != null) {
-
             for (int j = 0; j < userDTO.getChatId().size(); j++) {
                 chatDAO.readChat(new ChatDAO.FirestoreCallback() {
                     @Override
