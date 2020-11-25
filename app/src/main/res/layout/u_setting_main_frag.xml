@@ -10,42 +10,41 @@
         android:id="@+id/u_profile_name"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:layout_marginBottom="80dp"
+        android:layout_marginTop="16dp"
         android:gravity="center"
         android:text="Henrik, 22"
-        app:layout_constraintBottom_toTopOf="@+id/linearLayout3"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/profile_pic" />
 
     <ImageView
         android:id="@+id/profile_pic"
 
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="29dp"
+        android:layout_marginTop="24dp"
+
         android:adjustViewBounds="true"
-        android:maxWidth="200dp"
-        android:maxHeight="200dp"
-        android:scaleType="centerCrop"
-        app:layout_constraintBottom_toTopOf="@+id/u_profile_name"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.802"
         app:srcCompat="@drawable/question" />
 
     <LinearLayout
         android:id="@+id/linearLayout3"
         android:layout_width="match_parent"
         android:layout_height="200dp"
-        android:layout_marginBottom="72dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="10dp"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent">
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/u_profile_name"
+        app:layout_constraintVertical_bias="0.077">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"

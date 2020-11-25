@@ -65,7 +65,7 @@ public class Activity_Profile extends AppCompatActivity implements View.OnClickL
                     Picasso.get().load(currPics.get(currentPic+1))
                             .resize(width, height/2 + 200)
                             .centerCrop()
-                            .placeholder(R.drawable.question)
+                            .placeholder(R.drawable.load2)
                             .into(pb);
                     currentPic = currentPic + 1;
                     String text = currentPic+1 + "/" + maxPicPrint;
@@ -78,7 +78,7 @@ public class Activity_Profile extends AppCompatActivity implements View.OnClickL
                     Picasso.get().load(currPics.get(currentPic-1))
                             .resize(width, height/2 + 200)
                             .centerCrop()
-                            .placeholder(R.drawable.question)
+                            .placeholder(R.drawable.load2)
                             .into(pb);
 
                     String text = currentPic + "/" + maxPicPrint;
@@ -99,30 +99,39 @@ public class Activity_Profile extends AppCompatActivity implements View.OnClickL
         maxPic = 0;
         minPic = 0;
         currentPic = 0;
+        int flag = 0;
+        boolean noPic = true;
 
         int counter = 0;
         for(int i=0; i<6; i++){
             if(pictures.get(i) != null){
-                counter += 1;
+                if(flag == 0){
+                    Picasso.get().load(pictures.get(i))
+                            .resize(width, height/2 + 200)
+                            .centerCrop()
+                            .placeholder(R.drawable.load2)
+                            .error(R.drawable.question)
+                            .into(pb);
+                    flag = 1;
+                    noPic = false;
 
+                }
+                counter += 1;
                 currPics.add(pictures.get(i));
             }
         }
         maxPic = counter-1;
         maxPicPrint = maxPic +1;
+
         String text = currentPic+1 + "/" + maxPicPrint;
-        picNumber.setText(text);
+        if(noPic) picNumber.setText("1/1");
+        else picNumber.setText(text);
+
     }
 
     @Override
     public void onStart() {
         super.onStart();
-
-        Picasso.get().load(pictures.get(0))
-                .resize(width, height/2 + 200)
-                .centerCrop()
-                .placeholder(R.drawable.question)
-                .into(pb);
 
 
 

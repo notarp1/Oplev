@@ -145,6 +145,7 @@ public class U_Settings_Edit extends Fragment implements View.OnClickListener, V
         p2.setOnLongClickListener(this);
         p3.setOnLongClickListener(this);
         p4.setOnLongClickListener(this);
+        p5.setOnLongClickListener(this);
 
 
     }

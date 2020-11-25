@@ -2,6 +2,7 @@ package com.A4.oplev.UserSettings;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,6 +28,7 @@ public class U_Settings_Main extends Fragment implements View.OnClickListener {
     UserDTO user;
     ImageView back, profilepic;
     ArrayList<String> pictures;
+    int height, width;
 
 
     public View onCreateView(LayoutInflater i, ViewGroup container, Bundle savedInstanceState) {
@@ -57,6 +59,13 @@ public class U_Settings_Main extends Fragment implements View.OnClickListener {
         rediger.setOnClickListener(this);
         visProfil.setOnClickListener(this);
 
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        getActivity().getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        height = displayMetrics.heightPixels;
+        width = displayMetrics.widthPixels;
+
+        profilepic.setMaxHeight(height/4);
+        profilepic.setMaxWidth(width/2);
 
         return root;
 
@@ -72,7 +81,10 @@ public class U_Settings_Main extends Fragment implements View.OnClickListener {
 
             if(pictures.get(i) != null){
                 Picasso.get().load(pictures.get(i))
-                        .placeholder(R.drawable.question)
+                        .resize(width/2, height/4)
+                        .centerCrop()
+                        .placeholder(R.drawable.load2)
+                        .error(R.drawable.question)
                         .into(profilepic);
                 break;
             }
