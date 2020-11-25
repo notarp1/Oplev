@@ -63,7 +63,7 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <ListView
+    <ScrollView
         android:dividerHeight="5.0sp"
         android:id="@+id/chat_beskedList"
         android:layout_width="match_parent"
@@ -71,7 +71,14 @@
         android:layout_weight="1"
         android:listSelector="@android:color/transparent"
         android:divider="@null"
-        android:transcriptMode="alwaysScroll" />
+        android:transcriptMode="alwaysScroll" >
+
+        <LinearLayout
+            android:id="@+id/chat_besked_linearlayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" />
+    </ScrollView>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -103,7 +110,7 @@
                 android:layout_height="43dp"
                 android:hint="Indtast besked"
                 android:imeOptions="actionGo"
-                android:inputType="textMultiLine" />
+                android:inputType="text" />
 
         </com.google.android.material.textfield.TextInputLayout>
 

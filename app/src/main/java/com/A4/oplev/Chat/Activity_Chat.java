@@ -17,7 +17,9 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.annotation.Nullable;
@@ -43,7 +45,8 @@ import DTO.ChatDTO;
 public class Activity_Chat extends AppCompatActivity  implements View.OnClickListener {
     private ImageView settings, tilbage;
     private TextView navn;
-    private ListView beskeder;
+    private ScrollView beskeder;
+    private LinearLayout linearLayout;
     private Button sendBillede;
     private ArrayList<String> beskederStrings;
     private ArrayList<Bitmap> bitmaps = new ArrayList<>();
@@ -80,6 +83,7 @@ public class Activity_Chat extends AppCompatActivity  implements View.OnClickLis
         sendBillede = findViewById(R.id.chat_indsendBesked);
         beskeder = findViewById(R.id.chat_beskedList);
         inputTekst = findViewById(R.id.chat_inputBesked2);
+        linearLayout = findViewById(R.id.chat_besked_linearlayout);
 
 
         // For at kunne sende besked med enter på IME tastaturet så bruger vi den her funktion
@@ -107,7 +111,11 @@ public class Activity_Chat extends AppCompatActivity  implements View.OnClickLis
                                     setChatDTO(dto);
                                     // Selvlavet adapter der tager listen af beskeder, Chat-objektet og den nuværende brugers navn som input og laver listviewet over chatten
                                     ChatList_Adapter adapter = new ChatList_Adapter(ctx, beskederStrings, dto, person1);
-                                    beskeder.setAdapter(adapter);
+                                    linearLayout.removeAllViews();
+                                    for (int i = 0; i < adapter.getCount(); i++) {
+                                        View item = adapter.getView(i,null,null);
+                                        linearLayout.addView(item);
+                                    }
                                     // clear tekstboksen
                                     inputTekst.setText("");
                                 }
@@ -138,7 +146,11 @@ public class Activity_Chat extends AppCompatActivity  implements View.OnClickLis
 
                 // Opsætter listviewet med chatten der skal være der
                 ChatList_Adapter adapter = new ChatList_Adapter(ctx, beskederStrings, dto, person1);
-                beskeder.setAdapter(adapter);
+                linearLayout.removeAllViews();
+                for (int i = 0; i < adapter.getCount(); i++) {
+                    View item = adapter.getView(i,null,null);
+                    linearLayout.addView(item);
+                }
             }
         }, chatDocumentPath);
 
@@ -173,7 +185,11 @@ public class Activity_Chat extends AppCompatActivity  implements View.OnClickLis
                             }
 
                             ChatList_Adapter adapter = new ChatList_Adapter(ctx, beskederStrings, dto, person1);
-                            beskeder.setAdapter(adapter);
+                            linearLayout.removeAllViews();
+                            for (int i = 0; i < adapter.getCount(); i++) {
+                                View item = adapter.getView(i,null,null);
+                                linearLayout.addView(item);
+                            }
                         } else {
                             Log.d(TAG, "Current data: null");
                         }
@@ -271,7 +287,12 @@ public class Activity_Chat extends AppCompatActivity  implements View.OnClickLis
                             public void onCallback(ChatDTO dto) {
                                 if (dto.getChatId() != null){
                                     ChatList_Adapter adapter = new ChatList_Adapter(ctx, beskederStrings, dto, person1);
-                                    beskeder.setAdapter(adapter);
+                                    linearLayout.removeAllViews();
+                                    for (int i = 0; i < adapter.getCount(); i++) {
+                                        View item = adapter.getView(i,null,null);
+                                        linearLayout.addView(item);
+                                    }
+                                    // clear tekstboksen
                                     inputTekst.setText("");
                                 }
                             }
