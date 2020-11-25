@@ -11,10 +11,12 @@ import android.os.Build;
 import android.os.SystemClock;
 import android.text.SpannableStringBuilder;
 import android.text.style.ImageSpan;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -43,7 +45,6 @@ public class ChatList_Adapter extends ArrayAdapter<String> {
     private ChatDTO dto;
     private String thisUser;
     private int pictureCount;
-    private List<Bitmap> bitmapList = new ArrayList<>();
 
     public ChatList_Adapter(@NonNull Context context, @NonNull ArrayList<String> list, ChatDTO dto, String thisUser) {
         super(context, 0 , list);
@@ -52,7 +53,6 @@ public class ChatList_Adapter extends ArrayAdapter<String> {
         this.dto = dto;
         this.thisUser = thisUser;
         this.pictureCount = 0;
-        this.bitmapList = new ArrayList<>();
     }
 
     // Den her funktion vil lave vores listview for chatsne
@@ -85,28 +85,26 @@ public class ChatList_Adapter extends ArrayAdapter<String> {
                 @Override
                 public void onCallBack(Bitmap bitmap) {
                     pictureCount++;
-                    bitmapList.add(bitmap);
+                    // Vi gør os sikre på at billedet er blevet læst ind ellers vil programmet crashe
+                    if (bitmap != null) {
+                        // Vi kreerer et drawable fra det bitmap vi lige har fået fra firestore
+                        Drawable drawable = new BitmapDrawable(mContext.getResources(), bitmap);
+                        // Vi sætter dens dimensioner med denne funktion som nok skal ændres lidt
+                        drawable.setBounds(0, 0, mContext.getResources().getDisplayMetrics().widthPixels / 2, mContext.getResources().getDisplayMetrics().heightPixels / 2);
+                        // Vi laver et imagespan ud af det som kan placeres i vores spannable string
+                        ImageSpan span = new ImageSpan(drawable);
+                        ssb.setSpan(span, ssb.length() - 1, ssb.length(), 0);
+                        // Nu sætter vi vores billede ind i tekstfeltet
+                        besked.setText(ssb);
+                        // Sætter baggrunden til den default vi har inde i aktiviteten
+                        besked.setBackgroundColor(mContext.getResources().getColor(R.color.backgroundColor));
+                    } else {
+                        // Hvis bitmappet er tomt så bare send en fejlbesked
+                        Toast.makeText(mContext,"Error whilst loading picture", Toast.LENGTH_LONG).show();
+                    }
                 }
             });
-
-            // Vi gør os sikre på at billedet er blevet læst ind ellers vil programmet crashe
-            if (bitmapList.get(bitmapList.size()-1) != null) {
-                // Vi kreerer et drawable fra det bitmap vi lige har fået fra firestore
-                Drawable drawable = new BitmapDrawable(mContext.getResources(), bitmapList.get(bitmapList.size()-1));
-                // Vi sætter dens dimensioner med denne funktion som nok skal ændres lidt
-                drawable.setBounds(0, 0, mContext.getResources().getDisplayMetrics().widthPixels / 2, mContext.getResources().getDisplayMetrics().heightPixels / 2);
-                // Vi laver et imagespan ud af det som kan placeres i vores spannable string
-                ImageSpan span = new ImageSpan(drawable);
-                ssb.setSpan(span, ssb.length() - 1, ssb.length(), 0);
-                // Nu sætter vi vores billede ind i tekstfeltet
-                besked.setText(ssb);
-                // Sætter baggrunden til den default vi har inde i aktiviteten
-                besked.setBackgroundColor(mContext.getResources().getColor(R.color.backgroundColor));
-                isPic = true;
-            } else {
-                // Hvis bitmappet er tomt så bare send en fejlbesked
-                Toast.makeText(mContext,"Error whilst loading picture", Toast.LENGTH_LONG).show();
-            }
+            isPic = true;
         } else {
             // Hvis beskeden ikke er et billede så sætter vi bare teksten til det beskeden er
             besked.setText(currentBesked);
@@ -128,6 +126,7 @@ public class ChatList_Adapter extends ArrayAdapter<String> {
                     besked.setBackgroundColor(mContext.getResources().getColor(R.color.chatColorGrey));
                     besked.setTextColor(mContext.getResources().getColor(R.color.black));
                 }
+                else besked.setGravity(Gravity.RIGHT);
             }
         }
         else{
