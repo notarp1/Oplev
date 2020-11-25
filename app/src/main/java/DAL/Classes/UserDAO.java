@@ -44,6 +44,7 @@ public class UserDAO implements IUserDAO, CallbackUser {
 
                 DocumentSnapshot documentSnapshot = task.getResult();
                 if(documentSnapshot != null){
+                    System.out.println(documentSnapshot.getData());
                     UserDTO user = documentSnapshot.toObject(UserDTO.class);
                     callbackUser.onCallback(user);
                 }

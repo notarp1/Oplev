@@ -48,10 +48,6 @@ public class LikesideList_frag extends Fragment{
         ArrayList<Date> dates = new ArrayList<>();
 
 
-        ArrayList<String> temp = new ArrayList<>();
-        temp.add("60V6EddGhhZdY7pTGYRF");
-
-        userDTO.setChatId(temp);
         if (userDTO.getChatId() != null) {
             for (int j = 0; j < userDTO.getChatId().size(); j++) {
                 chatDAO.readChat(new ChatDAO.FirestoreCallback() {
