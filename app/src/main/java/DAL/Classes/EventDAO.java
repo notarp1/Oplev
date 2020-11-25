@@ -11,7 +11,7 @@ public class EventDAO implements IEventDAO {
 
     @Override
     public void createEvent(EventDTO event) {
-
+        // send new event to db
     }
 
     @Override

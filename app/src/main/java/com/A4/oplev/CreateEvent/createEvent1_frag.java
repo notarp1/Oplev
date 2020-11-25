@@ -109,10 +109,10 @@ public class createEvent1_frag extends Fragment implements View.OnClickListener{
                 //set strings
                 b.putString("title_in", title_in.getText().toString());
                 b.putString("desc_in", desc_in.getText().toString());
+                b.putString("price_in", price_in.getText().toString());
                 b.putString("date_in", date_in.getText().toString());
+                b.putString("time_in", time_in.getText().toString());
                 b.putString("city_in", city_in.getText().toString());
-                //set int (price)
-                //b.putInt("price_in", Integer.parseInt(price_in.getText().toString()));
 
                 //create fragment and add bundle to arguments
                 Fragment create2_frag = new createEvent2_frag();

@@ -13,6 +13,8 @@ import android.widget.TextView;
 
 import com.A4.oplev.R;
 
+import Controller.Controller;
+import DTO.EventDTO;
 import io.apptik.widget.MultiSlider;
 
 public class createEvent2_frag extends Fragment implements View.OnClickListener {
@@ -70,15 +72,23 @@ public class createEvent2_frag extends Fragment implements View.OnClickListener 
     public void onClick(View v) {
         if(v == done_btn){
             /*
-             * Create an event object and add it to program/database
+             * Parse values to controller which will create an event object and add it to program/database
              * get values from last frag using getArg as below:
              */
-            /*getArguments().getString("title_in");
-            getArguments().getString("desc_in");
-            getArguments().getString("date_in");
-            getArguments().getString("city_in");
-            getArguments().getInt("price_in");
-            */
+            Controller.getInstance().createEvent(
+                    getArguments().getString("title_in"),
+                    getArguments().getString("desc_in"),
+                    getArguments().getString("price_in"),
+                    getArguments().getString("date_in"),
+                    getArguments().getString("time_in"),
+                    getArguments().getString("city_in"),
+                    currMinAge,
+                    currMaxAge,
+                    maleSwitch.isChecked(),
+                    femaleSwitch.isChecked()
+                );
+
+
 
             //remove last frag from backstack
             //(shouldnt be able to change event settings when "done" is pressed)
