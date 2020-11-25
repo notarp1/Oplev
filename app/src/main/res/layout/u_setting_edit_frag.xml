@@ -87,6 +87,12 @@
             </TableLayout>
 
             <TextView
+                android:id="@+id/textView5"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="*Hold fingeren nede på et billede for at slette" />
+
+            <TextView
                 android:id="@+id/text_om"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

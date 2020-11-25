@@ -2,7 +2,6 @@ package com.A4.oplev.UserSettings;
 
 import android.Manifest;
 import android.content.Context;
-import android.content.ContextWrapper;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -10,7 +9,7 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,7 +22,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import com.A4.oplev.PicassoFunc;
 import com.A4.oplev.R;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -34,21 +32,20 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
 
-import java.io.File;
 import java.util.ArrayList;
 
-import Controller.Controller;
+import Controller.userController;
 
 import static android.app.Activity.RESULT_OK;
 
 
-public class U_Settings_Edit extends Fragment implements View.OnClickListener {
+public class U_Settings_Edit extends Fragment implements View.OnClickListener, View.OnLongClickListener {
 
     public EditText about, city, job, education;
     TextView textview;
     public ImageView accept, back, p0, p1, p2, p3, p4, p5;
 
-    Controller controller;
+    userController userController;
     Bitmap stockphotoBit;
 
     static public boolean[] picBoolean = new boolean[]{false, false, false, false, false, false};
@@ -78,10 +75,10 @@ public class U_Settings_Edit extends Fragment implements View.OnClickListener {
 
         mStorageRef = FirebaseStorage.getInstance().getReference();
 
-        controller = Controller.getInstance();
+        userController = userController.getInstance();
         mAuth = FirebaseAuth.getInstance();
         currentUser = mAuth.getCurrentUser();
-        pictures = controller.getUserPictures();
+        pictures = userController.getUserPictures();
 
         this.ctx = getContext();
         uris = new Uri[]{null, null, null, null, null, null};
@@ -106,7 +103,8 @@ public class U_Settings_Edit extends Fragment implements View.OnClickListener {
         education = root.findViewById(R.id.editText_edu);
 
         iniPictures(root);
-        controller.iniEditProfile(this);
+        userController.iniEditProfile(this);
+
 
 
         return root;
@@ -143,6 +141,15 @@ public class U_Settings_Edit extends Fragment implements View.OnClickListener {
         p3.setOnClickListener(this);
         p4.setOnClickListener(this);
         p5.setOnClickListener(this);
+
+        p0.setOnLongClickListener(this);
+        p1.setOnLongClickListener(this);
+        p2.setOnLongClickListener(this);
+        p3.setOnLongClickListener(this);
+        p4.setOnLongClickListener(this);
+        p5.setOnLongClickListener(this);
+
+
     }
 
 
@@ -172,50 +179,101 @@ public class U_Settings_Edit extends Fragment implements View.OnClickListener {
 
     }
 
+    @Override
+    public boolean onLongClick(View v) {
+        if (v==p0){
+            deletePicture(0);
+            return true;
+        } else if (v == p1) {
+            deletePicture(1);
+            return true;
+        } else if (v == p2) {
+            deletePicture(2);
+            return true;
+        } else if (v == p3) {
+            deletePicture(3);
+            return true;
+        } else if (v == p4) {
+            deletePicture(4);
+            return true;
+        } else if (v == p5) {
+            deletePicture(5);
+            return true;
+        }
+        return false;
+    }
+
+    private void deletePicture(int number) {
+        if(pictures.get(number) != null){
+            pictures.set(number, null);
+            updateUserAndGUI();
+            ImageView pic = getPictureNumber(number);
+            pic.setImageBitmap(stockphotoBit);
+        }
+    }
+
     private void onAccept() {
 
-        if(pictureCount > 0 )
-        for (int i = 0; i < 6; i++) {
-
-            if (uris[i] != null) {
-                indexPlace = i;
-
-                Uri file = uris[i];
-                picRef = mStorageRef.child("users/" + currentUser.getUid() + "/" + i);
-                picRef.putFile(file)
-                        .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                            @Override
-                            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                                // Get a URL to the uploaded content
-
-                                picRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                                    @Override
-                                    public void onSuccess(Uri uri) {
-                                        Uri downloadUrl = uri;
-                                        setPictures(indexPlace, downloadUrl);
-                                        updateUserAndGUI();
-                                    }
-                                });
-                            }
-                        })
-                        .addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception exception) {
-                                // Handle unsuccessful uploads
-                                // ...
-                            }
-                        });
+        for (Uri a : uris) {
+            if (a != null) {
+                pictureCount += 1;
 
             }
+        }
+        if(pictureCount > 0 )
+            for (int i = 0; i < 6; i++) {
+
+                System.out.println(uris[i]);
+                System.out.println(i);
+
+                if (uris[i] != null) {
+                    indexPlace = i;
+
+                    Uri file = uris[i];
+                    picRef = mStorageRef.child("users/" + currentUser.getUid() + "/" + i);
 
 
-        } else updateUserAndGUI();
+                    picRef.putFile(file)
+                            .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                                @Override
+                                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                                    // Get a URL to the uploaded content
+
+                                    picRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                        @Override
+                                        public void onSuccess(Uri uri) {
+                                            Uri downloadUrl = uri;
+
+                                            indexNumbers += 1;
+                                            setPictures(indexPlace, downloadUrl);
+
+                                            updateUserAndGUI();
+
+                                        }
+
+                                    });
+
+
+                                }
+                            })
+                            .addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception exception) {
+                                    // Handle unsuccessful uploads
+                                    // ...
+                                }
+                            });
+
+                }
+
+
+            } else updateUserAndGUI();
     }
 
 
     private void updateUserAndGUI() {
 
-        controller.updateUser(this, pictures);
+        userController.updateUser(this, pictures);
         Toast.makeText(getContext(), "Profil opdateret!", Toast.LENGTH_SHORT).show();
     }
 
@@ -313,9 +371,6 @@ public class U_Settings_Edit extends Fragment implements View.OnClickListener {
         }
         return  returnPic;
     }
-
-
-
 
 
 

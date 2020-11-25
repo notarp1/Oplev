@@ -44,7 +44,6 @@ public class ChatList_Adapter extends ArrayAdapter<String> {
     private List<String> beskederList = new ArrayList<>();
     private ChatDTO dto;
     private String thisUser;
-    private int pictureCount;
 
     public ChatList_Adapter(@NonNull Context context, @NonNull ArrayList<String> list, ChatDTO dto, String thisUser) {
         super(context, 0 , list);
@@ -52,7 +51,6 @@ public class ChatList_Adapter extends ArrayAdapter<String> {
         this.beskederList = list;
         this.dto = dto;
         this.thisUser = thisUser;
-        this.pictureCount = 0;
     }
 
     // Den her funktion vil lave vores listview for chatsne
@@ -60,6 +58,7 @@ public class ChatList_Adapter extends ArrayAdapter<String> {
     @NonNull
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+        System.out.println(position);
         View listItem = convertView;
         boolean isPic = false;
         if(listItem == null)
@@ -78,13 +77,9 @@ public class ChatList_Adapter extends ArrayAdapter<String> {
             ssb.append(" ");
 
             // Det her er en metode som skal hente et billede fra firestore storage og siden den nye måde at hente et billede på med URI så skal vi køre det asynkront med et callback
-            if (pictureCount > dto.getPictures().size() -1 ) {
-                pictureCount = dto.getPictures().size()-1;
-            }
-            uriToBitMap(dto.getPictures().get(pictureCount), new BitMapCallback() {
+            uriToBitMap(dto.getPictures().get(getPictureCount(position)), new BitMapCallback() {
                 @Override
                 public void onCallBack(Bitmap bitmap) {
-                    pictureCount++;
                     // Vi gør os sikre på at billedet er blevet læst ind ellers vil programmet crashe
                     if (bitmap != null) {
                         // Vi kreerer et drawable fra det bitmap vi lige har fået fra firestore
@@ -117,7 +112,7 @@ public class ChatList_Adapter extends ArrayAdapter<String> {
             int width = mContext.getResources().getDisplayMetrics().widthPixels;
             RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
             // Sætter nogle marginer alt efter bredden af skærmen
-            lp.setMargins(width/4, 0, width/50, 0);
+            lp.setMargins(width/4, 0, width/50, width/50);
             // Kun SDK 19 eller efter kan gøre dette her derfor checker vi om det er sandt
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
                 besked.setLayoutParams(new RelativeLayout.LayoutParams(lp));
@@ -133,7 +128,7 @@ public class ChatList_Adapter extends ArrayAdapter<String> {
             // Helt det samme gøres for hvis beskeden er sendt fra en selv bare med andre farver og en anden margine på textviewet
             int width = mContext.getResources().getDisplayMetrics().widthPixels;
             RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
-            lp.setMargins(width/50, 0, width/4, 0);
+            lp.setMargins(width/50, 0, width/4, width/50);
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
                 besked.setLayoutParams(new RelativeLayout.LayoutParams(lp));
                 if (!isPic) {
@@ -167,5 +162,15 @@ public class ChatList_Adapter extends ArrayAdapter<String> {
     // Interface til callback når man skal hente billeder
     private interface BitMapCallback{
         void onCallBack(Bitmap bitmap);
+    }
+
+    private int getPictureCount(int position){
+        int pics = 0;
+        for (int i = 0; i < position; i++) {
+            if (beskederList.get(i).equals("pictureBlaBlaBla!:")){
+                pics++;
+            }
+        }
+        return Math.max(pics-1,0);
     }
 }

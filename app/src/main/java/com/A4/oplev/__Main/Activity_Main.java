@@ -29,7 +29,7 @@ import swipeable.com.layoutmanager.SwipeableLayoutManager;
 import swipeable.com.layoutmanager.SwipeableTouchHelperCallback;
 import swipeable.com.layoutmanager.touchelper.ItemTouchHelper;
 
-public class Activity_Main extends AppCompatActivity implements View.OnClickListener {
+public class Activity_Main extends AppCompatActivity implements View.OnClickListener{
 
     ImageView options, match, user;
     Intent intent;
@@ -48,7 +48,7 @@ public class Activity_Main extends AppCompatActivity implements View.OnClickList
         //skal optimeres og ændres til at vi skal hente data ude fra.
         List<EventDTO> eventList = new ArrayList<>();
         EventDTO dto1,dto2, dto3;
-        dto1 = new EventDTO().setOwner(12).setName("Stjæl en grusgrav");
+        dto1 = new EventDTO().setOwner(12).setName("Spis is i Nyhavn");
         dto2 = new EventDTO().setOwner(13).setName("Svøm i tsørvejr");
         dto3 = new EventDTO().setOwner(14).setName("Slå en mink ned");
         eventList.add(dto1);

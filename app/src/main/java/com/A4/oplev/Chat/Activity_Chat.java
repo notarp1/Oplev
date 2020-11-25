@@ -18,7 +18,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -61,9 +60,6 @@ public class Activity_Chat extends AppCompatActivity  implements View.OnClickLis
 
     public void onCreate(Bundle saveInstanceState) {
         // De her parametre er predefined lige nu men skal blive genereret efter brugerens valg senere hen
-        chatDocumentPath = "60V6EddGhhZdY7pTGYRF";
-        person1 = "person1";
-        person2 = "person2";
         pictureMaker = PictureMaker.getInstance();
 
 
@@ -74,12 +70,16 @@ public class Activity_Chat extends AppCompatActivity  implements View.OnClickLis
 
         // her får vi intentet med navnet på den man skriver med
         Intent intent = getIntent();
+        chatDocumentPath = intent.getStringExtra("chatId");
+        person1 = intent.getStringExtra("currentUser");
+        person2 = intent.getStringExtra("otherUser");
+
 
         // finder elementerne i layoutet
         settings = findViewById(R.id.chat_settings);
         tilbage = findViewById(R.id.chat_topbar_arrow);
         navn = findViewById(R.id.chat_topbar_text);
-        navn.setText(intent.getStringExtra("navn"));
+        navn.setText(person2);
         sendBillede = findViewById(R.id.chat_indsendBesked);
         beskeder = findViewById(R.id.chat_beskedList);
         inputTekst = findViewById(R.id.chat_inputBesked2);
@@ -112,8 +112,8 @@ public class Activity_Chat extends AppCompatActivity  implements View.OnClickLis
                                     // Selvlavet adapter der tager listen af beskeder, Chat-objektet og den nuværende brugers navn som input og laver listviewet over chatten
                                     ChatList_Adapter adapter = new ChatList_Adapter(ctx, beskederStrings, dto, person1);
                                     //linearLayout.removeAllViews();
-                                    for (int i = adapter.getCount()-1; i < adapter.getCount(); i++) {
-                                        View item = adapter.getView(adapter.getCount()-1,null,null);
+                                    for (int i = 0; i < 1; i++) {
+                                        View item = adapter.getView(adapter.getCount()-2,null,null);
                                         linearLayout.addView(item);
                                     }
                                     // clear tekstboksen
@@ -186,10 +186,12 @@ public class Activity_Chat extends AppCompatActivity  implements View.OnClickLis
 
                             ChatList_Adapter adapter = new ChatList_Adapter(ctx, beskederStrings, dto, person1);
                             //linearLayout.removeAllViews();
-                            for (int i = adapter.getCount()-1; i < adapter.getCount(); i++) {
-                                if (dto.getSender().get(i).equals(person2)) {
-                                    View item = adapter.getView(adapter.getCount() - 1, null, null);
-                                    linearLayout.addView(item);
+                            for (int i = 0; i < 1; i++) {
+                                if (dto.getSender() != null) {
+                                    if (dto.getSender().get(i).equals(person2)) {
+                                        View item = adapter.getView(adapter.getCount() - 2, null, null);
+                                        linearLayout.addView(item);
+                                    }
                                 }
                             }
                         } else {
@@ -288,10 +290,11 @@ public class Activity_Chat extends AppCompatActivity  implements View.OnClickLis
                             @Override
                             public void onCallback(ChatDTO dto) {
                                 if (dto.getChatId() != null){
+                                    beskederStrings.add(dto.getMessages().get(dto.getMessages().size()-1));
                                     ChatList_Adapter adapter = new ChatList_Adapter(ctx, beskederStrings, dto, person1);
                                     //linearLayout.removeAllViews();
-                                    for (int i = adapter.getCount()-1; i < adapter.getCount(); i++) {
-                                        View item = adapter.getView(adapter.getCount()-1,null,null);
+                                    for (int i = 0; i < 1; i++) {
+                                        View item = adapter.getView(adapter.getCount()-2,null,null);
                                         linearLayout.addView(item);
                                     }
                                     // clear tekstboksen

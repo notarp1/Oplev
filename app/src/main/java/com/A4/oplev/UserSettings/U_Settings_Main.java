@@ -1,9 +1,8 @@
 package com.A4.oplev.UserSettings;
 
-import android.content.Context;
-import android.content.ContextWrapper;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,20 +15,20 @@ import com.A4.oplev.Activity_Profile;
 import com.A4.oplev.R;
 import com.squareup.picasso.Picasso;
 
-import java.io.File;
 import java.util.ArrayList;
 
-import Controller.Controller;
+import Controller.userController;
 import DTO.UserDTO;
 
 public class U_Settings_Main extends Fragment implements View.OnClickListener {
 
     View visProfil, rediger, indstillinger;
     public TextView about;
-    Controller controller;
+    userController userController;
     UserDTO user;
-    ImageView back, profilepic;
+    ImageView back, profilepic, accept;
     ArrayList<String> pictures;
+    int height, width;
 
 
     public View onCreateView(LayoutInflater i, ViewGroup container, Bundle savedInstanceState) {
@@ -39,9 +38,12 @@ public class U_Settings_Main extends Fragment implements View.OnClickListener {
         TextView textview = (TextView)getActivity().findViewById(R.id.topbar_text);
         textview.setText("Profil");
 
+        accept = (ImageView) getActivity().findViewById(R.id.imageView_checkmark);
+        accept.setVisibility(View.INVISIBLE);
 
-        controller =  Controller.getInstance();
-        pictures = controller.getUserPictures();
+
+        userController =  userController.getInstance();
+        pictures = userController.getUserPictures();
 
         back = (ImageView) getActivity().findViewById(R.id.topbar_arrow);
         back.setOnClickListener(this);
@@ -53,13 +55,20 @@ public class U_Settings_Main extends Fragment implements View.OnClickListener {
         about = root.findViewById(R.id.u_profile_name);
         profilepic = root.findViewById(R.id.profile_pic);
 
-        controller.iniUserMainSettings(this);
+        userController.iniUserMainSettings(this);
 
 
         indstillinger.setOnClickListener(this);
         rediger.setOnClickListener(this);
         visProfil.setOnClickListener(this);
 
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        getActivity().getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        height = displayMetrics.heightPixels;
+        width = displayMetrics.widthPixels;
+
+        profilepic.setMaxHeight(height/4);
+        profilepic.setMaxWidth(width/2);
 
         return root;
 
@@ -70,9 +79,21 @@ public class U_Settings_Main extends Fragment implements View.OnClickListener {
     public void onStart() {
         super.onStart();
 
-        Picasso.get().load(pictures.get(0))
-                    .placeholder(R.drawable.question)
-                    .into(profilepic);
+        int i = 0;
+        while (i<6){
+
+            if(pictures.get(i) != null){
+                Picasso.get().load(pictures.get(i))
+                        .resize(width/2, height/4)
+                        .centerCrop()
+                        .placeholder(R.drawable.load2)
+                        .error(R.drawable.question)
+                        .into(profilepic);
+                break;
+            }
+            i++;
+        }
+
 
 
 
