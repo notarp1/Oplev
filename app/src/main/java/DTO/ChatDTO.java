@@ -7,7 +7,7 @@ import java.util.Date;
 
 public class ChatDTO {
 
-    private String chatId;
+    private String chatId, header, user1, user2;
     private ArrayList<Date> dates;
     private ArrayList<String> messages, sender, receiver;
     private ArrayList<Uri> pictures;
@@ -17,13 +17,16 @@ public class ChatDTO {
 
     }
 
-    public ChatDTO(ArrayList<String> sender, ArrayList<String> messages , String chatId, ArrayList<Date> dates, ArrayList<String> receiver, ArrayList<Uri> pictures) {
+    public ChatDTO(ArrayList<String> sender, ArrayList<String> messages , String chatId, ArrayList<Date> dates, ArrayList<String> receiver, ArrayList<Uri> pictures, String header, String user1, String user2) {
         this.chatId = chatId;
         this.dates = dates;
         this.messages = messages;
         this.sender = sender;
         this.receiver = receiver;
         this.pictures = pictures;
+        this.header = header;
+        this.user1 = user1;
+        this.user2 = user2;
     }
 
     public String getChatId() {
@@ -82,6 +85,30 @@ public class ChatDTO {
 
     public ArrayList<Uri> getPictures(){
         return pictures;
+    }
+
+    public String getHeader() {
+        return header;
+    }
+
+    public void setHeader(String header) {
+        this.header = header;
+    }
+
+    public String getUser1() {
+        return user1;
+    }
+
+    public void setUser1(String user1) {
+        this.user1 = user1;
+    }
+
+    public String getUser2() {
+        return user2;
+    }
+
+    public void setUser2(String user2) {
+        this.user2 = user2;
     }
 
     @Override
