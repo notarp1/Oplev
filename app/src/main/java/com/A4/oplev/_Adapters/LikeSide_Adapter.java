@@ -41,6 +41,7 @@ public class LikeSide_Adapter extends ArrayAdapter<String> {
         // Vi får nogle værdier som vi skal bruge til at sætte ind i layoutet
         String currentName = nameList.get(position);
         String currentDate;
+        System.out.println("BLABLA" + isInitialized.toString());
         if (isInitialized.get(position).equals("false")) currentDate = "";
         else currentDate = dateList.get(position).toString().substring(0,3);
         String currentLastMessage;
