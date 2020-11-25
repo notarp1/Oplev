@@ -6,7 +6,7 @@ import java.util.Date;
 public class EventDTO {
 
     private int owner, eventId, price, participant, minAge, maxAge;
-    private String name, city, description, headline;
+    private String title, city, description, headline;
     private Date date;
     private boolean maleOn, femaleOn;
     private ArrayList<String> pictures;
@@ -34,12 +34,12 @@ public class EventDTO {
         return this;
     }
 
-    public String getName() {
-        return name;
+    public String getTitle() {
+        return title;
     }
 
-    public EventDTO setName(String name) {
-        this.name = name;
+    public EventDTO setTitle(String title) {
+        this.title = title;
         return this;
     }
 

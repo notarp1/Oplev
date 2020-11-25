@@ -137,11 +137,11 @@ public class userController {
         EventDTO event = new EventDTO();
 
         /*
-        todo: set owner of the event. is it string?
+        TODO: set owner of the event. is it string? (also pics/applicants/participants arent set)
         event.setOwner(getCurrUser().getUserId());*/
 
         //set some values of DTO
-        event.setName(name);
+        event.setTitle(name);
         event.setDescription(desc);
         event.setPrice(Integer.parseInt(price));
 
@@ -170,6 +170,7 @@ public class userController {
         System.out.println(day + "/" + month + "/" + year + "\n"
                 +"date:" + event.getDate());*/
 
+        // send event through DAO to database
         EventDAO eventDAO = new EventDAO();
         eventDAO.createEvent(event);
     }
