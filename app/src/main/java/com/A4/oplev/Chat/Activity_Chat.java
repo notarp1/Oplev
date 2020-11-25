@@ -110,10 +110,10 @@ public class Activity_Chat extends AppCompatActivity  implements View.OnClickLis
                                     // Sætter klassens objekt til at være det nye (kan åbenbart ikke gøres inde fra funktionen)
                                     setChatDTO(dto);
                                     // Selvlavet adapter der tager listen af beskeder, Chat-objektet og den nuværende brugers navn som input og laver listviewet over chatten
-                                    ChatList_Adapter adapter = new ChatList_Adapter(ctx, beskederStrings, dto, person1, getPictureCount());
+                                    ChatList_Adapter adapter = new ChatList_Adapter(ctx, beskederStrings, dto, person1);
                                     //linearLayout.removeAllViews();
-                                    for (int i = adapter.getCount()-1; i < adapter.getCount(); i++) {
-                                        View item = adapter.getView(adapter.getCount()-1,null,null);
+                                    for (int i = 0; i < 1; i++) {
+                                        View item = adapter.getView(adapter.getCount()-2,null,null);
                                         linearLayout.addView(item);
                                     }
                                     // clear tekstboksen
@@ -145,7 +145,7 @@ public class Activity_Chat extends AppCompatActivity  implements View.OnClickLis
                 }
 
                 // Opsætter listviewet med chatten der skal være der
-                ChatList_Adapter adapter = new ChatList_Adapter(ctx, beskederStrings, dto, person1, getPictureCount());
+                ChatList_Adapter adapter = new ChatList_Adapter(ctx, beskederStrings, dto, person1);
                 linearLayout.removeAllViews();
                 for (int i = 0; i < adapter.getCount(); i++) {
                     View item = adapter.getView(i,null,null);
@@ -184,12 +184,12 @@ public class Activity_Chat extends AppCompatActivity  implements View.OnClickLis
                                 }
                             }
 
-                            ChatList_Adapter adapter = new ChatList_Adapter(ctx, beskederStrings, dto, person1, getPictureCount());
+                            ChatList_Adapter adapter = new ChatList_Adapter(ctx, beskederStrings, dto, person1);
                             //linearLayout.removeAllViews();
-                            for (int i = adapter.getCount()-1; i < adapter.getCount(); i++) {
+                            for (int i = 0; i < 1; i++) {
                                 if (dto.getSender() != null) {
                                     if (dto.getSender().get(i).equals(person2)) {
-                                        View item = adapter.getView(adapter.getCount() - 1, null, null);
+                                        View item = adapter.getView(adapter.getCount() - 2, null, null);
                                         linearLayout.addView(item);
                                     }
                                 }
@@ -290,10 +290,11 @@ public class Activity_Chat extends AppCompatActivity  implements View.OnClickLis
                             @Override
                             public void onCallback(ChatDTO dto) {
                                 if (dto.getChatId() != null){
-                                    ChatList_Adapter adapter = new ChatList_Adapter(ctx, beskederStrings, dto, person1, getPictureCount());
+                                    beskederStrings.add(dto.getMessages().get(dto.getMessages().size()-1));
+                                    ChatList_Adapter adapter = new ChatList_Adapter(ctx, beskederStrings, dto, person1);
                                     //linearLayout.removeAllViews();
-                                    for (int i = adapter.getCount()-1; i < adapter.getCount(); i++) {
-                                        View item = adapter.getView(adapter.getCount()-1,null,null);
+                                    for (int i = 0; i < 1; i++) {
+                                        View item = adapter.getView(adapter.getCount()-2,null,null);
                                         linearLayout.addView(item);
                                     }
                                     // clear tekstboksen
@@ -310,15 +311,5 @@ public class Activity_Chat extends AppCompatActivity  implements View.OnClickLis
         }else {
             Toast.makeText(Activity_Chat.this, "You haven't picked Image",Toast.LENGTH_LONG).show();
         }
-    }
-
-    private int getPictureCount(){
-        int pics = 0;
-        for (int i = 0; i < beskederStrings.size(); i++) {
-            if (beskederStrings.get(i).equals("pictureBlaBlaBla!:")){
-                pics++;
-            }
-        }
-        return pics;
     }
 }
