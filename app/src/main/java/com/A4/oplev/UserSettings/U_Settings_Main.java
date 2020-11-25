@@ -67,9 +67,18 @@ public class U_Settings_Main extends Fragment implements View.OnClickListener {
     public void onStart() {
         super.onStart();
 
-        Picasso.get().load(pictures.get(0))
-                    .placeholder(R.drawable.question)
-                    .into(profilepic);
+        int i = 0;
+        while (i<6){
+
+            if(pictures.get(i) != null){
+                Picasso.get().load(pictures.get(i))
+                        .placeholder(R.drawable.question)
+                        .into(profilepic);
+                break;
+            }
+            i++;
+        }
+
 
 
 
