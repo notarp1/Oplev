@@ -90,12 +90,14 @@ public class UserDAO implements IUserDAO, CallbackUser {
 
         ObjectMapper oMapper = new ObjectMapper();
         Map<String, Object> userObject = oMapper.convertValue(user, Map.class);
+        System.out.println(user.getChatId().get(0));
 
         db.collection("users").document(user.getUserId())
                 .set(userObject)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
+
                         Log.d(TAG, "DocumentSnapshot successfully written!");
                     }
                 })
