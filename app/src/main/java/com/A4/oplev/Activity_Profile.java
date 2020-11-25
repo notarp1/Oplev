@@ -61,8 +61,6 @@ public class Activity_Profile extends AppCompatActivity implements View.OnClickL
             @SuppressLint("ResourceAsColor")
             @Override
             public void onSwipeLeft() {
-                System.out.println(maxPic);
-                System.out.println(currentPic);
                 if(currentPic != maxPic){
                     Picasso.get().load(currPics.get(currentPic+1))
                             .resize(width, height/2 + 200)
@@ -82,9 +80,10 @@ public class Activity_Profile extends AppCompatActivity implements View.OnClickL
                             .centerCrop()
                             .placeholder(R.drawable.question)
                             .into(pb);
-                    currentPic = currentPic - 1;
+
                     String text = currentPic + "/" + maxPicPrint;
                     picNumber.setText(text);
+                    currentPic = currentPic - 1;
                 }
 
             }
