@@ -111,9 +111,9 @@ public class Activity_Chat extends AppCompatActivity  implements View.OnClickLis
                                     setChatDTO(dto);
                                     // Selvlavet adapter der tager listen af beskeder, Chat-objektet og den nuværende brugers navn som input og laver listviewet over chatten
                                     ChatList_Adapter adapter = new ChatList_Adapter(ctx, beskederStrings, dto, person1);
-                                    linearLayout.removeAllViews();
-                                    for (int i = 0; i < adapter.getCount(); i++) {
-                                        View item = adapter.getView(i,null,null);
+                                    //linearLayout.removeAllViews();
+                                    for (int i = adapter.getCount()-1; i < adapter.getCount(); i++) {
+                                        View item = adapter.getView(adapter.getCount()-1,null,null);
                                         linearLayout.addView(item);
                                     }
                                     // clear tekstboksen
@@ -185,10 +185,12 @@ public class Activity_Chat extends AppCompatActivity  implements View.OnClickLis
                             }
 
                             ChatList_Adapter adapter = new ChatList_Adapter(ctx, beskederStrings, dto, person1);
-                            linearLayout.removeAllViews();
-                            for (int i = 0; i < adapter.getCount(); i++) {
-                                View item = adapter.getView(i,null,null);
-                                linearLayout.addView(item);
+                            //linearLayout.removeAllViews();
+                            for (int i = adapter.getCount()-1; i < adapter.getCount(); i++) {
+                                if (dto.getSender().get(i).equals(person2)) {
+                                    View item = adapter.getView(adapter.getCount() - 1, null, null);
+                                    linearLayout.addView(item);
+                                }
                             }
                         } else {
                             Log.d(TAG, "Current data: null");
@@ -287,9 +289,9 @@ public class Activity_Chat extends AppCompatActivity  implements View.OnClickLis
                             public void onCallback(ChatDTO dto) {
                                 if (dto.getChatId() != null){
                                     ChatList_Adapter adapter = new ChatList_Adapter(ctx, beskederStrings, dto, person1);
-                                    linearLayout.removeAllViews();
-                                    for (int i = 0; i < adapter.getCount(); i++) {
-                                        View item = adapter.getView(i,null,null);
+                                    //linearLayout.removeAllViews();
+                                    for (int i = adapter.getCount()-1; i < adapter.getCount(); i++) {
+                                        View item = adapter.getView(adapter.getCount()-1,null,null);
                                         linearLayout.addView(item);
                                     }
                                     // clear tekstboksen
