@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import Controller.eventController;
 
 public class Activity_Event extends AppCompatActivity implements View.OnClickListener {
-    public TextView eventName, ecity, edate, eprice, eabout, eUname, eUabout, picNumber;
+    public TextView eventName, eCity, eDate, ePrice, eAbout, eUname, eUabout, picNumber;
     ImageView eventPic;
     eventController eventController;
     ArrayList<String> pictures, currPics;
@@ -33,10 +33,10 @@ public class Activity_Event extends AppCompatActivity implements View.OnClickLis
         setContentView(R.layout.activity_event);
 
         eventName = findViewById(R.id.text_event_information);
-        ecity = findViewById(R.id.text_e_city);
-        edate = findViewById(R.id.text_date);
-        eprice = findViewById(R.id.text_price);
-        eabout = findViewById(R.id.text_e_about);
+        eCity = findViewById(R.id.text_e_city);
+        eDate = findViewById(R.id.text_date);
+        ePrice = findViewById(R.id.text_price);
+        eAbout = findViewById(R.id.text_e_about);
         eUname = findViewById(R.id.text_e_u_name);
         eUabout = findViewById(R.id.text_u_about);
         picNumber = findViewById(R.id.cur_picEvent);

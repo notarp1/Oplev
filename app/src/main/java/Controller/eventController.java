@@ -77,35 +77,28 @@ public class eventController {
 
     public ArrayList<String> getEventPictures(){
 
-
+        return ePictures;
     }
 
     public void iniEvents(Activity_Event ctx){
 
-        String eventText = eventDTO.get
-        String cityText = "\uD83D\uDCCD " + user.getCity();
-        String descText = user.getDescription();
-        String aboutNameText = "Om "+ user.getfName();
-        String eduText = "\uD83C\uDF93 " + user.getEducation();
-        String jobText = "\uD83D\uDCBC " + user.getJob();
+       String eventNameString = "";
+       String eCityString = "";
+       String eDateString = "";
+       String ePriceString = "";
+       String eAboutString = "";
+       String eUnameString = "";
+       String eUaboutString = "";
 
-        ctx.eventName.setText();
-        ctx.city.setText(cityText);
-        ctx.pDesc.setText(descText);
-        ctx.aboutName.setText(aboutNameText);
-        ctx.edu.setText(eduText);
-        ctx.job.setText(jobText);
-        ctx.edu.setText(eduText);
-        ctx.job.setText(jobText);
-
-        if(user.getEducation() == null || user.getEducation().equals("")){
-            eduText = "\uD83C\uDF93 " + "Ikke angivet";
+        ctx.eventName.setText(eventNameString);
+        ctx.eCity.setText(eCityString);
+        ctx.eDate.setText(eDateString);
+        ctx.ePrice.setText(ePriceString);
+        //EventDescription
+        ctx.eAbout.setText(eAboutString);
+        ctx.eUname.setText(eUnameString);
+        ctx.eUabout.setText(eUaboutString);
 
 
-        }
-        if(user.getJob() == null || user.getJob().equals("")){
-            jobText = "\uD83D\uDCBC " + "Ikke angivet";
-
-        }
     }
 }
