@@ -21,7 +21,7 @@ public class Activity_Profile extends AppCompatActivity implements View.OnClickL
     ImageView pb;
     UserController userController;
     ArrayList<String> pictures, currPics;
-
+    boolean noPic;
     int height, width, currentPic, maxPic, minPic, maxPicPrint;
 
 
@@ -55,39 +55,42 @@ public class Activity_Profile extends AppCompatActivity implements View.OnClickL
         getPictures();
 
 
-        pb.setOnTouchListener(new OnSwipeTouchListener(getApplicationContext()){
-            @SuppressLint("ResourceAsColor")
-            @Override
-            public void onSwipeLeft() {
-                if(currentPic != maxPic){
+        if(!noPic) {
+            pb.setOnTouchListener(new OnSwipeTouchListener(getApplicationContext()) {
+                @SuppressLint("ResourceAsColor")
+                @Override
+                public void onSwipeLeft() {
+                    if (currentPic != maxPic) {
 
 
-                    Picasso.get().load(currPics.get(currentPic+1))
-                            .resize(width, height/2 + 200)
-                            .centerCrop()
-                            .placeholder(R.drawable.load2)
-                            .into(pb);
-                    currentPic = currentPic + 1;
-                    String text = currentPic+1 + "/" + maxPicPrint;
-                    picNumber.setText(text);
-                }
-            }
-            @Override
-            public void onSwipeRight(){
-                if(currentPic != minPic){
-                    Picasso.get().load(currPics.get(currentPic-1))
-                            .resize(width, height/2 + 200)
-                            .centerCrop()
-                            .placeholder(R.drawable.load2)
-                            .into(pb);
-
-                    String text = currentPic + "/" + maxPicPrint;
-                    picNumber.setText(text);
-                    currentPic = currentPic - 1;
+                        Picasso.get().load(currPics.get(currentPic + 1))
+                                .resize(width, height / 2 + 200)
+                                .centerCrop()
+                                .placeholder(R.drawable.load2)
+                                .into(pb);
+                        currentPic = currentPic + 1;
+                        String text = currentPic + 1 + "/" + maxPicPrint;
+                        picNumber.setText(text);
+                    }
                 }
 
-            }
-        });
+                @Override
+                public void onSwipeRight() {
+                    if (currentPic != minPic) {
+                        Picasso.get().load(currPics.get(currentPic - 1))
+                                .resize(width, height / 2 + 200)
+                                .centerCrop()
+                                .placeholder(R.drawable.load2)
+                                .into(pb);
+
+                        String text = currentPic + "/" + maxPicPrint;
+                        picNumber.setText(text);
+                        currentPic = currentPic - 1;
+                    }
+
+                }
+            });
+        }
 
         userController.iniProfile(this);
 
@@ -100,7 +103,7 @@ public class Activity_Profile extends AppCompatActivity implements View.OnClickL
         minPic = 0;
         currentPic = 0;
         int flag = 0;
-        boolean noPic = true;
+        noPic = true;
 
         int counter = 0;
         for(int i=0; i<6; i++){
