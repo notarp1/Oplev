@@ -35,13 +35,6 @@ public class EventDAO implements IEventDAO {
 
     public EventDAO(){this.db = FirebaseFirestore.getInstance();}
 
-    FirebaseFirestore db;
-    private final String TAG = "eventLog";
-
-    public EventDAO(){
-        this.db = FirebaseFirestore.getInstance();
-    }
-
     @Override
     public void getEvent(CallbackEvent callbackEvent, String eventId) {
 

@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.A4.oplev.PicassoFunc;
 import com.A4.oplev.R;
+import com.google.firebase.storage.internal.Sleeper;
 import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
@@ -29,6 +30,7 @@ import java.util.Date;
 import java.util.List;
 
 import DAL.Classes.EventDAO;
+import DAL.Interfaces.CallbackEvent;
 import DAL.Interfaces.IEventDAO;
 import DTO.EventDTO;
 
@@ -39,20 +41,16 @@ public class Event_Adapter extends RecyclerView.Adapter<Event_Adapter.ViewHolder
     int offset = 0;
     IEventDAO dataA;
 
-    public Event_Adapter(List<Integer> scoreListId) {
-        this.eventListId = scoreListId;
+
+
+
+
+    public Event_Adapter(List<EventDTO> scoreListId) {
+        this.loadedEvent = scoreListId;
         this.dataA = new EventDAO();
         this.loadedEvent = new ArrayList<>();
         //loadedEvent.add(dataA.getEvent(eventListId.get(offset)));
        // loadedEvent.add(dataA.getEvent(eventListId.get(offset + 1)));
-
-        dataA.getEvent(new CallbackEvent() {
-            @Override
-            public void onCallback(EventDTO event) {
-                loadedEvent.add(event);
-                Log.d("eventDTO", "onCallback: " + event.getDescription());
-            }
-        }, "wDMy7zLzekflaGZGIRrG");
 
     }
 
