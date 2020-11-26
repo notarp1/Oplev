@@ -33,7 +33,6 @@ public class UserDAO implements IUserDAO, CallbackUser {
     }
 
 
-
     @Override
     public void getUser(CallbackUser callbackUser, String userId) {
         System.out.println("userId = " + userId);
@@ -48,8 +47,6 @@ public class UserDAO implements IUserDAO, CallbackUser {
                     UserDTO user = documentSnapshot.toObject(UserDTO.class);
                     callbackUser.onCallback(user);
                 }
-
-
             }
         });
     }
