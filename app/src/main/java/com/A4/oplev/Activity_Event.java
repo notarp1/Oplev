@@ -13,12 +13,12 @@ import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
-import Controller.eventController;
+import Controller.EventController;
 
 public class Activity_Event extends AppCompatActivity implements View.OnClickListener {
     public TextView eventName, eCity, eDate, ePrice, eAbout, eUname, eUabout, picNumber;
     ImageView eventPic;
-    eventController eventController;
+    EventController eventController;
     ArrayList<String> pictures, currPics;
 
     int height, width, currentPic, maxPic, minPic, maxPicPrint;

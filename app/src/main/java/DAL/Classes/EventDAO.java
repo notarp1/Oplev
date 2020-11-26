@@ -12,14 +12,17 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.HashMap;
 import java.util.Map;
 
+import Controller.UserController;
 import DAL.Interfaces.IEventDAO;
 import DTO.EventDTO;
 
 public class EventDAO implements IEventDAO {
     FirebaseFirestore db;
     private final String TAG = "eventLog";
+    private UserController userController;
 
     public EventDAO(){
+
         this.db = FirebaseFirestore.getInstance();
     }
 
@@ -30,6 +33,7 @@ public class EventDAO implements IEventDAO {
 
     @Override
     public void createEvent(EventDTO event) {
+        userController = UserController.getInstance();
         // send new event to db
         Map<String, Object> eventObject = new HashMap<>();
 
@@ -58,6 +62,7 @@ public class EventDAO implements IEventDAO {
                     @Override
                     public void onSuccess(DocumentReference documentReference) {
                         Log.d(TAG, "DocumentSnapshot written with ID: " + documentReference.getId());
+                        userController.updateUserEvents(documentReference.getId());
                         eventObject.put("eventId", documentReference.getId());
                         //overwrite database document with new ownerId.
                         db.collection("events").document(documentReference.getId())

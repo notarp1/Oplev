@@ -1,13 +1,11 @@
 package Controller;
 
-import com.A4.oplev.Activity_Event;
 import com.A4.oplev.Login.Activity_CreateUser;
 import com.A4.oplev.Activity_Profile;
 import com.A4.oplev.UserSettings.U_Settings_Edit;
 import com.A4.oplev.UserSettings.U_Settings_Main;
 
 import java.util.ArrayList;
-import java.util.Date;
 
 import DAL.Classes.ChatDAO;
 import DAL.Classes.EventDAO;
@@ -15,17 +13,16 @@ import DAL.Classes.UserDAO;
 import DAL.Interfaces.CallbackUser;
 import DTO.UserDTO;
 
-import DTO.EventDTO;
-
-public class userController {
-    private static userController instance = null;
+public class UserController {
+    private static UserController instance = null;
     static ChatDAO chatDAO;
     static UserDAO userDAO;
     static EventDAO eventDAO;
     private UserDTO user;
+    String userPic = "https://firebasestorage.googleapis.com/v0/b/opleva4.appspot.com/o/question.png?alt=media&token=9dea34be-a183-4b37-bfb7-afd7a9db81f2";
 
 
-    private userController(){
+    private UserController(){
 
         chatDAO = new ChatDAO();
         userDAO = new UserDAO();
@@ -35,8 +32,8 @@ public class userController {
 
     }
 
-    public static userController getInstance(){
-        if (instance == null) instance = new userController();
+    public static UserController getInstance(){
+        if (instance == null) instance = new UserController();
         return instance;
     }
 
@@ -58,6 +55,7 @@ public class userController {
 
         UserDTO user = new UserDTO();
 
+
         user.setfName(String.valueOf(ctx.fName.getText()));
         user.setlName(String.valueOf(ctx.lName.getText()));
         user.setCity(String.valueOf(ctx.city.getText()));
@@ -65,6 +63,9 @@ public class userController {
         user.setChatId(null);
         user.setAge(Integer.parseInt(String.valueOf(ctx.age.getText())));
         user.setUserId(userId);
+        user.setEvents(null);
+        user.setJoinedEvents(null);
+        user.setUserPicture(userPic);
 
         userDAO.createUser(user);
 
@@ -72,15 +73,37 @@ public class userController {
 
 
     public void updateUser(U_Settings_Edit ctx, ArrayList<String> pictures){
+        int i = 0;
 
+        while(i<6){
+
+            if(pictures.get(i) != null){
+                userPic = pictures.get(i);
+                break;
+            } else  userPic = "https://firebasestorage.googleapis.com/v0/b/opleva4.appspot.com/o/question.png?alt=media&token=9dea34be-a183-4b37-bfb7-afd7a9db81f2";
+            i++;
+        }
 
         user.setDescription(ctx.about.getText().toString());
         user.setCity(ctx.city.getText().toString());
         user.setJob(ctx.job.getText().toString());
         user.setEducation(ctx.education.getText().toString());
         user.setPictures(pictures);
+        user.setUserPicture(userPic);
         userDAO.updateUser(user);
 
+    }
+
+    public String getUserAvatar(){
+        return user.getUserPicture();
+    }
+
+
+    public void updateUserEvents(String event){
+        ArrayList<String> eventList = user.getEvents();
+        eventList.add(event);
+        user.setEvents(eventList);
+        userDAO.updateUser(user);
     }
 
     public ArrayList<String> getUserPictures(){
@@ -118,6 +141,7 @@ public class userController {
         }
 
     }
+
 
 
 

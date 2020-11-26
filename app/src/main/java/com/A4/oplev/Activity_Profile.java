@@ -14,12 +14,12 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 
 import Controller.Listeners.OnSwipeTouchListener;
-import Controller.userController;
+import Controller.UserController;
 
 public class Activity_Profile extends AppCompatActivity implements View.OnClickListener {
     public TextView about, city, desc, aboutName, job, edu, picNumber;
     ImageView pb;
-    userController userController;
+    UserController userController;
     ArrayList<String> pictures, currPics;
 
     int height, width, currentPic, maxPic, minPic, maxPicPrint;

@@ -20,7 +20,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 
-import Controller.userController;
+import Controller.UserController;
 
 public class Activity_Login extends AppCompatActivity implements View.OnClickListener {
 
@@ -29,7 +29,7 @@ public class Activity_Login extends AppCompatActivity implements View.OnClickLis
     EditText email, pass;
     Button loginButton, createButton;
     Context ctx;
-    userController userController;
+    UserController userController;
     SharedPreferences prefs;
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -17,14 +17,14 @@ import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
-import Controller.userController;
+import Controller.UserController;
 import DTO.UserDTO;
 
 public class U_Settings_Main extends Fragment implements View.OnClickListener {
 
     View visProfil, rediger, indstillinger;
     public TextView about;
-    userController userController;
+    UserController userController;
     UserDTO user;
     ImageView back, profilepic, accept;
     ArrayList<String> pictures;
@@ -79,22 +79,14 @@ public class U_Settings_Main extends Fragment implements View.OnClickListener {
     public void onStart() {
         super.onStart();
 
-        int i = 0;
-        while (i<6){
+        String avatar = userController.getUserAvatar();
 
-            if(pictures.get(i) != null){
-                Picasso.get().load(pictures.get(i))
-                        .resize(width/2, height/4)
-                        .centerCrop()
-                        .placeholder(R.drawable.load2)
-                        .error(R.drawable.question)
-                        .into(profilepic);
-                break;
-            }
-            i++;
-        }
-
-
+        Picasso.get().load(avatar)
+                .resize(width/2, height/4)
+                .centerCrop()
+                .placeholder(R.drawable.load2)
+                .error(R.drawable.question)
+                .into(profilepic);
 
 
         }

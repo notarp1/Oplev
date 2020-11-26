@@ -9,26 +9,26 @@ import DAL.Classes.EventDAO;
 import DAL.Classes.UserDAO;
 import DTO.EventDTO;
 
-public class eventController {
+public class EventController {
 
 
-    private static eventController instance = null;
+    private static EventController instance = null;
     private ArrayList<String> uPictures, ePictures;
     static UserDAO userDAO;
     static EventDAO eventDAO;
     private EventDTO eventDTO;
-    private userController userController;
+    private UserController userController;
 
 
-    private eventController(){
+    private EventController(){
         userDAO = new UserDAO();
         eventDAO = new EventDAO();
         userController = userController.getInstance();
         this.instance = this;
     }
 
-    public static eventController getInstance(){
-        if (instance == null) instance = new eventController();
+    public static EventController getInstance(){
+        if (instance == null) instance = new EventController();
         return instance;
     }
 
@@ -37,6 +37,7 @@ public class eventController {
         //create event dto
         eventDTO = new EventDTO();
 
+        String avatar = userController.getUserAvatar();
         /*
         TODO: set owner of the event. is it string? (also pics/applicants/participants arent set)
         event.setOwner(getCurrUser().getUserId());*/
@@ -60,25 +61,19 @@ public class eventController {
         eventDTO.setDate(new Date(year, month, day, hour, minute));
 
         //set rest of values
-        eventDTO.setCity(city);
-        eventDTO.setMinAge(Integer.parseInt(minAge));
-        eventDTO.setMaxAge(Integer.parseInt(maxAge));
-        eventDTO.setMaleOn(maleOn);
-        eventDTO.setFemaleOn(femaleOn);
-        eventDTO.setOwnerId(userController.getCurrUser().getUserId());
-        eventDTO.setOwnerPic(null);
-        eventDTO.setEventPic(null);
-        eventDTO.setEventId(null);
-        eventDTO.setApplicants(null);
-        eventDTO.setParticipant(null);
-        eventDTO.setType(null);
+        eventDTO.setCity(city)
+                .setMinAge(Integer.parseInt(minAge))
+                .setMaxAge(Integer.parseInt(maxAge))
+                .setMaleOn(maleOn)
+                .setFemaleOn(femaleOn)
+                .setOwnerId(userController.getCurrUser().getUserId())
+                .setOwnerPic(avatar)
+                .setEventPic(null)
+                .setEventId(null)
+                .setApplicants(null)
+                .setParticipant(null)
+                .setType(null);
 
-        /*//testing
-        System.out.println("maleOn:" + maleOn);
-        System.out.println(day + "/" + month + "/" + year + "\n"
-                +"date:" + event.getDate());*/
-
-        // send event through DAO to database
         eventDAO.createEvent(eventDTO);
     }
 

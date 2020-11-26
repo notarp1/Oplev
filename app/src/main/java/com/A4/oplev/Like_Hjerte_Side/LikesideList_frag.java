@@ -13,8 +13,8 @@ import androidx.fragment.app.Fragment;
 
 import com.A4.oplev.Chat.Activity_Chat;
 
-import Controller.userController;
 import Controller.Listeners.OnSwipeTouchListener;
+import Controller.UserController;
 import DAL.Classes.ChatDAO;
 import DTO.ChatDTO;
 import DTO.UserDTO;
@@ -30,7 +30,7 @@ public class LikesideList_frag extends Fragment{
     private ListView listView;
     private ChatDAO chatDAO;
     private UserDTO userDTO;
-    private userController userController;
+    private UserController userController;
     private String currentUser;
 
     // Den her klasse bruges til at få lave chatlisten ude fra likesiden af (hvor man kan vælge den chat man vil ind i)

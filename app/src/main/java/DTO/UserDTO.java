@@ -7,12 +7,11 @@ import java.util.Arrays;
 public class UserDTO implements Serializable {
 
     int age;
-    String fName, lName, city, email, phone, description, userId, job, education;
+    String fName, lName, city, email, userPicture, description, userId, job, education;
 
     ArrayList<String> pictures = new ArrayList<>(Arrays.asList(null, null, null, null, null, null));
 
-    ArrayList<String> chatId;
-    ArrayList<Integer> events, joinedEvents;
+    ArrayList<String> chatId, events, joinedEvents;
 
     public String getUserId() {
         return userId;
@@ -54,6 +53,14 @@ public class UserDTO implements Serializable {
     public UserDTO setEducation(String education) {
         this.education = education;
         return this;
+    }
+
+    public void setUserPicture(String userPicture) {
+        this.userPicture = userPicture;
+    }
+
+    public String getUserPicture() {
+        return userPicture;
     }
 
     public String getEducation() {
@@ -115,20 +122,20 @@ public class UserDTO implements Serializable {
         return this;
     }
 
-    public ArrayList<Integer> getEvents() {
+    public ArrayList<String> getEvents() {
         return events;
     }
 
-    public UserDTO setEvents(ArrayList<Integer> events) {
+    public UserDTO setEvents(ArrayList<String> events) {
         this.events = events;
         return this;
     }
 
-    public ArrayList<Integer> getJoinedEvents() {
+    public ArrayList<String> getJoinedEvents() {
         return joinedEvents;
     }
 
-    public UserDTO setJoinedEvents(ArrayList<Integer> joinedEvents) {
+    public UserDTO setJoinedEvents(ArrayList<String> joinedEvents) {
         this.joinedEvents = joinedEvents;
         return this;
     }
