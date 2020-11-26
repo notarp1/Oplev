@@ -5,6 +5,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.PagerSnapHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -41,11 +42,13 @@ public class Activity_Main extends AppCompatActivity implements View.OnClickList
     SharedPreferences prefs;
     Boolean onInstance;
    Event_Adapter event_Adapter;
+   Context ctx;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        this.ctx = this;
 
         //Tjekker om hvorvidt man er logget ind
         onInstance = prefs.getBoolean("onInstance", false);
@@ -66,10 +69,12 @@ public class Activity_Main extends AppCompatActivity implements View.OnClickList
             public void onCallback(EventDTO event) {
                 eventList.add(event);
                 Log.d("eventDTO", "onCallback: " + event.getDescription());
+                eventIni(eventList, layoutManager);
 
             }
-        }, "wDMy7zLzekflaGZGIRrG");
-        event_Adapter = new Event_Adapter(eventList);
+        }, "8Eb01xtg5FfsaFgO9wLz");
+
+/*        event_Adapter = new Event_Adapter(eventList);
         rcEvent.setLayoutManager(layoutManager);
         rcEvent.setAdapter(event_Adapter);
         PagerSnapHelper snap = new PagerSnapHelper();
@@ -81,9 +86,27 @@ public class Activity_Main extends AppCompatActivity implements View.OnClickList
 
         options.setOnClickListener(this);
         match.setOnClickListener(this);
+        user.setOnClickListener(this);*/
+      //  eventIni(eventList, layoutManager);
+      //  eventIni(eventList, layoutManager);
+        options = findViewById(R.id.options_btn);
+        match = findViewById(R.id.match_btn);
+        user = findViewById(R.id.user_btn);
+
+
+        options.setOnClickListener(this);
+        match.setOnClickListener(this);
         user.setOnClickListener(this);
 
 
+    }
+
+    private void eventIni(List<EventDTO> eventList, LinearLayoutManager layoutManager) {
+        event_Adapter = new Event_Adapter(eventList);
+        rcEvent.setLayoutManager(layoutManager);
+        rcEvent.setAdapter(event_Adapter);
+        PagerSnapHelper snap = new PagerSnapHelper();
+        snap.attachToRecyclerView(rcEvent);
     }
 
     @Override
