@@ -2,14 +2,26 @@ package Controller;
 
 import com.A4.oplev.Activity_Event;
 
+import java.util.ArrayList;
+import java.util.Date;
+
+import DAL.Classes.EventDAO;
+import DAL.Classes.UserDAO;
+import DTO.EventDTO;
+
 public class eventController {
 
 
     private static eventController instance = null;
+    private ArrayList<String> uPictures, ePictures;
+    static UserDAO userDAO;
+    static EventDAO eventDAO;
+    private EventDTO eventDTO;
 
 
-    public eventController(){
-
+    private eventController(){
+        userDAO = new UserDAO();
+        eventDAO = new EventDAO();
         this.instance = this;
     }
 
@@ -18,31 +30,82 @@ public class eventController {
         return instance;
     }
 
+    public void createEvent(String name, String desc, String price, String date, String time, String city,
+                            String minAge, String maxAge, boolean maleOn, boolean femaleOn){
+        //create event dto
+        eventDTO = new EventDTO();
 
-/*
+        /*
+        TODO: set owner of the event. is it string? (also pics/applicants/participants arent set)
+        event.setOwner(getCurrUser().getUserId());*/
+
+        //set some values of DTO
+        eventDTO.setTitle(name);
+        eventDTO.setDescription(desc);
+        eventDTO.setPrice(Integer.parseInt(price));
+
+        //getting date and time from string method input parameters
+        //date string input is DD/MM/YYYY
+        String[] dateSplit = date.split("/");
+        int day = Integer.parseInt(dateSplit[0]);
+        int month = Integer.parseInt(dateSplit[1]) - 1; //decrement to null index months of Date()
+        int year = Integer.parseInt(dateSplit[2]) - 1900; //subtract cuz wtf with this date obj
+        //getting time the same way. time input format HH:MM
+        String[] timeSplit = time.split(":");
+        int hour = Integer.parseInt(timeSplit[0]);
+        int minute = Integer.parseInt(timeSplit[1]);
+        //set the date now that values are available
+        eventDTO.setDate(new Date(year, month, day, hour, minute));
+
+        //set rest of values
+        eventDTO.setCity(city);
+        eventDTO.setMinAge(Integer.parseInt(minAge));
+        eventDTO.setMaxAge(Integer.parseInt(maxAge));
+        eventDTO.setMaleOn(maleOn);
+        eventDTO.setFemaleOn(femaleOn);
+
+        /*//testing
+        System.out.println("maleOn:" + maleOn);
+        System.out.println(day + "/" + month + "/" + year + "\n"
+                +"date:" + event.getDate());*/
+
+        // send event through DAO to database
+        eventDAO = new EventDAO();
+        eventDAO.createEvent(eventDTO);
+    }
+
+
+    public ArrayList<String> getEventPictures(){
+
+
+    }
+
     public void iniEvents(Activity_Event ctx){
-        String aboutText = user.getfName() + ", " + user.getAge();
+
+        String eventText = eventDTO.get
         String cityText = "\uD83D\uDCCD " + user.getCity();
         String descText = user.getDescription();
         String aboutNameText = "Om "+ user.getfName();
         String eduText = "\uD83C\uDF93 " + user.getEducation();
         String jobText = "\uD83D\uDCBC " + user.getJob();
 
-        ctx.about.setText(aboutText);
+        ctx.eventName.setText();
         ctx.city.setText(cityText);
-        ctx.desc.setText(descText);
+        ctx.pDesc.setText(descText);
         ctx.aboutName.setText(aboutNameText);
+        ctx.edu.setText(eduText);
+        ctx.job.setText(jobText);
         ctx.edu.setText(eduText);
         ctx.job.setText(jobText);
 
         if(user.getEducation() == null || user.getEducation().equals("")){
             eduText = "\uD83C\uDF93 " + "Ikke angivet";
-            ctx.edu.setText(eduText);
+
 
         }
         if(user.getJob() == null || user.getJob().equals("")){
             jobText = "\uD83D\uDCBC " + "Ikke angivet";
-            ctx.job.setText(jobText);
+
         }
-    } */
+    }
 }

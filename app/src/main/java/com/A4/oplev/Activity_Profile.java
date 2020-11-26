@@ -5,12 +5,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
-import android.view.ContextThemeWrapper;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.A4.oplev.Like_Hjerte_Side.HjerteSide_frag;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
