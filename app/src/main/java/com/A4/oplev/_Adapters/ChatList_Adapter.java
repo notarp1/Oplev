@@ -59,7 +59,7 @@ public class ChatList_Adapter extends ArrayAdapter<String> {
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
         System.out.println(position);
-        System.out.println("Picturecount: " + getPictureCount(position)+1);
+        System.out.println("Picturecount: " + getPictureCount(position));
         View listItem = convertView;
         boolean isPic = false;
         if(listItem == null)
@@ -170,7 +170,8 @@ public class ChatList_Adapter extends ArrayAdapter<String> {
         int pics = 0;
         for (int i = 0; i <= position; i++) {
             if (beskederList.get(i).equals("pictureBlaBlaBla!:")){
-                pics++;
+                pics+=1;
+                System.out.println(position);
             }
         }
         return Math.max(pics-1,0);
