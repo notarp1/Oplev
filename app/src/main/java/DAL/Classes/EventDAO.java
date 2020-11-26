@@ -1,7 +1,17 @@
 package DAL.Classes;
 
+import android.content.Intent;
+import android.preference.PreferenceManager;
 import android.util.Log;
 
+import androidx.annotation.NonNull;
+
+import com.A4.oplev.__Main.Activity_Main;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import androidx.annotation.NonNull;
 
 import com.google.android.gms.tasks.OnFailureListener;
@@ -12,24 +22,46 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.HashMap;
 import java.util.Map;
 
+import DAL.Interfaces.CallbackEvent;
 import Controller.UserController;
 import DAL.Interfaces.IEventDAO;
 import DTO.EventDTO;
+import DTO.UserDTO;
 
 public class EventDAO implements IEventDAO {
     FirebaseFirestore db;
     private final String TAG = "eventLog";
     private UserController userController;
 
+    public FirebaseFirestore db;
+    private static final String TAG = "eventLog" ;
+    private String collectionPath = "events";
     public EventDAO(){
 
         this.db = FirebaseFirestore.getInstance();
     }
 
+    public EventDAO(){this.db = FirebaseFirestore.getInstance();}
+
     @Override
-    public EventDTO getEvent(int eventId) {
-        return null;
+    public void getEvent(CallbackEvent callbackEvent, String eventId) {
+
+        DocumentReference docRef = db.collection(collectionPath).document(eventId);
+        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+
+                DocumentSnapshot documentSnapshot = task.getResult();
+                if(documentSnapshot != null){
+                    System.out.println(documentSnapshot.getData());
+                    EventDTO event = documentSnapshot.toObject(EventDTO.class);
+                    callbackEvent.onCallback(event);
+                }
+            }
+        });
+
     }
+
 
     @Override
     public void createEvent(EventDTO event) {

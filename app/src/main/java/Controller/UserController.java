@@ -48,7 +48,6 @@ public class UserController {
 
     public void getUser(CallbackUser callbackUser, String userId){
         userDAO.getUser(callbackUser, userId);
-
     }
 
     public void createUser(String userId, Activity_CreateUser ctx){

@@ -6,6 +6,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,7 +16,10 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.A4.oplev.PicassoFunc;
 import com.A4.oplev.R;
+import com.google.firebase.storage.internal.Sleeper;
+import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -26,6 +30,7 @@ import java.util.Date;
 import java.util.List;
 
 import DAL.Classes.EventDAO;
+import DAL.Interfaces.CallbackEvent;
 import DAL.Interfaces.IEventDAO;
 import DTO.EventDTO;
 
@@ -36,15 +41,17 @@ public class Event_Adapter extends RecyclerView.Adapter<Event_Adapter.ViewHolder
     int offset = 0;
     IEventDAO dataA;
 
-    public Event_Adapter(List<Integer> scoreListId) {
-        this.eventListId = scoreListId;
+
+
+
+
+    public Event_Adapter(List<EventDTO> scoreListId) {
+        this.loadedEvent = scoreListId;
         this.dataA = new EventDAO();
         this.loadedEvent = new ArrayList<>();
         //loadedEvent.add(dataA.getEvent(eventListId.get(offset)));
        // loadedEvent.add(dataA.getEvent(eventListId.get(offset + 1)));
-        //System.out.println("Kommer her ________________________________________________________________________________________________________________");
-       // ((EventDAO) dataA).getEvent("05dYAsN703X1lO0VWmk0");
-        testData();
+
     }
 
     public void testData(){
@@ -86,12 +93,12 @@ public class Event_Adapter extends RecyclerView.Adapter<Event_Adapter.ViewHolder
 
     public void add2list(int pos){
         //Henter Data ind i loadEvent, i sluttningen.
-        loadedEvent.add(dataA.getEvent(eventListId.get(eventListId.get(pos))));
+       //loadedEvent.add(dataA.getEvent(eventListId.get(eventListId.get(pos))));
     }
     public void add2listStart(int pos){
         //Henter Data ind i loadEvent, i sluttningen.
         List<EventDTO> newList  = new ArrayList<>();
-        newList.add(dataA.getEvent(eventListId.get(eventListId.get(pos))));
+       // newList.add(dataA.getEvent(eventListId.get(eventListId.get(pos))));
         newList.add(loadedEvent.get(0));
         newList.add(loadedEvent.get(1));
         loadedEvent = newList;
@@ -107,8 +114,7 @@ public class Event_Adapter extends RecyclerView.Adapter<Event_Adapter.ViewHolder
         // Inflate the custom layout
         View contactView = inflater.inflate(R.layout.eventlist_item, parent, false);
         // Return a new holder instance
-        ViewHolder viewHolder = new ViewHolder(contactView);
-        return viewHolder;
+        return new ViewHolder(contactView);
     }
 
     @Override
@@ -126,6 +132,7 @@ public class Event_Adapter extends RecyclerView.Adapter<Event_Adapter.ViewHolder
         withWhoText.setText(String.valueOf(dto.getOwnerId()));
 
         headlineText.setText(dto.getTitle());
+        headlineText.setText(dto.getDescription());
     }
 
     public void dataCleanUp(int pos){

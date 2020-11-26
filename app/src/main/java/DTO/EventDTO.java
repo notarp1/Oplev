@@ -156,4 +156,6 @@ public class EventDTO {
         this.type = type;
         return this;
     }
+
+
 }
