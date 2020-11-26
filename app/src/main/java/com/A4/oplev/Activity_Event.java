@@ -1,7 +1,5 @@
 package com.A4.oplev;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
@@ -9,17 +7,18 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
-import Controller.Listeners.OnSwipeTouchListener;
-import Controller.userController;
+import Controller.eventController;
 
-public class Activity_Profile extends AppCompatActivity implements View.OnClickListener {
-    public TextView about, city, desc, aboutName, job, edu, picNumber;
-    ImageView pb;
-    userController userController;
+public class Activity_Event extends AppCompatActivity implements View.OnClickListener {
+    public TextView eventName, eCity, eDate, ePrice, eAbout, eUname, eUabout, picNumber;
+    ImageView eventPic;
+    eventController eventController;
     ArrayList<String> pictures, currPics;
 
     int height, width, currentPic, maxPic, minPic, maxPicPrint;
@@ -31,37 +30,41 @@ public class Activity_Profile extends AppCompatActivity implements View.OnClickL
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_profile);
+        setContentView(R.layout.activity_event);
 
-        userController =  userController.getInstance();
-        pictures = userController.getUserPictures();
+        eventName = findViewById(R.id.text_event_information);
+        eCity = findViewById(R.id.text_e_city);
+        eDate = findViewById(R.id.text_date);
+        ePrice = findViewById(R.id.text_price);
+        eAbout = findViewById(R.id.text_e_about);
+        eUname = findViewById(R.id.text_e_u_name);
+        eUabout = findViewById(R.id.text_u_about);
+        picNumber = findViewById(R.id.cur_picEvent);
+        eventPic = findViewById(R.id.imageView_e_pb);
 
 
-        about = findViewById(R.id.text_information);
-        city = findViewById(R.id.text_city);
-        desc = findViewById(R.id.text_description);
-        aboutName = findViewById(R.id.text_about_name);
-        edu = findViewById(R.id.text_edu);
-        job = findViewById(R.id.text_job);
-        pb = findViewById(R.id.imageView_pb);
-        picNumber = findViewById(R.id.text_curPic);
+        eventController =  eventController.getInstance();
+        pictures = eventController.getEventPictures();
+
+
+
+
 
         DisplayMetrics displayMetrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
         height = displayMetrics.heightPixels;
         width = displayMetrics.widthPixels;
-        pb.setMaxHeight(height/2 + 200);
+        eventPic.setMaxHeight(height/2 + 200);
 
-        getPictures();
+        //getPictures();
 
 
-        pb.setOnTouchListener(new OnSwipeTouchListener(getApplicationContext()){
+
+     /*   pb.setOnTouchListener(new OnSwipeTouchListener(getApplicationContext()){
             @SuppressLint("ResourceAsColor")
             @Override
             public void onSwipeLeft() {
                 if(currentPic != maxPic){
-
-
                     Picasso.get().load(currPics.get(currentPic+1))
                             .resize(width, height/2 + 200)
                             .centerCrop()
@@ -88,8 +91,8 @@ public class Activity_Profile extends AppCompatActivity implements View.OnClickL
 
             }
         });
+           */
 
-        userController.iniProfile(this);
 
 
     }
@@ -111,7 +114,7 @@ public class Activity_Profile extends AppCompatActivity implements View.OnClickL
                             .centerCrop()
                             .placeholder(R.drawable.load2)
                             .error(R.drawable.question)
-                            .into(pb);
+                            .into(eventPic);
                     flag = 1;
                     noPic = false;
 

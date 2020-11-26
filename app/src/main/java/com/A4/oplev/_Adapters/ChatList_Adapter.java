@@ -58,8 +58,7 @@ public class ChatList_Adapter extends ArrayAdapter<String> {
     @NonNull
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-        System.out.println(position);
-        System.out.println("Picturecount: " + getPictureCount(position)+1);
+        System.out.println("Position: " + position + "\tSize: " + beskederList.size());
         View listItem = convertView;
         boolean isPic = false;
         if(listItem == null)
@@ -124,8 +123,7 @@ public class ChatList_Adapter extends ArrayAdapter<String> {
                 }
                 else besked.setGravity(Gravity.RIGHT);
             }
-        }
-        else{
+        } else{
             // Helt det samme gøres for hvis beskeden er sendt fra en selv bare med andre farver og en anden margine på textviewet
             int width = mContext.getResources().getDisplayMetrics().widthPixels;
             RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
@@ -170,7 +168,7 @@ public class ChatList_Adapter extends ArrayAdapter<String> {
         int pics = 0;
         for (int i = 0; i <= position; i++) {
             if (beskederList.get(i).equals("pictureBlaBlaBla!:")){
-                pics++;
+                pics+=1;
             }
         }
         return Math.max(pics-1,0);

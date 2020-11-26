@@ -1,7 +1,3 @@
-
-
-
-
 package com.A4.oplev._Adapters;
 
 import android.content.Context;
@@ -33,7 +29,6 @@ import java.util.Date;
 import java.util.List;
 
 import DAL.Classes.EventDAO;
-import DAL.Interfaces.CallbackEvent;
 import DAL.Interfaces.IEventDAO;
 import DTO.EventDTO;
 
@@ -43,8 +38,6 @@ public class Event_Adapter extends RecyclerView.Adapter<Event_Adapter.ViewHolder
     List<EventDTO> loadedEvent;
     int offset = 0;
     IEventDAO dataA;
-
-
 
     public Event_Adapter(List<Integer> scoreListId) {
         this.eventListId = scoreListId;
@@ -63,17 +56,15 @@ public class Event_Adapter extends RecyclerView.Adapter<Event_Adapter.ViewHolder
 
     }
 
-
     public void testData(){
         // metode til oprettelse af test data, så der ikke skal bruges db adgang.
         List<EventDTO> test = new ArrayList<>();
-        ArrayList<String> pic = new ArrayList<>();
         EventDTO data = new EventDTO();
         EventDTO data2 = new EventDTO();
         EventDTO data3 = new EventDTO();
-        data.setHeadline("Løbe tur i skoven").setOwner(1).setPictures(pic).setDescription("Løb en tur med mig");
-        data2.setHeadline("Spis en is").setOwner(2).setPictures(pic).setDescription("Is på Rungstedhavn");
-        data3.setHeadline("Tivoli").setOwner(3).setPictures(pic).setDescription("Juleudstilling i tivoli");
+        data.setTitle("Løbe tur i skoven").setOwnerId("1").setDescription("Løb en tur med mig");
+        data2.setTitle("Spis en is").setOwnerId("2").setDescription("Is på Rungstedhavn");
+        data3.setTitle("Tivoli").setOwnerId("3").setDescription("Juleudstilling i tivoli");
         loadedEvent.add(data);
         loadedEvent.add(data2);
         loadedEvent.add(data3);
@@ -130,23 +121,19 @@ public class Event_Adapter extends RecyclerView.Adapter<Event_Adapter.ViewHolder
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        PicassoFunc picFunc = PicassoFunc.getInstance();
-
 
         // Get the data model based on position
         EventDTO dto = loadedEvent.get(position);
         // Set item views based on your views and data model
         ImageView  profilePic = holder.profilePic;
         ImageView mainPic = holder.mainPic;
-
-        Drawable pic = mainPic.getDrawable();
-
         TextView withWhoText = holder.withWhoText;
         TextView headlineText = holder.headlineText;
 
         // her skal dataen sættes in i holderen, der skal gøres brug af en billed controler til at håndtere billder.
-        withWhoText.setText(String.valueOf(dto.getOwner()));
+        withWhoText.setText(String.valueOf(dto.getOwnerId()));
 
+        headlineText.setText(dto.getTitle());
         headlineText.setText(dto.getDescription());
     }
 

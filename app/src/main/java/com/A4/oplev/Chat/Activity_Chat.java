@@ -47,8 +47,7 @@ public class Activity_Chat extends AppCompatActivity  implements View.OnClickLis
     private ScrollView beskeder;
     private LinearLayout linearLayout;
     private Button sendBillede;
-    private ArrayList<String> beskederStrings;
-    private ArrayList<Bitmap> bitmaps = new ArrayList<>();
+    private ArrayList<String> beskederStrings = new ArrayList<>();
     private EditText inputTekst;
     private ChatDTO dto;
     private ChatDAO dao = new ChatDAO();
@@ -108,10 +107,8 @@ public class Activity_Chat extends AppCompatActivity  implements View.OnClickLis
                                     setChatDTO(dto);
                                     // Selvlavet adapter der tager listen af beskeder, Chat-objektet og den nuværende brugers navn som input og laver listviewet over chatten
                                     ChatList_Adapter adapter = new ChatList_Adapter(ctx, beskederStrings, dto, person1);
-                                    for (int i = 0; i < 1; i++) {
-                                        View item = adapter.getView(adapter.getCount()-2,null,null);
-                                        linearLayout.addView(item);
-                                    }
+                                    View item = adapter.getView(beskederStrings.size()-1, null, null);
+                                    linearLayout.addView(item);
                                     // clear tekstboksen
                                     inputTekst.setText("");
                                 }
@@ -140,13 +137,55 @@ public class Activity_Chat extends AppCompatActivity  implements View.OnClickLis
                     beskederStrings.addAll(dto.getMessages());
                 }
 
+                System.out.println("Beskeder size = " + beskederStrings.size());
+
                 // Opsætter listviewet med chatten der skal være der
                 ChatList_Adapter adapter = new ChatList_Adapter(ctx, beskederStrings, dto, person1);
                 linearLayout.removeAllViews();
-                for (int i = 0; i < adapter.getCount(); i++) {
+                for (int i = 0; i < beskederStrings.size(); i++) {
                     View item = adapter.getView(i,null,null);
                     linearLayout.addView(item);
                 }
+                // Vi opstiller en eventlistener på den chat som vi er inde i lige nu, som vil opdatere listviewet hvis der kommer en opdatering fra databasen
+                FirebaseFirestore.getInstance().collection("chats").document(chatDocumentPath)
+                        .addSnapshotListener(new EventListener<DocumentSnapshot>() {
+                            private static final String TAG = "update from firestore";
+
+                            @Override
+                            public void onEvent(@Nullable DocumentSnapshot snapshot,
+                                                @Nullable FirebaseFirestoreException e) {
+                                if (e != null) {
+                                    Log.w(TAG, "Listen failed.", e);
+                                    return;
+                                }
+
+                                if (snapshot != null && snapshot.exists()) {
+                                    ChatDTO temp = snapshot.toObject(ChatDTO.class);
+                                    if (temp.getMessages() != null) {
+                                        if (temp.getMessages().size() != beskederStrings.size()) {
+                                            if (temp.getChatId() != null) {
+                                                setChatDTO(temp);
+                                                if (dto.getMessages() != null) {
+                                                    beskederStrings.clear();
+                                                    beskederStrings.addAll(dto.getMessages());
+                                                }
+                                            }
+
+
+                                            ChatList_Adapter adapter = new ChatList_Adapter(ctx, beskederStrings, dto, person1);
+                                            if (dto.getSender() != null) {
+                                                if (dto.getSender().get(dto.getSender().size() - 1).equals(person2)) {
+                                                    View item = adapter.getView(beskederStrings.size() - 1, null, null);
+                                                    linearLayout.addView(item);
+                                                }
+                                            }
+                                        }
+                                    }
+                                } else {
+                                    Log.d(TAG, "Current data: null");
+                                }
+                            }
+                        });
             }
         }, chatDocumentPath);
 
@@ -156,44 +195,6 @@ public class Activity_Chat extends AppCompatActivity  implements View.OnClickLis
         sendBillede.setOnClickListener(this);
         tilbage.setOnClickListener(this);
         settings.setOnClickListener(this);
-
-        // Vi opstiller en eventlistener på den chat som vi er inde i lige nu, som vil opdatere listviewet hvis der kommer en opdatering fra databasen
-        FirebaseFirestore.getInstance().collection("chats").document(chatDocumentPath)
-                .addSnapshotListener(new EventListener<DocumentSnapshot>() {
-                    private static final String TAG = "update from firestore";
-
-                    @Override
-                    public void onEvent(@Nullable DocumentSnapshot snapshot,
-                                        @Nullable FirebaseFirestoreException e) {
-                        if (e != null) {
-                            Log.w(TAG, "Listen failed.", e);
-                            return;
-                        }
-
-                        if (snapshot != null && snapshot.exists()) {
-                            ChatDTO temp = snapshot.toObject(ChatDTO.class);
-                            if (temp.getChatId() != null) {
-                                setChatDTO(snapshot.toObject(ChatDTO.class));
-                                if (dto.getMessages() != null) {
-                                    beskederStrings.clear();
-                                    beskederStrings.addAll(dto.getMessages());
-                                }
-                            }
-
-                            ChatList_Adapter adapter = new ChatList_Adapter(ctx, beskederStrings, dto, person1);
-                            for (int i = 0; i < 1; i++) {
-                                if (dto.getSender() != null) {
-                                    if (dto.getSender().get(i).equals(person2)) {
-                                        View item = adapter.getView(adapter.getCount() - 2, null, null);
-                                        linearLayout.addView(item);
-                                    }
-                                }
-                            }
-                        } else {
-                            Log.d(TAG, "Current data: null");
-                        }
-                    }
-                });
     }
 
 
@@ -279,19 +280,21 @@ public class Activity_Chat extends AppCompatActivity  implements View.OnClickLis
                     // Vi har brug for et callback til at vide om det lykkesdes
                     public void onCallBackPic(Uri url) {
                         // Nu skal vi opdatere vores klasse objekt (lige nu skelner vi forskel med at et billede har messagen nedenunder men er meget ustabilt og skal ændres)
-                        updateChatDTO(person1,person2,"pictureBlaBlaBla!:",url);
+                        updateChatDTO(person1, person2, "pictureBlaBlaBla!:", url);
 
                         // Vi opdaterer vores chatobjekt i firestore
                         dao.updateChat(new ChatDAO.FirestoreCallback() {
                             @Override
                             public void onCallback(ChatDTO dto) {
-                                if (dto.getChatId() != null){
-                                    beskederStrings.add(dto.getMessages().get(dto.getMessages().size()-1));
-                                    ChatList_Adapter adapter = new ChatList_Adapter(ctx, beskederStrings, dto, person1);
-                                    for (int i = 0; i < 1; i++) {
-                                        View item = adapter.getView(adapter.getCount()-2,null,null);
-                                        linearLayout.addView(item);
+                                if (dto.getChatId() != null) {
+                                    setChatDTO(dto);
+                                    if (dto.getMessages() != null){
+                                        beskederStrings.clear();
+                                        beskederStrings.addAll(dto.getMessages());
                                     }
+                                    ChatList_Adapter adapter = new ChatList_Adapter(ctx, beskederStrings, dto, person1);
+                                    View item = adapter.getView(beskederStrings.size() - 1, null, null);
+                                    linearLayout.addView(item);
                                     // clear tekstboksen
                                     inputTekst.setText("");
                                 }

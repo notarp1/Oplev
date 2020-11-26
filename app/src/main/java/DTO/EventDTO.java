@@ -1,26 +1,23 @@
 package DTO;
 
+import android.util.EventLog;
+
 import java.util.ArrayList;
 import java.util.Date;
 
 public class EventDTO {
 
-    private int owner, eventId, price, participant, minAge, maxAge;
-    private String title, city, description, headline;
+    private int price, minAge, maxAge;
+    private String ownerId, ownerPic, eventId, eventPic,  participant, title, city, description, type;
     private Date date;
     private boolean maleOn, femaleOn;
-    private ArrayList<String> pictures;
-    private ArrayList<java.lang.Integer>  applicants;
+    private ArrayList<String>  applicants;
 
-    public EventDTO setHeadline(String headline){this.headline = headline; return this;}
-
-    public String getHeadline(){return this.headline;}
-
-    public int getEventId() {
+    public String getEventId() {
         return eventId;
     }
 
-    public EventDTO setEventId(int eventId) {
+    public EventDTO setEventId(String eventId) {
         this.eventId = eventId;
         return this;
     }
@@ -70,38 +67,38 @@ public class EventDTO {
         return this;
     }
 
-    public ArrayList<String> getPictures() {
-        return pictures;
+    public String getEventPic() {
+        return eventPic;
     }
 
-    public EventDTO setPictures(ArrayList<String> pictures) {
-        this.pictures = pictures;
+    public EventDTO setEventPic(String eventPic) {
+        this.eventPic = eventPic;
         return this;
     }
 
-    public int getOwner() {
-        return owner;
+    public String getOwnerId() {
+        return ownerId;
     }
 
-    public EventDTO setOwner(int owner) {
-        this.owner = owner;
+    public EventDTO setOwnerId(String ownerId) {
+        this.ownerId = ownerId;
         return this;
     }
 
-    public int getParticipant() {
+    public String getParticipant() {
         return participant;
     }
 
-    public EventDTO setParticipant(int participant) {
+    public EventDTO setParticipant(String participant) {
         this.participant = participant;
         return this;
     }
 
-    public ArrayList<java.lang.Integer> getApplicants() {
+    public ArrayList<String> getApplicants() {
         return applicants;
     }
 
-    public EventDTO setApplicants(ArrayList<java.lang.Integer> applicants) {
+    public EventDTO setApplicants(ArrayList<String> applicants) {
         this.applicants = applicants;
         return this;
     }
@@ -110,32 +107,54 @@ public class EventDTO {
         return maleOn;
     }
 
-    public void setMaleOn(boolean maleOn) {
+    public EventDTO setMaleOn(boolean maleOn) {
         this.maleOn = maleOn;
+        return this;
     }
 
     public boolean isFemaleOn() {
         return femaleOn;
     }
 
-    public void setFemaleOn(boolean femaleOn) {
+    public EventDTO setFemaleOn(boolean femaleOn) {
         this.femaleOn = femaleOn;
+        return this;
     }
 
     public int getMinAge() {
         return minAge;
     }
 
-    public void setMinAge(int minAge) {
+    public EventDTO setMinAge(int minAge) {
         this.minAge = minAge;
+        return this;
     }
 
     public int getMaxAge() {
         return maxAge;
     }
 
-    public void setMaxAge(int maxAge) {
+    public EventDTO setMaxAge(int maxAge) {
         this.maxAge = maxAge;
+        return this;
+    }
+
+    public String getOwnerPic() {
+        return ownerPic;
+    }
+
+    public EventDTO setOwnerPic(String ownerPic) {
+        this.ownerPic = ownerPic;
+        return this;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public EventDTO setType(String type) {
+        this.type = type;
+        return this;
     }
 
 
