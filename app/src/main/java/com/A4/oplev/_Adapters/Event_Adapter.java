@@ -55,12 +55,12 @@ public class Event_Adapter extends RecyclerView.Adapter<Event_Adapter.ViewHolder
         EventDTO data = new EventDTO();
         EventDTO data2 = new EventDTO();
         EventDTO data3 = new EventDTO();
-        data.setName("Løbe tur i skoven").setOwner(1).setPictures(pic).setDescription("Løb en tur med mig");
-        data2.setName("Spis en is").setOwner(1).setPictures(pic).setDescription("Is på Rungstedhavn");
-        data3.setName("Tivoli").setOwner(1).setPictures(pic).setDescription("Juleudstilling i tivoli");
+        data.setHeadline("Løbe tur i skoven").setOwner(1).setPictures(pic).setDescription("Løb en tur med mig");
+        data2.setHeadline("Spis en is").setOwner(2).setPictures(pic).setDescription("Is på Rungstedhavn");
+        data3.setHeadline("Tivoli").setOwner(3).setPictures(pic).setDescription("Juleudstilling i tivoli");
         loadedEvent.add(data);
-        loadedEvent.add(data);
-        loadedEvent.add(data);
+        loadedEvent.add(data2);
+        loadedEvent.add(data3);
     }
 
 
@@ -127,7 +127,7 @@ public class Event_Adapter extends RecyclerView.Adapter<Event_Adapter.ViewHolder
         // her skal dataen sættes in i holderen, der skal gøres brug af en billed controler til at håndtere billder.
         withWhoText.setText(String.valueOf(dto.getOwner()));
 
-        headlineText.setText(dto.getTitle());
+        headlineText.setText(dto.getHeadline());
     }
 
     public void dataCleanUp(int pos){

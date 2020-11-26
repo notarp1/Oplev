@@ -47,14 +47,8 @@ public class Activity_Main extends AppCompatActivity implements View.OnClickList
         onInstance = prefs.getBoolean("onInstance", false);
 
         //skal optimeres og ændres til at vi skal hente data ude fra.
-        List<EventDTO> eventList = new ArrayList<>();
-        EventDTO dto1,dto2, dto3;
-        dto1 = new EventDTO().setOwner(12).setTitle("Spis is i Nyhavn");
-        dto2 = new EventDTO().setOwner(13).setTitle("Svøm i tsørvejr");
-        dto3 = new EventDTO().setOwner(14).setTitle("Slå en mink ned");
-        eventList.add(dto1);
-        eventList.add(dto2);
-        eventList.add(dto3);
+
+
         List<Integer> eventList = new ArrayList<>();
         eventList.add(1);
         eventList.add(2);
