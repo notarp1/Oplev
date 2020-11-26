@@ -16,11 +16,11 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import Controller.userController;
+import Controller.UserController;
 
 public class PicassoFunc {
     private static PicassoFunc instance = null;
-    userController userController;
+    UserController userController;
     ArrayList<String> pictures;
 
     private PicassoFunc(){

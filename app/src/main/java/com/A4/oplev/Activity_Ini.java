@@ -15,12 +15,12 @@ import com.google.firebase.auth.FirebaseUser;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-import Controller.userController;
+import Controller.UserController;
 import DAL.Interfaces.CallbackUser;
 import DTO.UserDTO;
 
 public class Activity_Ini extends AppCompatActivity implements Serializable {
-    userController userController;
+    UserController userController;
     UserDTO userDTO;
     SharedPreferences prefs;
     Context ctx;

@@ -9,7 +9,6 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,7 +33,7 @@ import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
-import Controller.userController;
+import Controller.UserController;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -45,7 +44,7 @@ public class U_Settings_Edit extends Fragment implements View.OnClickListener, V
     TextView textview;
     public ImageView accept, back, p0, p1, p2, p3, p4, p5;
 
-    userController userController;
+    UserController userController;
     Bitmap stockphotoBit;
 
     static public boolean[] picBoolean = new boolean[]{false, false, false, false, false, false};

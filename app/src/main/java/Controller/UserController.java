@@ -1,13 +1,11 @@
 package Controller;
 
-import com.A4.oplev.Activity_Event;
 import com.A4.oplev.Login.Activity_CreateUser;
 import com.A4.oplev.Activity_Profile;
 import com.A4.oplev.UserSettings.U_Settings_Edit;
 import com.A4.oplev.UserSettings.U_Settings_Main;
 
 import java.util.ArrayList;
-import java.util.Date;
 
 import DAL.Classes.ChatDAO;
 import DAL.Classes.EventDAO;
@@ -15,17 +13,16 @@ import DAL.Classes.UserDAO;
 import DAL.Interfaces.CallbackUser;
 import DTO.UserDTO;
 
-import DTO.EventDTO;
-
-public class userController {
-    private static userController instance = null;
+public class UserController {
+    private static UserController instance = null;
     static ChatDAO chatDAO;
     static UserDAO userDAO;
     static EventDAO eventDAO;
     private UserDTO user;
+    String userPic = "https://firebasestorage.googleapis.com/v0/b/opleva4.appspot.com/o/question.png?alt=media&token=9dea34be-a183-4b37-bfb7-afd7a9db81f2";
 
 
-    private userController(){
+    private UserController(){
 
         chatDAO = new ChatDAO();
         userDAO = new UserDAO();
@@ -35,8 +32,8 @@ public class userController {
 
     }
 
-    public static userController getInstance(){
-        if (instance == null) instance = new userController();
+    public static UserController getInstance(){
+        if (instance == null) instance = new UserController();
         return instance;
     }
 
@@ -51,12 +48,12 @@ public class userController {
 
     public void getUser(CallbackUser callbackUser, String userId){
         userDAO.getUser(callbackUser, userId);
-
     }
 
     public void createUser(String userId, Activity_CreateUser ctx){
 
         UserDTO user = new UserDTO();
+
 
         user.setfName(String.valueOf(ctx.fName.getText()));
         user.setlName(String.valueOf(ctx.lName.getText()));
@@ -65,6 +62,9 @@ public class userController {
         user.setChatId(null);
         user.setAge(Integer.parseInt(String.valueOf(ctx.age.getText())));
         user.setUserId(userId);
+        user.setEvents(null);
+        user.setJoinedEvents(null);
+        user.setUserPicture(userPic);
 
         userDAO.createUser(user);
 
@@ -72,15 +72,37 @@ public class userController {
 
 
     public void updateUser(U_Settings_Edit ctx, ArrayList<String> pictures){
+        int i = 0;
 
+        while(i<6){
+
+            if(pictures.get(i) != null){
+                userPic = pictures.get(i);
+                break;
+            } else  userPic = "https://firebasestorage.googleapis.com/v0/b/opleva4.appspot.com/o/question.png?alt=media&token=9dea34be-a183-4b37-bfb7-afd7a9db81f2";
+            i++;
+        }
 
         user.setDescription(ctx.about.getText().toString());
         user.setCity(ctx.city.getText().toString());
         user.setJob(ctx.job.getText().toString());
         user.setEducation(ctx.education.getText().toString());
         user.setPictures(pictures);
+        user.setUserPicture(userPic);
         userDAO.updateUser(user);
 
+    }
+
+    public String getUserAvatar(){
+        return user.getUserPicture();
+    }
+
+
+    public void updateUserEvents(String event){
+        ArrayList<String> eventList = user.getEvents();
+        eventList.add(event);
+        user.setEvents(eventList);
+        userDAO.updateUser(user);
     }
 
     public ArrayList<String> getUserPictures(){
@@ -121,6 +143,7 @@ public class userController {
 
 
 
+
     public void iniEditProfile(U_Settings_Edit ctx){
         ctx.about.setText(user.getDescription());
         ctx.city.setText(user.getCity());
@@ -134,47 +157,5 @@ public class userController {
 
     }
 
-    public void createEvent(String name, String desc, String price, String date, String time, String city,
-                            String minAge, String maxAge, boolean maleOn, boolean femaleOn){
-        //create event dto
-        EventDTO event = new EventDTO();
 
-        /*
-        TODO: set owner of the event. is it string? (also pics/applicants/participants arent set)
-        event.setOwner(getCurrUser().getUserId());*/
-
-        //set some values of DTO
-        event.setTitle(name);
-        event.setDescription(desc);
-        event.setPrice(Integer.parseInt(price));
-
-        //getting date and time from string method input parameters
-        //date string input is DD/MM/YYYY
-        String[] dateSplit = date.split("/");
-        int day = Integer.parseInt(dateSplit[0]);
-        int month = Integer.parseInt(dateSplit[1]) - 1; //decrement to null index months of Date()
-        int year = Integer.parseInt(dateSplit[2]) - 1900; //subtract cuz wtf with this date obj
-        //getting time the same way. time input format HH:MM
-        String[] timeSplit = time.split(":");
-        int hour = Integer.parseInt(timeSplit[0]);
-        int minute = Integer.parseInt(timeSplit[1]);
-        //set the date now that values are available
-        event.setDate(new Date(year, month, day, hour, minute));
-
-        //set rest of values
-        event.setCity(city);
-        event.setMinAge(Integer.parseInt(minAge));
-        event.setMaxAge(Integer.parseInt(maxAge));
-        event.setMaleOn(maleOn);
-        event.setFemaleOn(femaleOn);
-
-        /*//testing
-        System.out.println("maleOn:" + maleOn);
-        System.out.println(day + "/" + month + "/" + year + "\n"
-                +"date:" + event.getDate());*/
-
-        // send event through DAO to database
-        EventDAO eventDAO = new EventDAO();
-        eventDAO.createEvent(event);
-    }
 }

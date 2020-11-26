@@ -13,8 +13,7 @@ import android.widget.TextView;
 
 import com.A4.oplev.R;
 
-import Controller.userController;
-import DTO.EventDTO;
+import Controller.EventController;
 import io.apptik.widget.MultiSlider;
 
 public class createEvent2_frag extends Fragment implements View.OnClickListener {
@@ -75,7 +74,7 @@ public class createEvent2_frag extends Fragment implements View.OnClickListener 
              * Parse values to controller which will create an event object and add it to program/database
              * get values from last frag using getArg as below:
              */
-            userController.getInstance().createEvent(
+            EventController.getInstance().createEvent(
                     getArguments().getString("title_in"),
                     getArguments().getString("desc_in"),
                     getArguments().getString("price_in"),

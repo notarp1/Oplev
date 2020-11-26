@@ -21,7 +21,7 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
-import Controller.userController;
+import Controller.UserController;
 
 public class Activity_CreateUser extends AppCompatActivity implements View.OnClickListener {
 
@@ -31,7 +31,7 @@ public class Activity_CreateUser extends AppCompatActivity implements View.OnCli
     Button createUser;
     ImageView back;
     Context ctx;
-    userController userController;
+    UserController userController;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

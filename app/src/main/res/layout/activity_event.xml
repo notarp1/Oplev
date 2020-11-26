@@ -2,12 +2,13 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/event_pic"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".Activity_Profile">
 
     <ImageView
-        android:id="@+id/imageView_pb"
+        android:id="@+id/imageView_e_pb"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:adjustViewBounds="true"
@@ -19,7 +20,7 @@
         app:srcCompat="@drawable/question" />
 
     <ScrollView
-        android:id="@+id/scrollView2"
+        android:id="@+id/scrollviewEvent"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:background="#0B124E"
@@ -27,15 +28,17 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView_pb">
+        app:layout_constraintTop_toBottomOf="@id/imageView_e_pb">
 
         <LinearLayout
+            android:id="@+id/linear1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/text_city"
+
+                android:id="@+id/text_e_city"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="5sp"
@@ -44,7 +47,7 @@
                 android:textColor="#FFFFFF" />
 
             <TextView
-                android:id="@+id/text_job"
+                android:id="@+id/text_date"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="5sp"
@@ -53,7 +56,7 @@
                 android:textColor="#FFFFFF" />
 
             <TextView
-                android:id="@+id/text_edu"
+                android:id="@+id/text_price"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="5sp"
@@ -62,7 +65,26 @@
                 android:textColor="#FFFFFF" />
 
             <TextView
-                android:id="@+id/text_about_name"
+                android:id="@+id/text_e_oplevelse"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5sp"
+                android:layout_marginTop="20dp"
+                android:text="Oplevelsen"
+                android:textColor="#59C3FF"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/text_e_about"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5sp"
+                android:text="Vi skal spise is"
+                android:textColor="#59C3FF" />
+
+            <TextView
+                android:id="@+id/text_e_u_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="5sp"
@@ -73,7 +95,7 @@
                 android:textStyle="bold" />
 
             <TextView
-                android:id="@+id/text_description"
+                android:id="@+id/text_u_about"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="5sp"
@@ -81,7 +103,7 @@
                 android:textColor="#59C3FF" />
 
             <TextView
-                android:id="@+id/text_mutual"
+                android:id="@+id/text_e_mutual"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="5sp"
@@ -103,7 +125,7 @@
                     android:orientation="horizontal">
 
                     <View
-                        android:id="@+id/ellipse_7"
+                        android:id="@+id/circle1"
                         android:layout_width="47dp"
                         android:layout_height="47dp"
                         android:layout_alignParentLeft="true"
@@ -114,7 +136,7 @@
                         android:background="@drawable/ellipse4" />
 
                     <View
-                        android:id="@+id/ellipse_6"
+                        android:id="@+id/circle2"
                         android:layout_width="47dp"
                         android:layout_height="47dp"
                         android:layout_alignParentLeft="true"
@@ -125,7 +147,7 @@
                         android:background="@drawable/ellipse5" />
 
                     <View
-                        android:id="@+id/ellipse_5"
+                        android:id="@+id/circle3"
                         android:layout_width="47dp"
                         android:layout_height="47dp"
                         android:layout_alignParentLeft="true"
@@ -136,7 +158,7 @@
                         android:background="@drawable/ellipse" />
 
                     <View
-                        android:id="@+id/ellipse_4"
+                        android:id="@+id/circle4"
                         android:layout_width="47dp"
                         android:layout_height="47dp"
                         android:layout_alignParentStart="true"
@@ -148,7 +170,7 @@
                         android:background="@drawable/ellipse2" />
 
                     <View
-                        android:id="@+id/ellipse_8"
+                        android:id="@+id/circle5"
                         android:layout_width="47dp"
                         android:layout_height="47dp"
                         android:layout_marginStart="20dp"
@@ -160,7 +182,7 @@
             </HorizontalScrollView>
 
             <TextView
-                android:id="@+id/text_instagram"
+                android:id="@+id/text_e_instagram"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="5sp"
@@ -171,7 +193,6 @@
                 android:textStyle="bold" />
 
             <TableLayout
-                android:id="@+id/tableLayout2"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginTop="16dp">
@@ -181,7 +202,7 @@
                     android:layout_height="match_parent">
 
                     <View
-                        android:id="@+id/rectangle_1"
+                        android:id="@+id/box1"
                         android:layout_width="100dp"
                         android:layout_height="100dp"
                         android:layout_gravity="center|start|right"
@@ -191,7 +212,7 @@
                         android:background="#DC923C" />
 
                     <View
-                        android:id="@+id/rectangle_5"
+                        android:id="@+id/box2"
                         android:layout_width="100dp"
                         android:layout_height="100dp"
                         android:layout_gravity="center|start|right"
@@ -201,7 +222,7 @@
                         android:background="#2055A5" />
 
                     <View
-                        android:id="@+id/rectangle_6"
+                        android:id="@+id/box3"
                         android:layout_width="100dp"
                         android:layout_height="100dp"
                         android:layout_gravity="center|start|right"
@@ -218,7 +239,7 @@
                     android:layout_marginTop="15dp">
 
                     <View
-                        android:id="@+id/rectangle_2"
+                        android:id="@+id/box4"
                         android:layout_width="100dp"
                         android:layout_height="100dp"
                         android:layout_gravity="center|start|right"
@@ -228,7 +249,7 @@
                         android:background="#2C7D3E" />
 
                     <View
-                        android:id="@+id/rectangle_3"
+                        android:id="@+id/box5"
                         android:layout_width="100dp"
                         android:layout_height="100dp"
                         android:layout_gravity="center|start|right"
@@ -238,7 +259,7 @@
                         android:background="#B813BB" />
 
                     <View
-                        android:id="@+id/rectangle_4"
+                        android:id="@+id/box6"
                         android:layout_width="100dp"
                         android:layout_height="100dp"
                         android:layout_gravity="center|start|right"
@@ -254,17 +275,17 @@
     </ScrollView>
 
     <View
-        android:id="@+id/view"
+        android:id="@+id/view_e"
         android:layout_width="match_parent"
         android:layout_height="57dp"
         android:background="@drawable/gradient"
-        app:layout_constraintBottom_toTopOf="@+id/scrollView2"
+        app:layout_constraintBottom_toTopOf="@id/scrollviewEvent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
-        android:id="@+id/text_information"
+        android:id="@+id/text_event_information"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -273,21 +294,21 @@
         android:text="Søndags-is med Pia, 22"
         android:textColor="#FFFFFF"
         android:textSize="24sp"
-        app:layout_constraintBottom_toBottomOf="@+id/view"
+        app:layout_constraintBottom_toBottomOf="@+id/view_e"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/view"
+        app:layout_constraintTop_toTopOf="@+id/view_e"
         app:layout_constraintVertical_bias="0.48" />
 
     <TextView
-        android:id="@+id/text_curPic"
+        android:id="@+id/cur_picEvent"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
         android:layout_marginRight="16dp"
         android:text="1/4"
         android:textColor="#FFFFFF"
-        app:layout_constraintBottom_toBottomOf="@+id/imageView_pb"
-        app:layout_constraintEnd_toEndOf="@+id/view"
-        app:layout_constraintTop_toTopOf="@+id/view" />
+        app:layout_constraintBottom_toBottomOf="@id/imageView_e_pb"
+        app:layout_constraintEnd_toEndOf="@id/view_e"
+        app:layout_constraintTop_toTopOf="@+id/view_e" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
