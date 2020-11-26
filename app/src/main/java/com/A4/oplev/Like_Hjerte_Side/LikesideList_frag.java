@@ -37,6 +37,7 @@ public class LikesideList_frag extends Fragment{
     @SuppressLint("ClickableViewAccessibility")
     public View onCreateView(LayoutInflater i, ViewGroup container, Bundle savedInstanceState) {
         View root = i.inflate(R.layout.likeside_frag,container,false);
+        // Vi henter nogle informationer fra userControlleren så vi ved hvilken person vi er i gang med at sætte listen op for
         userController = userController.getInstance();
         userDTO = userController.getCurrUser();
         chatDAO = new ChatDAO();
@@ -48,7 +49,9 @@ public class LikesideList_frag extends Fragment{
         ArrayList<Date> dates = new ArrayList<>();
 
 
+        // Tjek om personen har nogle chatId's ellers så gå videre
         if (userDTO.getChatId() != null) {
+            // Vi looper over alle chatId's og opbygger dens view og indsætter den i listviewet
             for (int j = 0; j < userDTO.getChatId().size(); j++) {
                 chatDAO.readChat(new ChatDAO.FirestoreCallback() {
                     @Override

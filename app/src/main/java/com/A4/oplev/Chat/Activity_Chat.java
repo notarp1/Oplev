@@ -47,7 +47,7 @@ public class Activity_Chat extends AppCompatActivity  implements View.OnClickLis
     private ScrollView beskeder;
     private LinearLayout linearLayout;
     private Button sendBillede;
-    private ArrayList<String> beskederStrings;
+    private ArrayList<String> beskederStrings = new ArrayList<>();
     private ArrayList<Bitmap> bitmaps = new ArrayList<>();
     private EditText inputTekst;
     private ChatDTO dto;
@@ -59,9 +59,7 @@ public class Activity_Chat extends AppCompatActivity  implements View.OnClickLis
 
 
     public void onCreate(Bundle saveInstanceState) {
-        // De her parametre er predefined lige nu men skal blive genereret efter brugerens valg senere hen
         pictureMaker = PictureMaker.getInstance();
-
 
         // Vi instantierer layoutet
         super.onCreate(saveInstanceState);
@@ -73,7 +71,6 @@ public class Activity_Chat extends AppCompatActivity  implements View.OnClickLis
         chatDocumentPath = intent.getStringExtra("chatId");
         person1 = intent.getStringExtra("currentUser");
         person2 = intent.getStringExtra("otherUser");
-
 
         // finder elementerne i layoutet
         settings = findViewById(R.id.chat_settings);
@@ -111,11 +108,8 @@ public class Activity_Chat extends AppCompatActivity  implements View.OnClickLis
                                     setChatDTO(dto);
                                     // Selvlavet adapter der tager listen af beskeder, Chat-objektet og den nuværende brugers navn som input og laver listviewet over chatten
                                     ChatList_Adapter adapter = new ChatList_Adapter(ctx, beskederStrings, dto, person1);
-                                    //linearLayout.removeAllViews();
-                                    for (int i = 0; i < 1; i++) {
-                                        View item = adapter.getView(adapter.getCount()-2,null,null);
-                                        linearLayout.addView(item);
-                                    }
+                                    View item = adapter.getView(beskederStrings.size()-1, null, null);
+                                    linearLayout.addView(item);
                                     // clear tekstboksen
                                     inputTekst.setText("");
                                 }
@@ -147,7 +141,7 @@ public class Activity_Chat extends AppCompatActivity  implements View.OnClickLis
                 // Opsætter listviewet med chatten der skal være der
                 ChatList_Adapter adapter = new ChatList_Adapter(ctx, beskederStrings, dto, person1);
                 linearLayout.removeAllViews();
-                for (int i = 0; i < adapter.getCount(); i++) {
+                for (int i = 0; i < beskederStrings.size(); i++) {
                     View item = adapter.getView(i,null,null);
                     linearLayout.addView(item);
                 }
@@ -185,11 +179,10 @@ public class Activity_Chat extends AppCompatActivity  implements View.OnClickLis
                             }
 
                             ChatList_Adapter adapter = new ChatList_Adapter(ctx, beskederStrings, dto, person1);
-                            //linearLayout.removeAllViews();
-                            for (int i = 0; i < 1; i++) {
+                            for (int i = beskederStrings.size()-1; i < beskederStrings.size(); i++) {
                                 if (dto.getSender() != null) {
                                     if (dto.getSender().get(i).equals(person2)) {
-                                        View item = adapter.getView(adapter.getCount() - 2, null, null);
+                                        View item = adapter.getView(beskederStrings.size()-1, null, null);
                                         linearLayout.addView(item);
                                     }
                                 }
@@ -236,6 +229,7 @@ public class Activity_Chat extends AppCompatActivity  implements View.OnClickLis
 
     // bruges til at opdatere ens chat objekt
     private void updateChatDTO(String newSender, String newReciever, String newMessage, Uri newPic){
+        // Vi tjekker alle parametrene om de er tomme og eller null og indsætter værdier derefter
         ArrayList<String> tempSender = dto.getSender();
         if (tempSender == null) tempSender = new ArrayList<>();
         tempSender.add(newSender);
@@ -283,20 +277,21 @@ public class Activity_Chat extends AppCompatActivity  implements View.OnClickLis
                     // Vi har brug for et callback til at vide om det lykkesdes
                     public void onCallBackPic(Uri url) {
                         // Nu skal vi opdatere vores klasse objekt (lige nu skelner vi forskel med at et billede har messagen nedenunder men er meget ustabilt og skal ændres)
-                        updateChatDTO(person1,person2,"pictureBlaBlaBla!:",url);
+                        updateChatDTO(person1, person2, "pictureBlaBlaBla!:", url);
 
                         // Vi opdaterer vores chatobjekt i firestore
                         dao.updateChat(new ChatDAO.FirestoreCallback() {
                             @Override
                             public void onCallback(ChatDTO dto) {
-                                if (dto.getChatId() != null){
-                                    beskederStrings.add(dto.getMessages().get(dto.getMessages().size()-1));
-                                    ChatList_Adapter adapter = new ChatList_Adapter(ctx, beskederStrings, dto, person1);
-                                    //linearLayout.removeAllViews();
-                                    for (int i = 0; i < 1; i++) {
-                                        View item = adapter.getView(adapter.getCount()-2,null,null);
-                                        linearLayout.addView(item);
+                                if (dto.getChatId() != null) {
+                                    setChatDTO(dto);
+                                    if (dto.getMessages() != null){
+                                        beskederStrings.clear();
+                                        beskederStrings.addAll(dto.getMessages());
                                     }
+                                    ChatList_Adapter adapter = new ChatList_Adapter(ctx, beskederStrings, dto, person1);
+                                    View item = adapter.getView(beskederStrings.size() - 1, null, null);
+                                    linearLayout.addView(item);
                                     // clear tekstboksen
                                     inputTekst.setText("");
                                 }

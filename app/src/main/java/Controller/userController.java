@@ -1,5 +1,6 @@
 package Controller;
 
+import com.A4.oplev.Activity_Event;
 import com.A4.oplev.Login.Activity_CreateUser;
 import com.A4.oplev.Activity_Profile;
 import com.A4.oplev.UserSettings.U_Settings_Edit;
@@ -117,6 +118,8 @@ public class userController {
         }
 
     }
+
+
 
     public void iniEditProfile(U_Settings_Edit ctx){
         ctx.about.setText(user.getDescription());
