@@ -1,3 +1,7 @@
+
+
+
+
 package com.A4.oplev._Adapters;
 
 import android.content.Context;
@@ -6,6 +10,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,7 +20,9 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.A4.oplev.PicassoFunc;
 import com.A4.oplev.R;
+import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -37,16 +44,25 @@ public class Event_Adapter extends RecyclerView.Adapter<Event_Adapter.ViewHolder
     int offset = 0;
     IEventDAO dataA;
 
+
+
     public Event_Adapter(List<Integer> scoreListId) {
         this.eventListId = scoreListId;
         this.dataA = new EventDAO();
         this.loadedEvent = new ArrayList<>();
         //loadedEvent.add(dataA.getEvent(eventListId.get(offset)));
        // loadedEvent.add(dataA.getEvent(eventListId.get(offset + 1)));
-        //System.out.println("Kommer her ________________________________________________________________________________________________________________");
-       // ((EventDAO) dataA).getEvent("05dYAsN703X1lO0VWmk0");
-        testData();
+
+        dataA.getEvent(new CallbackEvent() {
+            @Override
+            public void onCallback(EventDTO event) {
+                loadedEvent.add(event);
+                Log.d("eventDTO", "onCallback: " + event.getDescription());
+            }
+        }, "wDMy7zLzekflaGZGIRrG");
+
     }
+
 
     public void testData(){
         // metode til oprettelse af test data, så der ikke skal bruges db adgang.
@@ -88,12 +104,12 @@ public class Event_Adapter extends RecyclerView.Adapter<Event_Adapter.ViewHolder
 
     public void add2list(int pos){
         //Henter Data ind i loadEvent, i sluttningen.
-        loadedEvent.add(dataA.getEvent(eventListId.get(eventListId.get(pos))));
+       //loadedEvent.add(dataA.getEvent(eventListId.get(eventListId.get(pos))));
     }
     public void add2listStart(int pos){
         //Henter Data ind i loadEvent, i sluttningen.
         List<EventDTO> newList  = new ArrayList<>();
-        newList.add(dataA.getEvent(eventListId.get(eventListId.get(pos))));
+       // newList.add(dataA.getEvent(eventListId.get(eventListId.get(pos))));
         newList.add(loadedEvent.get(0));
         newList.add(loadedEvent.get(1));
         loadedEvent = newList;
@@ -109,25 +125,29 @@ public class Event_Adapter extends RecyclerView.Adapter<Event_Adapter.ViewHolder
         // Inflate the custom layout
         View contactView = inflater.inflate(R.layout.eventlist_item, parent, false);
         // Return a new holder instance
-        ViewHolder viewHolder = new ViewHolder(contactView);
-        return viewHolder;
+        return new ViewHolder(contactView);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+        PicassoFunc picFunc = PicassoFunc.getInstance();
+
 
         // Get the data model based on position
         EventDTO dto = loadedEvent.get(position);
         // Set item views based on your views and data model
         ImageView  profilePic = holder.profilePic;
         ImageView mainPic = holder.mainPic;
+
+        Drawable pic = mainPic.getDrawable();
+
         TextView withWhoText = holder.withWhoText;
         TextView headlineText = holder.headlineText;
 
         // her skal dataen sættes in i holderen, der skal gøres brug af en billed controler til at håndtere billder.
         withWhoText.setText(String.valueOf(dto.getOwner()));
 
-        headlineText.setText(dto.getHeadline());
+        headlineText.setText(dto.getDescription());
     }
 
     public void dataCleanUp(int pos){

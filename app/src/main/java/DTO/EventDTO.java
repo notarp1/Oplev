@@ -137,4 +137,6 @@ public class EventDTO {
     public void setMaxAge(int maxAge) {
         this.maxAge = maxAge;
     }
+
+
 }
