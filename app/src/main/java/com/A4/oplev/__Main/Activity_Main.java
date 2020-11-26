@@ -5,10 +5,12 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.PagerSnapHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 
@@ -24,6 +26,8 @@ import java.util.List;
 import com.A4.oplev._Adapters.Event_Adapter;
 
 //import DAL.DBAccess;
+import DAL.Classes.EventDAO;
+import DAL.Interfaces.CallbackEvent;
 import DTO.EventDTO;
 import swipeable.com.layoutmanager.OnItemSwiped;
 import swipeable.com.layoutmanager.SwipeableLayoutManager;
@@ -37,11 +41,14 @@ public class Activity_Main extends AppCompatActivity implements View.OnClickList
     RecyclerView rcEvent;
     SharedPreferences prefs;
     Boolean onInstance;
+   Event_Adapter event_Adapter;
+   Context ctx;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        this.ctx = this;
 
         //Tjekker om hvorvidt man er logget ind
         onInstance = prefs.getBoolean("onInstance", false);
@@ -49,18 +56,25 @@ public class Activity_Main extends AppCompatActivity implements View.OnClickList
         //skal optimeres og ændres til at vi skal hente data ude fra.
 
 
-        List<Integer> eventList = new ArrayList<>();
-        eventList.add(1);
-        eventList.add(2);
+        List<EventDTO> eventList = new ArrayList<>();
+
         rcEvent = findViewById(R.id.eventRecycleView);
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
 
-        Event_Adapter event_Adapter = new Event_Adapter(eventList);
-        rcEvent.setLayoutManager(layoutManager);
-        rcEvent.setAdapter(event_Adapter);
-        PagerSnapHelper snap = new PagerSnapHelper();
-        snap.attachToRecyclerView(rcEvent);
+
+        EventDAO dataA = new EventDAO();
+        dataA.getEvent(new CallbackEvent() {
+            @Override
+            public void onCallback(EventDTO event) {
+                eventList.add(event);
+                Log.d("eventDTO", "onCallback: " + event.getDescription());
+                eventIni(eventList, layoutManager);
+
+            }
+        }, "8Eb01xtg5FfsaFgO9wLz");
+
+
         options = findViewById(R.id.options_btn);
         match = findViewById(R.id.match_btn);
         user = findViewById(R.id.user_btn);
@@ -71,6 +85,14 @@ public class Activity_Main extends AppCompatActivity implements View.OnClickList
         user.setOnClickListener(this);
 
 
+    }
+
+    private void eventIni(List<EventDTO> eventList, LinearLayoutManager layoutManager) {
+        event_Adapter = new Event_Adapter(eventList);
+        rcEvent.setLayoutManager(layoutManager);
+        rcEvent.setAdapter(event_Adapter);
+        PagerSnapHelper snap = new PagerSnapHelper();
+        snap.attachToRecyclerView(rcEvent);
     }
 
     @Override

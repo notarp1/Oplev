@@ -48,7 +48,6 @@ public class Activity_Chat extends AppCompatActivity  implements View.OnClickLis
     private LinearLayout linearLayout;
     private Button sendBillede;
     private ArrayList<String> beskederStrings = new ArrayList<>();
-    private ArrayList<Bitmap> bitmaps = new ArrayList<>();
     private EditText inputTekst;
     private ChatDTO dto;
     private ChatDAO dao = new ChatDAO();
@@ -138,6 +137,8 @@ public class Activity_Chat extends AppCompatActivity  implements View.OnClickLis
                     beskederStrings.addAll(dto.getMessages());
                 }
 
+                System.out.println("Beskeder size = " + beskederStrings.size());
+
                 // Opsætter listviewet med chatten der skal være der
                 ChatList_Adapter adapter = new ChatList_Adapter(ctx, beskederStrings, dto, person1);
                 linearLayout.removeAllViews();
@@ -145,6 +146,46 @@ public class Activity_Chat extends AppCompatActivity  implements View.OnClickLis
                     View item = adapter.getView(i,null,null);
                     linearLayout.addView(item);
                 }
+                // Vi opstiller en eventlistener på den chat som vi er inde i lige nu, som vil opdatere listviewet hvis der kommer en opdatering fra databasen
+                FirebaseFirestore.getInstance().collection("chats").document(chatDocumentPath)
+                        .addSnapshotListener(new EventListener<DocumentSnapshot>() {
+                            private static final String TAG = "update from firestore";
+
+                            @Override
+                            public void onEvent(@Nullable DocumentSnapshot snapshot,
+                                                @Nullable FirebaseFirestoreException e) {
+                                if (e != null) {
+                                    Log.w(TAG, "Listen failed.", e);
+                                    return;
+                                }
+
+                                if (snapshot != null && snapshot.exists()) {
+                                    ChatDTO temp = snapshot.toObject(ChatDTO.class);
+                                    if (temp.getMessages() != null) {
+                                        if (temp.getMessages().size() != beskederStrings.size()) {
+                                            if (temp.getChatId() != null) {
+                                                setChatDTO(temp);
+                                                if (dto.getMessages() != null) {
+                                                    beskederStrings.clear();
+                                                    beskederStrings.addAll(dto.getMessages());
+                                                }
+                                            }
+
+
+                                            ChatList_Adapter adapter = new ChatList_Adapter(ctx, beskederStrings, dto, person1);
+                                            if (dto.getSender() != null) {
+                                                if (dto.getSender().get(dto.getSender().size() - 1).equals(person2)) {
+                                                    View item = adapter.getView(beskederStrings.size() - 1, null, null);
+                                                    linearLayout.addView(item);
+                                                }
+                                            }
+                                        }
+                                    }
+                                } else {
+                                    Log.d(TAG, "Current data: null");
+                                }
+                            }
+                        });
             }
         }, chatDocumentPath);
 
@@ -154,44 +195,6 @@ public class Activity_Chat extends AppCompatActivity  implements View.OnClickLis
         sendBillede.setOnClickListener(this);
         tilbage.setOnClickListener(this);
         settings.setOnClickListener(this);
-
-        // Vi opstiller en eventlistener på den chat som vi er inde i lige nu, som vil opdatere listviewet hvis der kommer en opdatering fra databasen
-        FirebaseFirestore.getInstance().collection("chats").document(chatDocumentPath)
-                .addSnapshotListener(new EventListener<DocumentSnapshot>() {
-                    private static final String TAG = "update from firestore";
-
-                    @Override
-                    public void onEvent(@Nullable DocumentSnapshot snapshot,
-                                        @Nullable FirebaseFirestoreException e) {
-                        if (e != null) {
-                            Log.w(TAG, "Listen failed.", e);
-                            return;
-                        }
-
-                        if (snapshot != null && snapshot.exists()) {
-                            ChatDTO temp = snapshot.toObject(ChatDTO.class);
-                            if (temp.getChatId() != null) {
-                                setChatDTO(snapshot.toObject(ChatDTO.class));
-                                if (dto.getMessages() != null) {
-                                    beskederStrings.clear();
-                                    beskederStrings.addAll(dto.getMessages());
-                                }
-                            }
-
-                            ChatList_Adapter adapter = new ChatList_Adapter(ctx, beskederStrings, dto, person1);
-                            for (int i = beskederStrings.size()-1; i < beskederStrings.size(); i++) {
-                                if (dto.getSender() != null) {
-                                    if (dto.getSender().get(i).equals(person2)) {
-                                        View item = adapter.getView(beskederStrings.size()-1, null, null);
-                                        linearLayout.addView(item);
-                                    }
-                                }
-                            }
-                        } else {
-                            Log.d(TAG, "Current data: null");
-                        }
-                    }
-                });
     }
 
 
