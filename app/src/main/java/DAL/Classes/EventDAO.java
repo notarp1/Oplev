@@ -33,13 +33,8 @@ public class EventDAO implements IEventDAO {
     private final String TAG = "eventLog";
     private UserController userController;
 
-    public FirebaseFirestore db;
-    private static final String TAG = "eventLog" ;
     private String collectionPath = "events";
-    public EventDAO(){
 
-        this.db = FirebaseFirestore.getInstance();
-    }
 
     public EventDAO(){this.db = FirebaseFirestore.getInstance();}
 
