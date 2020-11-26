@@ -1,5 +1,11 @@
 package DAL.Classes;
 
+import android.util.Log;
+
+import androidx.annotation.NonNull;
+
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.HashMap;
@@ -9,6 +15,13 @@ import DAL.Interfaces.IEventDAO;
 import DTO.EventDTO;
 
 public class EventDAO implements IEventDAO {
+    FirebaseFirestore db;
+    private final String TAG = "eventLog";
+
+    public EventDAO(){
+        this.db = FirebaseFirestore.getInstance();
+    }
+
     @Override
     public EventDTO getEvent(int eventId) {
         return null;
@@ -19,8 +32,9 @@ public class EventDAO implements IEventDAO {
         // send new event to db
         Map<String, Object> eventObject = new HashMap<>();
 
-        eventObject.put("ownerID", event.getOwnerId());
-        eventObject.put("eventID", event.getEventId());
+        eventObject.put("ownerId", event.getOwnerId());
+        eventObject.put("ownerPic", event.getOwnerPic());
+        eventObject.put("eventId", event.getEventId());
         eventObject.put("title", event.getEventId());
         eventObject.put("description", event.getDescription());
         eventObject.put("price", event.getPrice());
@@ -31,20 +45,36 @@ public class EventDAO implements IEventDAO {
         eventObject.put("maleOn", event.isMaleOn());
         eventObject.put("femaleOn", event.isFemaleOn());
         eventObject.put("participant", event.getParticipant());
-        eventObject.put("pictures", event.getEventPic());
+        eventObject.put("eventPic", event.getEventPic());
         eventObject.put("applicants", event.getApplicants());
-        //all set except "headline" unsure of what this supposed to be if not title again
+        eventObject.put("type", event.getType());
 
-       /* UNFINISHED connection to db
-       * ( SHOULD ID'S BE STRINGS INSTEAD OF INT'S? HOW ARE THEY CREATED? )
+        //UNFINISHED connection to db
+        //create the new event document
        db.collection("events")
-                .document(event.getEventId())
-                .set(eventObject)
+                .add(eventObject)
                 .addOnSuccessListener(documentReference -> {
+                    //when created
                     Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference);
-
+                    //overwrite hashmap ownerId
+                    eventObject.put("eventId", String.valueOf(documentReference));
+                    //overwrite database document with new ownerId.
+                    db.collection("events").document(String.valueOf(documentReference))
+                            .set(eventObject)
+                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void aVoid) {
+                                    Log.d(TAG, "DocumentSnapshot successfully written!");
+                                }
+                            })
+                            .addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    Log.w(TAG, "Error writing document", e);
+                                }
+                            });
                 })
-                .addOnFailureListener(e -> Log.w(TAG, "Error adding document", e));*/
+                .addOnFailureListener(e -> Log.w(TAG, "Error adding document", e));
     }
 
     @Override

@@ -17,11 +17,13 @@ public class eventController {
     static UserDAO userDAO;
     static EventDAO eventDAO;
     private EventDTO eventDTO;
+    private userController userController;
 
 
     private eventController(){
         userDAO = new UserDAO();
         eventDAO = new EventDAO();
+        userController = userController.getInstance();
         this.instance = this;
     }
 
@@ -63,6 +65,13 @@ public class eventController {
         eventDTO.setMaxAge(Integer.parseInt(maxAge));
         eventDTO.setMaleOn(maleOn);
         eventDTO.setFemaleOn(femaleOn);
+        eventDTO.setOwnerId(userController.getCurrUser().getUserId());
+        eventDTO.setOwnerPic(null);
+        eventDTO.setEventPic(null);
+        eventDTO.setEventId(null);
+        eventDTO.setApplicants(null);
+        eventDTO.setParticipant(null);
+        eventDTO.setType(null);
 
         /*//testing
         System.out.println("maleOn:" + maleOn);
