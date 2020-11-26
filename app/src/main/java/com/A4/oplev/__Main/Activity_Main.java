@@ -74,21 +74,7 @@ public class Activity_Main extends AppCompatActivity implements View.OnClickList
             }
         }, "8Eb01xtg5FfsaFgO9wLz");
 
-/*        event_Adapter = new Event_Adapter(eventList);
-        rcEvent.setLayoutManager(layoutManager);
-        rcEvent.setAdapter(event_Adapter);
-        PagerSnapHelper snap = new PagerSnapHelper();
-        snap.attachToRecyclerView(rcEvent);
-        options = findViewById(R.id.options_btn);
-        match = findViewById(R.id.match_btn);
-        user = findViewById(R.id.user_btn);
 
-
-        options.setOnClickListener(this);
-        match.setOnClickListener(this);
-        user.setOnClickListener(this);*/
-      //  eventIni(eventList, layoutManager);
-      //  eventIni(eventList, layoutManager);
         options = findViewById(R.id.options_btn);
         match = findViewById(R.id.match_btn);
         user = findViewById(R.id.user_btn);
