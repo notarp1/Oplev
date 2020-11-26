@@ -1,7 +1,5 @@
 package DAL.Classes;
 
-import android.util.Log;
-
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.HashMap;
@@ -21,7 +19,7 @@ public class EventDAO implements IEventDAO {
         // send new event to db
         Map<String, Object> eventObject = new HashMap<>();
 
-        eventObject.put("ownerID", event.getOwner());
+        eventObject.put("ownerID", event.getOwnerId());
         eventObject.put("eventID", event.getEventId());
         eventObject.put("title", event.getEventId());
         eventObject.put("description", event.getDescription());
@@ -33,7 +31,7 @@ public class EventDAO implements IEventDAO {
         eventObject.put("maleOn", event.isMaleOn());
         eventObject.put("femaleOn", event.isFemaleOn());
         eventObject.put("participant", event.getParticipant());
-        eventObject.put("pictures", event.getPictures());
+        eventObject.put("pictures", event.getEventPic());
         eventObject.put("applicants", event.getApplicants());
         //all set except "headline" unsure of what this supposed to be if not title again
 
