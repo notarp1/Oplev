@@ -32,7 +32,7 @@ public class  LikeSide_Adapter extends ArrayAdapter<String> {
 
     @NonNull
     @Override
-    public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+    public View getView(int position, @Nullable View convertView, ViewGroup parent) {
         View listItem = convertView;
         if(listItem == null)
             // Vi inflater det relative layout som vi har lavet i xml filen
@@ -41,7 +41,7 @@ public class  LikeSide_Adapter extends ArrayAdapter<String> {
         // Vi får nogle værdier som vi skal bruge til at sætte ind i layoutet
         String currentName = nameList.get(position);
         String currentDate;
-        System.out.println("BLABLA" + isInitialized.toString());
+        // Vi tjekker om chatten indeholder nogle beskeder hvis ikke så indsæt tomme strenge
         if (isInitialized.get(position).equals("false")) currentDate = "";
         else currentDate = dateList.get(position).toString().substring(0,3);
         String currentLastMessage;

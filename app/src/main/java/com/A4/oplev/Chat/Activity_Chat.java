@@ -59,9 +59,7 @@ public class Activity_Chat extends AppCompatActivity  implements View.OnClickLis
 
 
     public void onCreate(Bundle saveInstanceState) {
-        // De her parametre er predefined lige nu men skal blive genereret efter brugerens valg senere hen
         pictureMaker = PictureMaker.getInstance();
-
 
         // Vi instantierer layoutet
         super.onCreate(saveInstanceState);
@@ -73,7 +71,6 @@ public class Activity_Chat extends AppCompatActivity  implements View.OnClickLis
         chatDocumentPath = intent.getStringExtra("chatId");
         person1 = intent.getStringExtra("currentUser");
         person2 = intent.getStringExtra("otherUser");
-
 
         // finder elementerne i layoutet
         settings = findViewById(R.id.chat_settings);
@@ -111,7 +108,6 @@ public class Activity_Chat extends AppCompatActivity  implements View.OnClickLis
                                     setChatDTO(dto);
                                     // Selvlavet adapter der tager listen af beskeder, Chat-objektet og den nuværende brugers navn som input og laver listviewet over chatten
                                     ChatList_Adapter adapter = new ChatList_Adapter(ctx, beskederStrings, dto, person1);
-                                    //linearLayout.removeAllViews();
                                     for (int i = 0; i < 1; i++) {
                                         View item = adapter.getView(adapter.getCount()-2,null,null);
                                         linearLayout.addView(item);
@@ -185,7 +181,6 @@ public class Activity_Chat extends AppCompatActivity  implements View.OnClickLis
                             }
 
                             ChatList_Adapter adapter = new ChatList_Adapter(ctx, beskederStrings, dto, person1);
-                            //linearLayout.removeAllViews();
                             for (int i = 0; i < 1; i++) {
                                 if (dto.getSender() != null) {
                                     if (dto.getSender().get(i).equals(person2)) {
@@ -236,6 +231,7 @@ public class Activity_Chat extends AppCompatActivity  implements View.OnClickLis
 
     // bruges til at opdatere ens chat objekt
     private void updateChatDTO(String newSender, String newReciever, String newMessage, Uri newPic){
+        // Vi tjekker alle parametrene om de er tomme og eller null og indsætter værdier derefter
         ArrayList<String> tempSender = dto.getSender();
         if (tempSender == null) tempSender = new ArrayList<>();
         tempSender.add(newSender);
@@ -292,7 +288,6 @@ public class Activity_Chat extends AppCompatActivity  implements View.OnClickLis
                                 if (dto.getChatId() != null){
                                     beskederStrings.add(dto.getMessages().get(dto.getMessages().size()-1));
                                     ChatList_Adapter adapter = new ChatList_Adapter(ctx, beskederStrings, dto, person1);
-                                    //linearLayout.removeAllViews();
                                     for (int i = 0; i < 1; i++) {
                                         View item = adapter.getView(adapter.getCount()-2,null,null);
                                         linearLayout.addView(item);
