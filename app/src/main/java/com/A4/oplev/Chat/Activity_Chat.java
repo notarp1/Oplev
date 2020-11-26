@@ -161,21 +161,23 @@ public class Activity_Chat extends AppCompatActivity  implements View.OnClickLis
 
                                 if (snapshot != null && snapshot.exists()) {
                                     ChatDTO temp = snapshot.toObject(ChatDTO.class);
-                                    if (temp.getMessages().size() != dto.getMessages().size()) {
-                                        if (temp.getChatId() != null) {
-                                            setChatDTO(temp);
-                                            if (dto.getMessages() != null) {
-                                                beskederStrings.clear();
-                                                beskederStrings.addAll(dto.getMessages());
+                                    if (temp.getMessages() != null) {
+                                        if (temp.getMessages().size() != beskederStrings.size()) {
+                                            if (temp.getChatId() != null) {
+                                                setChatDTO(temp);
+                                                if (dto.getMessages() != null) {
+                                                    beskederStrings.clear();
+                                                    beskederStrings.addAll(dto.getMessages());
+                                                }
                                             }
-                                        }
 
 
-                                        ChatList_Adapter adapter = new ChatList_Adapter(ctx, beskederStrings, dto, person1);
-                                        if (dto.getSender() != null) {
-                                            if (dto.getSender().get(dto.getSender().size() - 1).equals(person2)) {
-                                                View item = adapter.getView(beskederStrings.size() - 1, null, null);
-                                                linearLayout.addView(item);
+                                            ChatList_Adapter adapter = new ChatList_Adapter(ctx, beskederStrings, dto, person1);
+                                            if (dto.getSender() != null) {
+                                                if (dto.getSender().get(dto.getSender().size() - 1).equals(person2)) {
+                                                    View item = adapter.getView(beskederStrings.size() - 1, null, null);
+                                                    linearLayout.addView(item);
+                                                }
                                             }
                                         }
                                     }
