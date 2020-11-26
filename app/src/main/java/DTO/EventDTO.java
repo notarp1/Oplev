@@ -5,11 +5,12 @@ import java.util.Date;
 
 public class EventDTO {
 
-    int owner, eventId, price, participant;
-    String name, city, description, headline;
-    Date date;
-    ArrayList<String> pictures;
-    ArrayList<java.lang.Integer>  applicants;
+    private int owner, eventId, price, participant, minAge, maxAge;
+    private String title, city, description, headline;
+    private Date date;
+    private boolean maleOn, femaleOn;
+    private ArrayList<String> pictures;
+    private ArrayList<java.lang.Integer>  applicants;
 
     public EventDTO setHeadline(String headline){this.headline = headline; return this;}
 
@@ -33,12 +34,12 @@ public class EventDTO {
         return this;
     }
 
-    public String getName() {
-        return name;
+    public String getTitle() {
+        return title;
     }
 
-    public EventDTO setName(String name) {
-        this.name = name;
+    public EventDTO setTitle(String title) {
+        this.title = title;
         return this;
     }
 
@@ -103,5 +104,37 @@ public class EventDTO {
     public EventDTO setApplicants(ArrayList<java.lang.Integer> applicants) {
         this.applicants = applicants;
         return this;
+    }
+
+    public boolean isMaleOn() {
+        return maleOn;
+    }
+
+    public void setMaleOn(boolean maleOn) {
+        this.maleOn = maleOn;
+    }
+
+    public boolean isFemaleOn() {
+        return femaleOn;
+    }
+
+    public void setFemaleOn(boolean femaleOn) {
+        this.femaleOn = femaleOn;
+    }
+
+    public int getMinAge() {
+        return minAge;
+    }
+
+    public void setMinAge(int minAge) {
+        this.minAge = minAge;
+    }
+
+    public int getMaxAge() {
+        return maxAge;
+    }
+
+    public void setMaxAge(int maxAge) {
+        this.maxAge = maxAge;
     }
 }

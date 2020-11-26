@@ -13,6 +13,8 @@ import android.widget.TextView;
 
 import com.A4.oplev.R;
 
+import Controller.userController;
+import DTO.EventDTO;
 import io.apptik.widget.MultiSlider;
 
 public class createEvent2_frag extends Fragment implements View.OnClickListener {
@@ -23,27 +25,27 @@ public class createEvent2_frag extends Fragment implements View.OnClickListener 
     Switch femaleSwitch, maleSwitch;
     Button done_btn;
     MultiSlider age_bar;
-
+    //min and max values for age is set here
     String currMinAge = "18", currMaxAge = "99";
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.create_event2_frag, container, false);
 
-        //get frag elements
-
+        //get fragment elements
         femaleSwitch = root.findViewById(R.id.create2_female_switch);
         maleSwitch = root.findViewById(R.id.create2_male_switch);
         done_btn = root.findViewById(R.id.create2_done_btn);
 
         done_btn.setOnClickListener(this);
 
-        //
+        //setup the rangebar and its textview.
         ageVal_txt = root.findViewById(R.id.create2_ageInterval_txt);
         ageVal_txt.setText(currMinAge + " - " + currMaxAge);
         age_bar = root.findViewById(R.id.create2_rangebar);
         age_bar.setMin(Integer.parseInt(currMinAge));
         age_bar.setMax(Integer.parseInt(currMaxAge));
+        //following listener will run when either of the thumbs on range bar is moved
         age_bar.setOnThumbValueChangeListener(new MultiSlider.OnThumbValueChangeListener() {
             @Override
             public void onValueChanged(MultiSlider multiSlider,
@@ -52,10 +54,13 @@ public class createEvent2_frag extends Fragment implements View.OnClickListener 
                                        int value)
             {
                 if (thumbIndex == 0) {
+                    // the left thumb was moved - set value
                     currMinAge = (String.valueOf(value));
                 } else {
+                    //the right thumb was moved - set value
                     currMaxAge = (String.valueOf(value));
                 }
+                //update textview in UI to show new values.
                 ageVal_txt.setText(currMinAge + " - " + currMaxAge);
             }
         });
@@ -67,15 +72,23 @@ public class createEvent2_frag extends Fragment implements View.OnClickListener 
     public void onClick(View v) {
         if(v == done_btn){
             /*
-             * Create an event object and add it to program
+             * Parse values to controller which will create an event object and add it to program/database
              * get values from last frag using getArg as below:
              */
-            /*getArguments().getString("title_in");
-            getArguments().getString("desc_in");
-            getArguments().getString("date_in");
-            getArguments().getString("city_in");
-            getArguments().getInt("price_in");
-            */
+            userController.getInstance().createEvent(
+                    getArguments().getString("title_in"),
+                    getArguments().getString("desc_in"),
+                    getArguments().getString("price_in"),
+                    getArguments().getString("date_in"),
+                    getArguments().getString("time_in"),
+                    getArguments().getString("city_in"),
+                    currMinAge,
+                    currMaxAge,
+                    maleSwitch.isChecked(),
+                    femaleSwitch.isChecked()
+                );
+
+
 
             //remove last frag from backstack
             //(shouldnt be able to change event settings when "done" is pressed)

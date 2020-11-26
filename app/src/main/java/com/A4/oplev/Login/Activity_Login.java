@@ -20,7 +20,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 
-import Controller.Controller;
+import Controller.userController;
 
 public class Activity_Login extends AppCompatActivity implements View.OnClickListener {
 
@@ -29,7 +29,7 @@ public class Activity_Login extends AppCompatActivity implements View.OnClickLis
     EditText email, pass;
     Button loginButton, createButton;
     Context ctx;
-    Controller controller;
+    userController userController;
     SharedPreferences prefs;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,7 +85,7 @@ public class Activity_Login extends AppCompatActivity implements View.OnClickLis
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "signInWithEmail:success");
 
-                            controller = Controller.getInstance();
+                            userController = userController.getInstance();
                             //prefs = PreferenceManager.getDefaultSharedPreferences(ctx);
 
                             Intent i = new Intent(ctx, Activity_Ini.class);

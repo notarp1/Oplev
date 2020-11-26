@@ -43,8 +43,7 @@ public class createEvent1_frag extends Fragment implements View.OnClickListener{
                              Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.create_event1_frag, container, false);
 
-
-        //get elements
+        //get elements from fragment
         pic = root.findViewById(R.id.create_pic);
         title_in = root.findViewById(R.id.create_title_input);
         desc_in = root.findViewById(R.id.create_desc_input);
@@ -68,21 +67,27 @@ public class createEvent1_frag extends Fragment implements View.OnClickListener{
         hour = cal.get(Calendar.HOUR_OF_DAY);
         minute = cal.get(Calendar.MINUTE);
 
+        //When date is changed update current values and UI to show new date
         onDateSetListener = new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int yearNew, int monthNew, int dayNew) {
+                //setting values
                 day = dayNew;
-                month = monthNew;
+                month = monthNew + 1; //increment since monthNew is zero indexed (jan = 0)
                 year = yearNew;
+                //update UI
                 String dateString = day + "/" + month + "/" + year;
                 date_in.setText(dateString);
             }
         };
+        //when time is changed update current values and show new time in UI
         onTimeSetListener = new TimePickerDialog.OnTimeSetListener() {
             @Override
             public void onTimeSet(TimePicker view, int hourNew, int minuteNew) {
+                //setting values
                 hour = hourNew;
                 minute = minuteNew;
+                //update UI
                 String timeString = hour + ":" + minute;
                 time_in.setText(timeString);
             }
@@ -94,27 +99,26 @@ public class createEvent1_frag extends Fragment implements View.OnClickListener{
     @Override
     public void onClick(View v) {
         if(v == pic){
-            //gør noget smart for at kunne udskifte billedet
+            //TODO: make possible for user to change source of "pic", when pressing it
         }
         else if(v == next_btn){
-            //validate that inputs are entered
+            //validate that inputs are entered (shows "errors" if not)
             if(isInputValid()){
-
                 //setup bundle to transfer data to next frag
                 Bundle b = new Bundle();
                 //set strings
                 b.putString("title_in", title_in.getText().toString());
                 b.putString("desc_in", desc_in.getText().toString());
+                b.putString("price_in", price_in.getText().toString());
                 b.putString("date_in", date_in.getText().toString());
+                b.putString("time_in", time_in.getText().toString());
                 b.putString("city_in", city_in.getText().toString());
-                //set int (price)
-                //b.putInt("price_in", Integer.parseInt(price_in.getText().toString()));
 
                 //create fragment and add bundle to arguments
                 Fragment create2_frag = new createEvent2_frag();
                 create2_frag.setArguments(b);
 
-
+                //move to createEvent2 frag
                 getFragmentManager().beginTransaction()
                         .replace(R.id.mainFragmentBox, create2_frag)
                         .addToBackStack(null)
@@ -123,6 +127,7 @@ public class createEvent1_frag extends Fragment implements View.OnClickListener{
         }
         else if(v == date_in){
             //show date picker dialog
+            //triggers "OnDateSetListener" when date is changed
             DatePickerDialog dialog = new DatePickerDialog(
                     getContext(),
                     android.R.style.Theme_Holo_Light_Dialog_MinWidth,
@@ -133,6 +138,7 @@ public class createEvent1_frag extends Fragment implements View.OnClickListener{
         }
         else if(v == time_in){
             //show time picker dialog
+            //triggers "OnTimeSetListener" when time is changed
             TimePickerDialog dialog = new TimePickerDialog(
                     getContext(),
                     onTimeSetListener,
@@ -141,6 +147,8 @@ public class createEvent1_frag extends Fragment implements View.OnClickListener{
         }
     }
 
+    // Method for checking if all inputs have data. If not, prompt users with "setErrors"
+    // return true if all have inputs, return false if not.
     private boolean isInputValid() {
         String invalidInputToast = "Manglende input: \r\n";
         boolean inputIsValid = true;
@@ -156,9 +164,13 @@ public class createEvent1_frag extends Fragment implements View.OnClickListener{
             inputIsValid = false;
             price_in.setError("Indsæt pris");
         }
-        if(date_in.getText().toString().equals("")){
+        if(date_in.getText().toString().equals("DD/MM/YYYY")){
             inputIsValid = false;
             date_in.setError("Indsæt dato");
+        }
+        if(time_in.getText().toString().equals("HH:MM")){
+            inputIsValid = false;
+            time_in.setError("Indsæt dato");
         }
         if(city_in.getText().toString().equals("")){
             inputIsValid = false;

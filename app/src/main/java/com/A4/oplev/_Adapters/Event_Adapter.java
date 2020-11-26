@@ -51,7 +51,8 @@ public class Event_Adapter extends RecyclerView.Adapter<Event_Adapter.ViewHolder
         TextView headlineText = holder.headlineText;
 
         withWhoText.setText(String.valueOf(dto.getOwner()));
-        headlineText.setText(dto.getName());
+
+        headlineText.setText(dto.getTitle());
     }
 
 

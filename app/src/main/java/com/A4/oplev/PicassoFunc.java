@@ -16,14 +16,11 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import Controller.Controller;
-import DAL.Classes.ChatDAO;
-import DAL.Classes.EventDAO;
-import DAL.Classes.UserDAO;
+import Controller.userController;
 
 public class PicassoFunc {
     private static PicassoFunc instance = null;
-    Controller controller;
+    userController userController;
     ArrayList<String> pictures;
 
     private PicassoFunc(){
@@ -96,10 +93,10 @@ public class PicassoFunc {
     }
 
     public void getUserPictures(Context ctx) {
-        controller = Controller.getInstance();
+        userController = userController.getInstance();
 
         try {
-            pictures = controller.getUserPictures();
+            pictures = userController.getUserPictures();
         }catch (Exception e){
         FirebaseAuth.getInstance().signOut();
         PreferenceManager.getDefaultSharedPreferences(ctx).edit().clear().apply();
