@@ -2,6 +2,7 @@ package com.A4.oplev.__Main;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.PagerSnapHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
@@ -46,52 +47,18 @@ public class Activity_Main extends AppCompatActivity implements View.OnClickList
         onInstance = prefs.getBoolean("onInstance", false);
 
         //skal optimeres og ændres til at vi skal hente data ude fra.
-        List<EventDTO> eventList = new ArrayList<>();
-        EventDTO dto1,dto2, dto3;
-        dto1 = new EventDTO().setOwner(12).setName("Stjæl en grusgrav");
-        dto2 = new EventDTO().setOwner(13).setName("Svøm i tsørvejr");
-        dto3 = new EventDTO().setOwner(14).setName("Slå en mink ned");
-        eventList.add(dto1);
-        eventList.add(dto2);
-        eventList.add(dto3);
+        List<Integer> eventList = new ArrayList<>();
+        eventList.add(1);
+        eventList.add(2);
         rcEvent = findViewById(R.id.eventRecycleView);
 
-        final Event_Adapter Event_Adapter = new Event_Adapter(eventList);
-        SwipeableTouchHelperCallback swipeableTouchHelperCallback =
-                new SwipeableTouchHelperCallback(new OnItemSwiped() {
-                    //Called after swiping view, place to remove top item from your recyclerview adapter
-                    @Override public void onItemSwiped() {
-                        Event_Adapter.removeTopItem();
-                    }
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
 
-                    @Override public void onItemSwipedLeft() {
-
-                    }
-
-                    @Override public void onItemSwipedRight() {
-
-                    }
-
-                    @Override
-                    public void onItemSwipedUp() {
-
-                    }
-
-                    @Override
-                    public void onItemSwipedDown() {
-
-                    }
-                });
-
-        LinearLayoutManager layoutManager
-                = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
-        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(swipeableTouchHelperCallback);
-        itemTouchHelper.attachToRecyclerView(rcEvent);
-
-        rcEvent.setLayoutManager(new SwipeableLayoutManager());
-        rcEvent.setAdapter(Event_Adapter);
-
-
+        Event_Adapter event_Adapter = new Event_Adapter(eventList);
+        rcEvent.setLayoutManager(layoutManager);
+        rcEvent.setAdapter(event_Adapter);
+        PagerSnapHelper snap = new PagerSnapHelper();
+        snap.attachToRecyclerView(rcEvent);
         options = findViewById(R.id.options_btn);
         match = findViewById(R.id.match_btn);
         user = findViewById(R.id.user_btn);
