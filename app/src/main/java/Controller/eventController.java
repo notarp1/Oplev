@@ -70,7 +70,6 @@ public class eventController {
                 +"date:" + event.getDate());*/
 
         // send event through DAO to database
-        eventDAO = new EventDAO();
         eventDAO.createEvent(eventDTO);
     }
 
