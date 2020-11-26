@@ -1,5 +1,6 @@
 package com.A4.oplev.CreateEvent;
 
+import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.graphics.Color;
@@ -11,16 +12,18 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
 import com.A4.oplev.R;
 
-import java.sql.Time;
 import java.util.Calendar;
 
 public class createEvent1_frag extends Fragment implements View.OnClickListener{
@@ -31,6 +34,9 @@ public class createEvent1_frag extends Fragment implements View.OnClickListener{
     EditText title_in, desc_in, price_in, city_in;
     TextView price_txt, date_txt, city_txt, date_in, time_in;
     Button next_btn;
+    Spinner dropDown;
+    AdapterView.OnItemSelectedListener onItemSelectedListener;
+
 
     //dialog changelisteners
     DatePickerDialog.OnDateSetListener onDateSetListener;
@@ -52,6 +58,14 @@ public class createEvent1_frag extends Fragment implements View.OnClickListener{
         city_in = root.findViewById(R.id.create__city_input);
         next_btn = root.findViewById(R.id.create_next_btn);
         time_in = root.findViewById(R.id.create_time_input);
+        dropDown = root.findViewById(R.id.create_dropDown);
+
+        ArrayAdapter<CharSequence> dropDownAdapter = ArrayAdapter.createFromResource(getContext(),R.array.createDropDown, R.layout.support_simple_spinner_dropdown_item);
+        dropDownAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        dropDown.setAdapter(dropDownAdapter);
+        dropDown.setPrompt("Vælg type af oplevelse");
+
+
 
         //set onclick listeners
         pic.setOnClickListener(this);
@@ -66,6 +80,23 @@ public class createEvent1_frag extends Fragment implements View.OnClickListener{
         year = cal.get(Calendar.YEAR);
         hour = cal.get(Calendar.HOUR_OF_DAY);
         minute = cal.get(Calendar.MINUTE);
+
+
+        dropDown.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            // todo: sæt start text, således at motion ikke er valgt fra starten.
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                // An item was selected. You can retrieve the selected item using
+                System.out.println(parent.getItemAtPosition(position));
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                // Another interface callback
+            }
+        });
+
+
 
         //When date is changed update current values and UI to show new date
         onDateSetListener = new DatePickerDialog.OnDateSetListener() {
