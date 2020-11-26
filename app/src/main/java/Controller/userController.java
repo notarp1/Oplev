@@ -157,7 +157,6 @@ public class userController {
         int minute = Integer.parseInt(timeSplit[1]);
         //set the date now that values are available
         event.setDate(new Date(year, month, day, hour, minute));
-
         //set rest of values
         event.setCity(city);
         event.setMinAge(Integer.parseInt(minAge));
