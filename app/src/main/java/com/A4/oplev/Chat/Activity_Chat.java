@@ -140,7 +140,7 @@ public class Activity_Chat extends AppCompatActivity  implements View.OnClickLis
                 // Opsætter listviewet med chatten der skal være der
                 ChatList_Adapter adapter = new ChatList_Adapter(ctx, beskederStrings, dto, person1);
                 linearLayout.removeAllViews();
-                for (int i = 0; i < beskederStrings.size()-1; i++) {
+                for (int i = 0; i < beskederStrings.size(); i++) {
                     View item = adapter.getView(i,null,null);
                     linearLayout.addView(item);
                 }
@@ -178,14 +178,13 @@ public class Activity_Chat extends AppCompatActivity  implements View.OnClickLis
                             }
 
                             ChatList_Adapter adapter = new ChatList_Adapter(ctx, beskederStrings, dto, person1);
-                            for (int i = beskederStrings.size()-1; i < beskederStrings.size(); i++) {
-                                if (dto.getSender() != null) {
-                                    if (dto.getSender().get(i).equals(person2)) {
-                                        View item = adapter.getView(beskederStrings.size()-1, null, null);
-                                        linearLayout.addView(item);
-                                    }
+                            if (dto.getSender() != null) {
+                                if (dto.getSender().get(dto.getSender().size()-1).equals(person2)) {
+                                    View item = adapter.getView(beskederStrings.size() - 1, null, null);
+                                    linearLayout.addView(item);
                                 }
                             }
+
                         } else {
                             Log.d(TAG, "Current data: null");
                         }
