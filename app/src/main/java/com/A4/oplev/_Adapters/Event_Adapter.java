@@ -48,9 +48,9 @@ public class Event_Adapter extends RecyclerView.Adapter<Event_Adapter.ViewHolder
     public Event_Adapter(List<EventDTO> scoreListId) {
         this.loadedEvent = scoreListId;
         this.dataA = new EventDAO();
-        this.loadedEvent = new ArrayList<>();
-        //loadedEvent.add(dataA.getEvent(eventListId.get(offset)));
-       // loadedEvent.add(dataA.getEvent(eventListId.get(offset + 1)));
+
+        scoreListId.add(scoreListId.get(0));
+        scoreListId.add(scoreListId.get(0));
 
     }
 
