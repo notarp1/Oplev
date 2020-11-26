@@ -48,7 +48,6 @@ public class Activity_Chat extends AppCompatActivity  implements View.OnClickLis
     private LinearLayout linearLayout;
     private Button sendBillede;
     private ArrayList<String> beskederStrings = new ArrayList<>();
-    private ArrayList<Bitmap> bitmaps = new ArrayList<>();
     private EditText inputTekst;
     private ChatDTO dto;
     private ChatDAO dao = new ChatDAO();
@@ -141,7 +140,7 @@ public class Activity_Chat extends AppCompatActivity  implements View.OnClickLis
                 // Opsætter listviewet med chatten der skal være der
                 ChatList_Adapter adapter = new ChatList_Adapter(ctx, beskederStrings, dto, person1);
                 linearLayout.removeAllViews();
-                for (int i = 0; i < beskederStrings.size(); i++) {
+                for (int i = 0; i < beskederStrings.size()-1; i++) {
                     View item = adapter.getView(i,null,null);
                     linearLayout.addView(item);
                 }
