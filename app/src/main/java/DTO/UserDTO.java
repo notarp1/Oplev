@@ -18,36 +18,42 @@ public class UserDTO implements Serializable {
         return userId;
     }
 
-    public void setUserId(String userId) {
+    public UserDTO setUserId(String userId) {
         this.userId = userId;
+        return this;
     }
 
     public int getAge() {
         return age;
     }
 
-    public void setAge(int age) {
+    public UserDTO setAge(int age) {
         this.age = age;
+        return this;
     }
+
 
     public String getDescription() {
         return description;
     }
 
-    public void setDescription(String description) {
+    public UserDTO setDescription(String description) {
         this.description = description;
+        return this;
     }
 
     public String getJob() {
         return job;
     }
 
-    public void setJob(String job) {
+    public UserDTO setJob(String job) {
         this.job = job;
+        return this;
     }
 
-    public void setEducation(String education) {
+    public UserDTO setEducation(String education) {
         this.education = education;
+        return this;
     }
 
     public String getEducation() {
@@ -58,32 +64,36 @@ public class UserDTO implements Serializable {
         return fName;
     }
 
-    public void setfName(String fName) {
+    public UserDTO setfName(String fName) {
         this.fName = fName;
+        return this;
     }
 
     public String getlName() {
         return lName;
     }
 
-    public void setlName(String lName) {
+    public UserDTO setlName(String lName) {
         this.lName = lName;
+        return this;
     }
 
     public String getCity() {
         return city;
     }
 
-    public void setCity(String city) {
+    public UserDTO setCity(String city) {
         this.city = city;
+        return this;
     }
 
     public String getEmail() {
         return email;
     }
 
-    public void setEmail(String email) {
+    public UserDTO setEmail(String email) {
         this.email = email;
+        return this;
     }
 
     public ArrayList<String> getPictures() {
@@ -95,27 +105,31 @@ public class UserDTO implements Serializable {
         return chatId;
     }
 
-    public void setChatId(ArrayList<String> chatId) {
+    public UserDTO setChatId(ArrayList<String> chatId) {
         this.chatId = chatId;
+        return this;
     }
 
-    public void setPictures(ArrayList<String> pictures) {
+    public UserDTO setPictures(ArrayList<String> pictures) {
         this.pictures = pictures;
+        return this;
     }
 
     public ArrayList<Integer> getEvents() {
         return events;
     }
 
-    public void setEvents(ArrayList<Integer> events) {
+    public UserDTO setEvents(ArrayList<Integer> events) {
         this.events = events;
+        return this;
     }
 
     public ArrayList<Integer> getJoinedEvents() {
         return joinedEvents;
     }
 
-    public void setJoinedEvents(ArrayList<Integer> joinedEvents) {
+    public UserDTO setJoinedEvents(ArrayList<Integer> joinedEvents) {
         this.joinedEvents = joinedEvents;
+        return this;
     }
 }

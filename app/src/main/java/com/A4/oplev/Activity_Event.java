@@ -1,16 +1,14 @@
 package com.A4.oplev;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
-import android.view.ContextThemeWrapper;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.A4.oplev.Like_Hjerte_Side.HjerteSide_frag;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -18,7 +16,7 @@ import java.util.ArrayList;
 import Controller.Listeners.OnSwipeTouchListener;
 import Controller.userController;
 
-public class Activity_Profile extends AppCompatActivity implements View.OnClickListener {
+public class Activity_Event extends AppCompatActivity implements View.OnClickListener {
     public TextView about, city, desc, aboutName, job, edu, picNumber;
     ImageView pb;
     userController userController;
@@ -33,7 +31,7 @@ public class Activity_Profile extends AppCompatActivity implements View.OnClickL
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_profile);
+        setContentView(R.layout.activity_event);
 
         userController =  userController.getInstance();
         pictures = userController.getUserPictures();
@@ -57,13 +55,12 @@ public class Activity_Profile extends AppCompatActivity implements View.OnClickL
         getPictures();
 
 
+
         pb.setOnTouchListener(new OnSwipeTouchListener(getApplicationContext()){
             @SuppressLint("ResourceAsColor")
             @Override
             public void onSwipeLeft() {
                 if(currentPic != maxPic){
-
-
                     Picasso.get().load(currPics.get(currentPic+1))
                             .resize(width, height/2 + 200)
                             .centerCrop()
@@ -91,7 +88,7 @@ public class Activity_Profile extends AppCompatActivity implements View.OnClickL
             }
         });
 
-        userController.iniProfile(this);
+
 
 
     }

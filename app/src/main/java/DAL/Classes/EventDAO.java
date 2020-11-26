@@ -9,9 +9,6 @@ import DAL.Interfaces.IEventDAO;
 import DTO.EventDTO;
 
 public class EventDAO implements IEventDAO {
-    private final FirebaseFirestore db = FirebaseFirestore.getInstance();
-    private static final String TAG = "eventLog" ;
-
     @Override
     public EventDTO getEvent(int eventId) {
         return null;
