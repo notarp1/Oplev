@@ -35,8 +35,9 @@ public class HjerteSide_frag extends Fragment implements View.OnClickListener{
         listView.setOnTouchListener(new OnSwipeTouchListener(getContext()){
             @Override
             public void onSwipeRight() {
-                getActivity().findViewById(R.id.likeside_beskedbillede).setBackgroundColor(getContext().getResources().getColor(R.color.likesideBilleder));
-                getActivity().findViewById(R.id.likeside_hjertbillede).setBackgroundColor(getContext().getResources().getColor(R.color.chatColorGrey));
+                getActivity().findViewById(R.id.besked_back).setVisibility(View.VISIBLE);
+                getActivity().findViewById(R.id.hjerte_back).setVisibility(View.INVISIBLE);
+
                 getFragmentManager().beginTransaction().setCustomAnimations(android.R.anim.slide_in_left,
                         android.R.anim.slide_out_right).replace(R.id.likeside_frameLayout,new LikesideList_frag())
                         .commit();

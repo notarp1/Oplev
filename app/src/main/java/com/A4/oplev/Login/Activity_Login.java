@@ -44,6 +44,9 @@ public class Activity_Login extends AppCompatActivity implements View.OnClickLis
         loginButton = findViewById(R.id.login);
         createButton = findViewById(R.id.create);
 
+        email.setText("johnjohn@gmail.com");
+        pass.setText("johnjohn123");
+
         loginButton.setOnClickListener(this);
         createButton.setOnClickListener(this);
 

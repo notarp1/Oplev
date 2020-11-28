@@ -2,6 +2,7 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -27,51 +28,70 @@
             app:srcCompat="@drawable/arrow" />
 
         <ImageView
-            android:id="@+id/likeside_beskedbillede"
-            android:layout_width="29dp"
-            android:layout_height="25dp"
-            android:layout_marginStart="32dp"
-            android:layout_marginLeft="32dp"
-            android:layout_marginTop="24dp"
-            android:layout_marginEnd="7dp"
-            android:layout_marginRight="7dp"
-            android:background="@color/likesideBilleder"
-            android:scaleX="1.5"
-            android:scaleY="1.5"
-            app:layout_constraintEnd_toStartOf="@+id/likeside_hjertbillede"
-            app:layout_constraintHorizontal_bias="0.076"
-            app:layout_constraintStart_toStartOf="@+id/imageView3"
-            app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/message" />
+            android:id="@+id/rectimage"
+            android:layout_width="110dp"
+            android:layout_height="50dp"
+            android:layout_marginStart="119dp"
+            android:layout_marginLeft="119dp"
+            android:layout_marginTop="7dp"
+            android:layout_marginEnd="128dp"
+            android:layout_marginRight="128dp"
+            android:layout_marginBottom="8dp"
+            android:src="@drawable/rectangle"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toEndOf="@+id/topbar_arrow"
+            app:layout_constraintTop_toTopOf="parent"></ImageView>
+
+        <ImageView
+            android:id="@+id/hjerte_back"
+            android:layout_width="55dp"
+            android:layout_height="46dp"
+            android:src="@drawable/rectanglefill"
+            app:layout_constraintBottom_toBottomOf="@+id/rectimage"
+            app:layout_constraintEnd_toEndOf="@+id/rectimage"
+            app:layout_constraintStart_toEndOf="@+id/besked_back"
+            app:layout_constraintTop_toTopOf="@+id/rectimage" />
+
+        <ImageView
+            android:id="@+id/besked_back"
+            android:layout_width="50dp"
+            android:layout_height="46dp"
+            android:layout_marginTop="1dp"
+            android:layout_marginBottom="1dp"
+            android:src="@drawable/rectanglefill"
+            app:layout_constraintBottom_toBottomOf="@+id/rectimage"
+            app:layout_constraintEnd_toStartOf="@+id/hjerte_back"
+            app:layout_constraintStart_toStartOf="@+id/rectimage"
+            app:layout_constraintTop_toTopOf="@+id/rectimage" />
 
         <ImageView
             android:id="@+id/likeside_hjertbillede"
-            android:layout_width="27dp"
-            android:layout_height="26dp"
-            android:layout_marginTop="24dp"
-            android:layout_marginEnd="32dp"
-            android:layout_marginRight="32dp"
-            android:background="#00FFFFFF"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginRight="16dp"
             android:scaleType="centerInside"
             android:scaleX="1.5"
             android:scaleY="1.5"
-            app:layout_constraintEnd_toEndOf="@+id/imageView3"
-            app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/heart" />
+            app:layout_constraintBottom_toBottomOf="@+id/hjerte_back"
+            app:layout_constraintEnd_toEndOf="@+id/hjerte_back"
+            app:layout_constraintTop_toTopOf="@+id/hjerte_back"
+            app:srcCompat="@drawable/heart_line" />
 
         <ImageView
-            android:id="@+id/imageView3"
-            android:layout_width="140dp"
-            android:layout_height="90dp"
+            android:id="@+id/likeside_beskedbillede"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginLeft="16dp"
             android:scaleX="1.5"
             android:scaleY="1.5"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.533"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.16"
-            app:srcCompat="@drawable/oval1" />
+            app:layout_constraintBottom_toBottomOf="@+id/besked_back"
+            app:layout_constraintStart_toStartOf="@+id/besked_back"
+            app:layout_constraintTop_toTopOf="@+id/besked_back"
+            app:srcCompat="@drawable/chat" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -79,16 +99,18 @@
         android:id="@+id/likeside_frameLayout"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"/>
+        android:layout_weight="1">
+
+    </FrameLayout>
 
     <Button
         android:id="@+id/opretOpslag_Knap2"
         android:layout_width="match_parent"
         android:layout_height="81dp"
-        android:background="@color/buttonBackground"
+        android:background="#0B124E"
         android:shadowColor="#FFFFFF"
         android:text="NYT OPSLAG"
-        android:textColor="@color/buttonText"
+        android:textColor="@color/backgroundColor"
         android:textSize="30sp" />
 
 </LinearLayout>
