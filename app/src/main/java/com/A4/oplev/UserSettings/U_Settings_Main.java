@@ -1,11 +1,13 @@
 package com.A4.oplev.UserSettings;
 
 import android.content.Intent;
+import android.graphics.PixelFormat;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -37,6 +39,8 @@ public class U_Settings_Main extends Fragment implements View.OnClickListener {
         View root = i.inflate(R.layout.u_setting_main_frag, container, false);
         TextView textview = (TextView)getActivity().findViewById(R.id.topbar_text);
         textview.setText("Profil");
+
+
 
         accept = (ImageView) getActivity().findViewById(R.id.imageView_checkmark);
         accept.setVisibility(View.INVISIBLE);

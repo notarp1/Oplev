@@ -3,34 +3,47 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    >
 
 
     <TextView
         android:id="@+id/u_profile_name"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="8dp"
         android:gravity="center"
         android:text="Henrik, 22"
+        android:textColor="#A4E8E0"
+        android:textSize="16sp"
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/profile_pic" />
+        app:layout_constraintTop_toBottomOf="@+id/HOLDERprofile_pic" />
 
-    <ImageView
-        android:id="@+id/profile_pic"
-
+    <androidx.cardview.widget.CardView
+        android:id="@+id/HOLDERprofile_pic"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-
+        android:layout_gravity="center"
+        android:layout_marginTop="40dp"
         android:adjustViewBounds="true"
+        app:cardCornerRadius="100dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/question" />
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/profile_pic"
+            android:layout_width="180dp"
+            android:layout_height="180dp"
+            android:scaleType="centerCrop"
+            app:srcCompat="@drawable/question" />
+    </androidx.cardview.widget.CardView>
+
+
 
     <LinearLayout
         android:id="@+id/linearLayout3"
@@ -50,17 +63,28 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <View
+            <ImageView
                 android:id="@+id/box_profil"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
-                android:background="#FFFFFF"
+                android:background="@drawable/selection"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_bias="0.0" />
+
+            <View
+                android:id="@+id/view3"
+                android:layout_width="40dp"
+                android:layout_height="33dp"
+                android:background="@drawable/buttoncircle2"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="@+id/box_profil"
+                app:layout_constraintHorizontal_bias="0.98"
+                app:layout_constraintStart_toStartOf="@+id/box_profil"
+                app:layout_constraintTop_toTopOf="@+id/arrow7" />
 
             <ImageView
                 android:id="@+id/arrow7"
@@ -73,7 +97,7 @@
                 app:layout_constraintHorizontal_bias="1.0"
                 app:layout_constraintStart_toStartOf="@+id/box_profil"
                 app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/arrowblack" />
+                app:srcCompat="@drawable/arrow2right" />
 
             <TextView
                 android:id="@+id/beskeder_opt_text3"
@@ -83,6 +107,7 @@
                 android:layout_marginLeft="16dp"
                 android:gravity="left|center_vertical"
                 android:text="Vis Profil"
+                android:textColor="#A4E8E0"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
@@ -96,22 +121,34 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <View
+            <ImageView
                 android:id="@+id/box_rediger"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
-                android:layout_marginTop="16dp"
-                android:background="#FFFFFF"
+                android:layout_marginTop="5dp"
+                android:background="@drawable/selection"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
+            <View
+                android:id="@+id/view4"
+                android:layout_width="40dp"
+                android:layout_height="33dp"
+                android:background="@drawable/buttoncircle2"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="@+id/box_rediger"
+                app:layout_constraintHorizontal_bias="0.98"
+                app:layout_constraintStart_toStartOf="@+id/box_rediger"
+                app:layout_constraintTop_toTopOf="@+id/arrow8"/>
+
+
             <ImageView
                 android:id="@+id/arrow8"
                 android:layout_width="20dp"
                 android:layout_height="50dp"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="5dp"
                 android:layout_marginEnd="16dp"
                 android:layout_marginRight="16dp"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -119,7 +156,7 @@
                 app:layout_constraintHorizontal_bias="1.0"
                 app:layout_constraintStart_toStartOf="@+id/box_rediger"
                 app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/arrowblack" />
+                app:srcCompat="@drawable/arrow2right" />
 
             <TextView
                 android:id="@+id/anmod_opt_text2"
@@ -127,9 +164,11 @@
                 android:layout_height="match_parent"
                 android:layout_marginStart="16dp"
                 android:layout_marginLeft="16dp"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="5dp"
                 android:gravity="left|center_vertical"
+                android:shadowColor="#FFFFFF"
                 android:text="Rediger"
+                android:textColor="#A4E8E0"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -140,16 +179,27 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <View
+            <ImageView
                 android:id="@+id/box_indstillinger"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
-                android:layout_marginTop="16dp"
-                android:background="#FFFFFF"
+                android:layout_marginTop="5dp"
+                android:background="@drawable/selection"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
+
+            <View
+                android:id="@+id/view5"
+                android:layout_width="40dp"
+                android:layout_height="33dp"
+                android:background="@drawable/buttoncircle2"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="@+id/box_indstillinger"
+                app:layout_constraintHorizontal_bias="0.98"
+                app:layout_constraintStart_toStartOf="@+id/box_indstillinger"
+                app:layout_constraintTop_toTopOf="@+id/arrow9" />
 
             <TextView
                 android:id="@+id/indstillinger_text2"
@@ -157,9 +207,10 @@
                 android:layout_height="match_parent"
                 android:layout_marginStart="16dp"
                 android:layout_marginLeft="16dp"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="5dp"
                 android:gravity="left|center_vertical"
                 android:text="Indstillinger"
+                android:textColor="#A4E8E0"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -169,7 +220,7 @@
                 android:id="@+id/arrow9"
                 android:layout_width="20dp"
                 android:layout_height="50dp"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="5dp"
                 android:layout_marginEnd="16dp"
                 android:layout_marginRight="16dp"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -178,7 +229,7 @@
                 app:layout_constraintStart_toStartOf="@id/box_indstillinger"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_bias="0.0"
-                app:srcCompat="@drawable/arrowblack" />
+                app:srcCompat="@drawable/arrow2right" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </LinearLayout>
 

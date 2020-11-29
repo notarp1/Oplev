@@ -83,7 +83,7 @@ public class U_Settings_Edit extends Fragment implements View.OnClickListener, V
         uris = new Uri[]{null, null, null, null, null, null};
 
         //Gem stockphoto bitmap
-        stockphotoBit = BitmapFactory.decodeResource(getContext().getResources(), R.drawable.uploadpng);
+        stockphotoBit = BitmapFactory.decodeResource(getContext().getResources(), R.drawable.uploadpic);
 
         textview = (TextView) getActivity().findViewById(R.id.topbar_text);
         textview.setText("Rediger Profil");

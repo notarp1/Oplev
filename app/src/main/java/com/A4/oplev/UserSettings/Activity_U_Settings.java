@@ -1,8 +1,10 @@
 package com.A4.oplev.UserSettings;
 
 import android.content.Intent;
+import android.graphics.PixelFormat;
 import android.os.Bundle;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -20,6 +22,7 @@ public class Activity_U_Settings extends AppCompatActivity implements View.OnCli
 
     public void onCreate(Bundle saveInstanceState) {
         super.onCreate(saveInstanceState);
+
         setContentView(R.layout.activity_u_settings);
         title = findViewById(R.id.topbar_text);
         back = findViewById(R.id.topbar_arrow);
