@@ -401,7 +401,7 @@
                     android:gravity="center"
                     android:shadowColor="#070707"
                     android:text="Log ud"
-                    android:textColor="#59C3FF"
+                    android:textColor="#A4E8E0"
                     android:textSize="18sp" />
 
                 <TextView
