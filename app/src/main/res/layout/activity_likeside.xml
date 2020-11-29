@@ -14,7 +14,7 @@
         android:id="@+id/top_bar"
         android:layout_width="match_parent"
         android:layout_height="65dp"
-        android:background="#0B124E"
+        android:background="#111851"
 
         >
 
