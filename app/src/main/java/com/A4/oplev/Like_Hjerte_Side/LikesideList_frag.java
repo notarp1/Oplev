@@ -103,8 +103,8 @@ public class LikesideList_frag extends Fragment{
             @Override
             public void onSwipeLeft() {
                 // Sæt farven på billederne i toppen af skærmen
-                getActivity().findViewById(R.id.likeside_hjertbillede).setBackgroundColor(getContext().getResources().getColor(R.color.likesideBilleder));
-                getActivity().findViewById(R.id.likeside_beskedbillede).setBackgroundColor(getContext().getResources().getColor(R.color.chatColorGrey));
+                getActivity().findViewById(R.id.besked_back).setVisibility(View.INVISIBLE);
+                getActivity().findViewById(R.id.hjerte_back).setVisibility(View.VISIBLE);
 
                 // Kreer fragmentet over til hjertesiden
                 getFragmentManager().beginTransaction().setCustomAnimations(R.anim.enter_from_right,

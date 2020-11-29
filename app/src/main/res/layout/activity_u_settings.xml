@@ -5,6 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#0B124E"
     >
 
 
@@ -12,8 +13,7 @@
         android:id="@+id/mainFragmentBox"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginTop="1dp"
-        android:background="#E5E5E5"
+        android:background="@drawable/gradientback"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
@@ -27,12 +27,27 @@
         android:layout_alignParentStart="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
-        android:background="#0B124E"
+
         app:layout_constraintBottom_toTopOf="@+id/mainFragmentBox"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
+
+
+        <View
+            android:id="@+id/view2"
+            android:layout_width="40dp"
+            android:layout_height="33dp"
+            android:layout_marginStart="7dp"
+            android:layout_marginLeft="7dp"
+            android:background="@drawable/topbar2"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/topbar_text"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.485" />
 
         <ImageView
             android:id="@+id/topbar_arrow"
@@ -40,11 +55,10 @@
             android:layout_height="25dp"
             android:layout_marginStart="16dp"
             android:layout_marginLeft="16dp"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toBottomOf="@+id/view2"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.533"
-            app:srcCompat="@drawable/arrow" />
+            app:layout_constraintTop_toTopOf="@+id/view2"
+            app:srcCompat="@drawable/arrowleftblue" />
 
         <TextView
             android:id="@+id/topbar_text"
@@ -52,11 +66,10 @@
             android:layout_height="wrap_content"
             android:layout_weight="0"
             android:text="@string/profil"
-            android:textColor="#FBFBFB"
+            android:textColor="#A4E8E0"
             android:textSize="18sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -64,14 +77,13 @@
             android:id="@+id/imageView_checkmark"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginEnd="10dp"
-            android:layout_marginRight="10dp"
-            android:layout_marginBottom="5dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginRight="16dp"
             android:visibility="invisible"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.48"
             app:srcCompat="@drawable/checkmark2" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
