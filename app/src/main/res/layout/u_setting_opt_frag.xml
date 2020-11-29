@@ -85,7 +85,8 @@
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/Rediger"
                     android:layout_width="match_parent"
-                    android:layout_height="50dp">
+                    android:layout_height="50dp"
+                    android:layout_marginTop="2dp">
 
                     <ImageView
                         android:id="@+id/box_anmod"
@@ -134,8 +135,7 @@
             <LinearLayout
                 android:id="@+id/linearLayout"
                 android:layout_width="match_parent"
-                android:layout_height="120dp"
-                android:layout_marginTop="10dp"
+                android:layout_height="wrap_content"
                 android:orientation="vertical">
 
                 <TextView
@@ -143,6 +143,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
+                    android:layout_marginTop="10dp"
                     android:text="JURA"
                     android:textColor="#59C3FF" />
 
@@ -205,7 +206,8 @@
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
-                    android:layout_height="50dp">
+                    android:layout_height="50dp"
+                    android:layout_marginTop="2dp">
 
                     <ImageView
                         android:id="@+id/box_vilkaar"
@@ -264,7 +266,6 @@
                 android:id="@+id/info_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
                 android:orientation="vertical">
 
                 <TextView
@@ -272,6 +273,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
+                    android:layout_marginTop="10dp"
                     android:text="INFO"
                     android:textColor="#59C3FF"
                     android:textColorHighlight="#FFFFFF" />
@@ -335,7 +337,8 @@
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/kontakt_lay"
                     android:layout_width="match_parent"
-                    android:layout_height="50dp">
+                    android:layout_height="50dp"
+                    android:layout_marginTop="2dp">
 
                     <ImageView
                         android:id="@+id/box_kontakt"
@@ -396,9 +399,9 @@
                     android:layout_gravity="center|center_horizontal"
                     android:layout_marginTop="15dp"
                     android:gravity="center"
-                    android:shadowColor="#FFFFFF"
+                    android:shadowColor="#070707"
                     android:text="Log ud"
-                    android:textColor="#FFFFFF"
+                    android:textColor="#59C3FF"
                     android:textSize="18sp" />
 
                 <TextView
