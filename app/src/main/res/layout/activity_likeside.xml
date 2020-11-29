@@ -57,7 +57,7 @@
         <ImageView
             android:id="@+id/hjerte_back"
             android:layout_width="55dp"
-            android:layout_height="46dp"
+            android:layout_height="50dp"
             android:src="@drawable/rectanglefill"
             app:layout_constraintBottom_toBottomOf="@+id/rectimage"
             app:layout_constraintEnd_toEndOf="@+id/rectimage"
@@ -66,10 +66,8 @@
 
         <ImageView
             android:id="@+id/besked_back"
-            android:layout_width="50dp"
-            android:layout_height="46dp"
-            android:layout_marginTop="1dp"
-            android:layout_marginBottom="1dp"
+            android:layout_width="55dp"
+            android:layout_height="50dp"
             android:src="@drawable/rectanglefill"
             app:layout_constraintBottom_toBottomOf="@+id/rectimage"
             app:layout_constraintEnd_toStartOf="@+id/hjerte_back"

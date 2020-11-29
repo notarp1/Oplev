@@ -6,11 +6,28 @@
     android:layout_height="match_parent"
     tools:context=".CreateEvent.createEvent1_frag">
 
-    <ScrollView
+    <Button
+        android:id="@+id/create_next_btn"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:layout_editor_absoluteX="0dp"
-        tools:layout_editor_absoluteY="0dp">
+        android:layout_height="81dp"
+        android:background="#4C5270"
+        android:shadowColor="#FFFFFF"
+        android:text="VIDERE"
+        android:textColor="#A4E8E0"
+        android:textSize="30sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <ScrollView
+        android:id="@+id/scrollView3"
+        android:layout_width="match_parent"
+        android:layout_height="651dp"
+        app:layout_constraintBottom_toTopOf="@+id/create_next_btn"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -47,6 +64,8 @@
                 android:gravity="center"
                 android:hint="Overskrift"
                 android:inputType="textPersonName"
+                android:textColor="#A4E8E0"
+                android:textColorHint="#A4E8E0"
                 android:textSize="24sp"
                 app:layout_constraintBottom_toTopOf="@+id/create_desc_input"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -68,6 +87,8 @@
                 android:hint="Beskrivelse"
                 android:inputType="textMultiLine"
                 android:lines="3"
+                android:textColor="#A4E8E0"
+                android:textColorHint="#A4E8E0"
                 android:textSize="18sp"
                 app:layout_constraintBottom_toTopOf="@+id/create_price_input"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -84,6 +105,7 @@
                 android:layout_marginBottom="5dp"
                 android:ems="10"
                 android:inputType="number"
+                android:textColor="#A4E8E0"
                 app:layout_constraintBottom_toTopOf="@+id/create_date_input"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/create_desc_input" />
@@ -99,6 +121,8 @@
                 android:ems="10"
                 android:gravity="center"
                 android:text="DD/MM/YYYY"
+                android:textColor="#A4E8E0"
+                android:textColorHint="#A4E8E0"
                 android:textSize="18sp"
                 app:layout_constraintBottom_toTopOf="@+id/create_time_input"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -115,6 +139,8 @@
                 android:ems="10"
                 android:gravity="center"
                 android:text="HH:MM"
+                android:textColor="#A4E8E0"
+                android:textColorHint="#A4E8E0"
                 android:textSize="18sp"
                 app:layout_constraintBottom_toTopOf="@+id/create__city_input"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -128,7 +154,7 @@
                 android:layout_marginLeft="20dp"
                 android:gravity="left|center_vertical"
                 android:text="Pris:"
-                android:textColor="#000000"
+                android:textColor="#A4E8E0"
                 android:textSize="18sp"
                 app:layout_constraintBottom_toBottomOf="@+id/create_price_input"
                 app:layout_constraintStart_toStartOf="parent"
@@ -142,7 +168,7 @@
                 android:layout_marginLeft="20dp"
                 android:gravity="left|center_vertical"
                 android:text="Dato:"
-                android:textColor="#000000"
+                android:textColor="#A4E8E0"
                 android:textSize="18sp"
                 app:layout_constraintBottom_toBottomOf="@+id/create_date_input"
                 app:layout_constraintStart_toStartOf="parent"
@@ -156,7 +182,7 @@
                 android:layout_marginLeft="20dp"
                 android:gravity="left|center_vertical"
                 android:text="Tidspunkt:"
-                android:textColor="#000000"
+                android:textColor="#A4E8E0"
                 android:textSize="18sp"
                 app:layout_constraintBottom_toBottomOf="@+id/create_time_input"
                 app:layout_constraintStart_toStartOf="parent"
@@ -171,6 +197,7 @@
                 android:layout_marginBottom="5dp"
                 android:ems="10"
                 android:inputType="textPersonName"
+                android:textColor="#A4E8E0"
                 app:layout_constraintBottom_toTopOf="@+id/create_dropDown"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/create_time_input" />
@@ -197,22 +224,11 @@
                 android:layout_marginLeft="20dp"
                 android:gravity="left|center_vertical"
                 android:text="By:"
-                android:textColor="#000000"
+                android:textColor="#A4E8E0"
                 android:textSize="18sp"
                 app:layout_constraintBottom_toBottomOf="@+id/create__city_input"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/create__city_input" />
-
-            <Button
-                android:id="@+id/create_next_btn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@color/buttonBackground"
-                android:text="Videre"
-                android:textColor="@color/buttonText"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent" />
 
             <TextView
                 android:id="@+id/create_type_txt"
@@ -222,7 +238,7 @@
                 android:layout_marginLeft="16dp"
                 android:layout_marginTop="8dp"
                 android:text="Type:"
-                android:textColor="#000000"
+                android:textColor="#A4E8E0"
                 android:textSize="18sp"
                 app:layout_constraintBottom_toBottomOf="@+id/create_dropDown"
                 app:layout_constraintStart_toStartOf="parent"
@@ -230,13 +246,16 @@
 
             <Spinner
                 android:id="@+id/create_dropDown"
-                android:layout_width="216dp"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="20dp"
-                app:layout_constraintBottom_toTopOf="@+id/create_next_btn"
+                android:layout_width="208dp"
+                android:layout_height="23dp"
+                android:layout_marginTop="9dp"
+                android:background="@drawable/mybg"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.882"
-                app:layout_constraintStart_toEndOf="@+id/create_type_txt" />
+                app:layout_constraintHorizontal_bias="0.827"
+                app:layout_constraintStart_toEndOf="@+id/create_type_txt"
+                app:layout_constraintTop_toBottomOf="@+id/create__city_input"
+                />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>
