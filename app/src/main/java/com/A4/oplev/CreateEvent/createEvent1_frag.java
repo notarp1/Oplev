@@ -3,8 +3,12 @@ package com.A4.oplev.CreateEvent;
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -24,7 +28,13 @@ import android.widget.TimePicker;
 
 import com.A4.oplev.R;
 
+import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
 import java.util.Calendar;
+
+import Controller.PictureMaker;
+
+import static android.app.Activity.RESULT_OK;
 
 public class createEvent1_frag extends Fragment implements View.OnClickListener{
     //topbar text
@@ -132,7 +142,10 @@ public class createEvent1_frag extends Fragment implements View.OnClickListener{
     @Override
     public void onClick(View v) {
         if(v == pic){
-            //TODO: make possible for user to change source of "pic", when pressing it
+            System.out.println("BILLED PRESSED");
+            //Is mainly handled from actitity
+            //triggers onActivityResult in activity_create_event.java when picture is picked
+            PictureMaker.getInstance().uploadPic(getActivity());
         }
         else if(v == next_btn){
             //validate that inputs are entered (shows "errors" if not)
@@ -147,6 +160,7 @@ public class createEvent1_frag extends Fragment implements View.OnClickListener{
                 b.putString("time_in", time_in.getText().toString());
                 b.putString("city_in", city_in.getText().toString());
                 b.putString("type_in", currentType);
+                //TODO: FIND WAY TO PASS THE PICTURE TO NEXT WINDOW
 
                 //create fragment and add bundle to arguments
                 Fragment create2_frag = new createEvent2_frag();

@@ -1,5 +1,7 @@
 package com.A4.oplev.CreateEvent;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
@@ -36,6 +38,15 @@ public class Activity_Create_Event extends AppCompatActivity implements View.OnC
     public void onClick(View v) {
         if (v == back) {
            finish();
+        }
+    }
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK) {
+            ImageView pic = findViewById(R.id.create_pic);
+            Uri pickedImg = data.getData();
+            pic.setImageURI(pickedImg);
         }
     }
 }
