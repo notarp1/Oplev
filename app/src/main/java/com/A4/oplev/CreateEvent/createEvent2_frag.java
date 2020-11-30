@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.A4.oplev.R;
 
@@ -70,35 +71,39 @@ public class createEvent2_frag extends Fragment implements View.OnClickListener 
     @Override
     public void onClick(View v) {
         if(v == done_btn){
-            /*
-             * Parse values to controller which will create an event object and add it to program/database
-             * get values from last frag using getArg as below:
-             */
-            EventController.getInstance().createEvent(
-                    getArguments().getString("title_in"),
-                    getArguments().getString("desc_in"),
-                    getArguments().getString("price_in"),
-                    getArguments().getString("date_in"),
-                    getArguments().getString("time_in"),
-                    getArguments().getString("city_in"),
-                    currMinAge,
-                    currMaxAge,
-                    maleSwitch.isChecked(),
-                    femaleSwitch.isChecked()
+            if(maleSwitch.isChecked() || femaleSwitch.isChecked()) {
+                /*
+                 * Parse values to controller which will create an event object and add it to program/database
+                 * get values from last frag using getArg as below:
+                 */
+                EventController.getInstance().createEvent(
+                        getArguments().getString("title_in"),
+                        getArguments().getString("desc_in"),
+                        getArguments().getString("price_in"),
+                        getArguments().getString("date_in"),
+                        getArguments().getString("time_in"),
+                        getArguments().getString("city_in"),
+                        getArguments().getString("type_in"),
+                        currMinAge,
+                        currMaxAge,
+                        maleSwitch.isChecked(),
+                        femaleSwitch.isChecked()
                 );
 
 
+                //remove last frag from backstack
+                //(shouldnt be able to change event settings when "done" is pressed)
 
-            //remove last frag from backstack
-            //(shouldnt be able to change event settings when "done" is pressed)
 
-
-            //transaction to final create frag
-            getFragmentManager().beginTransaction()
-                    .replace(R.id.mainFragmentBox, new createEvent3_frag())
-                    .addToBackStack(null)
-                    .commit();
-
+                //transaction to final create frag
+                getFragmentManager().beginTransaction()
+                        .replace(R.id.mainFragmentBox, new createEvent3_frag())
+                        .addToBackStack(null)
+                        .commit();
+            }
+            else{
+                Toast.makeText(getContext(), "Vælg mindst et køn", Toast.LENGTH_SHORT).show();
+            }
 
         }
     }

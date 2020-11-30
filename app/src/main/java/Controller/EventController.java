@@ -32,15 +32,12 @@ public class EventController {
         return instance;
     }
 
-    public void createEvent(String name, String desc, String price, String date, String time, String city,
+    public void createEvent(String name, String desc, String price, String date, String time, String city, String type,
                             String minAge, String maxAge, boolean maleOn, boolean femaleOn){
         //create event dto
         eventDTO = new EventDTO();
 
         String avatar = userController.getUserAvatar();
-        /*
-        TODO: set owner of the event. is it string? (also pics/applicants/participants arent set)
-        event.setOwner(getCurrUser().getUserId());*/
 
         //set some values of DTO
         eventDTO.setTitle(name);
@@ -70,9 +67,9 @@ public class EventController {
                 .setOwnerPic(avatar)
                 .setEventPic(null)
                 .setEventId(null)
-                .setApplicants(null)
+                .setApplicants(new ArrayList<>())
                 .setParticipant(null)
-                .setType(null);
+                .setType(type);
 
         eventDAO.createEvent(eventDTO);
     }

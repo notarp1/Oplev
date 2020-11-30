@@ -67,7 +67,7 @@ public class EventDAO implements IEventDAO {
         eventObject.put("ownerId", event.getOwnerId());
         eventObject.put("ownerPic", event.getOwnerPic());
         eventObject.put("eventId", event.getEventId());
-        eventObject.put("title", event.getEventId());
+        eventObject.put("title", event.getTitle());
         eventObject.put("description", event.getDescription());
         eventObject.put("price", event.getPrice());
         eventObject.put("date", event.getDate());

@@ -36,7 +36,7 @@ public class createEvent1_frag extends Fragment implements View.OnClickListener{
     Button next_btn;
     Spinner dropDown;
     AdapterView.OnItemSelectedListener onItemSelectedListener;
-
+    String currentType = "";
 
     //dialog changelisteners
     DatePickerDialog.OnDateSetListener onDateSetListener;
@@ -88,6 +88,8 @@ public class createEvent1_frag extends Fragment implements View.OnClickListener{
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 // An item was selected. You can retrieve the selected item using
                 System.out.println(parent.getItemAtPosition(position));
+                //set the newly selected type to local string
+                currentType = parent.getItemAtPosition(position).toString();
             }
 
             @Override
@@ -144,6 +146,7 @@ public class createEvent1_frag extends Fragment implements View.OnClickListener{
                 b.putString("date_in", date_in.getText().toString());
                 b.putString("time_in", time_in.getText().toString());
                 b.putString("city_in", city_in.getText().toString());
+                b.putString("type_in", currentType);
 
                 //create fragment and add bundle to arguments
                 Fragment create2_frag = new createEvent2_frag();
