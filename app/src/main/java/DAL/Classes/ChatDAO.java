@@ -176,11 +176,11 @@ public class ChatDAO implements IChatDAO {
     }
 
     // Den her funktion bruges lige foreløbigt til at uploade billeder til firebase storage
-    public void uploadFile(Bitmap bitmap, FirestoreCallbackPic firestoreCallbackPic, String chat_id) {
+    public void uploadFile(Bitmap bitmap, FirestoreCallbackPic firestoreCallbackPic, String chat_id, String user_id) {
         // Først instantierer vi nogle objekter der skal bruges
         FirebaseStorage storage = FirebaseStorage.getInstance();
         StorageReference storageRef = storage.getReference();
-        StorageReference mountainImagesRef = storageRef.child("images/" + chat_id + new Date() + ".jpg");
+        StorageReference mountainImagesRef = storageRef.child("chats/" + chat_id + "/" + user_id + " " + new Date() + ".jpg");
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.JPEG, 20, baos);
         byte[] data = baos.toByteArray();

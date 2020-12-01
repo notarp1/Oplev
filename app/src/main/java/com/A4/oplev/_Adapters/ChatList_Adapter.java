@@ -92,7 +92,7 @@ public class ChatList_Adapter extends ArrayAdapter<String> {
                         // Nu sætter vi vores billede ind i tekstfeltet
                         besked.setText(ssb);
                         // Sætter baggrunden til den default vi har inde i aktiviteten
-                        besked.setBackgroundColor(mContext.getResources().getColor(R.color.backgroundColor));
+                        //besked.setBackgroundColor(mContext.getResources().getColor(R.color.backgroundColor));
                     } else {
                         // Hvis bitmappet er tomt så bare send en fejlbesked
                         Toast.makeText(mContext,"Error whilst loading picture", Toast.LENGTH_LONG).show();
@@ -118,10 +118,12 @@ public class ChatList_Adapter extends ArrayAdapter<String> {
                 besked.setLayoutParams(new RelativeLayout.LayoutParams(lp));
                 // Hvis beskeden ikke var et billede skal vi sætte baggrundens farve og tekstens farve til noget nyt
                 if (!isPic) {
-                    besked.setBackgroundColor(mContext.getResources().getColor(R.color.chatColorGrey));
-                    besked.setTextColor(mContext.getResources().getColor(R.color.black));
+                    listItem.findViewById(R.id.chat_background_pic).setBackgroundResource(R.drawable.beskedbackground2);
                 }
-                else besked.setGravity(Gravity.RIGHT);
+                else {
+                    listItem.findViewById(R.id.chat_background_pic).setVisibility(View.INVISIBLE);
+                    besked.setGravity(Gravity.RIGHT);
+                }
             }
         } else{
             // Helt det samme gøres for hvis beskeden er sendt fra en selv bare med andre farver og en anden margine på textviewet
@@ -131,8 +133,11 @@ public class ChatList_Adapter extends ArrayAdapter<String> {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
                 besked.setLayoutParams(new RelativeLayout.LayoutParams(lp));
                 if (!isPic) {
-                    besked.setBackgroundColor(mContext.getResources().getColor(R.color.chatColorBlue));
-                    besked.setTextColor(mContext.getResources().getColor(R.color.white));
+                    //besked.setBackgroundColor(mContext.getResources().getColor(R.color.chatColorBlue));
+                    //besked.setTextColor(mContext.getResources().getColor(R.color.white));
+                }
+                else {
+                    listItem.findViewById(R.id.chat_background_pic).setVisibility(View.INVISIBLE);
                 }
             }
         }

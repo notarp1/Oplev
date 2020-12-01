@@ -46,7 +46,7 @@ public class Activity_Chat extends AppCompatActivity  implements View.OnClickLis
     private TextView navn;
     private ScrollView beskeder;
     private LinearLayout linearLayout;
-    private Button sendBillede;
+    private ImageView sendBillede, sendMessage;
     private ArrayList<String> beskederStrings = new ArrayList<>();
     private EditText inputTekst;
     private ChatDTO dto;
@@ -76,10 +76,11 @@ public class Activity_Chat extends AppCompatActivity  implements View.OnClickLis
         tilbage = findViewById(R.id.chat_topbar_arrow);
         navn = findViewById(R.id.chat_topbar_text);
         navn.setText(person2);
-        sendBillede = findViewById(R.id.chat_indsendBesked);
+        sendBillede = findViewById(R.id.chat_upload_picture);
         beskeder = findViewById(R.id.chat_beskedList);
         inputTekst = findViewById(R.id.chat_inputBesked2);
         linearLayout = findViewById(R.id.chat_besked_linearlayout);
+        sendMessage = findViewById(R.id.chat_send_message);
 
 
         // For at kunne sende besked med enter på IME tastaturet så bruger vi den her funktion
@@ -88,7 +89,7 @@ public class Activity_Chat extends AppCompatActivity  implements View.OnClickLis
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 boolean handled = false;
                 // Checker hvis man har trykket GO (enter)
-                if (actionId == EditorInfo.IME_ACTION_GO) {
+                if (actionId == EditorInfo.IME_ACTION_GO | actionId == EditorInfo.IME_ACTION_DONE | actionId == EditorInfo.IME_ACTION_SEND | actionId == EditorInfo.IME_ACTION_NEXT) {
                     // Vi gider kun sende teksten hvis den ikke er tom
                     if (!inputTekst.getText().toString().equals("")) {
 
@@ -146,6 +147,12 @@ public class Activity_Chat extends AppCompatActivity  implements View.OnClickLis
                     View item = adapter.getView(i,null,null);
                     linearLayout.addView(item);
                 }
+                beskeder.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        beskeder.fullScroll(View.FOCUS_DOWN);
+                    }
+                });
             }
         }, chatDocumentPath);
 
@@ -185,7 +192,12 @@ public class Activity_Chat extends AppCompatActivity  implements View.OnClickLis
                                             linearLayout.addView(item);
                                         }
                                     }
-                                }
+                                    beskeder.post(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            beskeder.fullScroll(View.FOCUS_DOWN);
+                                        }
+                                    });                                }
                             }
                         } else {
                             Log.d(TAG, "Current data: null");
@@ -196,6 +208,7 @@ public class Activity_Chat extends AppCompatActivity  implements View.OnClickLis
         sendBillede.setOnClickListener(this);
         tilbage.setOnClickListener(this);
         settings.setOnClickListener(this);
+        sendMessage.setOnClickListener(this);
     }
 
 
@@ -222,6 +235,33 @@ public class Activity_Chat extends AppCompatActivity  implements View.OnClickLis
             }
         } else if (v == settings) {
             // gør noget her
+        } else if (v == sendMessage){
+            // Vi gider kun sende teksten hvis den ikke er tom
+            if (!inputTekst.getText().toString().equals("")) {
+
+                // Selvlavet funktion til at opdatere attributterne i vores ChatDTO objekt
+                updateChatDTO(person1, person2, inputTekst.getText().toString(), null);
+                // vi adder beskeden til vores liste af beskeder
+                beskederStrings.add(inputTekst.getText().toString());
+
+                // Nu når vi har sendt en besked vil vi gerne opdatere den i firestore
+                dao.updateChat(new ChatDAO.FirestoreCallback() {
+                    @Override
+                    // Der skal ventes på et callback for at få det nye objekt fra databasen
+                    public void onCallback(ChatDTO dto) {
+                        if (dto.getChatId() != null) {
+                            // Sætter klassens objekt til at være det nye (kan åbenbart ikke gøres inde fra funktionen)
+                            setChatDTO(dto);
+                            // Selvlavet adapter der tager listen af beskeder, Chat-objektet og den nuværende brugers navn som input og laver listviewet over chatten
+                            ChatList_Adapter adapter = new ChatList_Adapter(ctx, beskederStrings, dto, person1);
+                            View item = adapter.getView(beskederStrings.size()-1, null, null);
+                            linearLayout.addView(item);
+                            // clear tekstboksen
+                            inputTekst.setText("");
+                        }
+                    }
+                }, dto);
+            }
         }
     }
 
@@ -302,7 +342,7 @@ public class Activity_Chat extends AppCompatActivity  implements View.OnClickLis
                             }
                         }, dto);
                     }
-                },chatDocumentPath);
+                },chatDocumentPath, person1);
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
                 Toast.makeText(Activity_Chat.this, "Something went wrong", Toast.LENGTH_LONG).show();
