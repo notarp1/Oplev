@@ -112,6 +112,12 @@ public class Activity_Chat extends AppCompatActivity  implements View.OnClickLis
                                     linearLayout.addView(item);
                                     // clear tekstboksen
                                     inputTekst.setText("");
+                                    beskeder.post(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            beskeder.fullScroll(View.FOCUS_DOWN);
+                                        }
+                                    });
                                 }
                             }
                         }, dto);
@@ -258,6 +264,12 @@ public class Activity_Chat extends AppCompatActivity  implements View.OnClickLis
                             linearLayout.addView(item);
                             // clear tekstboksen
                             inputTekst.setText("");
+                            beskeder.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    beskeder.fullScroll(View.FOCUS_DOWN);
+                                }
+                            });
                         }
                     }
                 }, dto);

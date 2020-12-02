@@ -52,12 +52,20 @@ public class  LikeSide_Adapter extends ArrayAdapter<String> {
                 if (lastMessage.get(position).equals("pictureBlaBlaBla!:"))
                     currentLastMessage = currentName + ": " + "[Picture]";
                     // Sæt stringen til dette hvis sidste besked er fra anden person
-                else currentLastMessage = currentName + ": " + lastMessage.get(position);
+                else {
+                    if (lastMessage.get(position).length() > 30){
+                        currentLastMessage = currentName + "" + lastMessage.get(position).substring(0,30-currentName.length()) + "...";
+                    } else currentLastMessage = currentName + " " + lastMessage.get(position);
+                }
             } else {
                 if (lastMessage.get(position).equals("pictureBlaBlaBla!:"))
                     currentLastMessage = "Dig: " + "[Picture]";
                     // Sæt stringen til dette hvis sidste besked er fra en selv
-                else currentLastMessage = "Dig: " + lastMessage.get(position);
+                else {
+                    if (lastMessage.get(position).length() > 30){
+                        currentLastMessage = "Dig: " + lastMessage.get(position).substring(0,30) + "...";
+                    } else currentLastMessage = "Dig: " + lastMessage.get(position);
+                }
             }
         }
         else currentLastMessage = "";

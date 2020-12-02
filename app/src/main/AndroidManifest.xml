@@ -34,7 +34,8 @@
         <activity android:name=".SearchFilter.Activity_Search_Filter" />
         <activity android:name=".CreateEvent.Activity_Create_Event" />
         <activity android:name=".Like_Hjerte_Side.Activity_Likeside" />
-        <activity android:name=".Chat.Activity_Chat" />
+        <activity android:name=".Chat.Activity_Chat"
+            android:windowSoftInputMode="adjustPan"/>
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="${applicationId}.provider"

@@ -48,6 +48,7 @@ public class LikesideList_frag extends Fragment{
         ArrayList<String> names = new ArrayList<>(), lastMessage = new ArrayList<>(), headerList = new ArrayList<>(), lastSender = new ArrayList<>(), isInitialized = new ArrayList<>();
         ArrayList<Date> dates = new ArrayList<>();
 
+        //chatDAO.createChat(new ChatDTO(null,null,null,null,null,null,"Istur","John","Karl"));
 
         // Tjek om personen har nogle chatId's ellers så gå videre
         if (userDTO.getChatId() != null) {

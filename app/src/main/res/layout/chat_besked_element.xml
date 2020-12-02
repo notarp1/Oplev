@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <ImageView
@@ -19,6 +21,37 @@
         android:layout_height="wrap_content"
         android:text="TextView"
         android:textColor="#000000"
-        android:textSize="18sp"
+        android:textSize="20sp"
         android:paddingLeft="5dp"/>
+
+    <ImageView
+        android:id="@+id/chat_checkmark"
+        android:layout_width="16dp"
+        android:layout_height="15dp"
+        android:layout_below="@+id/chat_background_pic"
+        android:layout_alignEnd="@+id/chat_background_pic"
+        android:layout_alignRight="@+id/chat_background_pic"
+        android:layout_marginTop="0dp"
+        android:layout_marginEnd="3dp"
+        android:layout_marginRight="3dp"
+        app:srcCompat="@drawable/checkmark" />
+
+    <TextView
+        android:id="@+id/chat_besked_dato"
+        android:layout_width="132dp"
+        android:layout_height="15dp"
+        android:layout_below="@+id/chat_background_pic"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_marginStart="47dp"
+        android:layout_marginLeft="47dp"
+        android:layout_marginTop="0dp"
+        android:layout_marginEnd="2dp"
+        android:layout_marginRight="2dp"
+        android:layout_toStartOf="@+id/chat_checkmark"
+        android:layout_toLeftOf="@+id/chat_checkmark"
+        android:gravity="right"
+        android:text="man"
+        android:textColor="@color/white"
+        android:textSize="10dp" />
 </RelativeLayout>

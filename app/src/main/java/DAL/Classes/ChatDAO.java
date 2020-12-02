@@ -39,18 +39,23 @@ public class ChatDAO implements IChatDAO {
         // Først skal vi opbygge et chat objekt med de attributter der skal være i firestore
         Map<String, Object> chatObject = new HashMap<>();
         ArrayList<String> tempPics = new ArrayList<>();
-        for (int i = 0; i < chat.getPictures().size(); i++) {
-            tempPics.add(i,chat.getPictures().get(i).toString());
+        if (chat.getPictures() != null) {
+            for (int i = 0; i < chat.getPictures().size(); i++) {
+                tempPics.add(i, chat.getPictures().get(i).toString());
+            }
         }
 
-        chatObject.put("sender", chat.getSender());
-        chatObject.put("receiver", chat.getReceiver());
-        chatObject.put("messages", chat.getMessages());
-        chatObject.put("dates", chat.getDates());
+        String autoMessage = "Hej " + chat.getUser1() + " og " + chat.getUser2() + "\nCool, at I ønsker at tage på " + chat.getHeader() + " sammen.\n\nGod fornøjelse\nTeam SIMPLY";
+
+        chatObject.put("sender", "Oplev");
+        chatObject.put("receiver", "Oplev");
+        chatObject.put("messages", autoMessage);
+        chatObject.put("dates", new Date());
         chatObject.put("chatId",null);
         chatObject.put("pictures",tempPics);
         chatObject.put("header",chat.getHeader());
-
+        chatObject.put("user1",chat.getUser1());
+        chatObject.put("user2",chat.getUser2());
 
         // Dernæst vil vi adde objektet i vores chats collection
         db.collection("chats")
