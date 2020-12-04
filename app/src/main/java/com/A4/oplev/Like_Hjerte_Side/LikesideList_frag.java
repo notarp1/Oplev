@@ -45,7 +45,7 @@ public class LikesideList_frag extends Fragment{
         listView = root.findViewById(R.id.beskedListView);
 
         // Lige nu bliver de her auto-genereret men skal senere hen hentes ind fra firestore af
-        ArrayList<String> names = new ArrayList<>(), lastMessage = new ArrayList<>(), headerList = new ArrayList<>(), lastSender = new ArrayList<>(), isInitialized = new ArrayList<>();
+        ArrayList<String> names = new ArrayList<>(), lastMessage = new ArrayList<>(), headerList = new ArrayList<>(), lastSender = new ArrayList<>(), isInitialized = new ArrayList<>(), chatIds = new ArrayList<>();
         ArrayList<Date> dates = new ArrayList<>();
 
         //chatDAO.createChat(new ChatDTO(null,null,null,null,null,null,"Istur","John","Karl"));
@@ -76,9 +76,10 @@ public class LikesideList_frag extends Fragment{
                             names.add(dto.getUser1());
                         }
                         headerList.add(dto.getHeader());
-                        // Vi laver adapteren der laver vores listview over de chats man har
-                        LikeSide_Adapter adapter = new LikeSide_Adapter(getContext(), names, dates, lastMessage,headerList, lastSender, isInitialized);
-                        listView.setAdapter(adapter);
+                        chatIds.add(dto.getChatId());
+                        if (userDTO.getChatId().size() == headerList.size()){
+                            setListView(chatIds,names,dates,lastMessage,headerList,lastSender,isInitialized);
+                        }
                     }
                 }, userDTO.getChatId().get(j));
             }
@@ -116,5 +117,27 @@ public class LikesideList_frag extends Fragment{
 
 
         return root;
+    }
+
+    public void setListView(ArrayList<String> chatIds, ArrayList<String> names, ArrayList<Date> dates, ArrayList<String> lastMessage, ArrayList<String> headerList, ArrayList<String> lastSender, ArrayList<String> isInitialized){
+        ArrayList<String> tempNames = new ArrayList<>(), tempLastmessage = new ArrayList<>(), tempHeaderList = new ArrayList<>(), tempLastSender = new ArrayList<>(), tempIsInitialized = new ArrayList<>();
+        ArrayList<Date> tempDates = new ArrayList<>();
+
+        for (int i = 0; i < chatIds.size(); i++) {
+            for (int j = 0; j < chatIds.size(); j++) {
+                if (userDTO.getChatId().get(i).equals(chatIds.get(j))){
+                    tempNames.add(names.get(j));
+                    tempLastmessage.add(lastMessage.get(j));
+                    tempDates.add(dates.get(j));
+                    tempHeaderList.add(headerList.get(j));
+                    tempIsInitialized.add(isInitialized.get(j));
+                    tempLastSender.add(lastSender.get(j));
+                }
+            }
+        }
+
+        // Vi laver adapteren der laver vores listview over de chats man har
+        LikeSide_Adapter adapter = new LikeSide_Adapter(getContext(), tempNames, tempDates, tempLastmessage,tempHeaderList, tempLastSender, tempIsInitialized);
+        listView.setAdapter(adapter);
     }
 }
