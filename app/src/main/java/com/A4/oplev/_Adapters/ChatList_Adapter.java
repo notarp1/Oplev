@@ -99,7 +99,9 @@ public class ChatList_Adapter extends ArrayAdapter<String> {
                         ImageSpan span = new ImageSpan(drawable);
                         ssb.setSpan(span, ssb.length() - 1, ssb.length(), 0);
                         // Nu sætter vi vores billede ind i tekstfeltet
+
                         besked.setText(ssb);
+
                     } else {
                         // Hvis bitmappet er tomt så bare send en fejlbesked
                         Toast.makeText(mContext,"Error whilst loading picture", Toast.LENGTH_LONG).show();

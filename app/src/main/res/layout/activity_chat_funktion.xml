@@ -20,17 +20,30 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
+        <View
+            android:id="@+id/surround"
+            android:layout_width="40dp"
+            android:layout_height="33dp"
+            android:layout_marginStart="7dp"
+            android:layout_marginLeft="7dp"
+            android:background="@drawable/topbar2"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/rectimage"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
         <ImageView
+
             android:id="@+id/chat_topbar_arrow"
             android:layout_width="20dp"
             android:layout_height="25dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.04"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.533"
-            app:srcCompat="@drawable/arrow" />
+
+            app:layout_constraintBottom_toBottomOf="@+id/surround"
+            app:layout_constraintEnd_toEndOf="@+id/surround"
+            app:layout_constraintStart_toStartOf="@+id/surround"
+            app:layout_constraintTop_toTopOf="@+id/surround"
+            app:srcCompat="@drawable/arrowleftblue" />
 
         <TextView
             android:id="@+id/chat_topbar_text"
@@ -38,7 +51,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="0"
             android:text="navn"
-            android:textColor="#FBFBFB"
+            android:textColor="#A4E8E0"
             android:textSize="18sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
