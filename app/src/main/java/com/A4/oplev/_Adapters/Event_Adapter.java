@@ -30,9 +30,13 @@ import java.util.Date;
 import java.util.List;
 
 import DAL.Classes.EventDAO;
+import DAL.Classes.UserDAO;
 import DAL.Interfaces.CallbackEvent;
+import DAL.Interfaces.CallbackUser;
 import DAL.Interfaces.IEventDAO;
+import DAL.Interfaces.IUserDAO;
 import DTO.EventDTO;
+import DTO.UserDTO;
 
 public class Event_Adapter extends RecyclerView.Adapter<Event_Adapter.ViewHolder>implements View.OnClickListener {
 
@@ -42,16 +46,14 @@ public class Event_Adapter extends RecyclerView.Adapter<Event_Adapter.ViewHolder
     IEventDAO dataA;
 
 
-
-
-
-    public Event_Adapter(List<EventDTO> scoreListId) {
-        this.loadedEvent = scoreListId;
+    public Event_Adapter(List<EventDTO> scoreList) {
+        this.loadedEvent = scoreList;
         this.dataA = new EventDAO();
-
-        scoreListId.add(scoreListId.get(0));
-        scoreListId.add(scoreListId.get(0));
-
+        if(scoreList == null){
+            testData();
+        }else {
+            loadedEvent = scoreList;
+        }
     }
 
     public void testData(){
@@ -120,6 +122,7 @@ public class Event_Adapter extends RecyclerView.Adapter<Event_Adapter.ViewHolder
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
 
+        IUserDAO userDAO = new UserDAO();
         // Get the data model based on position
         EventDTO dto = loadedEvent.get(position);
         // Set item views based on your views and data model
@@ -128,11 +131,15 @@ public class Event_Adapter extends RecyclerView.Adapter<Event_Adapter.ViewHolder
         TextView withWhoText = holder.withWhoText;
         TextView headlineText = holder.headlineText;
 
-        // her skal dataen sættes in i holderen, der skal gøres brug af en billed controler til at håndtere billder.
-        withWhoText.setText(String.valueOf(dto.getOwnerId()));
-
-        headlineText.setText(dto.getTitle());
-        headlineText.setText(dto.getDescription());
+        // her skal dataen sættes in i holderen, der skal gøres brug af en billed controller til at håndtere billder.
+        userDAO.getUser(new CallbackUser() {
+            @Override
+            public void onCallback(UserDTO user) {
+                withWhoText.setText(user.getfName());
+                headlineText.setText(dto.getTitle());
+                headlineText.setText(dto.getDescription());
+            }
+        }, dto.getOwnerId());
     }
 
     public void dataCleanUp(int pos){

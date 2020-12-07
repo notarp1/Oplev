@@ -27,6 +27,8 @@ import com.A4.oplev._Adapters.Event_Adapter;
 
 //import DAL.DBAccess;
 import DAL.Classes.EventDAO;
+import DAL.Interfaces.CallBackEventList;
+import DAL.Interfaces.CallBackList;
 import DAL.Interfaces.CallbackEvent;
 import DTO.EventDTO;
 import swipeable.com.layoutmanager.OnItemSwiped;
@@ -64,15 +66,20 @@ public class Activity_Main extends AppCompatActivity implements View.OnClickList
 
 
         EventDAO dataA = new EventDAO();
-        dataA.getEvent(new CallbackEvent() {
-            @Override
-            public void onCallback(EventDTO event) {
-                eventList.add(event);
-                Log.d("eventDTO", "onCallback: " + event.getDescription());
-                eventIni(eventList, layoutManager);
 
+
+        dataA.getEventIDs(new CallBackList() {
+            @Override
+            public void onCallback(List<String> list) {
+               dataA.getEvents(new CallBackEventList() {
+                   @Override
+                   public void onCallback(List<EventDTO> events) {
+                       System.out.println(list);
+                       eventIni(events, layoutManager);
+                   }
+               }, list);
             }
-        }, "BdylZgT7sOvY7aGFUujK");
+        });
 
 
         options = findViewById(R.id.options_btn);

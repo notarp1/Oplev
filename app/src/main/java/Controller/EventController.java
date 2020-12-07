@@ -1,6 +1,12 @@
 package Controller;
 
+import androidx.annotation.NonNull;
+
 import com.A4.oplev.Activity_Event;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -31,6 +37,7 @@ public class EventController {
         if (instance == null) instance = new EventController();
         return instance;
     }
+
 
     public void createEvent(String name, String desc, String price, String date, String time, String city, String type,
                             String minAge, String maxAge, boolean maleOn, boolean femaleOn){

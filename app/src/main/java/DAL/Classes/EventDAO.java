@@ -1,32 +1,33 @@
 package DAL.Classes;
 
-import android.content.Intent;
-import android.preference.PreferenceManager;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
 
-import com.A4.oplev.__Main.Activity_Main;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
-import androidx.annotation.NonNull;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
+import DAL.Interfaces.CallBackEventList;
+import DAL.Interfaces.CallBackList;
 import DAL.Interfaces.CallbackEvent;
 import Controller.UserController;
 import DAL.Interfaces.IEventDAO;
 import DTO.EventDTO;
-import DTO.UserDTO;
 
 public class EventDAO implements IEventDAO {
     FirebaseFirestore db;
@@ -54,9 +55,44 @@ public class EventDAO implements IEventDAO {
                 }
             }
         });
+    }
+    public void getEvents(CallBackEventList callbackEventList, List<String> Ids) {
+        List<EventDTO> res = new ArrayList<>();
+        for(String id : Ids){
+            getEvent(new CallbackEvent() {
+                @Override
+                public void onCallback(EventDTO event) {
+                    res.add(event);
+
+                    if(res.size() == Ids.size()){
+                        callbackEventList.onCallback(res);
+                    }
+                }
+            } ,id);
+        }
 
     }
 
+
+    public void getEventIDs(CallBackList callBackList){
+        CollectionReference docRef = db.collection(collectionPath);
+        docRef.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        List<String> list = new ArrayList<>();
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : Objects.requireNonNull(task.getResult())) {
+                                list.add(document.getId());
+                            }
+                            callBackList.onCallback(list);
+                        } else {
+                            Log.d(TAG, "Error getting documents: ", task.getException());
+                        }
+
+
+                    }
+                });
+    }
 
     @Override
     public void createEvent(EventDTO event) {
