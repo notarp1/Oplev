@@ -39,7 +39,6 @@ import swipeable.com.layoutmanager.touchelper.ItemTouchHelper;
 public class Activity_Main extends AppCompatActivity implements View.OnClickListener{
 
     ImageView options, match, user;
-    Intent intent;
     RecyclerView rcEvent;
     SharedPreferences prefs;
     Boolean onInstance;
