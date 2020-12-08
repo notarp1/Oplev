@@ -45,12 +45,19 @@ public class ChatDAO implements IChatDAO {
             }
         }
 
-        String autoMessage = "Hej " + chat.getUser1() + " og " + chat.getUser2() + "\nCool, at I ønsker at tage på " + chat.getHeader() + " sammen.\n\nGod fornøjelse\nTeam SIMPLY";
+        ArrayList<String> senders = new ArrayList<>(), receivers = new ArrayList<>(), messages = new ArrayList<>();
+        ArrayList<Date> dates = new ArrayList<>();
+        senders.add("Oplev");
+        receivers.add("Oplev");
+        dates.add(new Date());
 
-        chatObject.put("sender", "Oplev");
-        chatObject.put("receiver", "Oplev");
-        chatObject.put("messages", autoMessage);
-        chatObject.put("dates", new Date());
+        String autoMessage = "Hej " + chat.getUser1() + " og " + chat.getUser2() + "\nCool, at I ønsker at tage på " + chat.getHeader() + " sammen.\n\nGod fornøjelse\nTeam SIMPLY";
+        messages.add(autoMessage);
+
+        chatObject.put("sender", senders);
+        chatObject.put("receiver", receivers);
+        chatObject.put("messages", messages);
+        chatObject.put("dates", dates);
         chatObject.put("chatId",null);
         chatObject.put("pictures",tempPics);
         chatObject.put("header",chat.getHeader());
