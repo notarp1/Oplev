@@ -9,6 +9,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import com.A4.oplev.R;
+
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -43,9 +45,19 @@ public class  LikeSide_Adapter extends ArrayAdapter<String> {
         String currentDate;
         // Vi tjekker om chatten indeholder nogle beskeder hvis ikke så indsæt tomme strenge
         if (isInitialized.get(position).equals("false")) currentDate = "";
-        else currentDate = dateList.get(position).toString().substring(0,3);
-        String currentLastMessage;
+        else {
+            Date now = new Date();
+            long days = Math.max(now.getDay(),dateList.get(position).getDay()) - Math.min(now.getDay(),dateList.get(position).getDay());
+            long months = Math.max(now.getMonth(),dateList.get(position).getMonth()) - Math.min(now.getMonth(),dateList.get(position).getMonth());
+            long years = Math.max(now.getYear(),dateList.get(position).getYear()) - Math.min(now.getYear(),dateList.get(position).getYear());
+            if (years > 0 || months > 0 || days > 7){
+                currentDate = dateList.get(position).getDate()+"";
+            }
+            else currentDate = dateList.get(position).toString().substring(0,3);
+        }
 
+
+        String currentLastMessage;
         if (isInitialized.get(position).equals("true")) {
             // Vi checker om den besked der sidst blev sendt er fra den man chatter med
             if (lastMessageSender.get(position).equals(currentName)) {

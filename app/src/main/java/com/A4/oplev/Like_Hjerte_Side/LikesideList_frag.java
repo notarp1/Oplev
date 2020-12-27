@@ -118,21 +118,77 @@ public class LikesideList_frag extends Fragment{
     }
 
     public void setListView(ArrayList<String> chatIds, ArrayList<String> names, ArrayList<Date> dates, ArrayList<String> lastMessage, ArrayList<String> headerList, ArrayList<String> lastSender, ArrayList<String> isInitialized){
-        ArrayList<String> tempNames = new ArrayList<>(), tempLastmessage = new ArrayList<>(), tempHeaderList = new ArrayList<>(), tempLastSender = new ArrayList<>(), tempIsInitialized = new ArrayList<>();
+        ArrayList<String> tempNames = new ArrayList<>(), tempLastmessage = new ArrayList<>(), tempHeaderList = new ArrayList<>(), tempLastSender = new ArrayList<>(), tempIsInitialized = new ArrayList<>(), tempChatIds = new ArrayList<>();
         ArrayList<Date> tempDates = new ArrayList<>();
 
-        for (int i = 0; i < chatIds.size(); i++) {
-            for (int j = 0; j < chatIds.size(); j++) {
-                if (userDTO.getChatId().get(i).equals(chatIds.get(j))){
-                    tempNames.add(names.get(j));
-                    tempLastmessage.add(lastMessage.get(j));
-                    tempDates.add(dates.get(j));
-                    tempHeaderList.add(headerList.get(j));
-                    tempIsInitialized.add(isInitialized.get(j));
-                    tempLastSender.add(lastSender.get(j));
+//        for (int i = 0; i < chatIds.size(); i++) {
+//            for (int j = 0; j < chatIds.size(); j++) {
+//                if (userDTO.getChatId().get(i).equals(chatIds.get(j))){
+//                    tempNames.add(names.get(j));
+//                    tempLastmessage.add(lastMessage.get(j));
+//                    tempDates.add(dates.get(j));
+//                    tempHeaderList.add(headerList.get(j));
+//                    tempIsInitialized.add(isInitialized.get(j));
+//                    tempLastSender.add(lastSender.get(j));
+//                }
+//            }
+//        }
+
+        for (int i = 0; i < dates.size(); i++) {
+            if (i == 0){
+                tempChatIds.add(chatIds.get(i));
+                tempNames.add(names.get(i));
+                tempLastmessage.add(lastMessage.get(i));
+                tempDates.add(dates.get(i));
+                tempHeaderList.add(headerList.get(i));
+                tempIsInitialized.add(isInitialized.get(i));
+                tempLastSender.add(lastSender.get(i));
+            }
+            else if (dates.get(i-1).after(dates.get(i))){
+                tempChatIds.add(chatIds.get(i));
+                tempNames.add(names.get(i));
+                tempLastmessage.add(lastMessage.get(i));
+                tempDates.add(dates.get(i));
+                tempHeaderList.add(headerList.get(i));
+                tempIsInitialized.add(isInitialized.get(i));
+                tempLastSender.add(lastSender.get(i));
+            }
+            else {
+                for (int j = 0; j < i; j++) {
+                    if (dates.get(i).after(dates.get(j))){
+                        for (int k = i; k > j; k--) {
+                            if (k == i){
+                                tempChatIds.add(chatIds.get(i));
+                                tempNames.add(names.get(i));
+                                tempLastmessage.add(lastMessage.get(i));
+                                tempDates.add(dates.get(i));
+                                tempHeaderList.add(headerList.get(i));
+                                tempIsInitialized.add(isInitialized.get(i));
+                                tempLastSender.add(lastSender.get(i));
+                            }
+                            else {
+                                tempChatIds.set(k, chatIds.get(k - 1));
+                                tempNames.set(k, names.get(k - 1));
+                                tempLastmessage.set(k, lastMessage.get(k - 1));
+                                tempDates.set(k, dates.get(k - 1));
+                                tempHeaderList.set(k, headerList.get(k - 1));
+                                tempIsInitialized.set(k, isInitialized.get(k - 1));
+                                tempLastSender.set(k, lastSender.get(k - 1));
+                            }
+                        }
+                        tempChatIds.set(j,chatIds.get(i));
+                        tempNames.set(j,names.get(i));
+                        tempLastmessage.set(j,lastMessage.get(i));
+                        tempDates.set(j,dates.get(i));
+                        tempHeaderList.set(j,headerList.get(i));
+                        tempIsInitialized.set(j,isInitialized.get(i));
+                        tempLastSender.set(j,lastSender.get(i));
+                    }
                 }
             }
+
         }
+        userDTO.setChatId(tempChatIds);
 
         // Vi laver adapteren der laver vores listview over de chats man har
         LikeSide_Adapter adapter = new LikeSide_Adapter(getContext(), tempNames, tempDates, tempLastmessage,tempHeaderList, tempLastSender, tempIsInitialized);
