@@ -65,13 +65,15 @@ public class createEvent2_frag extends Fragment implements View.OnClickListener 
             }
         });
 
+
+
         return root;
     }
 
     @Override
     public void onClick(View v) {
         if(v == done_btn){
-            if(maleSwitch.isChecked() || femaleSwitch.isChecked()) {
+            if(maleSwitch.isChecked() || femaleSwitch.isChecked()) { //make sure gender chosen
                 /*
                  * Parse values to controller which will create an event object and add it to program/database
                  * get values from last frag using getArg as below:
@@ -87,7 +89,8 @@ public class createEvent2_frag extends Fragment implements View.OnClickListener 
                         currMinAge,
                         currMaxAge,
                         maleSwitch.isChecked(),
-                        femaleSwitch.isChecked()
+                        femaleSwitch.isChecked(),
+                        ((Activity_Create_Event) getActivity()).getPickedImgUri()
                 );
 
 
@@ -102,6 +105,7 @@ public class createEvent2_frag extends Fragment implements View.OnClickListener 
                         .commit();
             }
             else{
+                //no gender chosen
                 Toast.makeText(getContext(), "Vælg mindst et køn", Toast.LENGTH_SHORT).show();
             }
 
