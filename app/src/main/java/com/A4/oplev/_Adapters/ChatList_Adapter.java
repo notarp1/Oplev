@@ -64,7 +64,6 @@ public class ChatList_Adapter extends ArrayAdapter<String> {
     @NonNull
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-        System.out.println("Position: " + position + "\tSize: " + beskederList.size());
         View listItem = convertView;
         boolean isPic = false;
         if(listItem == null)

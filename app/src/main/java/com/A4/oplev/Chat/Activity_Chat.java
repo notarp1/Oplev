@@ -144,8 +144,6 @@ public class Activity_Chat extends AppCompatActivity  implements View.OnClickLis
                     beskederStrings.addAll(dto.getMessages());
                 }
 
-                System.out.println("Beskeder size = " + beskederStrings.size());
-
                 // Opsætter listviewet med chatten der skal være der
                 ChatList_Adapter adapter = new ChatList_Adapter(ctx, beskederStrings, dto, person1);
                 linearLayout.removeAllViews();
