@@ -131,6 +131,9 @@ public class Event_Adapter extends RecyclerView.Adapter<Event_Adapter.ViewHolder
         TextView withWhoText = holder.withWhoText;
         TextView headlineText = holder.headlineText;
 
+
+
+
         // her skal dataen sættes in i holderen, der skal gøres brug af en billed controller til at håndtere billder.
         userDAO.getUser(new CallbackUser() {
             @Override
@@ -138,6 +141,8 @@ public class Event_Adapter extends RecyclerView.Adapter<Event_Adapter.ViewHolder
                 withWhoText.setText(user.getfName());
                 headlineText.setText(dto.getTitle());
                 headlineText.setText(dto.getDescription());
+                
+
             }
         }, dto.getOwnerId());
     }

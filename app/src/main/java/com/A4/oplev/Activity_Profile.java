@@ -1,6 +1,8 @@
 package com.A4.oplev;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
@@ -19,8 +21,11 @@ import Controller.UserController;
 public class Activity_Profile extends AppCompatActivity implements View.OnClickListener {
     public TextView about, city, desc, aboutName, job, edu, picNumber;
     ImageView pb;
+    RecyclerView pbtest;
     UserController userController;
     ArrayList<String> pictures, currPics;
+
+    ImageView p1, p2, p3, p4, p5, p6;
     boolean noPic;
     int height, width, currentPic, maxPic, minPic, maxPicPrint;
 
@@ -32,6 +37,8 @@ public class Activity_Profile extends AppCompatActivity implements View.OnClickL
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
+
+
 
         userController =  userController.getInstance();
         pictures = userController.getUserPictures();
@@ -46,13 +53,18 @@ public class Activity_Profile extends AppCompatActivity implements View.OnClickL
         pb = findViewById(R.id.imageView_pb);
         picNumber = findViewById(R.id.text_curPic);
 
+
         DisplayMetrics displayMetrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
         height = displayMetrics.heightPixels;
         width = displayMetrics.widthPixels;
         pb.setMaxHeight(height/2 + 200);
 
+
+
+
         getPictures();
+
 
 
         if(!noPic) {
@@ -61,13 +73,12 @@ public class Activity_Profile extends AppCompatActivity implements View.OnClickL
                 @Override
                 public void onSwipeLeft() {
                     if (currentPic != maxPic) {
-
-
                         Picasso.get().load(currPics.get(currentPic + 1))
                                 .resize(width, height / 2 + 200)
                                 .centerCrop()
                                 .placeholder(R.drawable.load2)
                                 .into(pb);
+
                         currentPic = currentPic + 1;
                         String text = currentPic + 1 + "/" + maxPicPrint;
                         picNumber.setText(text);
@@ -96,6 +107,8 @@ public class Activity_Profile extends AppCompatActivity implements View.OnClickL
 
 
     }
+
+
 
     private void getPictures() {
         currPics = new ArrayList<>();

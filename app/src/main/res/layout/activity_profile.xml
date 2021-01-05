@@ -18,6 +18,8 @@
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/question" />
 
+
+
     <ScrollView
         android:id="@+id/scrollView2"
         android:layout_width="match_parent"

@@ -31,7 +31,10 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
 
+
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 import Controller.UserController;
 
@@ -231,7 +234,7 @@ public class U_Settings_Edit extends Fragment implements View.OnClickListener, V
                     Uri file = uris[i];
                     picRef = mStorageRef.child("users/" + currentUser.getUid() + "/" + i);
 
-
+                    //Dette skal være callback
                     picRef.putFile(file)
                             .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                                 @Override
@@ -281,6 +284,7 @@ public class U_Settings_Edit extends Fragment implements View.OnClickListener, V
         String address = String.valueOf(uri);
 
         pictures.set(index, address);
+
     }
     private void picBool(int number) {
         picNumber = number;
