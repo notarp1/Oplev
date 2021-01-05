@@ -78,7 +78,7 @@ public class Activity_Main extends AppCompatActivity implements View.OnClickList
                    }
                }, list);
             }
-        });
+        },prefs);
 
 
         options = findViewById(R.id.options_btn);

@@ -1,5 +1,8 @@
 package DAL.Classes;
 
+import android.app.DownloadManager;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -13,10 +16,13 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -74,7 +80,39 @@ public class EventDAO implements IEventDAO {
     }
 
 
-    public void getEventIDs(CallBackList callBackList){
+    public void getEventIDs(CallBackList callBackList,SharedPreferences prefs) {
+        CollectionReference docRef = db.collection(collectionPath);
+        List<String> completeList = new ArrayList<>();
+
+        Task<QuerySnapshot> query = null;
+
+        ArrayList<String> kultur = new ArrayList<>();
+
+        /*if (prefs.getBoolean("kulturswitch", true)) {
+            query = (docRef.whereIn("type", Arrays.asList("Kultur", "Motion")).get());
+        }*/
+       /* if (prefs.getBoolean("motionswitch", true)) {
+            query = docRef.whereEqualTo("type", "Motion").get();
+       }*/
+
+
+        docRef.whereIn("type", Arrays.asList("Kultur", "Motion")).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    for (QueryDocumentSnapshot document : task.getResult()) {
+                        Log.d(TAG, document.getId() + " => " + document.getData());
+                        completeList.add(document.getId());
+                    }
+                    callBackList.onCallback(completeList);
+                } else {
+                    Log.d(TAG, "Error getting documents: ", task.getException());
+                }
+            }
+        });
+    }
+
+    /*public void getEventIDs(CallBackList callBackList){
         CollectionReference docRef = db.collection(collectionPath);
         docRef.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
@@ -92,7 +130,7 @@ public class EventDAO implements IEventDAO {
 
                     }
                 });
-    }
+    }*/
 
     @Override
     public void createEvent(EventDTO event) {
