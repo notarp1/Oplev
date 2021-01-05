@@ -57,7 +57,7 @@ public class  LikeSide_Adapter extends ArrayAdapter<String> {
                 DateFormat format1 = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
                 format1.setTimeZone(TimeZone.getTimeZone("GMT+1"));
                 currentDate = format1.format(dateList.get(position));
-            }
+            } else if (years == 0 && months == 0 && days == 0) currentDate = "I dag";
             else currentDate = dateList.get(position).toString().substring(0,3);
         }
 
@@ -71,8 +71,8 @@ public class  LikeSide_Adapter extends ArrayAdapter<String> {
                     // Sæt stringen til dette hvis sidste besked er fra anden person
                 else {
                     if (lastMessage.get(position).length() > 30){
-                        currentLastMessage = currentName + "" + lastMessage.get(position).substring(0,30-currentName.length()) + "...";
-                    } else currentLastMessage = currentName + " " + lastMessage.get(position);
+                        currentLastMessage = currentName + ": " + lastMessage.get(position).substring(0,30-currentName.length()) + "...";
+                    } else currentLastMessage = currentName + ": " + lastMessage.get(position);
                 }
             } else {
                 if (lastMessage.get(position).equals("pictureBlaBlaBla!:"))
