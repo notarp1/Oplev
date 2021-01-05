@@ -43,12 +43,10 @@ public class LikesideList_frag extends Fragment{
     private String currentUser;
     private ArrayList<String> names = new ArrayList<>(), lastMessage = new ArrayList<>(), headerList = new ArrayList<>(), lastSender = new ArrayList<>(), isInitialized = new ArrayList<>(), chatIds = new ArrayList<>();
     private ArrayList<Date> dates = new ArrayList<>();
-    private Semaphore semaphore;
 
     // Den her klasse bruges til at få lave chatlisten ude fra likesiden af (hvor man kan vælge den chat man vil ind i)
     @SuppressLint("ClickableViewAccessibility")
     public View onCreateView(LayoutInflater i, ViewGroup container, Bundle savedInstanceState) {
-        semaphore = new Semaphore(1);
         View root = i.inflate(R.layout.likeside_frag,container,false);
         // Vi henter nogle informationer fra userControlleren så vi ved hvilken person vi er i gang med at sætte listen op for
         userController = userController.getInstance();
@@ -191,7 +189,7 @@ public class LikesideList_frag extends Fragment{
         userDTO.setChatId(tempChatIds);
 
         // Vi laver adapteren der laver vores listview over de chats man har
-        LikeSide_Adapter adapter = new LikeSide_Adapter(getContext(), tempNames, tempDates, tempLastmessage,tempHeaderList, tempLastSender, tempIsInitialized);
+        LikeSide_Adapter adapter = new LikeSide_Adapter(requireContext(), tempNames, tempDates, tempLastmessage,tempHeaderList, tempLastSender, tempIsInitialized);
         listView.setAdapter(adapter);
         this.dates = tempDates;
         this.names = tempNames;
@@ -222,16 +220,10 @@ public class LikesideList_frag extends Fragment{
                                 for (int k = 0; k < chatIds.size(); k++) {
                                     if (chatIds.get(k).equals(temp.getChatId())) {
                                         if (!temp.getDates().get(temp.getDates().size() - 1).equals(dates.get(k))) {
-                                            try {
-                                                semaphore.acquire();
-                                                dates.set(k, temp.getDates().get(temp.getDates().size() - 1));
-                                                lastMessage.set(k, temp.getMessages().get(temp.getMessages().size() - 1));
-                                                lastSender.set(k, temp.getSender().get(temp.getMessages().size() - 1));
-                                                setListView(chatIds, names, dates, lastMessage, headerList, lastSender, isInitialized);
-                                            } catch (InterruptedException interruptedException) {
-                                                interruptedException.printStackTrace();
-                                            }
-                                            semaphore.release();
+                                            dates.set(k, temp.getDates().get(temp.getDates().size() - 1));
+                                            lastMessage.set(k, temp.getMessages().get(temp.getMessages().size() - 1));
+                                            lastSender.set(k, temp.getSender().get(temp.getMessages().size() - 1));
+                                            setListView(chatIds, names, dates, lastMessage, headerList, lastSender, isInitialized);
                                         }
                                         break;
                                     }
