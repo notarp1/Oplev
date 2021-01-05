@@ -9,9 +9,14 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import com.A4.oplev.R;
+
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 
 
 public class  LikeSide_Adapter extends ArrayAdapter<String> {
@@ -43,9 +48,21 @@ public class  LikeSide_Adapter extends ArrayAdapter<String> {
         String currentDate;
         // Vi tjekker om chatten indeholder nogle beskeder hvis ikke så indsæt tomme strenge
         if (isInitialized.get(position).equals("false")) currentDate = "";
-        else currentDate = dateList.get(position).toString().substring(0,3);
-        String currentLastMessage;
+        else {
+            Date now = new Date();
+            long days = Math.max(now.getDay(),dateList.get(position).getDay()) - Math.min(now.getDay(),dateList.get(position).getDay());
+            long months = Math.max(now.getMonth(),dateList.get(position).getMonth()) - Math.min(now.getMonth(),dateList.get(position).getMonth());
+            long years = Math.max(now.getYear(),dateList.get(position).getYear()) - Math.min(now.getYear(),dateList.get(position).getYear());
+            if (years > 0 || months > 0 || days > 7){
+                DateFormat format1 = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+                format1.setTimeZone(TimeZone.getTimeZone("GMT+1"));
+                currentDate = format1.format(dateList.get(position));
+            } else if (years == 0 && months == 0 && days == 0) currentDate = "I dag";
+            else currentDate = dateList.get(position).toString().substring(0,3);
+        }
 
+
+        String currentLastMessage;
         if (isInitialized.get(position).equals("true")) {
             // Vi checker om den besked der sidst blev sendt er fra den man chatter med
             if (lastMessageSender.get(position).equals(currentName)) {
@@ -54,8 +71,8 @@ public class  LikeSide_Adapter extends ArrayAdapter<String> {
                     // Sæt stringen til dette hvis sidste besked er fra anden person
                 else {
                     if (lastMessage.get(position).length() > 30){
-                        currentLastMessage = currentName + "" + lastMessage.get(position).substring(0,30-currentName.length()) + "...";
-                    } else currentLastMessage = currentName + " " + lastMessage.get(position);
+                        currentLastMessage = currentName + ": " + lastMessage.get(position).substring(0,30-currentName.length()) + "...";
+                    } else currentLastMessage = currentName + ": " + lastMessage.get(position);
                 }
             } else {
                 if (lastMessage.get(position).equals("pictureBlaBlaBla!:"))
