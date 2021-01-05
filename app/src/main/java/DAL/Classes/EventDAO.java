@@ -63,7 +63,6 @@ public class EventDAO implements IEventDAO {
                 @Override
                 public void onCallback(EventDTO event) {
                     res.add(event);
-
                     if(res.size() == Ids.size()){
                         callbackEventList.onCallback(res);
                     }
@@ -82,6 +81,7 @@ public class EventDAO implements IEventDAO {
                         List<String> list = new ArrayList<>();
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot document : Objects.requireNonNull(task.getResult())) {
+
                                 list.add(document.getId());
                             }
                             callBackList.onCallback(list);
