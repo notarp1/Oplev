@@ -10,10 +10,13 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import com.A4.oplev.R;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 
 
 public class  LikeSide_Adapter extends ArrayAdapter<String> {
@@ -51,7 +54,9 @@ public class  LikeSide_Adapter extends ArrayAdapter<String> {
             long months = Math.max(now.getMonth(),dateList.get(position).getMonth()) - Math.min(now.getMonth(),dateList.get(position).getMonth());
             long years = Math.max(now.getYear(),dateList.get(position).getYear()) - Math.min(now.getYear(),dateList.get(position).getYear());
             if (years > 0 || months > 0 || days > 7){
-                currentDate = dateList.get(position).getDate()+"";
+                DateFormat format1 = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+                format1.setTimeZone(TimeZone.getTimeZone("GMT+1"));
+                currentDate = format1.format(dateList.get(position));
             }
             else currentDate = dateList.get(position).toString().substring(0,3);
         }

@@ -144,7 +144,7 @@ public class LikesideList_frag extends Fragment{
                 tempIsInitialized.add(isInitialized.get(i));
                 tempLastSender.add(lastSender.get(i));
             }
-            else if (dates.get(i-1).after(dates.get(i))){
+            else if (tempDates.get(i-1).after(dates.get(i))){
                 tempChatIds.add(chatIds.get(i));
                 tempNames.add(names.get(i));
                 tempLastmessage.add(lastMessage.get(i));
@@ -155,25 +155,25 @@ public class LikesideList_frag extends Fragment{
             }
             else {
                 for (int j = 0; j < i; j++) {
-                    if (dates.get(i).after(dates.get(j))){
-                        for (int k = i; k > j; k--) {
+                    if (dates.get(i).after(tempDates.get(j))){
+                        for (int k = i; k >= j; k--) {
                             if (k == i){
-                                tempChatIds.add(chatIds.get(i));
-                                tempNames.add(names.get(i));
-                                tempLastmessage.add(lastMessage.get(i));
-                                tempDates.add(dates.get(i));
-                                tempHeaderList.add(headerList.get(i));
-                                tempIsInitialized.add(isInitialized.get(i));
-                                tempLastSender.add(lastSender.get(i));
+                                tempChatIds.add(tempChatIds.get(i-1));
+                                tempNames.add(tempNames.get(i-1));
+                                tempLastmessage.add(tempLastmessage.get(i-1));
+                                tempDates.add(tempDates.get(i-1));
+                                tempHeaderList.add(tempHeaderList.get(i-1));
+                                tempIsInitialized.add(tempIsInitialized.get(i-1));
+                                tempLastSender.add(tempLastSender.get(i-1));
                             }
-                            else {
-                                tempChatIds.set(k, chatIds.get(k - 1));
-                                tempNames.set(k, names.get(k - 1));
-                                tempLastmessage.set(k, lastMessage.get(k - 1));
-                                tempDates.set(k, dates.get(k - 1));
-                                tempHeaderList.set(k, headerList.get(k - 1));
-                                tempIsInitialized.set(k, isInitialized.get(k - 1));
-                                tempLastSender.set(k, lastSender.get(k - 1));
+                            else if (k != 0 ){
+                                tempChatIds.set(k, tempChatIds.get(Math.max(k - 1,0)));
+                                tempNames.set(k, tempNames.get(Math.max(k - 1,0)));
+                                tempLastmessage.set(k, tempLastmessage.get(Math.max(k - 1,0)));
+                                tempDates.set(k, tempDates.get(Math.max(k - 1,0)));
+                                tempHeaderList.set(k, tempHeaderList.get(Math.max(k - 1,0)));
+                                tempIsInitialized.set(k, tempIsInitialized.get(Math.max(k - 1,0)));
+                                tempLastSender.set(k, tempLastSender.get(Math.max(k - 1,0)));
                             }
                         }
                         tempChatIds.set(j,chatIds.get(i));
@@ -184,6 +184,7 @@ public class LikesideList_frag extends Fragment{
                         tempIsInitialized.set(j,isInitialized.get(i));
                         tempLastSender.set(j,lastSender.get(i));
                     }
+                    break;
                 }
             }
 
