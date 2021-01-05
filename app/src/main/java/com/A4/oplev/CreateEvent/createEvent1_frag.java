@@ -1,8 +1,10 @@
 package com.A4.oplev.CreateEvent;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -54,6 +56,9 @@ public class createEvent1_frag extends Fragment implements View.OnClickListener{
 
     //date time values
     int day, month, year, hour, minute;
+
+    // for input validation
+    boolean inputIsValid;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -160,7 +165,8 @@ public class createEvent1_frag extends Fragment implements View.OnClickListener{
                 b.putString("time_in", time_in.getText().toString());
                 b.putString("city_in", city_in.getText().toString());
                 b.putString("type_in", currentType);
-                //TODO: FIND WAY TO PASS THE PICTURE TO NEXT WINDOW
+                // *** EVENT PIC URI IS IN ACTIVITY, AVAIL FROM NEXT FRAG ALREADY
+                // WITH METHOD ((Activity_Create_Event) getActivity()).getPickedImgUri()
 
                 //create fragment and add bundle to arguments
                 Fragment create2_frag = new createEvent2_frag();
@@ -198,8 +204,7 @@ public class createEvent1_frag extends Fragment implements View.OnClickListener{
     // Method for checking if all inputs have data. If not, prompt users with "setErrors"
     // return true if all have inputs, return false if not.
     private boolean isInputValid() {
-        String invalidInputToast = "Manglende input: \r\n";
-        boolean inputIsValid = true;
+        inputIsValid = true;
         if(title_in.getText().toString().equals("")){
             inputIsValid = false;
             title_in.setError("Indsæt titel");
@@ -223,6 +228,33 @@ public class createEvent1_frag extends Fragment implements View.OnClickListener{
         if(city_in.getText().toString().equals("")){
             inputIsValid = false;
             city_in.setError("Indsæt by");
+        }
+        if( ((Activity_Create_Event) getActivity()).getPickedImgUri() == null){
+
+            // no picture selected. Ask user if they want to proceed without pic
+            /* TODO : fix below code to wait for user to answer before moving on (callback?)
+            // from https://stackoverflow.com/questions/2478517/how-to-display-a-yes-no-dialog-box-on-android
+            DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    switch (which){
+                        case DialogInterface.BUTTON_POSITIVE:
+                            //Yes button clicked
+                            //input still ok
+                            break;
+                        case DialogInterface.BUTTON_NEGATIVE:
+                            //No button clicked
+                            //input not ok
+                            inputIsValid = false;
+                            break;
+                    }
+                }
+            };
+
+            AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+            builder.setMessage("Billede ikke valgt. Fortsæt alligevel?").setPositiveButton("Ja", dialogClickListener)
+                    .setNegativeButton("Nej", dialogClickListener).show();
+             */
         }
 
         return inputIsValid;

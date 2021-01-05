@@ -1,5 +1,7 @@
 package Controller;
 
+import android.net.Uri;
+
 import com.A4.oplev.Activity_Event;
 
 import java.util.ArrayList;
@@ -34,7 +36,7 @@ public class EventController {
 
 
     public void createEvent(String name, String desc, String price, String date, String time, String city, String type,
-                            String minAge, String maxAge, boolean maleOn, boolean femaleOn){
+                            String minAge, String maxAge, boolean maleOn, boolean femaleOn, Uri eventImgUri){
         //create event dto
         eventDTO = new EventDTO();
 
@@ -72,7 +74,7 @@ public class EventController {
                 .setParticipant(null)
                 .setType(type);
 
-        eventDAO.createEvent(eventDTO);
+        eventDAO.createEvent(eventDTO, eventImgUri);
     }
 
 
