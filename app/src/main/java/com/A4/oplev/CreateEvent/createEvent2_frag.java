@@ -106,7 +106,7 @@ public class createEvent2_frag extends Fragment implements View.OnClickListener 
             }
             else{
                 //no gender chosen
-                Toast.makeText(getContext(), "Vælg mindst et køn", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), "Vælg mindst et køn", Toast.LENGTH_SHORT).show();
             }
 
         }
