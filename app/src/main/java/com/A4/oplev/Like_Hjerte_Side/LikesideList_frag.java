@@ -53,7 +53,7 @@ public class LikesideList_frag extends Fragment{
     public View onCreateView(LayoutInflater i, ViewGroup container, Bundle savedInstanceState) {
         View root = i.inflate(R.layout.likeside_frag,container,false);
         // Vi henter nogle informationer fra userControlleren så vi ved hvilken person vi er i gang med at sætte listen op for
-        userController = userController.getInstance();
+        userController = UserController.getInstance();
         userDTO = userController.getCurrUser();
         chatDAO = new ChatDAO();
 
@@ -62,12 +62,13 @@ public class LikesideList_frag extends Fragment{
 
         // Tjek om personen har nogle chatId's ellers så gå videre
         if (userDTO == null) userDTO = userController.getCurrUser();
-        if (userDTO.getChatId() != null) {
-            // Vi looper over alle chatId's og opbygger dens view og indsætter den i listviewet
-            for (int j = 0; j < userDTO.getChatId().size(); j++) {
-                chatDAO.readChat(new ChatDAO.FirestoreCallback() {
-                    @Override
-                    public void onCallback(ChatDTO dto) {
+        if (userDTO != null) {
+            if (userDTO.getChatId() != null) {
+                // Vi looper over alle chatId's og opbygger dens view og indsætter den i listviewet
+                for (int j = 0; j < userDTO.getChatId().size(); j++) {
+                    chatDAO.readChat(new ChatDAO.FirestoreCallback() {
+                        @Override
+                        public void onCallback(ChatDTO dto) {
                             if (dto.getSender() != null) {
                                 dates.add(dto.getDates().get(dto.getDates().size() - 1));
                                 lastMessage.add(dto.getMessages().get(dto.getMessages().size() - 1));
@@ -93,8 +94,9 @@ public class LikesideList_frag extends Fragment{
                                 setChangeListeners();
                             }
 
-                    }
-                }, userDTO.getChatId().get(j));
+                        }
+                    }, userDTO.getChatId().get(j));
+                }
             }
         }
 
@@ -194,8 +196,10 @@ public class LikesideList_frag extends Fragment{
         userDTO.setChatId(tempChatIds);
 
         // Vi laver adapteren der laver vores listview over de chats man har
-        LikeSide_Adapter adapter = new LikeSide_Adapter(mContext, tempNames, tempDates, tempLastmessage,tempHeaderList, tempLastSender, tempIsInitialized);
-        listView.setAdapter(adapter);
+        if (mContext != null) {
+            LikeSide_Adapter adapter = new LikeSide_Adapter(mContext, tempNames, tempDates, tempLastmessage, tempHeaderList, tempLastSender, tempIsInitialized);
+            listView.setAdapter(adapter);
+        }
         this.dates = tempDates;
         this.names = tempNames;
         this.lastMessage = tempLastmessage;
