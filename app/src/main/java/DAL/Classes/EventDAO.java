@@ -3,23 +3,26 @@ package DAL.Classes;
 import android.app.DownloadManager;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import android.net.Uri;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintSet;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
-
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
@@ -30,10 +33,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
+import Controller.UserController;
 import DAL.Interfaces.CallBackEventList;
 import DAL.Interfaces.CallBackList;
 import DAL.Interfaces.CallbackEvent;
-import Controller.UserController;
 import DAL.Interfaces.IEventDAO;
 import DTO.EventDTO;
 
@@ -41,9 +44,9 @@ public class EventDAO implements IEventDAO {
     FirebaseFirestore db;
     private final String TAG = "eventLog";
     private UserController userController;
-
     private String collectionPath = "events";
-
+    private StorageReference mStorageRef;
+    private StorageReference picRef;
 
     public EventDAO(){this.db = FirebaseFirestore.getInstance();}
 
@@ -110,7 +113,7 @@ public class EventDAO implements IEventDAO {
 
 
     @Override
-    public void createEvent(EventDTO event) {
+    public void createEvent(EventDTO event, Uri picUri) {
         userController = UserController.getInstance();
         // send new event to db
         Map<String, Object> eventObject = new HashMap<>();
@@ -133,28 +136,61 @@ public class EventDAO implements IEventDAO {
         eventObject.put("type", event.getType());
 
 
-
+        //first add event (no pic, no eventid)
         db.collection("events")
                 .add(eventObject)
                 .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                     @Override
                     public void onSuccess(DocumentReference documentReference) {
                         Log.d(TAG, "DocumentSnapshot written with ID: " + documentReference.getId());
+                        //second add eventid to users' event list
                         userController.updateUserEvents(documentReference.getId());
+
+                        //overwrite object map eventid
                         eventObject.put("eventId", documentReference.getId());
-                        //overwrite database document with new ownerId.
-                        db.collection("events").document(documentReference.getId())
-                                .set(eventObject)
-                                .addOnSuccessListener(new OnSuccessListener<Void>() {
+
+                        //add the picture to database
+                        mStorageRef  = FirebaseStorage.getInstance().getReference();
+                        picRef = mStorageRef.child("events/" + documentReference.getId() + "/1");
+
+                        picRef.putFile(picUri)
+                                .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                                     @Override
-                                    public void onSuccess(Void aVoid) {
-                                        Log.d(TAG, "DocumentSnapshot successfully written!");
+                                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                                        // Get a URL to the uploaded content picture
+                                        picRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                            @Override
+                                            public void onSuccess(Uri uri) {
+                                                //set URL of eventpic in eventObject map
+                                                eventObject.put("eventPic",String.valueOf(uri));
+                                                //eventObject is now updated with eventId and eventPic URL
+                                                //update the event in db
+                                                //overwrite database document with new eventId and link to pic
+                                                db.collection("events").document(documentReference.getId())
+                                                        .set(eventObject)
+                                                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                            @Override
+                                                            public void onSuccess(Void aVoid) {
+                                                                Log.d(TAG, "DocumentSnapshot successfully written!");
+                                                            }
+                                                        })
+                                                        .addOnFailureListener(new OnFailureListener() {
+                                                            @Override
+                                                            public void onFailure(@NonNull Exception e) {
+                                                                Log.w(TAG, "Error writing document", e);
+                                                            }
+                                                        });
+                                            }
+                                        });
+
+
                                     }
                                 })
                                 .addOnFailureListener(new OnFailureListener() {
                                     @Override
-                                    public void onFailure(@NonNull Exception e) {
-                                        Log.w(TAG, "Error writing document", e);
+                                    public void onFailure(@NonNull Exception exception) {
+                                        // Handle unsuccessful uploads
+                                        // ...
                                     }
                                 });
                     }

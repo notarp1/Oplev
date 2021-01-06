@@ -1,12 +1,7 @@
 package com.A4.oplev._Adapters;
 
 import android.content.Context;
-import android.content.res.Resources;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
-import android.util.Log;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,22 +11,16 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.A4.oplev.PicassoFunc;
+import com.A4.oplev.Activity_Profile;
 import com.A4.oplev.R;
-import com.google.firebase.storage.internal.Sleeper;
 import com.squareup.picasso.Picasso;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
+import Controller.UserController;
 import DAL.Classes.EventDAO;
 import DAL.Classes.UserDAO;
-import DAL.Interfaces.CallbackEvent;
 import DAL.Interfaces.CallbackUser;
 import DAL.Interfaces.IEventDAO;
 import DAL.Interfaces.IUserDAO;
@@ -45,9 +34,12 @@ public class Event_Adapter extends RecyclerView.Adapter<Event_Adapter.ViewHolder
     int offset = 0;
     IEventDAO dataA;
 
+    Context ctx;
+    EventDTO eventDTO;
 
-    public Event_Adapter(List<EventDTO> scoreList) {
+    public Event_Adapter(List<EventDTO> scoreList, Context frame) {
         this.loadedEvent = scoreList;
+        this.ctx = frame;
         this.dataA = new EventDAO();
         if(scoreList == null){
             testData();
@@ -124,22 +116,43 @@ public class Event_Adapter extends RecyclerView.Adapter<Event_Adapter.ViewHolder
 
         IUserDAO userDAO = new UserDAO();
         // Get the data model based on position
-        EventDTO dto = loadedEvent.get(position);
+        eventDTO = loadedEvent.get(position);
         // Set item views based on your views and data model
-        ImageView  profilePic = holder.profilePic;
+        ImageView profilePic = holder.profilePic;
         ImageView mainPic = holder.mainPic;
         TextView withWhoText = holder.withWhoText;
         TextView headlineText = holder.headlineText;
+
+
 
         // her skal dataen sættes in i holderen, der skal gøres brug af en billed controller til at håndtere billder.
         userDAO.getUser(new CallbackUser() {
             @Override
             public void onCallback(UserDTO user) {
+
+                int width = 200;
+                int height = 10;
+
+                System.out.println(eventDTO.getOwnerId() + "HAHA2");
                 withWhoText.setText(user.getfName());
-                headlineText.setText(dto.getTitle());
-                headlineText.setText(dto.getDescription());
+                headlineText.setText(eventDTO.getTitle());
+
+                Picasso.get().load(eventDTO.getOwnerPic())
+                        .resize(width, height/2 + 200)
+                        .centerCrop()
+                        .placeholder(R.drawable.load2)
+                        .error(R.drawable.question)
+                        .transform(new RoundedTransformation(90,0))
+                        .into(profilePic);
+                Picasso.get().load(eventDTO.getEventPic())
+                        .resize(width, height/2 + 200)
+                        .centerCrop()
+                        .placeholder(R.drawable.load2)
+                        .error(R.drawable.question)
+                        .into(mainPic);
+
             }
-        }, dto.getOwnerId());
+        }, eventDTO.getOwnerId());
     }
 
     public void dataCleanUp(int pos){
@@ -173,13 +186,29 @@ public class Event_Adapter extends RecyclerView.Adapter<Event_Adapter.ViewHolder
             profilePic = (ImageView) itemView.findViewById(R.id.eventItem_pp);
             withWhoText = (TextView) itemView.findViewById(R.id.evntItem_withWho);
             headlineText = (TextView) itemView.findViewById(R.id.eventitem_Headline);
-
+            profilePic.setOnClickListener(this);
         }
 
         @Override
         public void onClick(View view) {
             int id =this.getLayoutPosition();
 
+            if(view == profilePic){
+                UserController user = UserController.getInstance();
+
+                System.out.println(eventDTO.getOwnerId() + " HGAHAH");
+
+
+                user.getUser(new CallbackUser() {
+                    @Override
+                    public void onCallback(UserDTO user) {
+                        Intent i = new Intent(ctx, Activity_Profile.class);
+                        i.putExtra("user", user);
+                        i.putExtra("load", 1);
+                        ctx.startActivity(i);
+                    }
+                }, eventDTO.getOwnerId());
+            }
         }
     }
 

@@ -1,12 +1,8 @@
 package Controller;
 
-import androidx.annotation.NonNull;
+import android.net.Uri;
 
 import com.A4.oplev.Activity_Event;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -40,7 +36,7 @@ public class EventController {
 
 
     public void createEvent(String name, String desc, String price, String date, String time, String city, String type,
-                            String minAge, String maxAge, boolean maleOn, boolean femaleOn){
+                            String minAge, String maxAge, boolean maleOn, boolean femaleOn, Uri eventImgUri){
         //create event dto
         eventDTO = new EventDTO();
 
@@ -78,7 +74,7 @@ public class EventController {
                 .setParticipant(null)
                 .setType(type);
 
-        eventDAO.createEvent(eventDTO);
+        eventDAO.createEvent(eventDTO, eventImgUri);
     }
 
 

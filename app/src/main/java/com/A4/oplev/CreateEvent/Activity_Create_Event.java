@@ -9,13 +9,12 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.A4.oplev.CreateEvent.createEvent1_frag;
 import com.A4.oplev.R;
 
 public class Activity_Create_Event extends AppCompatActivity implements View.OnClickListener {
     ImageView back;
     static TextView title;
-
+    private Uri pickedImgUri;
     public void onCreate(Bundle saveInstanceState) {
         super.onCreate(saveInstanceState);
         // uses the same topbar with empty frag below as u_settings...
@@ -32,6 +31,9 @@ public class Activity_Create_Event extends AppCompatActivity implements View.OnC
         //fill fragment holder with createvent 1
         getSupportFragmentManager().beginTransaction().replace(R.id.mainFragmentBox,  new createEvent1_frag(), "uSettingMainBox")
                 .commit();
+        //initiate picked image to null
+        pickedImgUri = null;
+
 
     }
     @Override
@@ -43,10 +45,16 @@ public class Activity_Create_Event extends AppCompatActivity implements View.OnC
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        System.out.println("jbe in actres act");
         if (resultCode == RESULT_OK) {
             ImageView pic = findViewById(R.id.create_pic);
-            Uri pickedImg = data.getData();
-            pic.setImageURI(pickedImg);
+            pickedImgUri = data.getData();
+            pic.setImageURI(pickedImgUri);
         }
+    }
+
+    public Uri getPickedImgUri() {
+        System.out.println("jbe picked img method woop");
+        return pickedImgUri;
     }
 }
