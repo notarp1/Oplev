@@ -1,13 +1,11 @@
 package com.A4.oplev.UserSettings;
 
 import android.content.Intent;
-import android.graphics.PixelFormat;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -24,7 +22,7 @@ import DTO.UserDTO;
 
 public class U_Settings_Main extends Fragment implements View.OnClickListener {
 
-    View visProfil, rediger, indstillinger;
+    View visProfil, rediger, indstillinger, egneEvents;
     public TextView about;
     UserController userController;
     UserDTO user;
@@ -56,6 +54,7 @@ public class U_Settings_Main extends Fragment implements View.OnClickListener {
         visProfil = root.findViewById(R.id.box_profil);
         rediger = root.findViewById(R.id.box_rediger);
         indstillinger = root.findViewById(R.id.box_indstillinger);
+        egneEvents = root.findViewById(R.id.box_events);
         about = root.findViewById(R.id.u_profile_name);
         profilepic = root.findViewById(R.id.profile_pic);
 
@@ -65,6 +64,7 @@ public class U_Settings_Main extends Fragment implements View.OnClickListener {
         indstillinger.setOnClickListener(this);
         rediger.setOnClickListener(this);
         visProfil.setOnClickListener(this);
+        egneEvents.setOnClickListener(this);
 
         DisplayMetrics displayMetrics = new DisplayMetrics();
         getActivity().getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
@@ -112,9 +112,16 @@ public class U_Settings_Main extends Fragment implements View.OnClickListener {
                      .addToBackStack(null)
                      .commit();
 
-         } else if (v == visProfil){
+         } else if (v == visProfil) {
              Intent i = new Intent(getActivity(), Activity_Profile.class);
              startActivity(i);
+
+         }else if (v == egneEvents) {
+             getFragmentManager().beginTransaction()
+                     .replace(R.id.mainFragmentBox, new U_Settings_Options())
+                     .addToBackStack(null)
+                     .commit();
+
          } else if(v == back){
              System.out.println("HEJ");
                 getActivity().finish();
