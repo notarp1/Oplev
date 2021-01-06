@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
@@ -19,12 +20,17 @@ import com.A4.oplev.Chat.Activity_Chat;
 import Controller.Listeners.OnSwipeTouchListener;
 import Controller.UserController;
 import DAL.Classes.ChatDAO;
+import DAL.Classes.EventDAO;
+import DAL.Interfaces.CallbackEvent;
+import DAL.Interfaces.CallbackUser;
 import DTO.ChatDTO;
+import DTO.EventDTO;
 import DTO.UserDTO;
 
 import com.A4.oplev.R;
 import com.A4.oplev._Adapters.ChatList_Adapter;
 import com.A4.oplev._Adapters.LikeSide_Adapter;
+import com.A4.oplev._Adapters.LikeSide_Event_Adapter;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -39,13 +45,16 @@ import java.util.concurrent.Semaphore;
 
 
 public class LikesideList_frag extends Fragment{
-    private ListView listView;
+    private ListView chat_listView, tilmeldinger_listView;
     private ChatDAO chatDAO;
+    private EventDAO eventDAO;
     private UserDTO userDTO;
     private UserController userController;
     private String currentUser;
     private ArrayList<String> names = new ArrayList<>(), lastMessage = new ArrayList<>(), headerList = new ArrayList<>(), lastSender = new ArrayList<>(), isInitialized = new ArrayList<>(), chatIds = new ArrayList<>();
     private ArrayList<Date> dates = new ArrayList<>();
+    private ArrayList<Integer> eventApplicantsSize = new ArrayList<>();
+    private ArrayList<String> eventHeaders = new ArrayList<>(), eventEventPic = new ArrayList<>(), eventApplicantPic = new ArrayList<>(), eventOwnerPic = new ArrayList<>(), eventFirstApplicants = new ArrayList<>();
     private Context mContext;
 
     // Den her klasse bruges til at få lave chatlisten ude fra likesiden af (hvor man kan vælge den chat man vil ind i)
@@ -56,9 +65,10 @@ public class LikesideList_frag extends Fragment{
         userController = UserController.getInstance();
         userDTO = userController.getCurrUser();
         chatDAO = new ChatDAO();
+        eventDAO = new EventDAO();
 
-        listView = root.findViewById(R.id.beskedListView);
-
+        chat_listView = root.findViewById(R.id.beskedListView_chats);
+        tilmeldinger_listView = root.findViewById(R.id.beskedListView_tilmeldinger);
 
         // Tjek om personen har nogle chatId's ellers så gå videre
         if (userDTO == null) userDTO = userController.getCurrUser();
@@ -66,35 +76,32 @@ public class LikesideList_frag extends Fragment{
             if (userDTO.getChatId() != null) {
                 // Vi looper over alle chatId's og opbygger dens view og indsætter den i listviewet
                 for (int j = 0; j < userDTO.getChatId().size(); j++) {
-                    chatDAO.readChat(new ChatDAO.FirestoreCallback() {
-                        @Override
-                        public void onCallback(ChatDTO dto) {
-                            if (dto.getSender() != null) {
-                                dates.add(dto.getDates().get(dto.getDates().size() - 1));
-                                lastMessage.add(dto.getMessages().get(dto.getMessages().size() - 1));
-                                lastSender.add(dto.getSender().get(dto.getSender().size() - 1));
-                                isInitialized.add("true");
-                            } else {
-                                isInitialized.add("false");
-                                dates.add(new Date());
-                                lastMessage.add("blabla");
-                                lastSender.add("blabla");
-                            }
-                            if (dto.getUser1().equals(userDTO.getfName())) {
-                                currentUser = dto.getUser1();
-                                names.add(dto.getUser2());
-                            } else {
-                                currentUser = dto.getUser2();
-                                names.add(dto.getUser1());
-                            }
-                            headerList.add(dto.getHeader());
-                            chatIds.add(dto.getChatId());
-                            if (userDTO.getChatId().size() == headerList.size()) {
-                                setListView(chatIds, names, dates, lastMessage, headerList, lastSender, isInitialized);
-                                setChangeListeners();
-                            }
-
+                    chatDAO.readChat(dto -> {
+                        if (dto.getSender() != null) {
+                            dates.add(dto.getDates().get(dto.getDates().size() - 1));
+                            lastMessage.add(dto.getMessages().get(dto.getMessages().size() - 1));
+                            lastSender.add(dto.getSender().get(dto.getSender().size() - 1));
+                            isInitialized.add("true");
+                        } else {
+                            isInitialized.add("false");
+                            dates.add(new Date());
+                            lastMessage.add("blabla");
+                            lastSender.add("blabla");
                         }
+                        if (dto.getUser1().equals(userDTO.getfName())) {
+                            currentUser = dto.getUser1();
+                            names.add(dto.getUser2());
+                        } else {
+                            currentUser = dto.getUser2();
+                            names.add(dto.getUser1());
+                        }
+                        headerList.add(dto.getHeader());
+                        chatIds.add(dto.getChatId());
+                        if (userDTO.getChatId().size() == headerList.size()) {
+                            setListView_chats(chatIds, names, dates, lastMessage, headerList, lastSender, isInitialized);
+                            setChangeListeners_chats();
+                        }
+
                     }, userDTO.getChatId().get(j));
                 }
             }
@@ -102,20 +109,17 @@ public class LikesideList_frag extends Fragment{
 
 
         // Vi laver en itemclicklistener for at kunne differentiere med hvilket listview objekt man har trykket på
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                // Her ville chatId'et også sendes med senere hen
-                Intent i = new Intent(getActivity(), Activity_Chat.class);
-                i.putExtra("currentUser",currentUser);
-                i.putExtra("otherUser",names.get(position));
-                i.putExtra("chatId", userDTO.getChatId().get(position));
-                startActivity(i);
-            }
+        chat_listView.setOnItemClickListener((parent, view, position, id) -> {
+            // Her ville chatId'et også sendes med senere hen
+            Intent i1 = new Intent(getActivity(), Activity_Chat.class);
+            i1.putExtra("currentUser",currentUser);
+            i1.putExtra("otherUser",names.get(position));
+            i1.putExtra("chatId", userDTO.getChatId().get(position));
+            startActivity(i1);
         });
 
         // Vi har lavet en swipe listener for egentlig bare at kunne swipe til siden for at komme til hjertesiden
-        listView.setOnTouchListener(new OnSwipeTouchListener(mContext){
+        chat_listView.setOnTouchListener(new OnSwipeTouchListener(mContext){
             @SuppressLint("ResourceAsColor")
             @Override
             public void onSwipeLeft() {
@@ -131,10 +135,50 @@ public class LikesideList_frag extends Fragment{
         });
 
 
+        /**
+         * Det her er til ens egne events som andre prøver på at ansøge om at joine
+         */
+        if (userDTO == null) userDTO = userController.getCurrUser();
+        if (userDTO != null){
+            if (userDTO.getEvents() != null){
+                for (int j = 0; j < userDTO.getEvents().size(); j++) {
+                    System.out.println(j + "\n");
+                    eventDAO.getEvent(event -> {
+                        if (event != null) {
+                            eventApplicantsSize.add(event.getApplicants().size());
+                            eventHeaders.add(event.getTitle());
+                            eventOwnerPic.add(event.getOwnerPic());
+                            eventEventPic.add(event.getEventPic());
+                            String firstApplicant = event.getApplicants().size() == 0 ? "" : event.getApplicants().get(0);
+                            eventFirstApplicants.add(firstApplicant);
+                            System.out.println(firstApplicant.equals(""));
+                            if (firstApplicant.equals("")) {
+                                eventApplicantPic.add("");
+                                if (eventApplicantPic.size() == userDTO.getEvents().size()) {
+                                    setListView_applicants(eventEventPic, eventHeaders, eventOwnerPic, eventFirstApplicants, eventApplicantPic, eventApplicantsSize);
+                                }
+                            } else {
+                                userController.getUser(user -> {
+                                    for (int k = 0; k < eventFirstApplicants.size(); k++) {
+                                        if (eventFirstApplicants.get(k).equals(user.getUserId())) {
+                                            eventApplicantPic.set(k, user.getUserPicture());
+                                            k = eventFirstApplicants.size();
+                                        }
+                                    }
+                                    if (eventApplicantPic.size() == userDTO.getEvents().size()) {
+                                        setListView_applicants(eventEventPic, eventHeaders, eventOwnerPic, eventFirstApplicants, eventApplicantPic, eventApplicantsSize);
+                                    }
+                                }, event.getApplicants().get(0));
+                            }
+                        }
+                    }, userDTO.getEvents().get(j));
+                }
+            }
+        }
         return root;
     }
 
-    public void setListView(ArrayList<String> chatIds, ArrayList<String> names, ArrayList<Date> dates, ArrayList<String> lastMessage, ArrayList<String> headerList, ArrayList<String> lastSender, ArrayList<String> isInitialized){
+    public void setListView_chats(ArrayList<String> chatIds, ArrayList<String> names, ArrayList<Date> dates, ArrayList<String> lastMessage, ArrayList<String> headerList, ArrayList<String> lastSender, ArrayList<String> isInitialized){
         ArrayList<String> tempNames = new ArrayList<>(), tempLastmessage = new ArrayList<>(), tempHeaderList = new ArrayList<>(), tempLastSender = new ArrayList<>(), tempIsInitialized = new ArrayList<>(), tempChatIds = new ArrayList<>();
         ArrayList<Date> tempDates = new ArrayList<>();
 
@@ -198,7 +242,7 @@ public class LikesideList_frag extends Fragment{
         // Vi laver adapteren der laver vores listview over de chats man har
         if (mContext != null) {
             LikeSide_Adapter adapter = new LikeSide_Adapter(mContext, tempNames, tempDates, tempLastmessage, tempHeaderList, tempLastSender, tempIsInitialized);
-            listView.setAdapter(adapter);
+            chat_listView.setAdapter(adapter);
         }
         this.dates = tempDates;
         this.names = tempNames;
@@ -209,7 +253,7 @@ public class LikesideList_frag extends Fragment{
         this.chatIds = tempChatIds;
     }
 
-    public void setChangeListeners() {
+    public void setChangeListeners_chats() {
         for (int j = 0; j < chatIds.size(); j++) {
             FirebaseFirestore.getInstance().collection("chats").document(chatIds.get(j)).addSnapshotListener(new EventListener<DocumentSnapshot>() {
                 private static final String TAG = "update from firestore";
@@ -232,7 +276,7 @@ public class LikesideList_frag extends Fragment{
                                             dates.set(k, temp.getDates().get(temp.getDates().size() - 1));
                                             lastMessage.set(k, temp.getMessages().get(temp.getMessages().size() - 1));
                                             lastSender.set(k, temp.getSender().get(temp.getMessages().size() - 1));
-                                            setListView(chatIds, names, dates, lastMessage, headerList, lastSender, isInitialized);
+                                            setListView_chats(chatIds, names, dates, lastMessage, headerList, lastSender, isInitialized);
                                         }
                                         break;
                                     }
@@ -245,6 +289,14 @@ public class LikesideList_frag extends Fragment{
                     }
                 }
             });
+        }
+    }
+
+
+    public void setListView_applicants(@NonNull ArrayList<String> eventEventPic, @NonNull ArrayList<String> eventHeaders, @NonNull ArrayList<String> eventOwnerPic, @NonNull ArrayList<String> eventFirstApplicants, @NonNull ArrayList<String> eventApplicantPic, @NonNull ArrayList<Integer> eventApplicantsSize){
+        if (mContext != null){
+            LikeSide_Event_Adapter eventAdapter = new LikeSide_Event_Adapter(mContext, eventEventPic, eventHeaders, eventOwnerPic, eventFirstApplicants, eventApplicantPic, eventApplicantsSize);
+            tilmeldinger_listView.setAdapter(eventAdapter);
         }
     }
 
