@@ -5,6 +5,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.View;
@@ -17,6 +18,7 @@ import java.util.ArrayList;
 
 import Controller.Listeners.OnSwipeTouchListener;
 import Controller.UserController;
+import DTO.UserDTO;
 
 public class Activity_Profile extends AppCompatActivity implements View.OnClickListener {
     public TextView about, city, desc, aboutName, job, edu, picNumber;
@@ -37,8 +39,7 @@ public class Activity_Profile extends AppCompatActivity implements View.OnClickL
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
-
-
+        Intent myIntent = getIntent();
 
         userController =  userController.getInstance();
         pictures = userController.getUserPictures();
@@ -66,13 +67,26 @@ public class Activity_Profile extends AppCompatActivity implements View.OnClickL
 
 
 
-        getPictures();
+
 
 
         right.setMinimumWidth(width/2);
         left.setMinimumWidth(width/2);
 
-        userController.iniProfile(this);
+        int j = myIntent.getIntExtra("load", 0);
+        System.out.println(j);
+
+
+        if(j == 1){
+            UserDTO user = (UserDTO) myIntent.getSerializableExtra("user");
+            System.out.println(user.getDescription() + " " + user.getfName());
+            pictures = user.getPictures();
+            getPictures();
+            userController.iniPublicProfile(this, user);
+        } else {
+            getPictures();
+            userController.iniProfile(this);
+        }
 
 
     }

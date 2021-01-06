@@ -13,7 +13,7 @@
         android:id="@+id/top_bar"
         android:layout_width="match_parent"
         android:layout_height="64dp"
-        android:background="#0B124E"
+        android:background="#23295F"
         app:layout_constraintBottom_toTopOf="@+id/mainFragmentBox"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"

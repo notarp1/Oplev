@@ -28,6 +28,7 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
 
+        android:background="#23295f"
         app:layout_constraintBottom_toTopOf="@+id/mainFragmentBox"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
