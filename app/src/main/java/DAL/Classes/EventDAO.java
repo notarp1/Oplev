@@ -84,52 +84,56 @@ public class EventDAO implements IEventDAO {
         CollectionReference docRef = db.collection(collectionPath);
         List<String> completeList = new ArrayList<>();
 
-        Task<QuerySnapshot> query = null;
+        if (prefs.getBoolean("motionSwitch", true)) {
+            docRef.whereEqualTo("type", "Motion").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                    if (task.isSuccessful()) {
+                        for (QueryDocumentSnapshot document : task.getResult()) { completeList.add(document.getId()); }
+                        callBackList.onCallback(completeList);
+                    } else {
+                        Log.d("switchFail", "Error getting motionswitch: ", task.getException());
+                    }
+                }
+            });
+        }
 
-        ArrayList<String> kultur = new ArrayList<>();
+        if (prefs.getBoolean("kulturSwitch", true)) {
+            docRef.whereEqualTo("type", "Kultur").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                    if (task.isSuccessful()) {
+                        for (QueryDocumentSnapshot document : task.getResult()) { completeList.add(document.getId()); }
+                        callBackList.onCallback(completeList);
+                    } else {
+                        Log.d("switchFail", "Error getting kulturSwitch: ", task.getException());
+                    }
+                }
+            });
+        }
+    }
 
-        /*if (prefs.getBoolean("kulturswitch", true)) {
-            query = (docRef.whereIn("type", Arrays.asList("Kultur", "Motion")).get());
-        }*/
-       /* if (prefs.getBoolean("motionswitch", true)) {
-            query = docRef.whereEqualTo("type", "Motion").get();
-       }*/
 
 
-        docRef.whereIn("type", Arrays.asList("Kultur", "Motion")).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+    // Get all events:
+    /*public void getEventIDs(CallBackList callBackList) {
+        CollectionReference docRef = db.collection(collectionPath);
+        docRef.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                List<String> list = new ArrayList<>();
                 if (task.isSuccessful()) {
-                    for (QueryDocumentSnapshot document : task.getResult()) {
-                        Log.d(TAG, document.getId() + " => " + document.getData());
-                        completeList.add(document.getId());
+                    for (QueryDocumentSnapshot document : Objects.requireNonNull(task.getResult())) {
+                        list.add(document.getId());
                     }
-                    callBackList.onCallback(completeList);
+                    callBackList.onCallback(list);
                 } else {
                     Log.d(TAG, "Error getting documents: ", task.getException());
                 }
+
+
             }
         });
-    }
-
-    /*public void getEventIDs(CallBackList callBackList){
-        CollectionReference docRef = db.collection(collectionPath);
-        docRef.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        List<String> list = new ArrayList<>();
-                        if (task.isSuccessful()) {
-                            for (QueryDocumentSnapshot document : Objects.requireNonNull(task.getResult())) {
-                                list.add(document.getId());
-                            }
-                            callBackList.onCallback(list);
-                        } else {
-                            Log.d(TAG, "Error getting documents: ", task.getException());
-                        }
-
-
-                    }
-                });
     }*/
 
     @Override
