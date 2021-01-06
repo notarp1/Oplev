@@ -196,15 +196,13 @@ public class Event_Adapter extends RecyclerView.Adapter<Event_Adapter.ViewHolder
             if(view == profilePic){
                 UserController user = UserController.getInstance();
 
-                System.out.println(eventDTO.getOwnerId() + " HGAHAH");
-
 
                 user.getUser(new CallbackUser() {
                     @Override
                     public void onCallback(UserDTO user) {
                         Intent i = new Intent(ctx, Activity_Profile.class);
                         i.putExtra("user", user);
-                        i.putExtra("load", 1);
+                        i.putExtra("load", 2);
                         ctx.startActivity(i);
                     }
                 }, eventDTO.getOwnerId());

@@ -12,13 +12,12 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import Controller.UserController;
 import DAL.Interfaces.CallbackUser;
 import DAL.Interfaces.IUserDAO;
 import DTO.UserDTO;
@@ -96,18 +95,26 @@ public class UserDAO implements IUserDAO, CallbackUser {
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
-
+                        UserController userController = UserController.getInstance();
+                        userController.setSafe(true);
                         Log.d(TAG, "DocumentSnapshot successfully written!");
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
+                        UserController userController = UserController.getInstance();
+                        userController.setSafe(true);
                         Log.w(TAG, "Error writing document", e);
                     }
                 });
 
     }
+
+
+
+
+
 
     @Override
     public void deleteUser(String userId) {
