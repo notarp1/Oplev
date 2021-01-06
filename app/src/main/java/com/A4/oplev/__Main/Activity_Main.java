@@ -42,8 +42,8 @@ public class Activity_Main extends AppCompatActivity implements View.OnClickList
     RecyclerView rcEvent;
     SharedPreferences prefs;
     Boolean onInstance;
-   Event_Adapter event_Adapter;
-   Context ctx;
+    Event_Adapter event_Adapter;
+    Context ctx;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

@@ -6,6 +6,7 @@ import android.preference.PreferenceManager;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.ConstraintSet;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -23,6 +24,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -79,62 +81,33 @@ public class EventDAO implements IEventDAO {
 
     }
 
-
     public void getEventIDs(CallBackList callBackList,SharedPreferences prefs) {
         CollectionReference docRef = db.collection(collectionPath);
         List<String> completeList = new ArrayList<>();
+        List<String> types = new ArrayList<>();
 
-        if (prefs.getBoolean("motionSwitch", true)) {
-            docRef.whereEqualTo("type", "Motion").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+        if (prefs.getBoolean("motionSwitch", true)) { types.add("Motion"); }
+        if (prefs.getBoolean("kulturSwitch", true)) { types.add("Kultur"); }
+        if (prefs.getBoolean("underholdningSwitch", true)) { types.add("Underholdning"); }
+        if (prefs.getBoolean("madDrikkeSwitch", true)) { types.add("Mad og Drikke"); }
+        if (prefs.getBoolean("musikNattelivSwitch", true)) { types.add("Musik og Natteliv"); }
+        if (prefs.getBoolean("gratisSwitch", true)) { types.add("Gratis"); }
+
+        docRef.whereIn("type", types).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>(){
                 @Override
                 public void onComplete(@NonNull Task<QuerySnapshot> task) {
                     if (task.isSuccessful()) {
                         for (QueryDocumentSnapshot document : task.getResult()) { completeList.add(document.getId()); }
+                        Collections.shuffle(completeList);
                         callBackList.onCallback(completeList);
                     } else {
                         Log.d("switchFail", "Error getting motionswitch: ", task.getException());
                     }
+
                 }
             });
         }
 
-        if (prefs.getBoolean("kulturSwitch", true)) {
-            docRef.whereEqualTo("type", "Kultur").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                @Override
-                public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                    if (task.isSuccessful()) {
-                        for (QueryDocumentSnapshot document : task.getResult()) { completeList.add(document.getId()); }
-                        callBackList.onCallback(completeList);
-                    } else {
-                        Log.d("switchFail", "Error getting kulturSwitch: ", task.getException());
-                    }
-                }
-            });
-        }
-    }
-
-
-
-    // Get all events:
-    /*public void getEventIDs(CallBackList callBackList) {
-        CollectionReference docRef = db.collection(collectionPath);
-        docRef.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                List<String> list = new ArrayList<>();
-                if (task.isSuccessful()) {
-                    for (QueryDocumentSnapshot document : Objects.requireNonNull(task.getResult())) {
-                        list.add(document.getId());
-                    }
-                    callBackList.onCallback(list);
-                } else {
-                    Log.d(TAG, "Error getting documents: ", task.getException());
-                }
-
-
-            }
-        });
-    }*/
 
     @Override
     public void createEvent(EventDTO event) {
