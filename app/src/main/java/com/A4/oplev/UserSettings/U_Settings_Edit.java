@@ -20,22 +20,8 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-
 import com.A4.oplev.R;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
-import com.squareup.picasso.Picasso;
-
-
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-
 import Controller.UserController;
 
 import static android.app.Activity.RESULT_OK;
@@ -50,22 +36,15 @@ public class U_Settings_Edit extends Fragment implements View.OnClickListener, V
     UserController userController;
     Bitmap stockphotoBit;
 
-    static public boolean[] picBoolean = new boolean[]{false, false, false, false, false, false};
 
     private Uri[] uris;
     private ArrayList<String> pictures;
-    private int pictureCount;
+
 
     private static final int IMAGE_PICK_CODE = 1000;
     private static final int PERMISSION_CODE = 1000;
     int picNumber;
-    int indexNumbers = 0;
-    int indexPlace;
 
-    private StorageReference mStorageRef;
-    private FirebaseAuth mAuth;
-    private FirebaseUser currentUser;
-    StorageReference picRef;
 
     Context ctx;
 
@@ -75,11 +54,9 @@ public class U_Settings_Edit extends Fragment implements View.OnClickListener, V
         super.onCreate(savedInstanceState);
         View root = i.inflate(R.layout.u_setting_edit_frag, container, false);
 
-        mStorageRef = FirebaseStorage.getInstance().getReference();
-
         userController = userController.getInstance();
-        mAuth = FirebaseAuth.getInstance();
-        currentUser = mAuth.getCurrentUser();
+
+
         pictures = userController.getUserPictures();
 
         this.ctx = getContext();
@@ -117,14 +94,7 @@ public class U_Settings_Edit extends Fragment implements View.OnClickListener, V
     @Override
     public void onStart() {
         super.onStart();
-        ImageView avatar;
-
-        for(int i = 0; i<6; i++){
-            if(pictures.get(i) != null){
-                avatar = getPictureNumber(i);
-                Picasso.get().load(pictures.get(i)).into(avatar);
-            }
-        }
+        userController.iniEdit(this);
 
     }
 
@@ -156,136 +126,65 @@ public class U_Settings_Edit extends Fragment implements View.OnClickListener, V
 
 
 
-
     @Override
     public void onClick(View v) {
-
-        if(v == back){
-            accept.setVisibility(View.INVISIBLE);
-            getActivity().getSupportFragmentManager().popBackStack();
-        } else if (v == accept) {
-            updateUserAndGUI();
-        } else if (v==p0){
-            picBool(0);
-        } else if (v == p1) {
-            picBool(1);
-        } else if (v == p2) {
-            picBool(2);
-        } else if (v == p3) {
-            picBool(3);
-        } else if (v == p4) {
-            picBool(4);
-        } else if (v == p5) {
-            picBool(5);
+        if(userController.isSafe()) {
+            if (v == back) {
+                accept.setVisibility(View.INVISIBLE);
+                getActivity().getSupportFragmentManager().popBackStack();
+            } else if (v == accept) {
+                userController.updateUserAndGUI(this);
+            } else if (v == p0) {
+                picBool(0);
+            } else if (v == p1) {
+                picBool(1);
+            } else if (v == p2) {
+                picBool(2);
+            } else if (v == p3) {
+                picBool(3);
+            } else if (v == p4) {
+                picBool(4);
+            } else if (v == p5) {
+                picBool(5);
+            }
         }
-
     }
 
     @Override
     public boolean onLongClick(View v) {
-        if (v==p0){
-            deletePicture(0);
-            return true;
-        } else if (v == p1) {
-            deletePicture(1);
-            return true;
-        } else if (v == p2) {
-            deletePicture(2);
-            return true;
-        } else if (v == p3) {
-            deletePicture(3);
-            return true;
-        } else if (v == p4) {
-            deletePicture(4);
-            return true;
-        } else if (v == p5) {
-            deletePicture(5);
-            return true;
-        }
-        return false;
-    }
-
-    private void deletePicture(int number) {
-        if(pictures.get(number) != null){
-            pictures.set(number, null);
-            updateUserAndGUI();
-            ImageView pic = getPictureNumber(number);
-            pic.setImageBitmap(stockphotoBit);
-        }
-    }
-
-    private void onAccept() {
-
-        for (Uri a : uris) {
-            if (a != null) {
-                pictureCount += 1;
-
+        if(userController.isSafe()) {
+            if (v == p0) {
+                userController.deletePicture(0, pictures, this, stockphotoBit);
+                return true;
+            } else if (v == p1) {
+                userController.deletePicture(1, pictures, this, stockphotoBit);
+                return true;
+            } else if (v == p2) {
+                userController.deletePicture(2, pictures, this, stockphotoBit);
+                return true;
+            } else if (v == p3) {
+                userController.deletePicture(3, pictures, this, stockphotoBit);
+                return true;
+            } else if (v == p4) {
+                userController.deletePicture(4, pictures, this, stockphotoBit);
+                return true;
+            } else if (v == p5) {
+                userController.deletePicture(5, pictures, this, stockphotoBit);
+                return true;
             }
         }
-        if(pictureCount > 0 )
-            for (int i = 0; i < 6; i++) {
+        return false;
 
-                System.out.println(uris[i]);
-                System.out.println(i);
-
-                if (uris[i] != null) {
-                    indexPlace = i;
-
-                    Uri file = uris[i];
-                    picRef = mStorageRef.child("users/" + currentUser.getUid() + "/" + i);
-
-                    //Dette skal være callback
-                    picRef.putFile(file)
-                            .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                                @Override
-                                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                                    // Get a URL to the uploaded content
-
-                                    picRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                                        @Override
-                                        public void onSuccess(Uri uri) {
-                                            Uri downloadUrl = uri;
-
-                                            indexNumbers += 1;
-                                            setPictures(indexPlace, downloadUrl);
-
-                                            updateUserAndGUI();
-
-                                        }
-
-                                    });
+    }
 
 
-                                }
-                            })
-                            .addOnFailureListener(new OnFailureListener() {
-                                @Override
-                                public void onFailure(@NonNull Exception exception) {
-                                    // Handle unsuccessful uploads
-                                    // ...
-                                }
-                            });
 
-                }
-
-
-            } else updateUserAndGUI();
+    private void onAccept() {
+        userController.uploadPicture(this, uris);
     }
 
 
-    private void updateUserAndGUI() {
 
-        userController.updateUser(this, pictures);
-        Toast.makeText(getContext(), "Profil opdateret!", Toast.LENGTH_SHORT).show();
-    }
-
-    private void setPictures(int index, Uri uri){
-
-        String address = String.valueOf(uri);
-
-        pictures.set(index, address);
-
-    }
     private void picBool(int number) {
         picNumber = number;
         picturePermission();

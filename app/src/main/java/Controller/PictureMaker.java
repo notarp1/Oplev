@@ -1,9 +1,12 @@
 package Controller;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Base64;
@@ -11,6 +14,7 @@ import android.util.Base64;
 import androidx.core.content.FileProvider;
 
 import com.A4.oplev.BuildConfig;
+import com.A4.oplev.UserSettings.U_Settings_Edit;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -20,6 +24,8 @@ import static androidx.core.app.ActivityCompat.startActivityForResult;
 public class PictureMaker {
     private static PictureMaker instance = null;
     private static int RESULT_LOAD_IMAGE = 1;
+    private static final int IMAGE_PICK_CODE = 1000;
+    private static final int PERMISSION_CODE = 1000;
 
     // Vi laver en singleton for at kunne uploade eller tage billeder
     private PictureMaker(){
@@ -50,6 +56,8 @@ public class PictureMaker {
         startActivityForResult(activity,imageIntent,0, null);
 
     }
+
+
 
 
 
