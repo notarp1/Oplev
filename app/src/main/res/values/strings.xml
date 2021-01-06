@@ -15,7 +15,9 @@
     <string name="invalid_username">Not a valid username</string>
     <string name="invalid_password">Password must be >5 characters</string>
     <string name="login_failed">"Login failed"</string>
-    
+    <string name="channel_name">Chat</string>
+    <string name="channel_description">Chat beskeder</string>
+
     <string-array name="createDropDown">
         <item>--Vælg type--</item>
         <item>Motion</item>
