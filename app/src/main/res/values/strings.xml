@@ -17,6 +17,7 @@
     <string name="login_failed">"Login failed"</string>
     
     <string-array name="createDropDown">
+        <item>--Vælg type--</item>
         <item>Motion</item>
         <item>Underholdning</item>
         <item>Mad og Drikke</item>

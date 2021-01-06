@@ -74,7 +74,7 @@
             <EditText
                 android:id="@+id/create_desc_input"
                 android:layout_width="356dp"
-                android:layout_height="74dp"
+                android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
                 android:layout_marginLeft="20dp"
                 android:layout_marginTop="5dp"
@@ -82,10 +82,9 @@
                 android:layout_marginRight="20dp"
                 android:layout_marginBottom="5dp"
                 android:ems="10"
-                android:gravity="center"
+                android:gravity="bottom|center_horizontal"
                 android:hint="Beskrivelse"
                 android:inputType="textMultiLine"
-                android:lines="3"
                 android:textColor="#A4E8E0"
                 android:textColorHint="#A4E8E0"
                 android:textSize="18sp"
@@ -233,27 +232,26 @@
                 android:id="@+id/create_type_txt"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginLeft="16dp"
-                android:layout_marginTop="8dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginLeft="20dp"
                 android:text="Type:"
                 android:textColor="#A4E8E0"
                 android:textSize="18sp"
                 app:layout_constraintBottom_toBottomOf="@+id/create_dropDown"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/create__city_input" />
+                app:layout_constraintTop_toTopOf="@+id/create_dropDown" />
 
             <Spinner
                 android:id="@+id/create_dropDown"
                 android:layout_width="208dp"
                 android:layout_height="23dp"
-                android:layout_marginTop="9dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="20dp"
+                android:layout_marginRight="20dp"
                 android:layout_marginBottom="8dp"
                 android:background="@drawable/mybg"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.827"
-                app:layout_constraintStart_toEndOf="@+id/create_type_txt"
                 app:layout_constraintTop_toBottomOf="@+id/create__city_input" />
 
 
