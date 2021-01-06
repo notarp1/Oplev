@@ -13,6 +13,7 @@ import androidx.annotation.Nullable;
 
 import com.A4.oplev.PicassoFunc;
 import com.A4.oplev.R;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -21,20 +22,18 @@ import DTO.UserDTO;
 
 public class LikeSide_Event_Adapter extends ArrayAdapter<String> {
     private Context mContext;
-    private ArrayList<String> headerList, numberOfAppliantsList;
-    private ArrayList<Date> dateList;
-    private ArrayList<UserDTO> thisUserList, otherUserList;
-    private PicassoFunc picassoFunc;
+    private ArrayList<Integer> eventApplicantsSize;
+    private ArrayList<String> eventHeaders, eventEventPic, eventApplicantPic, eventOwnerPic, eventFirstApplicants;
 
-
-    public LikeSide_Event_Adapter(@NonNull Context context, @NonNull ArrayList<String> headerList, @NonNull ArrayList<String> numberOfAppliantsList, @NonNull ArrayList<Date> dateList, @NonNull ArrayList<UserDTO> thisUserList, @NonNull ArrayList<UserDTO> otherUserList) {
-        super(context, 0 , headerList);
+    public LikeSide_Event_Adapter(@NonNull Context context, @NonNull ArrayList<String> eventEventPic, @NonNull ArrayList<String> eventHeaders, @NonNull ArrayList<String> eventOwnerPic, @NonNull ArrayList<String> eventFirstApplicants, @NonNull ArrayList<String> eventApplicantPic, @NonNull ArrayList<Integer> eventApplicantsSize) {
+        super(context, 0 , eventHeaders);
         this.mContext = context;
-        this.headerList = headerList;
-        this.numberOfAppliantsList = numberOfAppliantsList;
-        this.dateList = dateList;
-        this.thisUserList = thisUserList;
-        this.otherUserList = otherUserList;
+        this.eventHeaders = eventHeaders;
+        this.eventApplicantsSize = eventApplicantsSize;
+        this.eventApplicantPic = eventApplicantPic;
+        this.eventEventPic = eventEventPic;
+        this.eventOwnerPic = eventOwnerPic;
+        this.eventFirstApplicants = eventFirstApplicants;
     }
 
     @NonNull
@@ -46,18 +45,49 @@ public class LikeSide_Event_Adapter extends ArrayAdapter<String> {
             listItem = LayoutInflater.from(mContext).inflate(R.layout.besked_liste_event_element,parent,false);
 
         ImageView eventPic = listItem.findViewById(R.id.beskeder_event_eventbillede);
+        Picasso.get().load(eventEventPic.get(position))
+                .resize(mContext.getDisplay().getWidth(), mContext.getDisplay().getHeight()/2 + 200)
+                .centerCrop()
+                .placeholder(R.drawable.load2)
+                .error(R.drawable.question)
+                .into(eventPic);
+
+
         ImageView profilePic1 = listItem.findViewById(R.id.beskeder_event_lilleprofilbillede1);
+        if (eventOwnerPic.get(position).equals("")){
+            profilePic1.setImageResource(R.drawable.question);
+        }
+        else {
+            Picasso.get().load(eventOwnerPic.get(position))
+                    .resize(mContext.getDisplay().getWidth(), mContext.getDisplay().getHeight() / 2 + 200)
+                    .centerCrop()
+                    .placeholder(R.drawable.load2)
+                    .error(R.drawable.question)
+                    .into(profilePic1);
+        }
+
         ImageView profilePic2 = listItem.findViewById(R.id.beskeder_event_lilleprofilbillede2);
+        if (eventApplicantPic.get(position).equals("")){
+            profilePic2.setImageResource(R.drawable.question);
+        }
+        else {
+            Picasso.get().load(eventApplicantPic.get(position))
+                    .resize(mContext.getDisplay().getWidth(), mContext.getDisplay().getHeight() / 2 + 200)
+                    .centerCrop()
+                    .placeholder(R.drawable.load2)
+                    .error(R.drawable.question)
+                    .into(profilePic2);
+        }
 
         // Sætter overskriften for eventet
         TextView header = listItem.findViewById(R.id.beskeder_event_overskrift);
-        header.setText(headerList.get(position));
+        header.setText(eventHeaders.get(position));
 
         TextView numberOfAppliants = listItem.findViewById(R.id.beskeder_event_name);
-        numberOfAppliants.setText(numberOfAppliantsList.get(position));
+        numberOfAppliants.setText(eventApplicantsSize.get(position)+" anmoder(e)");
 
         TextView date = listItem.findViewById(R.id.beskeder_event_dato);
-        date.setText(dateList.get(position).toString().substring(0,3));
+        date.setText("");
 
 
 
