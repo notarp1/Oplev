@@ -203,7 +203,7 @@ public class Event_Adapter extends RecyclerView.Adapter<Event_Adapter.ViewHolder
                     public void onCallback(UserDTO user) {
                         Intent i = new Intent(ctx, Activity_Profile.class);
                         i.putExtra("user", user);
-                        i.putExtra("load", 2);
+                        i.putExtra("load", 1);
                         ctx.startActivity(i);
                     }
                 }, eventDTO.getOwnerId());
