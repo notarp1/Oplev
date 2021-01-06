@@ -33,14 +33,17 @@ public class Event_Adapter extends RecyclerView.Adapter<Event_Adapter.ViewHolder
     List<EventDTO> loadedEvent;
     int offset = 0;
     IEventDAO dataA;
-
+    int height;
+    int width;
     Context ctx;
     EventDTO eventDTO;
 
-    public Event_Adapter(List<EventDTO> scoreList, Context frame) {
+    public Event_Adapter(List<EventDTO> scoreList, Context frame, int height, int width) {
         this.loadedEvent = scoreList;
         this.ctx = frame;
         this.dataA = new EventDAO();
+        this.height = height;
+        this.width = width;
         if(scoreList == null){
             testData();
         }else {
@@ -130,22 +133,20 @@ public class Event_Adapter extends RecyclerView.Adapter<Event_Adapter.ViewHolder
             @Override
             public void onCallback(UserDTO user) {
 
-                int width = 200;
-                int height = 10;
 
                 System.out.println(eventDTO.getOwnerId() + "HAHA2");
                 withWhoText.setText(user.getfName());
                 headlineText.setText(eventDTO.getTitle());
 
                 Picasso.get().load(eventDTO.getOwnerPic())
-                        .resize(width, height/2 + 200)
+                        .resize(width/8, height/16)
                         .centerCrop()
                         .placeholder(R.drawable.load2)
                         .error(R.drawable.question)
                         .transform(new RoundedTransformation(90,0))
                         .into(profilePic);
                 Picasso.get().load(eventDTO.getEventPic())
-                        .resize(width, height/2 + 200)
+                        .resize(width, height)
                         .centerCrop()
                         .placeholder(R.drawable.load2)
                         .error(R.drawable.question)

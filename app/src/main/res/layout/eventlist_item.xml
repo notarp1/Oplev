@@ -24,6 +24,8 @@
         android:id="@+id/eventItem_pp"
         android:layout_width="118dp"
         android:layout_height="123dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginLeft="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
