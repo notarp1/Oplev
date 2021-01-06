@@ -1,6 +1,7 @@
 package com.A4.oplev.Like_Hjerte_Side;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -30,6 +31,8 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.storage.FirebaseStorage;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.concurrent.Semaphore;
@@ -43,6 +46,7 @@ public class LikesideList_frag extends Fragment{
     private String currentUser;
     private ArrayList<String> names = new ArrayList<>(), lastMessage = new ArrayList<>(), headerList = new ArrayList<>(), lastSender = new ArrayList<>(), isInitialized = new ArrayList<>(), chatIds = new ArrayList<>();
     private ArrayList<Date> dates = new ArrayList<>();
+    private Context mContext;
 
     // Den her klasse bruges til at få lave chatlisten ude fra likesiden af (hvor man kan vælge den chat man vil ind i)
     @SuppressLint("ClickableViewAccessibility")
@@ -57,6 +61,7 @@ public class LikesideList_frag extends Fragment{
 
 
         // Tjek om personen har nogle chatId's ellers så gå videre
+        if (userDTO == null) userDTO = userController.getCurrUser();
         if (userDTO.getChatId() != null) {
             // Vi looper over alle chatId's og opbygger dens view og indsætter den i listviewet
             for (int j = 0; j < userDTO.getChatId().size(); j++) {
@@ -108,7 +113,7 @@ public class LikesideList_frag extends Fragment{
         });
 
         // Vi har lavet en swipe listener for egentlig bare at kunne swipe til siden for at komme til hjertesiden
-        listView.setOnTouchListener(new OnSwipeTouchListener(getContext()){
+        listView.setOnTouchListener(new OnSwipeTouchListener(mContext){
             @SuppressLint("ResourceAsColor")
             @Override
             public void onSwipeLeft() {
@@ -189,7 +194,7 @@ public class LikesideList_frag extends Fragment{
         userDTO.setChatId(tempChatIds);
 
         // Vi laver adapteren der laver vores listview over de chats man har
-        LikeSide_Adapter adapter = new LikeSide_Adapter(requireContext(), tempNames, tempDates, tempLastmessage,tempHeaderList, tempLastSender, tempIsInitialized);
+        LikeSide_Adapter adapter = new LikeSide_Adapter(mContext, tempNames, tempDates, tempLastmessage,tempHeaderList, tempLastSender, tempIsInitialized);
         listView.setAdapter(adapter);
         this.dates = tempDates;
         this.names = tempNames;
@@ -238,4 +243,19 @@ public class LikesideList_frag extends Fragment{
             });
         }
     }
+
+    @Override
+    public void onAttach(@NotNull Context context){
+        System.out.println("Is attached");
+        super.onAttach(context);
+        this.mContext = context;
+    }
+
+    @Override
+    public void onDetach(){
+        System.out.println("Is detached");
+        this.mContext = null;
+        super.onDetach();
+    }
+
 }
