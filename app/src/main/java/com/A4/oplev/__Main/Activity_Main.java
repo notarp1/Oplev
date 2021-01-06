@@ -94,7 +94,7 @@ public class Activity_Main extends AppCompatActivity implements View.OnClickList
     }
 
     private void eventIni(List<EventDTO> eventList, LinearLayoutManager layoutManager) {
-        event_Adapter = new Event_Adapter(eventList);
+        event_Adapter = new Event_Adapter(eventList, this);
         rcEvent.setLayoutManager(layoutManager);
         rcEvent.setAdapter(event_Adapter);
         PagerSnapHelper snap = new PagerSnapHelper();
