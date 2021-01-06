@@ -27,6 +27,7 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import com.A4.oplev.R;
 
@@ -48,7 +49,7 @@ public class createEvent1_frag extends Fragment implements View.OnClickListener{
     Button next_btn;
     Spinner dropDown;
     AdapterView.OnItemSelectedListener onItemSelectedListener;
-    String currentType = "";
+    String currentType = "--Vælg type--";
 
     //dialog changelisteners
     DatePickerDialog.OnDateSetListener onDateSetListener;
@@ -126,6 +127,8 @@ public class createEvent1_frag extends Fragment implements View.OnClickListener{
                 //update UI
                 String dateString = day + "/" + month + "/" + year;
                 date_in.setText(dateString);
+                //remove error of missing date
+                date_in.setError(null);
             }
         };
         //when time is changed update current values and show new time in UI
@@ -138,6 +141,8 @@ public class createEvent1_frag extends Fragment implements View.OnClickListener{
                 //update UI
                 String timeString = hour + ":" + minute;
                 time_in.setText(timeString);
+                //remove error of missing time
+                time_in.setError(null);
             }
         };
 
@@ -255,6 +260,10 @@ public class createEvent1_frag extends Fragment implements View.OnClickListener{
             builder.setMessage("Billede ikke valgt. Fortsæt alligevel?").setPositiveButton("Ja", dialogClickListener)
                     .setNegativeButton("Nej", dialogClickListener).show();
              */
+        }
+        if(currentType.equals("--Vælg type--")){
+            inputIsValid = false;
+            Toast.makeText(getActivity(), "Vælg en event type", Toast.LENGTH_SHORT).show();
         }
 
         return inputIsValid;
