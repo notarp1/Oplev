@@ -11,6 +11,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.A4.oplev.Activity_Event;
 import com.A4.oplev.Activity_Profile;
 import com.A4.oplev.R;
 import com.squareup.picasso.Picasso;
@@ -18,9 +19,11 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 import java.util.List;
 
+import Controller.EventController;
 import Controller.UserController;
 import DAL.Classes.EventDAO;
 import DAL.Classes.UserDAO;
+import DAL.Interfaces.CallbackEvent;
 import DAL.Interfaces.CallbackUser;
 import DAL.Interfaces.IEventDAO;
 import DAL.Interfaces.IUserDAO;
@@ -29,7 +32,7 @@ import DTO.UserDTO;
 
 public class Event_Adapter extends RecyclerView.Adapter<Event_Adapter.ViewHolder>implements View.OnClickListener {
 
-    List<Integer> eventListId;
+    List<String> eventListId;
     List<EventDTO> loadedEvent;
     int offset = 0;
     IEventDAO dataA;
@@ -126,6 +129,8 @@ public class Event_Adapter extends RecyclerView.Adapter<Event_Adapter.ViewHolder
         TextView withWhoText = holder.withWhoText;
         TextView headlineText = holder.headlineText;
 
+        offset = position;
+
 
 
         // her skal dataen sættes in i holderen, der skal gøres brug af en billed controller til at håndtere billder.
@@ -188,6 +193,7 @@ public class Event_Adapter extends RecyclerView.Adapter<Event_Adapter.ViewHolder
             withWhoText = (TextView) itemView.findViewById(R.id.evntItem_withWho);
             headlineText = (TextView) itemView.findViewById(R.id.eventitem_Headline);
             profilePic.setOnClickListener(this);
+            mainPic.setOnClickListener(this);
         }
 
         @Override
@@ -207,6 +213,28 @@ public class Event_Adapter extends RecyclerView.Adapter<Event_Adapter.ViewHolder
                         ctx.startActivity(i);
                     }
                 }, eventDTO.getOwnerId());
+
+            } else if(view == mainPic){
+
+                dataA.getEvent(new CallbackEvent() {
+                    @Override
+                    public void onCallback(EventDTO event) {
+
+                        UserController user = UserController.getInstance();
+
+
+                        user.getUser(new CallbackUser() {
+                            @Override
+                            public void onCallback(UserDTO user) {
+                                Intent i = new Intent(ctx, Activity_Event.class);
+                                i.putExtra("user", user);
+                                i.putExtra("event", event);
+                                ctx.startActivity(i);
+
+                            }
+                        }, eventDTO.getOwnerId());
+                    }
+                }, eventListId.get(offset));
             }
         }
     }
