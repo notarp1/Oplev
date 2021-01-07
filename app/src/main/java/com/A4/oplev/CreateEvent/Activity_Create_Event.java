@@ -3,15 +3,25 @@ package com.A4.oplev.CreateEvent;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.A4.oplev.R;
+import com.google.android.gms.common.api.Status;
+import com.google.android.libraries.places.api.model.Place;
+import com.google.android.libraries.places.widget.Autocomplete;
+import com.google.android.libraries.places.widget.AutocompleteActivity;
+
+import static com.google.android.libraries.places.widget.AutocompleteActivity.RESULT_ERROR;
 
 public class Activity_Create_Event extends AppCompatActivity implements View.OnClickListener {
+    private static final String TAG = "Activity_Create_Event";
     ImageView back;
     static TextView title;
     private Uri pickedImgUri;
@@ -46,7 +56,14 @@ public class Activity_Create_Event extends AppCompatActivity implements View.OnC
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         System.out.println("jbe in actres act");
-        if (resultCode == RESULT_OK) {
+        Log.d(TAG, "onActivityResult: jbe in method \n" +
+                "req code = " + requestCode + "\n" +
+                "res code = " + resultCode);
+
+
+        if (requestCode == 1 && resultCode == RESULT_OK) {
+            //if its an image change
+            Log.d(TAG, "onActivityResult: jbe, result=ok, no req code");
             //change picture source URI
             ImageView pic = findViewById(R.id.create_pic);
             pickedImgUri = data.getData();
@@ -54,6 +71,27 @@ public class Activity_Create_Event extends AppCompatActivity implements View.OnC
             //remove the "change pic" text
             TextView changePicTxt = findViewById(R.id.create_changepic_txt);
             changePicTxt.setVisibility(View.GONE);
+        }
+        else if(resultCode== RESULT_OK){
+            // if city chosen with Places widget (request code is variable for some reason)
+            Log.d(TAG, "onActivityResult: jbe, req=100, result=ok");
+            //if google places intent (for location autocomplete)
+            // and if success
+            //get data into place object
+            Place place = Autocomplete.getPlaceFromIntent(data);
+            //set the text in the edittext view
+            EditText city_in = findViewById(R.id.create__city_input);
+            city_in.setText(place.getAddress());
+            Log.d(TAG, "onActivityResult: jbe, adress: " + place.getAddress());
+            city_in.setError(null);
+        }
+        else if(resultCode== RESULT_ERROR){
+            Log.d(TAG, "onActivityResult: jbe, req=100, result=error");
+            Status status = Autocomplete.getStatusFromIntent(data);
+            Log.d(TAG, "onActivityResult: jbe"+ status.getStatusMessage());
+            Toast.makeText(getApplicationContext(),
+                    status.getStatusMessage(),
+                    Toast.LENGTH_SHORT).show();
         }
     }
 
