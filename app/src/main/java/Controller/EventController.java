@@ -5,8 +5,12 @@ import android.net.Uri;
 import com.A4.oplev.Activity_Event;
 import com.google.firebase.firestore.auth.User;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.TimeZone;
 
 import DAL.Classes.EventDAO;
 import DAL.Classes.UserDAO;
@@ -87,13 +91,18 @@ public class EventController {
 
     public void iniEvents(Activity_Event ctx, EventDTO event, UserDTO user){
 
-       String eventNameString = event.getTitle() + " med " + user.getfName();
-       String eCityString =  event.getCity();
-       String eDateString = event.getDate().toString();
-       String ePriceString = String.valueOf(event.getPrice()) + " DKK";
-       String eAboutString = event.getDescription();
-       String eUnameString = "Om " + user.getfName();
-       String eUaboutString = user.getDescription();
+        DateFormat format1 = new SimpleDateFormat("dd-MM-yyyy HH:mm");
+        format1.setTimeZone(TimeZone.getTimeZone("GMT+1"));
+
+
+        String eventNameString = event.getTitle() + " med " + user.getfName();
+        String eCityString =  event.getCity();
+
+        String eDateString = format1.format(event.getDate());
+        String ePriceString = String.valueOf(event.getPrice()) + " DKK";
+        String eAboutString = event.getDescription();
+        String eUnameString = "Om " + user.getfName();
+        String eUaboutString = user.getDescription();
 
         ctx.eventName.setText(eventNameString);
         ctx.eCity.setText(eCityString);
