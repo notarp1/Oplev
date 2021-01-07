@@ -3,6 +3,7 @@ package Controller;
 import android.net.Uri;
 
 import com.A4.oplev.Activity_Event;
+import com.google.firebase.firestore.auth.User;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -10,6 +11,7 @@ import java.util.Date;
 import DAL.Classes.EventDAO;
 import DAL.Classes.UserDAO;
 import DTO.EventDTO;
+import DTO.UserDTO;
 
 public class EventController {
 
@@ -83,15 +85,15 @@ public class EventController {
         return ePictures;
     }
 
-    public void iniEvents(Activity_Event ctx){
+    public void iniEvents(Activity_Event ctx, EventDTO event, UserDTO user){
 
-       String eventNameString = "";
-       String eCityString = "";
-       String eDateString = "";
-       String ePriceString = "";
-       String eAboutString = "";
-       String eUnameString = "";
-       String eUaboutString = "";
+       String eventNameString = event.getTitle();
+       String eCityString = event.getCity();
+       String eDateString = event.getDate().toString();
+       String ePriceString = String.valueOf(event.getPrice());
+       String eAboutString = event.getDescription();
+       String eUnameString = user.getfName();
+       String eUaboutString = user.getDescription();
 
         ctx.eventName.setText(eventNameString);
         ctx.eCity.setText(eCityString);

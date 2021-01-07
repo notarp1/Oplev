@@ -1,6 +1,7 @@
 package com.A4.oplev;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.View;
@@ -14,6 +15,8 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 
 import Controller.EventController;
+import DTO.EventDTO;
+import DTO.UserDTO;
 
 public class Activity_Event extends AppCompatActivity implements View.OnClickListener {
     public TextView eventName, eCity, eDate, ePrice, eAbout, eUname, eUabout, picNumber;
@@ -31,6 +34,7 @@ public class Activity_Event extends AppCompatActivity implements View.OnClickLis
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_event);
+        Intent myIntent = getIntent();
 
         eventName = findViewById(R.id.text_event_information);
         eCity = findViewById(R.id.text_e_city);
@@ -55,6 +59,19 @@ public class Activity_Event extends AppCompatActivity implements View.OnClickLis
         height = displayMetrics.heightPixels;
         width = displayMetrics.widthPixels;
         eventPic.setMaxHeight(height/2 + 200);
+
+        UserDTO user = (UserDTO) myIntent.getSerializableExtra("user");
+        EventDTO event = (EventDTO) myIntent.getSerializableExtra("event");
+        Picasso.get().load(event.getEventPic())
+                .resize(width, height/2 + 200)
+                .centerCrop()
+                .placeholder(R.drawable.load2)
+                .into(eventPic);
+
+        eventController.iniEvents(this, event, user);
+
+
+
 
         //getPictures();
 

@@ -20,6 +20,7 @@
         <activity android:name=".Login.Activity_Login" />
         <activity android:name=".__Main.Activity_Main" />
         <activity android:name=".Activity_Profile" />
+        <activity android:name=".Activity_Event" />
         <activity
             android:name=".Activity_Ini"
             android:configChanges="orientation|screenSize"

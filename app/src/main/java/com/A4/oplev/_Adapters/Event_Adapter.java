@@ -199,11 +199,9 @@ public class Event_Adapter extends RecyclerView.Adapter<Event_Adapter.ViewHolder
         @Override
         public void onClick(View view) {
             int id =this.getLayoutPosition();
+            UserController user = UserController.getInstance();
 
             if(view == profilePic){
-                UserController user = UserController.getInstance();
-
-
                 user.getUser(new CallbackUser() {
                     @Override
                     public void onCallback(UserDTO user) {
@@ -214,14 +212,13 @@ public class Event_Adapter extends RecyclerView.Adapter<Event_Adapter.ViewHolder
                     }
                 }, eventDTO.getOwnerId());
 
-            } else if(view == mainPic){
+            }
+
+            if(view == mainPic){
 
                 dataA.getEvent(new CallbackEvent() {
                     @Override
                     public void onCallback(EventDTO event) {
-
-                        UserController user = UserController.getInstance();
-
 
                         user.getUser(new CallbackUser() {
                             @Override
@@ -233,8 +230,9 @@ public class Event_Adapter extends RecyclerView.Adapter<Event_Adapter.ViewHolder
 
                             }
                         }, eventDTO.getOwnerId());
+
                     }
-                }, eventListId.get(offset));
+                }, "1v3EKAc0iNWJvebUDW6u");
             }
         }
     }
