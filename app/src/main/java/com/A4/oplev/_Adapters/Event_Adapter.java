@@ -11,6 +11,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.A4.oplev.Activity_Event;
 import com.A4.oplev.Activity_Profile;
 import com.A4.oplev.R;
 import com.squareup.picasso.Picasso;
@@ -21,6 +22,7 @@ import java.util.List;
 import Controller.UserController;
 import DAL.Classes.EventDAO;
 import DAL.Classes.UserDAO;
+import DAL.Interfaces.CallbackEvent;
 import DAL.Interfaces.CallbackUser;
 import DAL.Interfaces.IEventDAO;
 import DAL.Interfaces.IUserDAO;
@@ -230,7 +232,7 @@ public class Event_Adapter extends RecyclerView.Adapter<Event_Adapter.ViewHolder
                         }, eventDTO.getOwnerId());
 
                     }
-                }, "1v3EKAc0iNWJvebUDW6u");
+                }, eventListId.get(offset));
             }
         }
     }
