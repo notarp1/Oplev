@@ -87,12 +87,12 @@ public class EventController {
 
     public void iniEvents(Activity_Event ctx, EventDTO event, UserDTO user){
 
-       String eventNameString = event.getTitle();
-       String eCityString = event.getCity();
-       String eDateString = event.getDate().toString();
-       String ePriceString = String.valueOf(event.getPrice());
+       String eventNameString = event.getTitle() + " med " + user.getfName();
+       String eCityString = "\uD83D\uDCCD " + event.getCity();
+       String eDateString = "\uD83D\uDD52 " + event.getDate().toString();
+       String ePriceString = "\uD83D\uDCB5" + String.valueOf(event.getPrice());
        String eAboutString = event.getDescription();
-       String eUnameString = user.getfName();
+       String eUnameString = "Om " + user.getfName();
        String eUaboutString = user.getDescription();
 
         ctx.eventName.setText(eventNameString);

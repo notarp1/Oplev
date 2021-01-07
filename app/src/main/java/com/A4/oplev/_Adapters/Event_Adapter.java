@@ -232,7 +232,7 @@ public class Event_Adapter extends RecyclerView.Adapter<Event_Adapter.ViewHolder
                         }, eventDTO.getOwnerId());
 
                     }
-                }, "ZJYbmnvjbXXhmfAsQFio");
+                }, eventListId.get(id));
             }
         }
     }
