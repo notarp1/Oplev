@@ -43,8 +43,8 @@ public class Activity_Main extends AppCompatActivity implements View.OnClickList
     RecyclerView rcEvent;
     SharedPreferences prefs;
     Boolean onInstance;
-   Event_Adapter event_Adapter;
-   Context ctx;
+    Event_Adapter event_Adapter;
+    Context ctx;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -75,11 +75,11 @@ public class Activity_Main extends AppCompatActivity implements View.OnClickList
                    @Override
                    public void onCallback(List<EventDTO> events) {
                        System.out.println(list);
-                       eventIni(events, layoutManager);
+                       eventIni(events, list, layoutManager);
                    }
                }, list);
             }
-        });
+        },prefs);
 
 
         options = findViewById(R.id.options_btn);
@@ -94,12 +94,12 @@ public class Activity_Main extends AppCompatActivity implements View.OnClickList
 
     }
 
-    private void eventIni(List<EventDTO> eventList, LinearLayoutManager layoutManager) {
+    private void eventIni(List<EventDTO> eventList, List<String> ids, LinearLayoutManager layoutManager) {
         DisplayMetrics displayMetrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
         int height = displayMetrics.heightPixels;
         int width = displayMetrics.widthPixels;
-        event_Adapter = new Event_Adapter(eventList, this, height, width);
+        event_Adapter = Event_Adapter.getInstance(eventList, ids, this, height, width);
         rcEvent.setLayoutManager(layoutManager);
         rcEvent.setAdapter(event_Adapter);
         PagerSnapHelper snap = new PagerSnapHelper();

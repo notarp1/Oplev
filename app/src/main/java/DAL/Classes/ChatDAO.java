@@ -63,6 +63,8 @@ public class ChatDAO implements IChatDAO {
         chatObject.put("header",chat.getHeader());
         chatObject.put("user1",chat.getUser1());
         chatObject.put("user2",chat.getUser2());
+        chatObject.put("user1ID", chat.getUser1ID());
+        chatObject.put("user2ID",chat.getUser2ID());
 
         // Dernæst vil vi adde objektet i vores chats collection
         db.collection("chats")
@@ -110,6 +112,8 @@ public class ChatDAO implements IChatDAO {
         chatObject.put("user1", chat.getUser1());
         chatObject.put("user2",chat.getUser2());
         chatObject.put("header", chat.getHeader());
+        chatObject.put("user1ID", chat.getUser1ID());
+        chatObject.put("user2ID",chat.getUser2ID());
 
 
         // Vi opdaterer en chat der eksisterer i forvejen og derfor bruger vi documentreference ved chatid'et hvor vi indsætter det chatobjekt vii har lavet
@@ -125,7 +129,7 @@ public class ChatDAO implements IChatDAO {
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        firestoreCallback.onCallback(new ChatDTO(null,null,null,null,null, null, null, null,null));
+                        firestoreCallback.onCallback(new ChatDTO(null,null,null,null,null, null, null, null,null, null,null));
                         Log.d("Update","Not updated chat");
                     }
                 });
@@ -139,12 +143,12 @@ public class ChatDAO implements IChatDAO {
         docRef.delete().addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
-                firestoreCallback.onCallback(new ChatDTO(null,null,chatId,null,null, null, null, null,null));
+                firestoreCallback.onCallback(new ChatDTO(null,null,chatId,null,null, null, null, null,null,null,null));
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                firestoreCallback.onCallback(new ChatDTO(null,null,null,null,null, null, null, null,null));
+                firestoreCallback.onCallback(new ChatDTO(null,null,null,null,null, null, null, null,null,null,null));
             }
         });
     }
@@ -170,7 +174,7 @@ public class ChatDAO implements IChatDAO {
                         ChatDTO dto = document.toObject(ChatDTO.class);
                         if (dto.getChatId() == null){
                             // Det her bliver redundant senere men ikke lige nu hvis man prøver at indlæse et helt tomt dokument
-                            dto = new ChatDTO(new ArrayList<>(), new ArrayList<>(), chatId, new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), dto.getHeader(), dto.getUser1(), dto.getUser2());
+                            dto = new ChatDTO(new ArrayList<>(), new ArrayList<>(), chatId, new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), dto.getHeader(), dto.getUser1(), dto.getUser2(), dto.getUser1ID(), dto.getUser2ID());
                             firestoreCallback.onCallback(dto);
                         }
                         else {

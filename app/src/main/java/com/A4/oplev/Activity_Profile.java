@@ -61,7 +61,7 @@ public class Activity_Profile extends AppCompatActivity implements View.OnClickL
         accept = findViewById(R.id.btn_accept);
         informationText = findViewById(R.id.text_confirmation);
         confirmationBox = findViewById(R.id.confirmationBox);
-        confirmationBox.setVisibility(View.INVISIBLE);
+        confirmationBox.setVisibility(View.GONE);
 
         left.setOnClickListener(this);
         right.setOnClickListener(this);

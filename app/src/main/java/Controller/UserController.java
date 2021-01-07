@@ -147,11 +147,11 @@ public class UserController {
 
     public void iniProfile(Activity_Profile ctx){
         String aboutText = user.getfName() + ", " + user.getAge();
-        String cityText = "\uD83D\uDCCD " + user.getCity();
+        String cityText =  user.getCity();
         String descText = user.getDescription();
         String aboutNameText = "Om "+ user.getfName();
-        String eduText = "\uD83C\uDF93 " + user.getEducation();
-        String jobText = "\uD83D\uDCBC " + user.getJob();
+        String eduText =  user.getEducation();
+        String jobText =  user.getJob();
 
         ctx.about.setText(aboutText);
         ctx.city.setText(cityText);
@@ -161,12 +161,12 @@ public class UserController {
         ctx.job.setText(jobText);
 
         if(user.getEducation() == null || user.getEducation().equals("")){
-            eduText = "\uD83C\uDF93 " + "Ikke angivet";
+            eduText = "Ikke angivet";
             ctx.edu.setText(eduText);
 
         }
         if(user.getJob() == null || user.getJob().equals("")){
-            jobText = "\uD83D\uDCBC " + "Ikke angivet";
+            jobText = "Ikke angivet";
             ctx.job.setText(jobText);
         }
 
@@ -174,11 +174,11 @@ public class UserController {
 
     public void iniPublicProfile(Activity_Profile ctx, UserDTO user){
         String aboutText = user.getfName() + ", " + user.getAge();
-        String cityText = "\uD83D\uDCCD " + user.getCity();
+        String cityText =  user.getCity();
         String descText = user.getDescription();
         String aboutNameText = "Om "+ user.getfName();
-        String eduText = "\uD83C\uDF93 " + user.getEducation();
-        String jobText = "\uD83D\uDCBC " + user.getJob();
+        String eduText = user.getEducation();
+        String jobText = user.getJob();
 
         ctx.about.setText(aboutText);
         ctx.city.setText(cityText);
@@ -188,12 +188,12 @@ public class UserController {
         ctx.job.setText(jobText);
 
         if(user.getEducation() == null || user.getEducation().equals("")){
-            eduText = "\uD83C\uDF93 " + "Ikke angivet";
+            eduText = "Ikke angivet";
             ctx.edu.setText(eduText);
 
         }
         if(user.getJob() == null || user.getJob().equals("")){
-            jobText = "\uD83D\uDCBC " + "Ikke angivet";
+            jobText = "Ikke angivet";
             ctx.job.setText(jobText);
         }
 
