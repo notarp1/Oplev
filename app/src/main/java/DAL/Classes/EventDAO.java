@@ -1,5 +1,6 @@
 package DAL.Classes;
 
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.util.Log;
 
@@ -20,10 +21,10 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 import Controller.UserController;
 import DAL.Interfaces.CallBackEventList;
@@ -66,6 +67,7 @@ public class EventDAO implements IEventDAO {
                 @Override
                 public void onCallback(EventDTO event) {
                     res.add(event);
+
                     if(res.size() == Ids.size()){
                         callbackEventList.onCallback(res);
                     }
@@ -75,27 +77,33 @@ public class EventDAO implements IEventDAO {
 
     }
 
-
-    public void getEventIDs(CallBackList callBackList){
+    public void getEventIDs(CallBackList callBackList,SharedPreferences prefs) {
         CollectionReference docRef = db.collection(collectionPath);
-        docRef.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        List<String> list = new ArrayList<>();
-                        if (task.isSuccessful()) {
-                            for (QueryDocumentSnapshot document : Objects.requireNonNull(task.getResult())) {
+        List<String> completeList = new ArrayList<>();
+        List<String> types = new ArrayList<>();
 
-                                list.add(document.getId());
-                            }
-                            callBackList.onCallback(list);
-                        } else {
-                            Log.d(TAG, "Error getting documents: ", task.getException());
-                        }
+        if (prefs.getBoolean("motionSwitch", true)) { types.add("Motion"); }
+        if (prefs.getBoolean("kulturSwitch", true)) { types.add("Kultur"); }
+        if (prefs.getBoolean("underholdningSwitch", true)) { types.add("Underholdning"); }
+        if (prefs.getBoolean("madDrikkeSwitch", true)) { types.add("Mad og Drikke"); }
+        if (prefs.getBoolean("musikNattelivSwitch", true)) { types.add("Musik og Natteliv"); }
+        if (prefs.getBoolean("gratisSwitch", true)) { types.add("Gratis"); }
 
-
+        docRef.whereIn("type", types).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>(){
+                @Override
+                public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                    if (task.isSuccessful()) {
+                        for (QueryDocumentSnapshot document : task.getResult()) { completeList.add(document.getId()); }
+                        Collections.shuffle(completeList);
+                        callBackList.onCallback(completeList);
+                    } else {
+                        Log.d("switchFail", "Error getting motionswitch: ", task.getException());
                     }
-                });
-    }
+
+                }
+            });
+        }
+
 
     @Override
     public void createEvent(EventDTO event, Uri picUri) {
