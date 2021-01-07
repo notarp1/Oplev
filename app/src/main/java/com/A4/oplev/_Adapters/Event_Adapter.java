@@ -2,6 +2,8 @@ package com.A4.oplev._Adapters;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,11 +11,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.A4.oplev.Activity_Profile;
 import com.A4.oplev.R;
 import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Target;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,6 +25,7 @@ import java.util.List;
 import Controller.UserController;
 import DAL.Classes.EventDAO;
 import DAL.Classes.UserDAO;
+import DAL.Interfaces.CallbackEvent;
 import DAL.Interfaces.CallbackUser;
 import DAL.Interfaces.IEventDAO;
 import DAL.Interfaces.IUserDAO;
@@ -29,73 +34,40 @@ import DTO.UserDTO;
 
 public class Event_Adapter extends RecyclerView.Adapter<Event_Adapter.ViewHolder>implements View.OnClickListener {
 
-    List<Integer> eventListId;
+    List<String> eventListId;
     List<EventDTO> loadedEvent;
     int offset = 0;
     IEventDAO dataA;
-
+    int lastPos = -1;
     Context ctx;
     EventDTO eventDTO;
+    boolean way = true;
+    boolean first = false;
+    Bitmap rightimg = null;
+    Bitmap currentImg = null;
+    Bitmap leftimg = null;
 
-    public Event_Adapter(List<EventDTO> scoreList, Context frame) {
+
+
+    public Event_Adapter(Bitmap pic,List<EventDTO> scoreList, Context frame, List<String> ids) {
         this.loadedEvent = scoreList;
         this.ctx = frame;
         this.dataA = new EventDAO();
-        if(scoreList == null){
-            testData();
-        }else {
-            loadedEvent = scoreList;
-        }
+        this.eventListId = ids;
+        first = true;
+        this.currentImg = pic;
+
     }
 
-    public void testData(){
-        // metode til oprettelse af test data, så der ikke skal bruges db adgang.
-        List<EventDTO> test = new ArrayList<>();
-        EventDTO data = new EventDTO();
-        EventDTO data2 = new EventDTO();
-        EventDTO data3 = new EventDTO();
-        data.setTitle("Løbe tur i skoven").setOwnerId("1").setDescription("Løb en tur med mig");
-        data2.setTitle("Spis en is").setOwnerId("2").setDescription("Is på Rungstedhavn");
-        data3.setTitle("Tivoli").setOwnerId("3").setDescription("Juleudstilling i tivoli");
-        loadedEvent.add(data);
-        loadedEvent.add(data2);
-        loadedEvent.add(data3);
+    public void setCurrentImg(Bitmap bmp){
+        this.currentImg = bmp;
+    }
+    public void setRightimg(Bitmap bmp){
+        this.rightimg = bmp;
     }
 
-
-    public void loadData(boolean way){
-        // Metode til at hente data ind i loaded listen, så der hele tiden kun er tre udfyldte EventDto'er i hukkomelsen.
-        if(way){
-            //Going to the right, first is dumped
-            if(offset!= 0) {
-                loadedEvent.remove(0);
-            }
-            if(offset < eventListId.size()) {
-                offset++;
-                add2list(offset + 1);
-            }
-        }else{
-            if(offset != eventListId.size()-1){
-                loadedEvent.remove(2);
-            }
-            if(offset!= 0){
-                offset --;
-                add2listStart(offset -1);
-            }
-        }
-    }
-
-    public void add2list(int pos){
-        //Henter Data ind i loadEvent, i sluttningen.
-       //loadedEvent.add(dataA.getEvent(eventListId.get(eventListId.get(pos))));
-    }
-    public void add2listStart(int pos){
-        //Henter Data ind i loadEvent, i sluttningen.
-        List<EventDTO> newList  = new ArrayList<>();
-       // newList.add(dataA.getEvent(eventListId.get(eventListId.get(pos))));
-        newList.add(loadedEvent.get(0));
-        newList.add(loadedEvent.get(1));
-        loadedEvent = newList;
+    public void setWay(boolean way){
+        this.way = way;
     }
 
 
@@ -123,8 +95,6 @@ public class Event_Adapter extends RecyclerView.Adapter<Event_Adapter.ViewHolder
         TextView withWhoText = holder.withWhoText;
         TextView headlineText = holder.headlineText;
 
-
-
         // her skal dataen sættes in i holderen, der skal gøres brug af en billed controller til at håndtere billder.
         userDAO.getUser(new CallbackUser() {
             @Override
@@ -133,9 +103,62 @@ public class Event_Adapter extends RecyclerView.Adapter<Event_Adapter.ViewHolder
                 int width = 200;
                 int height = 10;
 
-                System.out.println(eventDTO.getOwnerId() + "HAHA2");
                 withWhoText.setText(user.getfName());
                 headlineText.setText(eventDTO.getTitle());
+
+                if(first) {
+                    mainPic.setImageBitmap(currentImg);
+                    first = false;
+                }else if(way && position < loadedEvent.size()-1) {
+                    Picasso.get().load(loadedEvent.get(position + 1).getEventPic()).into(new Target() {
+                        @Override
+                        public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+                            // loaded bitmap is here (bitmap)
+                            mainPic.setImageBitmap(rightimg);
+                            Bitmap newleftimg = currentImg;
+                            Bitmap newcurrentImg = rightimg;
+                            Bitmap newrightimg = bitmap;
+                            leftimg = newleftimg;
+                            currentImg = newcurrentImg;
+                            rightimg = newrightimg;
+
+                        }
+
+                        @Override
+                        public void onBitmapFailed(Exception e, Drawable errorDrawable) {
+
+                        }
+
+                        @Override
+                        public void onPrepareLoad(Drawable placeHolderDrawable) {
+                        }
+                    });
+                } else if(position > 0) {
+                    Picasso.get().load(loadedEvent.get(position - 1).getEventPic()).into(new Target() {
+                        @Override
+                        public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+                            // loaded bitmap is here (bitmap)
+                            mainPic.setImageBitmap(leftimg);
+                            Bitmap newrightimg = currentImg;
+                            Bitmap newcurrentImg = leftimg;
+                            Bitmap newleftimg = bitmap;
+
+                            leftimg = newleftimg;
+                            currentImg = newcurrentImg;
+                            rightimg = newrightimg;
+                        }
+
+                        @Override
+                        public void onBitmapFailed(Exception e, Drawable errorDrawable) {
+
+                        }
+
+                        @Override
+                        public void onPrepareLoad(Drawable placeHolderDrawable) {
+                        }
+                    });
+                }
+
 
                 Picasso.get().load(eventDTO.getOwnerPic())
                         .resize(width, height/2 + 200)
@@ -144,12 +167,6 @@ public class Event_Adapter extends RecyclerView.Adapter<Event_Adapter.ViewHolder
                         .error(R.drawable.question)
                         .transform(new RoundedTransformation(90,0))
                         .into(profilePic);
-                Picasso.get().load(eventDTO.getEventPic())
-                        .resize(width, height/2 + 200)
-                        .centerCrop()
-                        .placeholder(R.drawable.load2)
-                        .error(R.drawable.question)
-                        .into(mainPic);
 
             }
         }, eventDTO.getOwnerId());
@@ -195,8 +212,6 @@ public class Event_Adapter extends RecyclerView.Adapter<Event_Adapter.ViewHolder
 
             if(view == profilePic){
                 UserController user = UserController.getInstance();
-
-
                 user.getUser(new CallbackUser() {
                     @Override
                     public void onCallback(UserDTO user) {

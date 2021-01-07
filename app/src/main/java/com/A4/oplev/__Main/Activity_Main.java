@@ -4,13 +4,17 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.PagerSnapHelper;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.RecyclerView.OnScrollListener;
 
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
 
@@ -20,10 +24,14 @@ import com.A4.oplev.R;
 import com.A4.oplev.SearchFilter.Activity_Search_Filter;
 import com.A4.oplev.UserSettings.Activity_U_Settings;
 
+import java.sql.SQLOutput;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import com.A4.oplev._Adapters.Event_Adapter;
+import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Target;
 
 //import DAL.DBAccess;
 import DAL.Classes.EventDAO;
@@ -44,6 +52,8 @@ public class Activity_Main extends AppCompatActivity implements View.OnClickList
     Boolean onInstance;
    Event_Adapter event_Adapter;
    Context ctx;
+
+   int lastscrooled = 0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -70,11 +80,24 @@ public class Activity_Main extends AppCompatActivity implements View.OnClickList
         dataA.getEventIDs(new CallBackList() {
             @Override
             public void onCallback(List<String> list) {
+
                dataA.getEvents(new CallBackEventList() {
                    @Override
                    public void onCallback(List<EventDTO> events) {
-                       System.out.println(list);
-                       eventIni(events, layoutManager);
+                       Picasso.get().load(events.get(0).getEventPic()).into(new Target() {
+                           @Override
+                           public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+                               // loaded bitmap is here (bitmap)
+                                eventIni(bitmap, events, layoutManager, list);
+                           }
+                           @Override
+                           public void onBitmapFailed(Exception e, Drawable errorDrawable) {
+
+                           }
+                           @Override
+                           public void onPrepareLoad(Drawable placeHolderDrawable) {
+                           }
+                       });
                    }
                }, list);
             }
@@ -93,10 +116,31 @@ public class Activity_Main extends AppCompatActivity implements View.OnClickList
 
     }
 
-    private void eventIni(List<EventDTO> eventList, LinearLayoutManager layoutManager) {
-        event_Adapter = new Event_Adapter(eventList, this);
+    private void eventIni(Bitmap pic,List<EventDTO> eventList, LinearLayoutManager layoutManager, List<String> ids) {
+        event_Adapter = new Event_Adapter(pic, eventList, this, ids);
         rcEvent.setLayoutManager(layoutManager);
         rcEvent.setAdapter(event_Adapter);
+        rcEvent.addOnScrollListener(new RecyclerView.OnScrollListener(){
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+
+                super.onScrolled(recyclerView, dx, dy);
+                System.out.println("scrooled " + dx);
+
+                if (dx > 0 && lastscrooled < 0)  {
+                    // Scrolling right
+                    event_Adapter.setWay(true);
+
+                } else if(dx < 0 && lastscrooled > 0) {
+                    // Scrolling left
+                    event_Adapter.setWay(false);
+
+                }
+                lastscrooled = dx;
+            }
+        });
+
+
         PagerSnapHelper snap = new PagerSnapHelper();
         snap.attachToRecyclerView(rcEvent);
     }
