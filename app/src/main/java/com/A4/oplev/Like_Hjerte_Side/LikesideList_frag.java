@@ -352,7 +352,7 @@ public class LikesideList_frag extends Fragment{
 
     @Override
     public void onDetach(){
-        sendNoti();
+        //sendNoti();
         this.mContext = null;
         super.onDetach();
     }
