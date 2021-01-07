@@ -72,7 +72,7 @@ public class Activity_Event extends AppCompatActivity implements View.OnClickLis
                 .placeholder(R.drawable.load2)
                 .into(eventPic);
 
-        Picasso.get().load(event.getOwnerPic())
+        Picasso.get().load(user.getUserPicture())
                 .placeholder(R.drawable.load2)
                 .into(profilePic);
 

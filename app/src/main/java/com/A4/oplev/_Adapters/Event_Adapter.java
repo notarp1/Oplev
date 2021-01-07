@@ -235,7 +235,7 @@ public class Event_Adapter extends RecyclerView.Adapter<Event_Adapter.ViewHolder
                         }, eventDTO.getOwnerId());
 
                     }
-                }, "1v3EKAc0iNWJvebUDW6u");
+                }, eventListId.get(id));
             }
         }
     }
