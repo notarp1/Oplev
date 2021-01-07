@@ -50,6 +50,9 @@ public class Event_Adapter extends RecyclerView.Adapter<Event_Adapter.ViewHolder
         return instance;
     }
 
+    public static Event_Adapter getInstance() {
+        return instance;
+    }
 
     private Event_Adapter(List<EventDTO> scoreList, List<String> ids, Context frame, int height, int width) {
         this.loadedEvent = scoreList;
