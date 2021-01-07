@@ -72,8 +72,18 @@ public class  LikeSide_Adapter extends ArrayAdapter<String> {
                 else {
                     if (lastMessage.get(position).length() > 30){
                         currentLastMessage = currentName + ": " + lastMessage.get(position).substring(0,30-currentName.length()) + "...";
-                    } else currentLastMessage = currentName + ": " + lastMessage.get(position);
+                    } else {
+                        currentLastMessage = currentName + ": " + lastMessage.get(position);
+                    }
+                    currentLastMessage = currentLastMessage.replaceAll("\n","");
                 }
+            } else if (lastMessageSender.get(position).equals("Oplev")){
+                if (lastMessage.get(position).length() > 30){
+                    currentLastMessage = "Oplev: " + lastMessage.get(position).substring(0,30-5) + "...";
+                } else {
+                    currentLastMessage = "Oplev: " + lastMessage.get(position);
+                }
+                currentLastMessage = currentLastMessage.replaceAll("\n","");
             } else {
                 if (lastMessage.get(position).equals("pictureBlaBlaBla!:"))
                     currentLastMessage = "Dig: " + "[Picture]";
@@ -81,7 +91,10 @@ public class  LikeSide_Adapter extends ArrayAdapter<String> {
                 else {
                     if (lastMessage.get(position).length() > 30){
                         currentLastMessage = "Dig: " + lastMessage.get(position).substring(0,30) + "...";
-                    } else currentLastMessage = "Dig: " + lastMessage.get(position);
+                    } else {
+                        currentLastMessage = "Dig: " + lastMessage.get(position);
+                    }
+                    currentLastMessage = currentLastMessage.replaceAll("\n","");
                 }
             }
         }

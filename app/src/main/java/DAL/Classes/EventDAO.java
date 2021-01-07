@@ -1,5 +1,6 @@
 package DAL.Classes;
 
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.util.Log;
 
@@ -20,10 +21,10 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 import Controller.UserController;
 import DAL.Interfaces.CallBackEventList;
@@ -66,6 +67,7 @@ public class EventDAO implements IEventDAO {
                 @Override
                 public void onCallback(EventDTO event) {
                     res.add(event);
+
                     if(res.size() == Ids.size()){
                         callbackEventList.onCallback(res);
                     }
@@ -75,27 +77,33 @@ public class EventDAO implements IEventDAO {
 
     }
 
-
-    public void getEventIDs(CallBackList callBackList){
+    public void getEventIDs(CallBackList callBackList,SharedPreferences prefs) {
         CollectionReference docRef = db.collection(collectionPath);
-        docRef.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        List<String> list = new ArrayList<>();
-                        if (task.isSuccessful()) {
-                            for (QueryDocumentSnapshot document : Objects.requireNonNull(task.getResult())) {
+        List<String> completeList = new ArrayList<>();
+        List<String> types = new ArrayList<>();
 
-                                list.add(document.getId());
-                            }
-                            callBackList.onCallback(list);
-                        } else {
-                            Log.d(TAG, "Error getting documents: ", task.getException());
-                        }
+        if (prefs.getBoolean("motionSwitch", true)) { types.add("Motion"); }
+        if (prefs.getBoolean("kulturSwitch", true)) { types.add("Kultur"); }
+        if (prefs.getBoolean("underholdningSwitch", true)) { types.add("Underholdning"); }
+        if (prefs.getBoolean("madDrikkeSwitch", true)) { types.add("Mad og Drikke"); }
+        if (prefs.getBoolean("musikNattelivSwitch", true)) { types.add("Musik og Natteliv"); }
+        if (prefs.getBoolean("gratisSwitch", true)) { types.add("Gratis"); }
 
-
+        docRef.whereIn("type", types).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>(){
+                @Override
+                public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                    if (task.isSuccessful()) {
+                        for (QueryDocumentSnapshot document : task.getResult()) { completeList.add(document.getId()); }
+                        Collections.shuffle(completeList);
+                        callBackList.onCallback(completeList);
+                    } else {
+                        Log.d("switchFail", "Error getting motionswitch: ", task.getException());
                     }
-                });
-    }
+
+                }
+            });
+        }
+
 
     @Override
     public void createEvent(EventDTO event, Uri picUri) {
@@ -134,50 +142,81 @@ public class EventDAO implements IEventDAO {
                         //overwrite object map eventid
                         eventObject.put("eventId", documentReference.getId());
 
-                        //add the picture to database
+                        //get storage reference
                         mStorageRef  = FirebaseStorage.getInstance().getReference();
-                        picRef = mStorageRef.child("events/" + documentReference.getId() + "/1");
 
-                        picRef.putFile(picUri)
-                                .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                                    @Override
-                                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                                        // Get a URL to the uploaded content picture
-                                        picRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                                            @Override
-                                            public void onSuccess(Uri uri) {
-                                                //set URL of eventpic in eventObject map
-                                                eventObject.put("eventPic",String.valueOf(uri));
-                                                //eventObject is now updated with eventId and eventPic URL
-                                                //update the event in db
-                                                //overwrite database document with new eventId and link to pic
-                                                db.collection("events").document(documentReference.getId())
-                                                        .set(eventObject)
-                                                        .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                                            @Override
-                                                            public void onSuccess(Void aVoid) {
-                                                                Log.d(TAG, "DocumentSnapshot successfully written!");
-                                                            }
-                                                        })
-                                                        .addOnFailureListener(new OnFailureListener() {
-                                                            @Override
-                                                            public void onFailure(@NonNull Exception e) {
-                                                                Log.w(TAG, "Error writing document", e);
-                                                            }
-                                                        });
-                                            }
-                                        });
-
-
-                                    }
-                                })
-                                .addOnFailureListener(new OnFailureListener() {
-                                    @Override
-                                    public void onFailure(@NonNull Exception exception) {
-                                        // Handle unsuccessful uploads
-                                        // ...
-                                    }
-                                });
+                        //if a picture to upload was chosen then upload pic else skip that part
+                        if(picUri!=null) {
+                            //set picture reference (path where pic will be saved
+                            picRef = mStorageRef.child("events/" + documentReference.getId() + "/1");
+                            picRef.putFile(picUri)
+                                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                                        @Override
+                                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                                            // Get a URL to the uploaded content picture
+                                            picRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                                @Override
+                                                public void onSuccess(Uri uri) {
+                                                    //set URL of eventpic in eventObject map
+                                                    eventObject.put("eventPic", String.valueOf(uri));
+                                                    //eventObject is now updated with eventId and eventPic URL
+                                                    //update the event in db
+                                                    //overwrite database document with new eventId and link to pic
+                                                    db.collection("events").document(documentReference.getId())
+                                                            .set(eventObject)
+                                                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                                @Override
+                                                                public void onSuccess(Void aVoid) {
+                                                                    Log.d(TAG, "DocumentSnapshot successfully written!");
+                                                                }
+                                                            })
+                                                            .addOnFailureListener(new OnFailureListener() {
+                                                                @Override
+                                                                public void onFailure(@NonNull Exception e) {
+                                                                    Log.w(TAG, "Error writing document", e);
+                                                                }
+                                                            });
+                                                }
+                                            });
+                                        }
+                                    })
+                                    .addOnFailureListener(new OnFailureListener() {
+                                        @Override
+                                        public void onFailure(@NonNull Exception exception) {
+                                            // Handle unsuccessful uploads
+                                            // ...
+                                        }
+                                    });
+                        }
+                        else{
+                            //set picture reference  (path of pic, here hardcoded cuz default pic)
+                            picRef = mStorageRef.child("events/default/2.jpg");
+                            //get pic url from db
+                            picRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                @Override
+                                public void onSuccess(Uri uri) {
+                                    //set URL of eventpic in eventObject map
+                                    eventObject.put("eventPic", String.valueOf(uri));
+                                    //eventObject is now updated with eventId and eventPic URL
+                                    //update the event in db
+                                    //overwrite database document with new eventId and eventPic
+                                    db.collection("events").document(documentReference.getId())
+                                            .set(eventObject)
+                                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                @Override
+                                                public void onSuccess(Void aVoid) {
+                                                    Log.d(TAG, "DocumentSnapshot successfully written!");
+                                                }
+                                            })
+                                            .addOnFailureListener(new OnFailureListener() {
+                                                @Override
+                                                public void onFailure(@NonNull Exception e) {
+                                                    Log.w(TAG, "Error writing document", e);
+                                                }
+                                            });
+                                }
+                            });
+                        }
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
