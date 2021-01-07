@@ -138,7 +138,7 @@ public class Event_Adapter extends RecyclerView.Adapter<Event_Adapter.ViewHolder
                 withWhoText.setText(user.getfName());
                 headlineText.setText(eventDTO.getTitle());
 
-                Picasso.get().load(eventDTO.getOwnerPic())
+                Picasso.get().load(user.getUserPicture())
                         .resize(width/8, height/16)
                         .centerCrop()
                         .placeholder(R.drawable.load2)
