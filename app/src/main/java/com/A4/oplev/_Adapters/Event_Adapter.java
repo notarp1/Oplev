@@ -29,7 +29,9 @@ import DTO.UserDTO;
 
 public class Event_Adapter extends RecyclerView.Adapter<Event_Adapter.ViewHolder>implements View.OnClickListener {
 
-    List<Integer> eventListId;
+    final static Event_Adapter instance = null;
+
+    List<String> eventListId;
     List<EventDTO> loadedEvent;
     int offset = 0;
     IEventDAO dataA;
@@ -38,17 +40,16 @@ public class Event_Adapter extends RecyclerView.Adapter<Event_Adapter.ViewHolder
     Context ctx;
     EventDTO eventDTO;
 
-    public Event_Adapter(List<EventDTO> scoreList, Context frame, int height, int width) {
+
+
+
+    public Event_Adapter(List<EventDTO> scoreList, List<String> ids, Context frame, int height, int width) {
         this.loadedEvent = scoreList;
         this.ctx = frame;
         this.dataA = new EventDAO();
         this.height = height;
         this.width = width;
-        if(scoreList == null){
-            testData();
-        }else {
-            loadedEvent = scoreList;
-        }
+        this.eventListId = ids;
     }
 
     public void testData(){
