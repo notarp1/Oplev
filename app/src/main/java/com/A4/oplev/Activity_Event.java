@@ -20,10 +20,11 @@ import DTO.UserDTO;
 
 public class Activity_Event extends AppCompatActivity implements View.OnClickListener {
     public TextView eventName, eCity, eDate, ePrice, eAbout, eUname, eUabout, picNumber;
-    ImageView eventPic;
+    ImageView eventPic, profilePic;
     EventController eventController;
     ArrayList<String> pictures, currPics;
-
+    UserDTO user;
+    EventDTO event;
     int height, width, currentPic, maxPic, minPic, maxPicPrint;
 
 
@@ -45,7 +46,9 @@ public class Activity_Event extends AppCompatActivity implements View.OnClickLis
         eUabout = findViewById(R.id.text_u_about);
         picNumber = findViewById(R.id.cur_picEvent);
         eventPic = findViewById(R.id.imageView_e_pb);
+        profilePic = findViewById(R.id.event_profile_picture);
 
+        profilePic.setOnClickListener(this);
 
         eventController =  eventController.getInstance();
         pictures = eventController.getEventPictures();
@@ -60,13 +63,18 @@ public class Activity_Event extends AppCompatActivity implements View.OnClickLis
         width = displayMetrics.widthPixels;
         eventPic.setMaxHeight(height/2 + 200);
 
-        UserDTO user = (UserDTO) myIntent.getSerializableExtra("user");
-        EventDTO event = (EventDTO) myIntent.getSerializableExtra("event");
+        user = (UserDTO) myIntent.getSerializableExtra("user");
+        event = (EventDTO) myIntent.getSerializableExtra("event");
+
         Picasso.get().load(event.getEventPic())
                 .resize(width, height/2 + 200)
                 .centerCrop()
                 .placeholder(R.drawable.load2)
                 .into(eventPic);
+
+        Picasso.get().load(event.getOwnerPic())
+                .placeholder(R.drawable.load2)
+                .into(profilePic);
 
         eventController.iniEvents(this, event, user);
 
@@ -160,6 +168,11 @@ public class Activity_Event extends AppCompatActivity implements View.OnClickLis
 
     @Override
     public void onClick(View v) {
-
+        if(v == profilePic){
+            Intent i = new Intent(this, Activity_Profile.class);
+            i.putExtra("user", user);
+            i.putExtra("load", 1);
+            startActivity(i);
+        }
     }
 }
