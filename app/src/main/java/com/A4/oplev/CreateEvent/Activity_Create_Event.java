@@ -47,9 +47,13 @@ public class Activity_Create_Event extends AppCompatActivity implements View.OnC
         super.onActivityResult(requestCode, resultCode, data);
         System.out.println("jbe in actres act");
         if (resultCode == RESULT_OK) {
+            //change picture source URI
             ImageView pic = findViewById(R.id.create_pic);
             pickedImgUri = data.getData();
             pic.setImageURI(pickedImgUri);
+            //remove the "change pic" text
+            TextView changePicTxt = findViewById(R.id.create_changepic_txt);
+            changePicTxt.setVisibility(View.GONE);
         }
     }
 
