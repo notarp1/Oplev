@@ -1,6 +1,7 @@
 package com.A4.oplev.Like_Hjerte_Side;
 
 import android.annotation.SuppressLint;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,11 +11,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
+import androidx.core.app.TaskStackBuilder;
 import androidx.fragment.app.Fragment;
 
+import com.A4.oplev.Activity_Ini;
 import com.A4.oplev.Chat.Activity_Chat;
 
 import Controller.Listeners.OnSwipeTouchListener;
@@ -28,20 +34,17 @@ import DTO.EventDTO;
 import DTO.UserDTO;
 
 import com.A4.oplev.R;
-import com.A4.oplev._Adapters.ChatList_Adapter;
 import com.A4.oplev._Adapters.LikeSide_Adapter;
 import com.A4.oplev._Adapters.LikeSide_Event_Adapter;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
-import com.google.firebase.storage.FirebaseStorage;
 
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.concurrent.Semaphore;
 
 
 public class LikesideList_frag extends Fragment{
@@ -69,6 +72,8 @@ public class LikesideList_frag extends Fragment{
 
         chat_listView = root.findViewById(R.id.beskedListView_chats);
         tilmeldinger_listView = root.findViewById(R.id.beskedListView_tilmeldinger);
+
+        //chatDAO.createChat(new ChatDTO(null,null,null,null,null,null,"Spasser","John dillermand","Aben"));
 
         // Tjek om personen har nogle chatId's ellers så gå videre
         if (userDTO == null) userDTO = userController.getCurrUser();
@@ -118,6 +123,25 @@ public class LikesideList_frag extends Fragment{
             startActivity(i1);
         });
 
+        tilmeldinger_listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                sendNoti();
+                Toast.makeText(mContext, "Notifikation sendt", Toast.LENGTH_SHORT).show();
+                // Gør noget her som går ind på den andens profil
+                if (eventFirstApplicants.get(position).equals("")) {
+                    System.out.println(eventHeaders.get(position));
+                } else {
+                    userController.getUser(new CallbackUser() {
+                        @Override
+                        public void onCallback(UserDTO user) {
+
+                        }
+                    }, eventFirstApplicants.get(position));
+                }
+            }
+        });
+
         // Vi har lavet en swipe listener for egentlig bare at kunne swipe til siden for at komme til hjertesiden
         chat_listView.setOnTouchListener(new OnSwipeTouchListener(mContext){
             @SuppressLint("ResourceAsColor")
@@ -142,7 +166,6 @@ public class LikesideList_frag extends Fragment{
         if (userDTO != null){
             if (userDTO.getEvents() != null){
                 for (int j = 0; j < userDTO.getEvents().size(); j++) {
-                    System.out.println(j + "\n");
                     eventDAO.getEvent(event -> {
                         if (event != null) {
                             eventApplicantsSize.add(event.getApplicants().size());
@@ -151,7 +174,6 @@ public class LikesideList_frag extends Fragment{
                             eventEventPic.add(event.getEventPic());
                             String firstApplicant = event.getApplicants().size() == 0 ? "" : event.getApplicants().get(0);
                             eventFirstApplicants.add(firstApplicant);
-                            System.out.println(firstApplicant.equals(""));
                             if (firstApplicant.equals("")) {
                                 eventApplicantPic.add("");
                                 if (eventApplicantPic.size() == userDTO.getEvents().size()) {
@@ -159,12 +181,7 @@ public class LikesideList_frag extends Fragment{
                                 }
                             } else {
                                 userController.getUser(user -> {
-                                    for (int k = 0; k < eventFirstApplicants.size(); k++) {
-                                        if (eventFirstApplicants.get(k).equals(user.getUserId())) {
-                                            eventApplicantPic.set(k, user.getUserPicture());
-                                            k = eventFirstApplicants.size();
-                                        }
-                                    }
+                                    eventApplicantPic.add(user.getUserPicture());
                                     if (eventApplicantPic.size() == userDTO.getEvents().size()) {
                                         setListView_applicants(eventEventPic, eventHeaders, eventOwnerPic, eventFirstApplicants, eventApplicantPic, eventApplicantsSize);
                                     }
@@ -302,16 +319,37 @@ public class LikesideList_frag extends Fragment{
 
     @Override
     public void onAttach(@NotNull Context context){
-        System.out.println("Is attached");
         super.onAttach(context);
         this.mContext = context;
     }
 
     @Override
     public void onDetach(){
-        System.out.println("Is detached");
+        sendNoti();
         this.mContext = null;
         super.onDetach();
     }
 
+    @Override
+    public void onDestroy(){
+        super.onDestroy();
+    }
+
+    // Skal ændres til noget baggrunds halløjsa senere hen
+    private void sendNoti(){
+        Intent i = new Intent(mContext, Activity_Likeside.class);
+        TaskStackBuilder stackBuilder = TaskStackBuilder.create(mContext);
+        stackBuilder.addNextIntentWithParentStack(i);
+        PendingIntent resultPendingIntent =
+                stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(mContext, "0")
+                .setSmallIcon(R.drawable.chat)
+                .setContentTitle("KOM TILBAGE")
+                .setContentText("I miss you bro")
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT);
+        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(mContext);
+        builder.setContentIntent(resultPendingIntent);
+        notificationManager.notify(0, builder.build());
+    }
 }

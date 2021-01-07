@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
@@ -94,7 +95,11 @@ public class Activity_Main extends AppCompatActivity implements View.OnClickList
     }
 
     private void eventIni(List<EventDTO> eventList, LinearLayoutManager layoutManager) {
-        event_Adapter = new Event_Adapter(eventList, this);
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        int height = displayMetrics.heightPixels;
+        int width = displayMetrics.widthPixels;
+        event_Adapter = new Event_Adapter(eventList, this, height, width);
         rcEvent.setLayoutManager(layoutManager);
         rcEvent.setAdapter(event_Adapter);
         PagerSnapHelper snap = new PagerSnapHelper();
