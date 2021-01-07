@@ -46,6 +46,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 
 public class LikesideList_frag extends Fragment{
@@ -60,6 +61,7 @@ public class LikesideList_frag extends Fragment{
     private ArrayList<Integer> eventApplicantsSize = new ArrayList<>();
     private ArrayList<String> eventHeaders = new ArrayList<>(), eventEventPic = new ArrayList<>(), eventApplicantPic = new ArrayList<>(), eventOwnerPic = new ArrayList<>(), eventFirstApplicants = new ArrayList<>();
     private Context mContext;
+    private static ArrayList<View> footerViews = new ArrayList<>();
 
     // Den her klasse bruges til at få lave chatlisten ude fra likesiden af (hvor man kan vælge den chat man vil ind i)
     @SuppressLint("ClickableViewAccessibility")
@@ -71,7 +73,7 @@ public class LikesideList_frag extends Fragment{
         chatDAO = new ChatDAO();
         eventDAO = new EventDAO();
 
-        chat_listView = root.findViewById(R.id.beskedListView_chats);
+        //chat_listView = root.findViewById(R.id.beskedListView_chats);
         tilmeldinger_listView = root.findViewById(R.id.beskedListView_tilmeldinger);
 
         //chatDAO.createChat(new ChatDTO(null,null,null,null,null,null,"Spasser","John dillermand","Aben"));
@@ -119,48 +121,33 @@ public class LikesideList_frag extends Fragment{
         }
 
 
-        // Vi laver en itemclicklistener for at kunne differentiere med hvilket listview objekt man har trykket på
-        chat_listView.setOnItemClickListener((parent, view, position, id) -> {
-            // Her ville chatId'et også sendes med senere hen
-            Intent i1 = new Intent(getActivity(), Activity_Chat.class);
-            i1.putExtra("currentUser",currentUser);
-            i1.putExtra("otherUser",names.get(position));
-            i1.putExtra("chatId", userDTO.getChatId().get(position));
-            startActivity(i1);
-        });
-
         tilmeldinger_listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                sendNoti();
-                Toast.makeText(mContext, "Notifikation sendt", Toast.LENGTH_SHORT).show();
-                // Gør noget her som går ind på den andens profil
-                if (eventFirstApplicants.get(position).equals("")) {
-                    System.out.println(eventHeaders.get(position));
-                } else {
-                    userController.getUser(new CallbackUser() {
-                        @Override
-                        public void onCallback(UserDTO user) {
+                System.out.println(position + "\t" + eventHeaders.size());
+                if (position < eventHeaders.size()) {
+                    sendNoti();
+                    Toast.makeText(mContext, "Notifikation sendt", Toast.LENGTH_SHORT).show();
+                    // Gør noget her som går ind på den andens profil
+                    if (eventFirstApplicants.get(position).equals("")) {
+                        System.out.println(eventHeaders.get(position));
+                    } else {
+                        userController.getUser(new CallbackUser() {
+                            @Override
+                            public void onCallback(UserDTO user) {
 
-                        }
-                    }, eventFirstApplicants.get(position));
+                            }
+                        }, eventFirstApplicants.get(position));
+                    }
                 }
-            }
-        });
-
-        // Vi har lavet en swipe listener for egentlig bare at kunne swipe til siden for at komme til hjertesiden
-        chat_listView.setOnTouchListener(new OnSwipeTouchListener(mContext){
-            @SuppressLint("ResourceAsColor")
-            @Override
-            public void onSwipeLeft() {
-                // Sæt farven på billederne i toppen af skærmen
-                getActivity().findViewById(R.id.besked_back).setVisibility(View.INVISIBLE);
-                getActivity().findViewById(R.id.hjerte_back).setVisibility(View.VISIBLE);
-
-                // Kreer fragmentet over til hjertesiden
-                getFragmentManager().beginTransaction().setCustomAnimations(R.anim.enter_from_right,
-                        R.anim.exit_to_left).replace(R.id.likeside_frameLayout,new HjerteSide_frag())
-                        .commit();
+                else {
+                    // Her ville chatId'et også sendes med senere hen
+                    Intent i1 = new Intent(getActivity(), Activity_Chat.class);
+                    i1.putExtra("currentUser",currentUser);
+                    i1.putExtra("otherUser",names.get(position-eventHeaders.size()));
+                    i1.putExtra("chatId", userDTO.getChatId().get(position-eventHeaders.size()));
+                    startActivity(i1);
+                }
             }
         });
 
@@ -239,7 +226,6 @@ public class LikesideList_frag extends Fragment{
                 tempHeaderList.add(headerList.get(i));
                 tempIsInitialized.add(isInitialized.get(i));
                 tempLastSender.add(lastSender.get(i));
-                System.out.println(otherPersonPic.get(i));
                 tempOtherPersonPic.add(otherPersonPic.get(i));
             }
             else {
@@ -285,8 +271,23 @@ public class LikesideList_frag extends Fragment{
 
         // Vi laver adapteren der laver vores listview over de chats man har
         if (mContext != null) {
+            while(footerViews.size() != 0){
+                tilmeldinger_listView.removeFooterView(footerViews.get(0));
+                footerViews.remove(0);
+            }
+            System.out.println("FOOTER COUNT 1 " + tilmeldinger_listView.getFooterViewsCount());
+            tilmeldinger_listView.setAdapter(null);
+            System.out.println("FOOTER COUNT 2 " + tilmeldinger_listView.getFooterViewsCount());
+            setListView_applicants(eventEventPic, eventHeaders, eventOwnerPic, eventFirstApplicants, eventApplicantPic, eventApplicantsSize);
+            System.out.println("FOOTER COUNT 3 " + tilmeldinger_listView.getFooterViewsCount());
             LikeSide_Adapter adapter = new LikeSide_Adapter(mContext, tempNames, tempDates, tempLastmessage, tempHeaderList, tempLastSender, tempIsInitialized, otherPersonPic);
-            chat_listView.setAdapter(adapter);
+            System.out.println("FOOTER COUNT 4 " + tilmeldinger_listView.getFooterViewsCount());
+            for (int i = 0; i < tempNames.size(); i++) {
+                View v = adapter.getView(i,null,null);
+                tilmeldinger_listView.addFooterView(v);
+                footerViews.add(v);
+            }
+            System.out.println("FOOTER COUNT 5 " + tilmeldinger_listView.getFooterViewsCount());
         }
         this.dates = tempDates;
         this.names = tempNames;
