@@ -5,10 +5,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.cardview.widget.CardView;
+
 import com.A4.oplev.R;
+import com.squareup.picasso.Picasso;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -21,10 +25,10 @@ import java.util.TimeZone;
 
 public class  LikeSide_Adapter extends ArrayAdapter<String> {
     private Context mContext;
-    private List<String> nameList = new ArrayList<>(), lastMessage = new ArrayList<>(), headerList = new ArrayList<>(), lastMessageSender = new ArrayList<>(), isInitialized = new ArrayList<>();
+    private List<String> nameList = new ArrayList<>(), lastMessage = new ArrayList<>(), headerList = new ArrayList<>(), lastMessageSender = new ArrayList<>(), isInitialized = new ArrayList<>(), otherPersonPic = new ArrayList<>();
     private List<Date> dateList = new ArrayList<>();
 
-    public LikeSide_Adapter(@NonNull Context context, @NonNull ArrayList<String> names, @NonNull ArrayList<Date> dates, @NonNull ArrayList<String> lastMessage, @NonNull ArrayList<String> headerList, @NonNull ArrayList<String> lastMessageSender, ArrayList<String> isInitialized) {
+    public LikeSide_Adapter(@NonNull Context context, @NonNull ArrayList<String> names, @NonNull ArrayList<Date> dates, @NonNull ArrayList<String> lastMessage, @NonNull ArrayList<String> headerList, @NonNull ArrayList<String> lastMessageSender, ArrayList<String> isInitialized, ArrayList<String> otherPersonPic) {
         super(context, 0 , names);
         this.mContext = context;
         this.nameList = names;
@@ -33,6 +37,7 @@ public class  LikeSide_Adapter extends ArrayAdapter<String> {
         this.headerList = headerList;
         this.lastMessageSender = lastMessageSender;
         this.isInitialized = isInitialized;
+        this.otherPersonPic = otherPersonPic;
     }
 
     @NonNull
@@ -114,6 +119,14 @@ public class  LikeSide_Adapter extends ArrayAdapter<String> {
 
         TextView name = (TextView) listItem.findViewById(R.id.beskeder_name);
         name.setText("Med " + currentName);
+
+        ImageView profilBillede = listItem.findViewById(R.id.likeside_chats_profilbillede);
+        Picasso.get().load(otherPersonPic.get(position))
+                .resize(mContext.getDisplay().getWidth(), mContext.getDisplay().getHeight() / 2 + 200)
+                .centerCrop()
+                .placeholder(R.drawable.load2)
+                .error(R.drawable.question)
+                .into(profilBillede);
 
         return listItem;
     }
