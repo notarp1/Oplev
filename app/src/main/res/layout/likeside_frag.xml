@@ -21,15 +21,13 @@
             <ListView
                 android:id="@+id/beskedListView_tilmeldinger"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1">
+                android:layout_height="wrap_content">
             </ListView>
 
             <ListView
                 android:id="@+id/beskedListView_chats"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1">
+                android:layout_height="wrap_content">
 
             </ListView>
         </LinearLayout>
