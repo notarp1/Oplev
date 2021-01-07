@@ -73,6 +73,8 @@ public class LikesideList_frag extends Fragment{
         chat_listView = root.findViewById(R.id.beskedListView_chats);
         tilmeldinger_listView = root.findViewById(R.id.beskedListView_tilmeldinger);
 
+        //chatDAO.createChat(new ChatDTO(null,null,null,null,null,null,"Spasser","John dillermand","Aben"));
+
         // Tjek om personen har nogle chatId's ellers så gå videre
         if (userDTO == null) userDTO = userController.getCurrUser();
         if (userDTO != null) {
@@ -342,7 +344,7 @@ public class LikesideList_frag extends Fragment{
                 stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(mContext, "0")
-                .setSmallIcon(R.drawable.sms_icon)
+                .setSmallIcon(R.drawable.chat)
                 .setContentTitle("KOM TILBAGE")
                 .setContentText("I miss you bro")
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT);
