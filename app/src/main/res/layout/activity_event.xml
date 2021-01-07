@@ -69,10 +69,11 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
                     android:layout_marginLeft="16dp"
-                    android:layout_marginBottom="8dp"
+                    android:layout_marginBottom="6dp"
                     android:text="Søndags-is med Pia, 22"
                     android:textColor="#FFFFFF"
                     android:textSize="24sp"
+                    android:textStyle="bold"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="@+id/view_e" />
 
@@ -86,8 +87,8 @@
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="5dp"
-                    android:layout_marginLeft="5dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginLeft="10dp"
                     android:layout_weight="1"
                     android:orientation="vertical">
 
@@ -173,7 +174,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:layout_marginTop="7dp"
+                    android:layout_marginTop="3dp"
                     android:layout_marginEnd="20dp"
                     android:layout_marginRight="20dp"
                     app:cardCornerRadius="100dp">
@@ -192,8 +193,8 @@
                 android:id="@+id/text_e_oplevelse"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="5dp"
-                android:layout_marginLeft="5dp"
+                android:layout_marginStart="9dp"
+                android:layout_marginLeft="9dp"
                 android:layout_marginTop="20dp"
                 android:text="Oplevelsen"
                 android:textColor="#59C3FF"
@@ -204,15 +205,17 @@
                 android:id="@+id/text_e_about"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="5sp"
+                android:layout_marginStart="10dp"
+                android:layout_marginLeft="10dp"
                 android:text="Vi skal spise is"
-                android:textColor="#59C3FF" />
+                android:textColor="#B5DEF6" />
 
             <TextView
                 android:id="@+id/text_e_u_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="5sp"
+                android:layout_marginStart="9dp"
+                android:layout_marginLeft="9dp"
                 android:layout_marginTop="20dp"
                 android:text="Om Pia"
                 android:textColor="#59C3FF"
@@ -223,16 +226,17 @@
                 android:id="@+id/text_u_about"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="5sp"
+                android:layout_marginStart="10dp"
+                android:layout_marginLeft="10dp"
                 android:text="Typen der altid løber efter bussen, og altid ender med at komme i alt for god tid"
-                android:textColor="#59C3FF" />
+                android:textColor="#B5DEF6" />
 
             <TextView
                 android:id="@+id/text_e_mutual"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="5sp"
-                android:layout_marginLeft="5sp"
+                android:layout_marginStart="9dp"
+                android:layout_marginLeft="9dp"
                 android:layout_marginTop="20sp"
                 android:text="Fælles venners"
                 android:textColor="#59C3FF"
@@ -310,7 +314,8 @@
                 android:id="@+id/text_e_instagram"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="5sp"
+                android:layout_marginStart="9dp"
+                android:layout_marginLeft="9dp"
                 android:layout_marginTop="20sp"
                 android:text="Instagram(492)"
                 android:textColor="#59C3FF"
