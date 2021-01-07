@@ -99,7 +99,7 @@ public class Activity_Main extends AppCompatActivity implements View.OnClickList
         getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
         int height = displayMetrics.heightPixels;
         int width = displayMetrics.widthPixels;
-        event_Adapter = new Event_Adapter(eventList, ids, this, height, width);
+        event_Adapter = Event_Adapter.getInstance(eventList, ids, this, height, width);
         rcEvent.setLayoutManager(layoutManager);
         rcEvent.setAdapter(event_Adapter);
         PagerSnapHelper snap = new PagerSnapHelper();
