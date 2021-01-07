@@ -125,7 +125,7 @@ public class ChatDAO implements IChatDAO {
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        firestoreCallback.onCallback(new ChatDTO(null,null,null,null,null, null, null, null,null));
+                        firestoreCallback.onCallback(new ChatDTO(null,null,null,null,null, null, null, null,null, null,null));
                         Log.d("Update","Not updated chat");
                     }
                 });
@@ -139,12 +139,12 @@ public class ChatDAO implements IChatDAO {
         docRef.delete().addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
-                firestoreCallback.onCallback(new ChatDTO(null,null,chatId,null,null, null, null, null,null));
+                firestoreCallback.onCallback(new ChatDTO(null,null,chatId,null,null, null, null, null,null,null,null));
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                firestoreCallback.onCallback(new ChatDTO(null,null,null,null,null, null, null, null,null));
+                firestoreCallback.onCallback(new ChatDTO(null,null,null,null,null, null, null, null,null,null,null));
             }
         });
     }
@@ -170,7 +170,7 @@ public class ChatDAO implements IChatDAO {
                         ChatDTO dto = document.toObject(ChatDTO.class);
                         if (dto.getChatId() == null){
                             // Det her bliver redundant senere men ikke lige nu hvis man prøver at indlæse et helt tomt dokument
-                            dto = new ChatDTO(new ArrayList<>(), new ArrayList<>(), chatId, new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), dto.getHeader(), dto.getUser1(), dto.getUser2());
+                            dto = new ChatDTO(new ArrayList<>(), new ArrayList<>(), chatId, new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), dto.getHeader(), dto.getUser1(), dto.getUser2(), dto.getUser1ID(), dto.getUser2ID());
                             firestoreCallback.onCallback(dto);
                         }
                         else {
