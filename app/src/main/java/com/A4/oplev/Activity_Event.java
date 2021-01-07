@@ -20,7 +20,7 @@ import DTO.UserDTO;
 
 public class Activity_Event extends AppCompatActivity implements View.OnClickListener {
     public TextView eventName, eCity, eDate, ePrice, eAbout, eUname, eUabout, picNumber;
-    ImageView eventPic, profilePic;
+    ImageView eventPic, profilePic, repost, join;
     EventController eventController;
     ArrayList<String> pictures, currPics;
     UserDTO user;
@@ -47,8 +47,14 @@ public class Activity_Event extends AppCompatActivity implements View.OnClickLis
         picNumber = findViewById(R.id.cur_picEvent);
         eventPic = findViewById(R.id.imageView_e_pb);
         profilePic = findViewById(R.id.event_profile_picture);
+        repost = findViewById(R.id.btn_repost);
+        join = findViewById(R.id.btn_join);
 
+
+        //Knapper til billeder, repost og join
         profilePic.setOnClickListener(this);
+        repost.setOnClickListener(this);
+        join.setOnClickListener(this);
 
         eventController =  eventController.getInstance();
         pictures = eventController.getEventPictures();
