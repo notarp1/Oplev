@@ -11,7 +11,6 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.A4.oplev.Activity_Event;
 import com.A4.oplev.Activity_Profile;
 import com.A4.oplev.R;
 import com.squareup.picasso.Picasso;
@@ -19,11 +18,9 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 import java.util.List;
 
-import Controller.EventController;
 import Controller.UserController;
 import DAL.Classes.EventDAO;
 import DAL.Classes.UserDAO;
-import DAL.Interfaces.CallbackEvent;
 import DAL.Interfaces.CallbackUser;
 import DAL.Interfaces.IEventDAO;
 import DAL.Interfaces.IUserDAO;
@@ -31,6 +28,8 @@ import DTO.EventDTO;
 import DTO.UserDTO;
 
 public class Event_Adapter extends RecyclerView.Adapter<Event_Adapter.ViewHolder>implements View.OnClickListener {
+
+    final static Event_Adapter instance = null;
 
     List<String> eventListId;
     List<EventDTO> loadedEvent;
@@ -41,17 +40,16 @@ public class Event_Adapter extends RecyclerView.Adapter<Event_Adapter.ViewHolder
     Context ctx;
     EventDTO eventDTO;
 
-    public Event_Adapter(List<EventDTO> scoreList, Context frame, int height, int width) {
+
+
+
+    public Event_Adapter(List<EventDTO> scoreList, List<String> ids, Context frame, int height, int width) {
         this.loadedEvent = scoreList;
         this.ctx = frame;
         this.dataA = new EventDAO();
         this.height = height;
         this.width = width;
-        if(scoreList == null){
-            testData();
-        }else {
-            loadedEvent = scoreList;
-        }
+        this.eventListId = ids;
     }
 
     public void testData(){
@@ -143,7 +141,7 @@ public class Event_Adapter extends RecyclerView.Adapter<Event_Adapter.ViewHolder
                 withWhoText.setText(user.getfName());
                 headlineText.setText(eventDTO.getTitle());
 
-                Picasso.get().load(eventDTO.getOwnerPic())
+                Picasso.get().load(user.getUserPicture())
                         .resize(width/8, height/16)
                         .centerCrop()
                         .placeholder(R.drawable.load2)
