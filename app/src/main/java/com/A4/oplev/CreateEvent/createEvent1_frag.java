@@ -13,6 +13,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
@@ -30,14 +31,22 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.A4.oplev.R;
+import com.google.android.libraries.places.api.Places;
+import com.google.android.libraries.places.api.model.Place;
+import com.google.android.libraries.places.api.model.TypeFilter;
+import com.google.android.libraries.places.widget.Autocomplete;
+import com.google.android.libraries.places.widget.model.AutocompleteActivityMode;
 
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
+import java.util.Arrays;
 import java.util.Calendar;
+import java.util.List;
 
 import Controller.PictureMaker;
 
 import static android.app.Activity.RESULT_OK;
+import static android.content.ContentValues.TAG;
 
 public class createEvent1_frag extends Fragment implements View.OnClickListener{
     //topbar text
@@ -81,7 +90,11 @@ public class createEvent1_frag extends Fragment implements View.OnClickListener{
         dropDown.setAdapter(dropDownAdapter);
         dropDown.setPrompt("Vælg type af oplevelse");
 
-
+        //set city to non focusable (will open the google places API instead with onclick
+        city_in.setFocusable(false);
+        city_in.setOnClickListener(this);
+        //initialize places (API key saved in string resources
+        Places.initialize(getActivity().getApplicationContext(), getString(R.string.googlePlaces_api_key));
 
         //set onclick listeners
         pic.setOnClickListener(this);
@@ -122,12 +135,13 @@ public class createEvent1_frag extends Fragment implements View.OnClickListener{
             public void onDateSet(DatePicker view, int yearNew, int monthNew, int dayNew) {
                 //setting values
                 day = dayNew;
-                month = monthNew + 1; //increment since monthNew is zero indexed (jan = 0)
+                month = monthNew;
                 year = yearNew;
                 //update UI
-                String dateString = day + "/" + month + "/" + year;
+                // increment month since monthNew is zero indexed (jan = 0)
+                String dateString = day + "/" + month+1 + "/" + year;
                 date_in.setText(dateString);
-                //remove error of missing date
+                //remove error of missing date input
                 date_in.setError(null);
             }
         };
@@ -139,9 +153,18 @@ public class createEvent1_frag extends Fragment implements View.OnClickListener{
                 hour = hourNew;
                 minute = minuteNew;
                 //update UI
-                String timeString = hour + ":" + minute;
+                //handle setting zeroes if one ciffer on time
+                String hourString = "" + hour;
+                String minuteString = "" + minute;
+                if(hour < 10){
+                    hourString = "0" + hour;
+                }
+                if(minute < 10){
+                    minuteString = "0" + minute;
+                }
+                String timeString = hourString + ":" + minuteString;
                 time_in.setText(timeString);
-                //remove error of missing time
+                //remove error of missing time input
                 time_in.setError(null);
             }
         };
@@ -203,6 +226,24 @@ public class createEvent1_frag extends Fragment implements View.OnClickListener{
                     onTimeSetListener,
                     hour, day, true);
             dialog.show();
+        }
+        else if(v == city_in){
+            /*
+            https://youtu.be/t8nGh4gN1Q0
+            https://developers.google.com/places/android-sdk/autocomplete#add_an_autocomplete_widget
+
+             */
+
+            //open the places autocomplete api
+            List<Place.Field> fieldList = Arrays.asList(Place.Field.ADDRESS,
+                    Place.Field.NAME,
+                    Place.Field.LAT_LNG);
+            //create intent for activity overlay
+            //(context getActivity might be off)
+            Intent intent = new Autocomplete.IntentBuilder(AutocompleteActivityMode.OVERLAY, fieldList)
+                    .build(getActivity());
+            startActivityForResult(intent, 100);
+            // ***OBS*** onActivityResult (result of intent) handled in activity! (create event activity)
         }
     }
 

@@ -2,10 +2,11 @@ package DTO;
 
 import android.util.EventLog;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 
-public class EventDTO {
+public class EventDTO implements Serializable {
 
     private int price, minAge, maxAge;
     private String ownerId, ownerPic, eventId, eventPic,  participant, title, city, description, type;
