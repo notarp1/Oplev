@@ -38,6 +38,9 @@ public class Activity_Ini extends AppCompatActivity implements Serializable {
         setContentView(R.layout.activity__ini);
         mAuth = FirebaseAuth.getInstance();
 
+
+
+
         //KØR NEDENSTÅENDE FOR AT RESETTE OG UDKOMMENTER EFTER
         //FirebaseAuth.getInstance().signOut();
         //PreferenceManager.getDefaultSharedPreferences(ctx).edit().clear().apply();
@@ -58,6 +61,7 @@ public class Activity_Ini extends AppCompatActivity implements Serializable {
         prefs = PreferenceManager.getDefaultSharedPreferences(this);
         onInstance = prefs.getBoolean("onInstance", false);
 
+
         if(currentUser == null){
             prefs.edit().putBoolean("onInstance", false).apply();
             Intent i = new Intent(this, Activity_Main.class);
@@ -77,9 +81,11 @@ public class Activity_Ini extends AppCompatActivity implements Serializable {
                             FirebaseAuth.getInstance().signOut();
                             PreferenceManager.getDefaultSharedPreferences(ctx).edit().clear().apply();
                         }
+
                         Intent i = new Intent(ctx, Activity_Main.class);
                         userController.setCurrUser(user);
                         i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+
                         startActivity(i);
                     }
                 }, currentUser.getUid());

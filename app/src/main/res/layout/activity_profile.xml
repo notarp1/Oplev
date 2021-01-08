@@ -57,7 +57,7 @@
                     android:layout_marginLeft="16dp"
                     android:layout_marginBottom="4dp"
                     android:text="Søndags-is med Pia, 22"
-                    android:textColor="#FFFFFF"
+                    android:textColor="#A4E8E0"
                     android:textSize="28dp"
                     android:textStyle="bold"
                     app:layout_constraintBottom_toBottomOf="parent"
@@ -65,13 +65,15 @@
 
                 <TextView
                     android:id="@+id/text_curPic"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="40dp"
+                    android:layout_height="20dp"
                     android:layout_marginEnd="16dp"
                     android:layout_marginRight="16dp"
                     android:layout_marginBottom="14dp"
+                    android:background="@drawable/selection"
+                    android:gravity="center"
                     android:text="1/4"
-                    android:textColor="#FFFFFF"
+                    android:textColor="#A4E8E0"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="@+id/view" />
 
@@ -124,7 +126,7 @@
                         android:layout_marginStart="5sp"
                         android:layout_marginLeft="5sp"
                         android:text="placering"
-                        android:textColor="#FFFFFF" />
+                        android:textColor="#B5DEF6" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -147,7 +149,7 @@
                         android:layout_marginStart="5sp"
                         android:layout_marginLeft="5sp"
                         android:text="Job"
-                        android:textColor="#FFFFFF" />
+                        android:textColor="#B5DEF6" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -170,7 +172,7 @@
                         android:layout_marginStart="5sp"
                         android:layout_marginLeft="5sp"
                         android:text="Uddanelse"
-                        android:textColor="#FFFFFF" />
+                        android:textColor="#B5DEF6" />
                 </LinearLayout>
             </LinearLayout>
 
@@ -182,7 +184,7 @@
                 android:layout_marginLeft="9dp"
                 android:layout_marginTop="10dp"
                 android:text="Om Pia"
-                android:textColor="#59C3FF"
+                android:textColor="#A4E8E0"
                 android:textSize="20sp"
                 android:textStyle="bold" />
 
@@ -204,7 +206,7 @@
                 android:layout_marginLeft="9dp"
                 android:layout_marginTop="20sp"
                 android:text="Fælles venners"
-                android:textColor="#59C3FF"
+                android:textColor="#A4E8E0"
                 android:textSize="16sp"
                 android:textStyle="bold" />
 
@@ -283,7 +285,7 @@
                 android:layout_marginLeft="9dp"
                 android:layout_marginTop="20sp"
                 android:text="Instagram(492)"
-                android:textColor="#59C3FF"
+                android:textColor="#A4E8E0"
                 android:textSize="16sp"
                 android:textStyle="bold" />
 
