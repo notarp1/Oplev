@@ -43,7 +43,7 @@ public class Event_Adapter extends RecyclerView.Adapter<Event_Adapter.ViewHolder
     int height;
     int width;
     Context ctx;
-    // TODO Lav classen om så den kun henter Event en gang, og ikke 2 - 3 gange Alexander skal lave det når der er tid.  
+    // TODO Lav classen om så den kun henter Event en gang, og ikke 2 - 3 gange Alexander skal lave det når der er tid.
     //EventDTO eventDTO;
 
     public static Event_Adapter getInstance(List<EventDTO> scoreList, List<String> ids, Context frame, int height, int width) {

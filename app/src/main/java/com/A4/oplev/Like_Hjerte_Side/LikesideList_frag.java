@@ -193,14 +193,15 @@ public class LikesideList_frag extends Fragment{
                 for (int j = 0; j < userDTO.getEvents().size(); j++) {
                     eventDAO.getEvent(event -> {
                         if (event != null) {
-                            eventApplicantsSize.add(event.getApplicants().size());
-                            eventHeaders.add(event.getTitle());
-                            eventOwnerPic.add(event.getOwnerPic());
-                            eventEventPic.add(event.getEventPic());
                             String firstApplicant = event.getApplicants().size() == 0 ? "" : event.getApplicants().get(0);
-                            eventFirstApplicants.add(firstApplicant);
+                            System.out.println("First applicant: " + firstApplicant);
                             if (firstApplicant.equals("")) {
                                 eventApplicantPic.add("");
+                                eventApplicantsSize.add(event.getApplicants().size());
+                                eventHeaders.add(event.getTitle());
+                                eventOwnerPic.add(event.getOwnerPic());
+                                eventEventPic.add(event.getEventPic());
+                                eventFirstApplicants.add(firstApplicant);
                                 if (eventApplicantPic.size() == userDTO.getEvents().size() && !isGettingFromDB[0]) {
                                     eventsReady = true;
                                     if (eventsReady && chatsReady) {
@@ -215,6 +216,12 @@ public class LikesideList_frag extends Fragment{
                                 isGettingFromDB[0] = true;
                                 userController.getUser(user -> {
                                     eventApplicantPic.add(user.getUserPicture());
+                                    eventApplicantsSize.add(event.getApplicants().size());
+                                    eventHeaders.add(event.getTitle());
+                                    eventOwnerPic.add(event.getOwnerPic());
+                                    eventEventPic.add(event.getEventPic());
+                                    eventFirstApplicants.add(firstApplicant);
+                                    System.out.println("User picture: " + user.getUserPicture());
                                     isGettingFromDB[0] = false;
                                     if (eventApplicantPic.size() == userDTO.getEvents().size()) {
                                         eventsReady = true;
@@ -382,7 +389,9 @@ public class LikesideList_frag extends Fragment{
 
     public void setListView_applicants(@NonNull ArrayList<String> eventEventPic, @NonNull ArrayList<String> eventHeaders, @NonNull ArrayList<String> eventOwnerPic, @NonNull ArrayList<String> eventFirstApplicants, @NonNull ArrayList<String> eventApplicantPic, @NonNull ArrayList<Integer> eventApplicantsSize){
         if (mContext != null) {
+            System.out.println("Applicant pics: " + eventApplicantPic.toString());
             for (int i = 0; i < eventHeaders.size(); i++) {
+                System.out.println("User picture 2" + eventApplicantPic.get(i) + "\t" + eventApplicantsSize);
                 if (eventApplicantsSize.get(i) == 0) {
                     eventEventPic.remove(i);
                     eventHeaders.remove(i);
@@ -393,6 +402,7 @@ public class LikesideList_frag extends Fragment{
                     i--;
                 }
             }
+            System.out.println("Applicant pics: " + eventApplicantPic.toString());
             LikeSide_Event_Adapter eventAdapter = new LikeSide_Event_Adapter(mContext, eventEventPic, eventHeaders, eventOwnerPic, eventFirstApplicants, eventApplicantPic, eventApplicantsSize);
             tilmeldinger_listView.setAdapter(eventAdapter);
         }

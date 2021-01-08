@@ -134,8 +134,7 @@
                     android:checked="false"
                     app:layout_constraintBottom_toBottomOf="@+id/sf_textViewAllEventTypes"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="@+id/sf_textViewAllEventTypes"
-                    app:layout_constraintVertical_bias="0.0" />
+                    app:layout_constraintTop_toTopOf="@+id/sf_textViewAllEventTypes" />
 
                 <TextView
                     android:id="@+id/sf_textViewAllEventTypes"
