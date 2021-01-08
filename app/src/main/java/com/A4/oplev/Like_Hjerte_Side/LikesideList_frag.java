@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -22,6 +23,7 @@ import androidx.core.app.TaskStackBuilder;
 import androidx.fragment.app.Fragment;
 
 import com.A4.oplev.Activity_Ini;
+import com.A4.oplev.Activity_Profile;
 import com.A4.oplev.Chat.Activity_Chat;
 
 import Controller.Listeners.OnSwipeTouchListener;
@@ -50,7 +52,7 @@ import java.util.List;
 
 
 public class LikesideList_frag extends Fragment{
-    private ListView chat_listView, tilmeldinger_listView;
+    private ListView tilmeldinger_listView;
     private ChatDAO chatDAO;
     private EventDAO eventDAO;
     private UserDTO userDTO;
@@ -62,6 +64,7 @@ public class LikesideList_frag extends Fragment{
     private ArrayList<String> eventHeaders = new ArrayList<>(), eventEventPic = new ArrayList<>(), eventApplicantPic = new ArrayList<>(), eventOwnerPic = new ArrayList<>(), eventFirstApplicants = new ArrayList<>();
     private Context mContext;
     private static ArrayList<View> footerViews = new ArrayList<>();
+    private int listviewPosition = 0;
 
     // Den her klasse bruges til at få lave chatlisten ude fra likesiden af (hvor man kan vælge den chat man vil ind i)
     @SuppressLint("ClickableViewAccessibility")
@@ -124,20 +127,20 @@ public class LikesideList_frag extends Fragment{
         tilmeldinger_listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                System.out.println(position + "\t" + eventHeaders.size());
                 if (position < eventHeaders.size()) {
-                    sendNoti();
-                    Toast.makeText(mContext, "Notifikation sendt", Toast.LENGTH_SHORT).show();
-                    // Gør noget her som går ind på den andens profil
+                    //sendNoti();
+                    //Toast.makeText(mContext, "Notifikation sendt", Toast.LENGTH_SHORT).show();
                     if (eventFirstApplicants.get(position).equals("")) {
                         System.out.println(eventHeaders.get(position));
                     } else {
-                        userController.getUser(new CallbackUser() {
-                            @Override
-                            public void onCallback(UserDTO user) {
-
-                            }
+                        userController.getUser(user -> {
+                            Intent i12 = new Intent(mContext, Activity_Profile.class);
+                            i12.putExtra("user", user);
+                            i12.putExtra("load", 2);
+                            i12.putExtra("numberOfApplicants",eventApplicantsSize.get(position)-1);
+                            mContext.startActivity(i12);
                         }, eventFirstApplicants.get(position));
+
                     }
                 }
                 else {
@@ -200,6 +203,21 @@ public class LikesideList_frag extends Fragment{
                 }
             }
         }
+
+        tilmeldinger_listView.setOnScrollListener(new AbsListView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(AbsListView view, int scrollState) {
+
+            }
+
+            @Override
+            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+                listviewPosition = firstVisibleItem;
+            }
+        });
+
+
+
         return root;
     }
 
@@ -275,19 +293,15 @@ public class LikesideList_frag extends Fragment{
                 tilmeldinger_listView.removeFooterView(footerViews.get(0));
                 footerViews.remove(0);
             }
-            System.out.println("FOOTER COUNT 1 " + tilmeldinger_listView.getFooterViewsCount());
-            tilmeldinger_listView.setAdapter(null);
-            System.out.println("FOOTER COUNT 2 " + tilmeldinger_listView.getFooterViewsCount());
             setListView_applicants(eventEventPic, eventHeaders, eventOwnerPic, eventFirstApplicants, eventApplicantPic, eventApplicantsSize);
-            System.out.println("FOOTER COUNT 3 " + tilmeldinger_listView.getFooterViewsCount());
             LikeSide_Adapter adapter = new LikeSide_Adapter(mContext, tempNames, tempDates, tempLastmessage, tempHeaderList, tempLastSender, tempIsInitialized, otherPersonPic);
-            System.out.println("FOOTER COUNT 4 " + tilmeldinger_listView.getFooterViewsCount());
             for (int i = 0; i < tempNames.size(); i++) {
                 View v = adapter.getView(i,null,null);
                 tilmeldinger_listView.addFooterView(v);
                 footerViews.add(v);
             }
-            System.out.println("FOOTER COUNT 5 " + tilmeldinger_listView.getFooterViewsCount());
+            //tilmeldinger_listView.setSelection(eventHeaders.size());
+            tilmeldinger_listView.setSelection(listviewPosition);
         }
         this.dates = tempDates;
         this.names = tempNames;

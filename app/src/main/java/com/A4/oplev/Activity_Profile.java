@@ -84,8 +84,11 @@ public class Activity_Profile extends AppCompatActivity implements View.OnClickL
 
 
         if(j == 1 || j == 2){
-            if(j==2) confirmationBox.setVisibility(View.VISIBLE);
-
+            if(j==2) {
+                confirmationBox.setVisibility(View.VISIBLE);
+                int numbers = myIntent.getIntExtra("numberOfApplicants",0);
+                informationText.setText(numbers + " andre ønsker at deltage");
+            }
             UserDTO user = (UserDTO) myIntent.getSerializableExtra("user");
             System.out.println(user.getDescription() + " " + user.getfName());
             pictures = user.getPictures();
