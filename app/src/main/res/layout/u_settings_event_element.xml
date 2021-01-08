@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:card_view="http://schemas.android.com/tools"
     android:id="@+id/ownEventsOutline"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -13,8 +14,8 @@
         android:layout_alignParentStart="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
-        android:layout_marginStart="2dp"
-        android:layout_marginLeft="2dp"
+        android:layout_marginStart="3dp"
+        android:layout_marginLeft="3dp"
         android:layout_marginTop="2dp"
         android:layout_marginBottom="5dp"
         android:background="@drawable/own_events_background" />
@@ -43,6 +44,55 @@
 
     </androidx.cardview.widget.CardView>
 
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/own_event_edit_holder"
+        android:layout_width="36dp"
+        android:layout_height="36dp"
+        android:layout_alignBottom="@+id/box_own_events"
+        android:layout_alignParentTop="true"
+        android:layout_gravity="center"
+        android:layout_marginTop="32dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginBottom="32dp"
+        android:layout_toStartOf="@+id/own_event_delete_holder"
+        android:layout_toLeftOf="@+id/own_event_delete_holder"
+        app:cardCornerRadius="100dp">
+
+        <ImageView
+            android:id="@+id/own_event_edit_picture"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"
+            app:srcCompat="@drawable/edit1" />
+
+
+    </androidx.cardview.widget.CardView>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/own_event_delete_holder"
+        android:layout_width="36dp"
+        android:layout_height="36dp"
+        android:layout_alignBottom="@+id/box_own_events"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_gravity="center"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="15dp"
+        android:layout_marginRight="14dp"
+        android:layout_marginBottom="32dp"
+        app:cardCornerRadius="100dp">
+
+        <ImageView
+            android:id="@+id/own_event_delete_picture"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"
+            app:srcCompat="@drawable/delete2" />
+
+    </androidx.cardview.widget.CardView>
+
     <TextView
         android:id="@+id/own_event_headline"
         android:layout_width="194dp"
@@ -68,11 +118,16 @@
         android:id="@+id/own_event_anmodning1_holder"
         android:layout_width="30dp"
         android:layout_height="30dp"
-        android:layout_below="@+id/own_events_dato"
+        android:layout_alignTop="@+id/invibleBox"
+        android:layout_alignBottom="@+id/invibleBox"
         android:layout_gravity="center"
-        android:layout_marginLeft="20dp"
-        android:layout_toRightOf="@+id/own_event_picture_holder"
+        android:layout_marginLeft="0dp"
+        android:layout_marginTop="0dp"
+        android:layout_marginBottom="0dp"
+        android:layout_toRightOf="@+id/invibleBox"
+        android:visibility="visible"
         app:cardCornerRadius="100dp">
+
 
         <ImageView
             android:id="@+id/own_event_anmodning1_pic"
@@ -107,18 +162,25 @@
         android:layout_height="30dp"
         android:layout_alignTop="@+id/own_event_anmodning1_holder"
         android:layout_gravity="center"
-        android:layout_marginLeft="51dp"
-        android:layout_toRightOf="@+id/own_event_picture_holder"
-        app:cardCornerRadius="100dp">
+        android:layout_marginStart="2dp"
+        android:layout_marginLeft="-150dp"
+
+        android:layout_toLeftOf="@id/own_event_amount_anmodning"
+        android:layout_toEndOf="@+id/own_event_anmodning1_holder"
+        android:layout_toRightOf="@+id/own_event_anmodning1_holder"
+        android:visibility="visible"
+        app:cardCornerRadius="100dp"
+        card_view:cardBackgroundColor="@color/chatColorGrey">
 
         <ImageView
             android:id="@+id/own_event_anmodning2_pic"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scaleType="centerCrop"
-            app:srcCompat="@drawable/_profiltest" />
+            app:srcCompat="@drawable/question" />
 
     </androidx.cardview.widget.CardView>
+
 
     <TextView
         android:id="@+id/own_event_amount_anmodning"
@@ -126,16 +188,28 @@
         android:layout_height="wrap_content"
         android:layout_alignTop="@+id/own_event_anmodning2_holder"
         android:layout_alignBottom="@+id/own_event_anmodning2_holder"
-        android:layout_marginStart="6dp"
-        android:layout_marginLeft="6dp"
+        android:layout_marginStart="0dp"
+        android:layout_marginLeft="1dp"
         android:layout_marginTop="4dp"
         android:layout_marginBottom="7dp"
-        android:layout_toEndOf="@+id/own_event_anmodning2_holder"
-        android:layout_toRightOf="@+id/own_event_anmodning2_holder"
+        android:layout_toRightOf="@id/own_event_anmodning2_holder"
         android:gravity="left"
         android:text="0 anmodninger"
         android:textColor="#51555B"
         android:textSize="14sp" />
+
+    <ImageView
+        android:id="@+id/invibleBox"
+        android:layout_width="20dp"
+        android:layout_height="30dp"
+        android:layout_below="@+id/own_events_dato"
+        android:layout_alignBottom="@+id/box_own_events"
+        android:layout_marginLeft="0dp"
+        android:layout_marginTop="0dp"
+        android:layout_marginBottom="9dp"
+        android:layout_toRightOf="@+id/own_event_picture_holder"
+        android:background="@color/black"
+        android:visibility="invisible" />
 
 
 </RelativeLayout>
