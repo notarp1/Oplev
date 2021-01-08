@@ -12,11 +12,19 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.A4.oplev.Like_Hjerte_Side.Activity_Likeside;
+import com.A4.oplev.Like_Hjerte_Side.LikesideList_frag;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
 import Controller.UserController;
+import DAL.Classes.ChatDAO;
+import DAL.Classes.EventDAO;
+import DAL.Classes.UserDAO;
+import DAL.Interfaces.CallbackEvent;
+import DTO.ChatDTO;
+import DTO.EventDTO;
 import DTO.UserDTO;
 
 public class Activity_Profile extends AppCompatActivity implements View.OnClickListener {
@@ -148,9 +156,47 @@ public class Activity_Profile extends AppCompatActivity implements View.OnClickL
 
     @Override
     public void onClick(View v) {
-
         if(v == accept){
-            //Do something
+            Intent i = getIntent();
+            UserDTO user = (UserDTO) i.getSerializableExtra("user");
+            String header = i.getStringExtra("header");
+            ChatDAO chatDAO = new ChatDAO();
+            ChatDTO chatDTO = new ChatDTO(null,null,null,null,null,null,header,userController.getCurrUser().getfName(),user.getfName(),userController.getCurrUser().getUserId(),user.getUserId());
+            chatDAO.createChat(chatDTO, new ChatDAO.CreateChatCallback() {
+                @Override
+                public void onCallback(String chatID) {
+                    EventDAO eventDAO = new EventDAO();
+                    eventDAO.getEvent(new CallbackEvent() {
+                        @Override
+                        public void onCallback(EventDTO event) {
+                            if (event != null) {
+                                event.setParticipant(user.getUserId());
+                                System.out.println("EVENT ID : " + event.getEventId());
+                                eventDAO.updateEvent(event);
+                            }
+                        }
+                    }, i.getStringExtra("eventID"));
+
+                    ArrayList<String> otherUserChatID;
+                    if (user.getChatId() == null){
+                        otherUserChatID = new ArrayList<>();
+                    } else otherUserChatID = user.getChatId();
+                    otherUserChatID.add(chatID);
+
+
+                    ArrayList<String> thisUserChatID;
+                    if (userController.getCurrUser().getChatId() == null){
+                        thisUserChatID = new ArrayList<>();
+                    } else thisUserChatID = userController.getCurrUser().getChatId();
+                    thisUserChatID.add(chatID);
+
+
+                    UserDAO userDAO = new UserDAO();
+                    userDAO.updateUser(user);
+                    userDAO.updateUser(userController.getCurrUser());
+                    finish();
+                }
+            });
         }
         if(v == reject){
             Intent i = getIntent();
