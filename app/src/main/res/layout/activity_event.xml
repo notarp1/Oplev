@@ -196,7 +196,7 @@
                 android:layout_marginLeft="9dp"
                 android:text="Oplevelsen"
                 android:textColor="#59C3FF"
-                android:textSize="22sp"
+                android:textSize="20sp"
                 android:textStyle="bold" />
 
             <TextView
@@ -218,7 +218,7 @@
                 android:layout_marginTop="20dp"
                 android:text="Om Pia"
                 android:textColor="#59C3FF"
-                android:textSize="22sp"
+                android:textSize="20sp"
                 android:textStyle="bold" />
 
             <TextView

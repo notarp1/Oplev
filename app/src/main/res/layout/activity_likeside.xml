@@ -44,7 +44,7 @@
 
         <ImageView
             android:id="@+id/rectimage"
-            android:layout_width="110dp"
+            android:layout_width="165dp"
             android:layout_height="50dp"
             android:layout_marginTop="7dp"
             android:layout_marginBottom="8dp"
@@ -61,7 +61,6 @@
             android:src="@drawable/rectanglefill"
             app:layout_constraintBottom_toBottomOf="@+id/rectimage"
             app:layout_constraintEnd_toEndOf="@+id/rectimage"
-            app:layout_constraintStart_toEndOf="@+id/besked_back"
             app:layout_constraintTop_toTopOf="@+id/rectimage" />
 
         <ImageView
@@ -71,6 +70,14 @@
             android:src="@drawable/rectanglefill"
             app:layout_constraintBottom_toBottomOf="@+id/rectimage"
             app:layout_constraintEnd_toStartOf="@+id/hjerte_back"
+            app:layout_constraintTop_toTopOf="@+id/rectimage" />
+
+        <ImageView
+            android:id="@+id/event_back"
+            android:layout_width="55dp"
+            android:layout_height="50dp"
+            android:src="@drawable/rectanglefill"
+            app:layout_constraintBottom_toBottomOf="@+id/rectimage"
             app:layout_constraintStart_toStartOf="@+id/rectimage"
             app:layout_constraintTop_toTopOf="@+id/rectimage" />
 
@@ -100,6 +107,18 @@
             app:layout_constraintStart_toStartOf="@+id/besked_back"
             app:layout_constraintTop_toTopOf="@+id/besked_back"
             app:srcCompat="@drawable/chat" />
+
+        <ImageView
+            android:id="@+id/likeside_eventbillede"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:scaleX="1.5"
+            android:scaleY="1.5"
+            app:layout_constraintBottom_toBottomOf="@+id/event_back"
+            app:layout_constraintEnd_toStartOf="@+id/besked_back"
+            app:layout_constraintStart_toStartOf="@+id/rectimage"
+            app:layout_constraintTop_toTopOf="@+id/event_back"
+            app:srcCompat="@drawable/date_and_time" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
