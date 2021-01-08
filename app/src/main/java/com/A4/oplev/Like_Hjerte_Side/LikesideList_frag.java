@@ -5,8 +5,6 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.SystemClock;
-import android.telecom.Call;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,7 +12,6 @@ import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -23,7 +20,7 @@ import androidx.core.app.NotificationManagerCompat;
 import androidx.core.app.TaskStackBuilder;
 import androidx.fragment.app.Fragment;
 
-import com.A4.oplev.Activity_Ini;
+
 import com.A4.oplev.Activity_Profile;
 import com.A4.oplev.Chat.Activity_Chat;
 
@@ -31,10 +28,8 @@ import Controller.Listeners.OnSwipeTouchListener;
 import Controller.UserController;
 import DAL.Classes.ChatDAO;
 import DAL.Classes.EventDAO;
-import DAL.Interfaces.CallbackEvent;
-import DAL.Interfaces.CallbackUser;
+
 import DTO.ChatDTO;
-import DTO.EventDTO;
 import DTO.UserDTO;
 
 import com.A4.oplev.R;
@@ -49,7 +44,6 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 
 public class LikesideList_frag extends Fragment{
@@ -404,7 +398,6 @@ public class LikesideList_frag extends Fragment{
 
     @Override
     public void onDetach(){
-        //sendNoti();
         this.mContext = null;
         super.onDetach();
     }
