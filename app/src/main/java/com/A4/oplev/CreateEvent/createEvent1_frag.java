@@ -46,6 +46,7 @@ import java.util.List;
 import Controller.PictureMaker;
 
 import static android.app.Activity.RESULT_OK;
+import static android.content.ContentValues.TAG;
 
 public class createEvent1_frag extends Fragment implements View.OnClickListener{
     //topbar text
@@ -134,12 +135,13 @@ public class createEvent1_frag extends Fragment implements View.OnClickListener{
             public void onDateSet(DatePicker view, int yearNew, int monthNew, int dayNew) {
                 //setting values
                 day = dayNew;
-                month = monthNew + 1; //increment since monthNew is zero indexed (jan = 0)
+                month = monthNew;
                 year = yearNew;
                 //update UI
-                String dateString = day + "/" + month + "/" + year;
+                // increment month since monthNew is zero indexed (jan = 0)
+                String dateString = day + "/" + month+1 + "/" + year;
                 date_in.setText(dateString);
-                //remove error of missing date
+                //remove error of missing date input
                 date_in.setError(null);
             }
         };
@@ -151,9 +153,18 @@ public class createEvent1_frag extends Fragment implements View.OnClickListener{
                 hour = hourNew;
                 minute = minuteNew;
                 //update UI
-                String timeString = hour + ":" + minute;
+                //handle setting zeroes if one ciffer on time
+                String hourString = "" + hour;
+                String minuteString = "" + minute;
+                if(hour < 10){
+                    hourString = "0" + hour;
+                }
+                if(minute < 10){
+                    minuteString = "0" + minute;
+                }
+                String timeString = hourString + ":" + minuteString;
                 time_in.setText(timeString);
-                //remove error of missing time
+                //remove error of missing time input
                 time_in.setError(null);
             }
         };
