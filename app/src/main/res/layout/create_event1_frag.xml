@@ -37,7 +37,7 @@
 
             <ImageView
                 android:id="@+id/create_pic"
-                android:layout_width="329dp"
+                android:layout_width="200dp"
                 android:layout_height="200dp"
                 android:layout_marginStart="20dp"
                 android:layout_marginLeft="20dp"
@@ -57,7 +57,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
                 android:layout_marginBottom="5dp"
-                android:background="#63FFFFFF"
+                android:background="#81FFFFFF"
                 android:text="Skift billede"
                 android:textColor="#000000"
                 app:layout_constraintBottom_toBottomOf="@+id/create_pic"
@@ -66,6 +66,7 @@
                 app:layout_constraintTop_toTopOf="@+id/create_pic" />
 
             <EditText
+                android:inputType="textCapSentences"
                 android:id="@+id/create_title_input"
                 android:layout_width="352dp"
                 android:layout_height="59dp"
@@ -75,9 +76,9 @@
                 android:layout_marginRight="20dp"
                 android:layout_marginBottom="5dp"
                 android:ems="10"
+                android:maxLength="19"
                 android:gravity="center"
                 android:hint="Overskrift"
-                android:inputType="textPersonName"
                 android:textColor="#A4E8E0"
                 android:textColorHint="#A4E8E0"
                 android:textSize="24sp"
@@ -98,7 +99,7 @@
                 android:ems="10"
                 android:gravity="bottom|center_horizontal"
                 android:hint="Beskrivelse"
-                android:inputType="textMultiLine"
+                android:inputType="textCapSentences|textMultiLine"
                 android:textColor="#A4E8E0"
                 android:textColorHint="#A4E8E0"
                 android:textSize="18sp"

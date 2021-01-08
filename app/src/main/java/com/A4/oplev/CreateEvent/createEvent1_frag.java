@@ -16,6 +16,7 @@ import android.os.Bundle;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import android.text.format.DateUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -128,18 +129,17 @@ public class createEvent1_frag extends Fragment implements View.OnClickListener{
         });
 
 
-
         //When date is changed update current values and UI to show new date
         onDateSetListener = new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int yearNew, int monthNew, int dayNew) {
-                //setting values
+                //setting values (not to parse, but for next time datepicker is opened)
                 day = dayNew;
                 month = monthNew;
                 year = yearNew;
                 //update UI
                 // increment month since monthNew is zero indexed (jan = 0)
-                String dateString = day + "/" + month+1 + "/" + year;
+                String dateString = day + "/" + (month+1) + "/" + year;
                 date_in.setText(dateString);
                 //remove error of missing date input
                 date_in.setError(null);
@@ -216,6 +216,12 @@ public class createEvent1_frag extends Fragment implements View.OnClickListener{
                     onDateSetListener,
                     year, month, day);
             dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+            //set min and max date mindate=today, maxdate=one year from now
+            // (the minus 1000 avoids crash..."min date doesnt precede date, error")
+            dialog.getDatePicker().setMinDate(Calendar.getInstance().getTimeInMillis()-1000);
+            dialog.getDatePicker().setMaxDate(Calendar.getInstance().getTimeInMillis() +
+                    DateUtils.YEAR_IN_MILLIS);
+
             dialog.show();
         }
         else if(v == time_in){

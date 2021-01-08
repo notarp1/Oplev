@@ -33,7 +33,8 @@
         </activity>
         <activity android:name=".UserSettings.Activity_U_Settings" />
         <activity android:name=".SearchFilter.Activity_Search_Filter" />
-        <activity android:name=".CreateEvent.Activity_Create_Event"/>
+        <activity android:name=".CreateEvent.Activity_Create_Event"
+            android:windowSoftInputMode="adjustResize"/>
         <activity android:name=".Like_Hjerte_Side.Activity_Likeside" />
         <activity android:name=".Chat.Activity_Chat"
             android:windowSoftInputMode="adjustPan"/>
