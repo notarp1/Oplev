@@ -56,7 +56,7 @@ public class LikesideList_frag extends Fragment{
     private ArrayList<String> names = new ArrayList<>(), lastMessage = new ArrayList<>(), headerList = new ArrayList<>(), lastSender = new ArrayList<>(), isInitialized = new ArrayList<>(), chatIds = new ArrayList<>(), otherPersonPic = new ArrayList<>();
     private ArrayList<Date> dates = new ArrayList<>();
     private ArrayList<Integer> eventApplicantsSize = new ArrayList<>();
-    private ArrayList<String> eventHeaders = new ArrayList<>(), eventEventPic = new ArrayList<>(), eventApplicantPic = new ArrayList<>(), eventOwnerPic = new ArrayList<>(), eventFirstApplicants = new ArrayList<>();
+    private ArrayList<String> eventHeaders = new ArrayList<>(), eventEventPic = new ArrayList<>(), eventApplicantPic = new ArrayList<>(), eventOwnerPic = new ArrayList<>(), eventFirstApplicants = new ArrayList<>(), eventEventID = new ArrayList<>();
     private Context mContext;
     private static ArrayList<View> footerViews = new ArrayList<>();
     private int listviewPosition = 0;
@@ -143,6 +143,8 @@ public class LikesideList_frag extends Fragment{
                                 i12.putExtra("load", 2);
                                 i12.putExtra("numberOfApplicants",eventApplicantsSize.get(position)-1);
                                 i12.putExtra("applicantList",applicants);
+                                i12.putExtra("header",eventHeaders.get(position));
+                                i12.putExtra("eventID",eventEventID.get(position));
                                 mContext.startActivity(i12);
                             }, eventFirstApplicants.get(position));
                         }, userDTO.getEvents().get(position));
@@ -193,37 +195,18 @@ public class LikesideList_frag extends Fragment{
                 for (int j = 0; j < userDTO.getEvents().size(); j++) {
                     eventDAO.getEvent(event -> {
                         if (event != null) {
-                            String firstApplicant = event.getApplicants().size() == 0 ? "" : event.getApplicants().get(0);
-                            System.out.println("First applicant: " + firstApplicant);
-                            if (firstApplicant.equals("")) {
-                                eventApplicantPic.add("");
-                                eventApplicantsSize.add(event.getApplicants().size());
-                                eventHeaders.add(event.getTitle());
-                                eventOwnerPic.add(event.getOwnerPic());
-                                eventEventPic.add(event.getEventPic());
-                                eventFirstApplicants.add(firstApplicant);
-                                if (eventApplicantPic.size() == userDTO.getEvents().size() && !isGettingFromDB[0]) {
-                                    eventsReady = true;
-                                    if (eventsReady && chatsReady) {
-                                        setListView_chats(chatIds, names, dates, lastMessage, headerList, lastSender, isInitialized, otherPersonPic);
-                                        setListView_applicants(eventEventPic, eventHeaders, eventOwnerPic, eventFirstApplicants, eventApplicantPic, eventApplicantsSize);
-                                        setChangeListeners_chats();
-                                        eventsReady = false;
-                                        chatsReady = false;
-                                    }
-                                }
-                            } else {
-                                isGettingFromDB[0] = true;
-                                userController.getUser(user -> {
-                                    eventApplicantPic.add(user.getUserPicture());
+                            if (event.getParticipant().length() == 0) {
+                                String firstApplicant = event.getApplicants().size() == 0 ? "" : event.getApplicants().get(0);
+                                System.out.println("First applicant: " + firstApplicant);
+                                if (firstApplicant.equals("")) {
+                                    eventApplicantPic.add("");
                                     eventApplicantsSize.add(event.getApplicants().size());
                                     eventHeaders.add(event.getTitle());
                                     eventOwnerPic.add(event.getOwnerPic());
                                     eventEventPic.add(event.getEventPic());
                                     eventFirstApplicants.add(firstApplicant);
-                                    System.out.println("User picture: " + user.getUserPicture());
-                                    isGettingFromDB[0] = false;
-                                    if (eventApplicantPic.size() == userDTO.getEvents().size()) {
+                                    eventEventID.add(event.getEventId());
+                                    if (eventApplicantPic.size() == userDTO.getEvents().size() && !isGettingFromDB[0]) {
                                         eventsReady = true;
                                         if (eventsReady && chatsReady) {
                                             setListView_chats(chatIds, names, dates, lastMessage, headerList, lastSender, isInitialized, otherPersonPic);
@@ -233,7 +216,30 @@ public class LikesideList_frag extends Fragment{
                                             chatsReady = false;
                                         }
                                     }
-                                }, event.getApplicants().get(0));
+                                } else {
+                                    isGettingFromDB[0] = true;
+                                    userController.getUser(user -> {
+                                        eventApplicantPic.add(user.getUserPicture());
+                                        eventApplicantsSize.add(event.getApplicants().size());
+                                        eventHeaders.add(event.getTitle());
+                                        eventOwnerPic.add(event.getOwnerPic());
+                                        eventEventPic.add(event.getEventPic());
+                                        eventFirstApplicants.add(firstApplicant);
+                                        eventEventID.add(event.getEventId());
+                                        System.out.println("User picture: " + user.getUserPicture());
+                                        isGettingFromDB[0] = false;
+                                        if (eventApplicantPic.size() == userDTO.getEvents().size()) {
+                                            eventsReady = true;
+                                            if (eventsReady && chatsReady) {
+                                                setListView_chats(chatIds, names, dates, lastMessage, headerList, lastSender, isInitialized, otherPersonPic);
+                                                setListView_applicants(eventEventPic, eventHeaders, eventOwnerPic, eventFirstApplicants, eventApplicantPic, eventApplicantsSize);
+                                                setChangeListeners_chats();
+                                                eventsReady = false;
+                                                chatsReady = false;
+                                            }
+                                        }
+                                    }, event.getApplicants().get(0));
+                                }
                             }
                         }
                     }, userDTO.getEvents().get(j));
@@ -399,6 +405,7 @@ public class LikesideList_frag extends Fragment{
                     eventApplicantsSize.remove(i);
                     eventOwnerPic.remove(i);
                     eventFirstApplicants.remove(i);
+                    eventEventID.remove(i);
                     i--;
                 }
             }

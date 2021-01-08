@@ -6,6 +6,7 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -229,6 +230,44 @@ public class EventDAO implements IEventDAO {
 
     @Override
     public void updateEvent(EventDTO event) {
+
+        Map<String, Object> eventObject = new HashMap<>();
+        eventObject.put("ownerId", event.getOwnerId());
+        eventObject.put("ownerPic", event.getOwnerPic());
+        eventObject.put("eventId", event.getEventId());
+        eventObject.put("title", event.getTitle());
+        eventObject.put("description", event.getDescription());
+        eventObject.put("price", event.getPrice());
+        eventObject.put("date", event.getDate());
+        eventObject.put("city", event.getCity());
+        eventObject.put("minAge", event.getMinAge());
+        eventObject.put("maxAge", event.getMaxAge());
+        eventObject.put("maleOn", event.isMaleOn());
+        eventObject.put("femaleOn", event.isFemaleOn());
+        eventObject.put("participant", event.getParticipant());
+        eventObject.put("eventPic", event.getEventPic());
+        eventObject.put("applicants", event.getApplicants());
+        eventObject.put("type", event.getType());
+
+
+        db.collection("events").document(event.getEventId())
+                .set(eventObject)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        UserController userController = UserController.getInstance();
+                        userController.setSafe(true);
+                        Log.d(TAG, "DocumentSnapshot successfully written!");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        UserController userController = UserController.getInstance();
+                        userController.setSafe(true);
+                        Log.w(TAG, "Error writing document", e);
+                    }
+                });
 
     }
 
