@@ -124,7 +124,7 @@ public class EventDAO implements IEventDAO {
         eventObject.put("maxAge", event.getMaxAge());
         eventObject.put("maleOn", event.isMaleOn());
         eventObject.put("femaleOn", event.isFemaleOn());
-        eventObject.put("participant", event.getParticipant());
+        eventObject.put("participant", "");
         eventObject.put("eventPic", event.getEventPic());
         eventObject.put("applicants", event.getApplicants());
         eventObject.put("type", event.getType());

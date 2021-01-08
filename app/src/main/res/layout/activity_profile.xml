@@ -126,7 +126,8 @@
                         android:layout_marginStart="5sp"
                         android:layout_marginLeft="5sp"
                         android:text="placering"
-                        android:textColor="#B5DEF6" />
+                        android:textColor="#B5DEF6"
+                        android:textSize="18sp" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -149,7 +150,8 @@
                         android:layout_marginStart="5sp"
                         android:layout_marginLeft="5sp"
                         android:text="Job"
-                        android:textColor="#B5DEF6" />
+                        android:textColor="#B5DEF6"
+                        android:textSize="18sp" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -172,7 +174,8 @@
                         android:layout_marginStart="5sp"
                         android:layout_marginLeft="5sp"
                         android:text="Uddanelse"
-                        android:textColor="#B5DEF6" />
+                        android:textColor="#B5DEF6"
+                        android:textSize="18sp" />
                 </LinearLayout>
             </LinearLayout>
 
@@ -185,8 +188,7 @@
                 android:layout_marginTop="10dp"
                 android:text="Om Pia"
                 android:textColor="#A4E8E0"
-                android:textSize="20sp"
-                android:textStyle="bold" />
+                android:textSize="24sp" />
 
             <TextView
                 android:id="@+id/text_description"
