@@ -128,19 +128,23 @@ public class LikesideList_frag extends Fragment{
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 if (position < eventHeaders.size()) {
+                    ArrayList<String> applicants = new ArrayList<>();
                     //sendNoti();
                     //Toast.makeText(mContext, "Notifikation sendt", Toast.LENGTH_SHORT).show();
                     if (eventFirstApplicants.get(position).equals("")) {
                         System.out.println(eventHeaders.get(position));
                     } else {
-                        userController.getUser(user -> {
-                            Intent i12 = new Intent(mContext, Activity_Profile.class);
-                            i12.putExtra("user", user);
-                            i12.putExtra("load", 2);
-                            i12.putExtra("numberOfApplicants",eventApplicantsSize.get(position)-1);
-                            mContext.startActivity(i12);
-                        }, eventFirstApplicants.get(position));
-
+                        eventDAO.getEvent(event -> {
+                            applicants.addAll(event.getApplicants());
+                            userController.getUser(user -> {
+                                Intent i12 = new Intent(mContext, Activity_Profile.class);
+                                i12.putExtra("user", user);
+                                i12.putExtra("load", 2);
+                                i12.putExtra("numberOfApplicants",eventApplicantsSize.get(position)-1);
+                                i12.putExtra("applicantList",applicants);
+                                mContext.startActivity(i12);
+                            }, eventFirstApplicants.get(position));
+                        }, userDTO.getEvents().get(position));
                     }
                 }
                 else {

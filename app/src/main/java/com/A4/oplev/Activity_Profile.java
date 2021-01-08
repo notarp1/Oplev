@@ -19,6 +19,7 @@ import java.util.ArrayList;
 
 import Controller.Listeners.OnSwipeTouchListener;
 import Controller.UserController;
+import DAL.Classes.EventDAO;
 import DTO.UserDTO;
 
 public class Activity_Profile extends AppCompatActivity implements View.OnClickListener {
@@ -155,7 +156,20 @@ public class Activity_Profile extends AppCompatActivity implements View.OnClickL
             //Do something
         }
         if(v == reject){
-            //Do something
+            Intent i = getIntent();
+            ArrayList<String> otherApplicants = i.getStringArrayListExtra("applicantList");
+            otherApplicants.remove(0);
+            if (otherApplicants.size() != 0) {
+                userController.getUser(user -> {
+                    Intent i12 = new Intent(this, Activity_Profile.class);
+                    i12.putExtra("user", user);
+                    i12.putExtra("load", 2);
+                    i12.putExtra("numberOfApplicants", otherApplicants.size() - 1);
+                    i12.putExtra("applicantList", otherApplicants);
+                    this.startActivity(i12);
+                }, otherApplicants.get(0));
+            }
+            finish();
         }
         if(!noPic) {
             if(v == right){
