@@ -165,12 +165,20 @@ public class LikesideList_frag extends Fragment{
             public void onSwipeLeft() {
                 // Sæt farven på billederne i toppen af skærmen
                 getActivity().findViewById(R.id.besked_back).setVisibility(View.INVISIBLE);
+                getActivity().findViewById(R.id.event_back).setVisibility(View.INVISIBLE);
                 getActivity().findViewById(R.id.hjerte_back).setVisibility(View.VISIBLE);
 
                 // Kreer fragmentet over til hjertesiden
                 getFragmentManager().beginTransaction().setCustomAnimations(R.anim.enter_from_right,
                         R.anim.exit_to_left).replace(R.id.likeside_frameLayout,new HjerteSide_frag())
                         .commit();
+            }
+
+            @Override
+            public void onSwipeRight() {
+                getActivity().findViewById(R.id.besked_back).setVisibility(View.INVISIBLE);
+                getActivity().findViewById(R.id.hjerte_back).setVisibility(View.INVISIBLE);
+                getActivity().findViewById(R.id.event_back).setVisibility(View.VISIBLE);
             }
         });
 

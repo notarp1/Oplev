@@ -13,7 +13,7 @@ import Controller.Listeners.OnSwipeTouchListener;
 import com.A4.oplev.R;
 
 public class Activity_Likeside extends AppCompatActivity implements View.OnClickListener{
-    ImageView hjerte, besked, tilbage, backhjerte, backbesked;
+    ImageView hjerte, besked, tilbage, backhjerte, backbesked, events, backevents;
     Button opret;
 
 
@@ -24,30 +24,24 @@ public class Activity_Likeside extends AppCompatActivity implements View.OnClick
 
         hjerte = findViewById(R.id.likeside_hjertbillede);
         besked = findViewById(R.id.likeside_beskedbillede);
+        events = findViewById(R.id.likeside_eventbillede);
         tilbage = findViewById(R.id.topbar_arrow);
         backbesked = findViewById(R.id.besked_back);
         backhjerte = findViewById(R.id.hjerte_back);
+        backevents = findViewById(R.id.event_back);
 
         getSupportFragmentManager().beginTransaction().replace(R.id.likeside_frameLayout,new LikesideList_frag())
                 .commit();
 
         hjerte.setOnClickListener(this);
         besked.setOnClickListener(this);
+        events.setOnClickListener(this);
         tilbage.setOnClickListener(this);
         opret.setOnClickListener(this);
 
         backhjerte.setVisibility(View.INVISIBLE);
+        backevents.setVisibility(View.INVISIBLE);
 
-
-        // Sætter en swipe listener op på skærmen for at kunne swipe til siden
-        getWindow().getDecorView().getRootView().setOnTouchListener(new OnSwipeTouchListener(this){
-            @Override
-            public void onSwipeLeft() {
-                getSupportFragmentManager().beginTransaction().setCustomAnimations(android.R.anim.slide_in_left,
-                        android.R.anim.slide_out_right).replace(R.id.likeside_frameLayout,new HjerteSide_frag())
-                        .commit();
-            }
-        });
 
     }
 
@@ -59,6 +53,8 @@ public class Activity_Likeside extends AppCompatActivity implements View.OnClick
     public void onClick(View v) {
         if (v == hjerte){
             backbesked.setVisibility(View.INVISIBLE);
+            backevents.setVisibility(View.INVISIBLE);
+
             backhjerte.setVisibility(View.VISIBLE);
             getSupportFragmentManager().beginTransaction().replace(R.id.likeside_frameLayout,new HjerteSide_frag())
                     .commit();
@@ -67,8 +63,13 @@ public class Activity_Likeside extends AppCompatActivity implements View.OnClick
 
             backbesked.setVisibility(View.VISIBLE);
             backhjerte.setVisibility(View.INVISIBLE);
+            backevents.setVisibility(View.INVISIBLE);
             getSupportFragmentManager().beginTransaction().replace(R.id.likeside_frameLayout,new LikesideList_frag())
                     .commit();
+        } else if (v == events){
+            backbesked.setVisibility(View.INVISIBLE);
+            backhjerte.setVisibility(View.INVISIBLE);
+            backevents.setVisibility(View.VISIBLE);
         }
         else if (v == tilbage){
             finish();
