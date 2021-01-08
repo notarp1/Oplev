@@ -13,7 +13,12 @@ import android.widget.TextView;
 import androidx.fragment.app.Fragment;
 
 import com.A4.oplev.R;
+import com.A4.oplev._Adapters.Event_Adapter;
 
+import java.util.List;
+
+import DAL.Classes.EventDAO;
+import DAL.Interfaces.CallBackList;
 import io.apptik.widget.MultiSlider;
 
 public class Search_filter_frag extends Fragment{
@@ -112,6 +117,14 @@ public class Search_filter_frag extends Fragment{
                     prefs.edit().putBoolean("blivKlogereSwitch", blivKlogereSwitch.isChecked()).apply();
                     prefs.edit().putBoolean("gratisSwitch", gratisSwitch.isChecked()).apply();
                 }
+                EventDAO dataA = new EventDAO();
+                dataA.getEventIDs(new CallBackList() {
+                    @Override
+                    public void onCallback(List<String> list) {
+                        Event_Adapter event_adapter = Event_Adapter.getInstance();
+                        event_adapter.refreshData(list);
+                    }
+                },prefs);
             }
         });
 

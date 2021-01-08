@@ -45,14 +45,21 @@ public class Activity_Search_Filter extends AppCompatActivity implements View.On
     @Override
     public void onClick(View v) {
         if (v == back) {
-            finish();
+            EventDAO dataA = new EventDAO();
+            dataA.getEventIDs(new CallBackList() {
+                @Override
+                public void onCallback(List<String> list) {
+                    Event_Adapter event_adapter = Event_Adapter.getInstance();
+                    event_adapter.refreshData(list);
+                    finish();
+                }
+            },PreferenceManager.getDefaultSharedPreferences(this));
         }
     }
 
     @Override
-    public void onStop() {
-        super.onStop();
-
+    public void onPause() {
+        super.onPause();
         EventDAO dataA = new EventDAO();
         dataA.getEventIDs(new CallBackList() {
             @Override
