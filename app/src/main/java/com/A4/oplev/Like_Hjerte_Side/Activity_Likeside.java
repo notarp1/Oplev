@@ -42,7 +42,6 @@ public class Activity_Likeside extends AppCompatActivity implements View.OnClick
         backhjerte.setVisibility(View.INVISIBLE);
         backevents.setVisibility(View.INVISIBLE);
 
-
     }
 
 
