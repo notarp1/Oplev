@@ -11,14 +11,10 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.A4.oplev.PicassoFunc;
 import com.A4.oplev.R;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
-import java.util.Date;
-
-import DTO.UserDTO;
 
 public class LikeSide_Event_Adapter extends ArrayAdapter<String> {
     private Context mContext;
@@ -44,7 +40,7 @@ public class LikeSide_Event_Adapter extends ArrayAdapter<String> {
             // Vi inflater det relative layout som vi har lavet i xml filen
             listItem = LayoutInflater.from(mContext).inflate(R.layout.besked_liste_event_element,parent,false);
 
-        ImageView eventPic = listItem.findViewById(R.id.beskeder_event_eventbillede);
+        ImageView eventPic = listItem.findViewById(R.id.own_event_picture);
         Picasso.get().load(eventEventPic.get(position))
                 .resize(mContext.getDisplay().getWidth(), mContext.getDisplay().getHeight()/2 + 200)
                 .centerCrop()
@@ -83,10 +79,10 @@ public class LikeSide_Event_Adapter extends ArrayAdapter<String> {
         TextView header = listItem.findViewById(R.id.beskeder_event_overskrift);
         header.setText(eventHeaders.get(position));
 
-        TextView numberOfAppliants = listItem.findViewById(R.id.beskeder_event_name);
+        TextView numberOfAppliants = listItem.findViewById(R.id.own_event_amount_anmodning);
         numberOfAppliants.setText(eventApplicantsSize.get(position)+" anmoder(e)");
 
-        TextView date = listItem.findViewById(R.id.beskeder_event_dato);
+        TextView date = listItem.findViewById(R.id.own_events_dato);
         date.setText("");
 
 
