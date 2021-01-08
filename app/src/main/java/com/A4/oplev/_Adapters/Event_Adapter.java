@@ -2,6 +2,7 @@ package com.A4.oplev._Adapters;
 
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,6 +35,7 @@ public class Event_Adapter extends RecyclerView.Adapter<Event_Adapter.ViewHolder
 
     static Event_Adapter instance = null;
 
+    String TAG = "EventA";
     List<String> eventListId;
     List<EventDTO> loadedEvent;
     int offset = 0;
@@ -41,7 +43,8 @@ public class Event_Adapter extends RecyclerView.Adapter<Event_Adapter.ViewHolder
     int height;
     int width;
     Context ctx;
-    EventDTO eventDTO;
+    // TODO Lav classen om så den kun henter Event en gang, og ikke 2 - 3 gange Alexander skal lave det når der er tid.  
+    //EventDTO eventDTO;
 
     public static Event_Adapter getInstance(List<EventDTO> scoreList, List<String> ids, Context frame, int height, int width) {
         if (instance == null) {
@@ -55,12 +58,13 @@ public class Event_Adapter extends RecyclerView.Adapter<Event_Adapter.ViewHolder
     }
 
     private Event_Adapter(List<EventDTO> scoreList, List<String> ids, Context frame, int height, int width) {
-        this.loadedEvent = scoreList;
         this.ctx = frame;
         this.dataA = new EventDAO();
         this.height = height;
         this.width = width;
         this.eventListId = ids;
+        this.loadedEvent = scoreList;
+
     }
 
     public void refreshData(List<String> ids) {
@@ -128,7 +132,7 @@ public class Event_Adapter extends RecyclerView.Adapter<Event_Adapter.ViewHolder
 
         IUserDAO userDAO = new UserDAO();
         // Get the data model based on position
-        eventDTO = loadedEvent.get(position);
+        //eventDTO = loadedEvent.get(position);
         // Set item views based on your views and data model
         ImageView profilePic = holder.profilePic;
         ImageView mainPic = holder.mainPic;
@@ -137,31 +141,38 @@ public class Event_Adapter extends RecyclerView.Adapter<Event_Adapter.ViewHolder
 
 
         // her skal dataen sættes in i holderen, der skal gøres brug af en billed controller til at håndtere billder.
-        userDAO.getUser(new CallbackUser() {
+
+        dataA.getEvent(new CallbackEvent() {
             @Override
-            public void onCallback(UserDTO user) {
+            public void onCallback(EventDTO eventDTO) {
+                userDAO.getUser(new CallbackUser() {
+                    @Override
+                    public void onCallback(UserDTO user) {
+                        System.out.println(eventDTO.getOwnerId() + "HAHA2");
+                        withWhoText.setText(user.getfName());
+                        headlineText.setText(eventDTO.getTitle());
 
+                        Picasso.get().load(user.getUserPicture())
+                                .resize(width / 8, height / 16)
+                                .centerCrop()
+                                .placeholder(R.drawable.load2)
+                                .error(R.drawable.question)
+                                .transform(new RoundedTransformation(90, 0))
+                                .into(profilePic);
 
-                System.out.println(eventDTO.getOwnerId() + "HAHA2");
-                withWhoText.setText(user.getfName());
-                headlineText.setText(eventDTO.getTitle());
+                        Picasso.get().load(eventDTO.getEventPic())
+                                .resize(width, height)
+                                .centerCrop()
+                                .placeholder(R.drawable.load2)
+                                .error(R.drawable.question)
+                                .into(mainPic);
 
-                Picasso.get().load(user.getUserPicture())
-                        .resize(width / 8, height / 16)
-                        .centerCrop()
-                        .placeholder(R.drawable.load2)
-                        .error(R.drawable.question)
-                        .transform(new RoundedTransformation(90, 0))
-                        .into(profilePic);
-                Picasso.get().load(eventDTO.getEventPic())
-                        .resize(width, height)
-                        .centerCrop()
-                        .placeholder(R.drawable.load2)
-                        .error(R.drawable.question)
-                        .into(mainPic);
+                                   }
+                               }, eventDTO.getOwnerId());
+                           }
+                       }
+                ,eventListId.get(position));
 
-            }
-        }, eventDTO.getOwnerId());
     }
 
     public void dataCleanUp(int pos) {
@@ -171,7 +182,7 @@ public class Event_Adapter extends RecyclerView.Adapter<Event_Adapter.ViewHolder
 
     @Override
     public int getItemCount() {
-        return loadedEvent.size();
+        return eventListId.size();
     }
 
     @Override
@@ -205,15 +216,24 @@ public class Event_Adapter extends RecyclerView.Adapter<Event_Adapter.ViewHolder
             UserController user = UserController.getInstance();
 
             if (view == profilePic) {
-                user.getUser(new CallbackUser() {
+
+                dataA.getEvent(new CallbackEvent(){
+
                     @Override
-                    public void onCallback(UserDTO user) {
-                        Intent i = new Intent(ctx, Activity_Profile.class);
-                        i.putExtra("user", user);
-                        i.putExtra("load", 1);
-                        ctx.startActivity(i);
+                    public void onCallback(EventDTO event) {
+                        user.getUser(new CallbackUser() {
+                            @Override
+                            public void onCallback(UserDTO user) {
+                                Log.d(TAG, "onCallback: " + id + " username: " + user.getfName() + " EventID: " + event.getEventId());
+                                Intent i = new Intent(ctx, Activity_Profile.class);
+                                i.putExtra("user", user);
+                                i.putExtra("load", 1);
+                                ctx.startActivity(i);
+                            }
+                        }, event.getOwnerId());
                     }
-                }, eventDTO.getOwnerId());
+                }, eventListId.get(id));
+
 
             }
 
@@ -222,7 +242,6 @@ public class Event_Adapter extends RecyclerView.Adapter<Event_Adapter.ViewHolder
                 dataA.getEvent(new CallbackEvent() {
                     @Override
                     public void onCallback(EventDTO event) {
-
                         user.getUser(new CallbackUser() {
                             @Override
                             public void onCallback(UserDTO user) {
@@ -230,10 +249,8 @@ public class Event_Adapter extends RecyclerView.Adapter<Event_Adapter.ViewHolder
                                 i.putExtra("user", user);
                                 i.putExtra("event", event);
                                 ctx.startActivity(i);
-
                             }
-                        }, eventDTO.getOwnerId());
-
+                        }, event.getOwnerId());
                     }
                 }, eventListId.get(id));
             }
