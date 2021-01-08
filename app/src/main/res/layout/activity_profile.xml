@@ -378,13 +378,13 @@
                 android:visibility="gone">
 
                 <ImageView
-                    android:id="@+id/btn_accept"
+                    android:id="@+id/btn_reject"
                     android:layout_width="50dp"
                     android:layout_height="50dp"
                     android:layout_weight="1"
                     android:maxWidth="50dp"
                     android:maxHeight="50dp"
-                    app:srcCompat="@drawable/acceptperson" />
+                    app:srcCompat="@drawable/reject" />
 
                 <TextView
                     android:id="@+id/text_confirmation"
@@ -398,13 +398,13 @@
                     android:textStyle="bold" />
 
                 <ImageView
-                    android:id="@+id/btn_reject"
+                    android:id="@+id/btn_accept"
                     android:layout_width="50dp"
                     android:layout_height="50dp"
                     android:layout_weight="1"
                     android:maxWidth="50dp"
                     android:maxHeight="50dp"
-                    app:srcCompat="@drawable/reject" />
+                    app:srcCompat="@drawable/acceptperson" />
             </LinearLayout>
 
         </LinearLayout>

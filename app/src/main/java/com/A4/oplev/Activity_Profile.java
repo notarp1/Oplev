@@ -1,7 +1,6 @@
 package com.A4.oplev;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
@@ -17,9 +16,7 @@ import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
-import Controller.Listeners.OnSwipeTouchListener;
 import Controller.UserController;
-import DAL.Classes.EventDAO;
 import DTO.UserDTO;
 
 public class Activity_Profile extends AppCompatActivity implements View.OnClickListener {
