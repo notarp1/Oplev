@@ -201,16 +201,34 @@ public class Activity_Profile extends AppCompatActivity implements View.OnClickL
         if(v == reject){
             Intent i = getIntent();
             ArrayList<String> otherApplicants = i.getStringArrayListExtra("applicantList");
-            otherApplicants.remove(0);
             if (otherApplicants.size() != 0) {
-                userController.getUser(user -> {
-                    Intent i12 = new Intent(this, Activity_Profile.class);
-                    i12.putExtra("user", user);
-                    i12.putExtra("load", 2);
-                    i12.putExtra("numberOfApplicants", otherApplicants.size() - 1);
-                    i12.putExtra("applicantList", otherApplicants);
-                    this.startActivity(i12);
-                }, otherApplicants.get(0));
+                EventDAO eventDAO = new EventDAO();
+                System.out.println("EVENT ID  " + i.getStringExtra("eventID"));
+                eventDAO.getEvent(new CallbackEvent() {
+                    @Override
+                    public void onCallback(EventDTO event) {
+                        if (event != null) {
+                            ArrayList<String> newApplicants = event.getApplicants();
+                            newApplicants.remove(0);
+                            System.out.println("APPLICANTS " + newApplicants.toString());
+                            event.setApplicants(newApplicants);
+                            eventDAO.updateEvent(event);
+                        }
+                    }
+                }, i.getStringExtra("eventID"));
+                otherApplicants.remove(0);
+                if (otherApplicants.size() != 0) {
+                    userController.getUser(user -> {
+                        Intent i12 = new Intent(this, Activity_Profile.class);
+                        i12.putExtra("user", user);
+                        i12.putExtra("load", 2);
+                        i12.putExtra("numberOfApplicants", otherApplicants.size() - 1);
+                        i12.putExtra("applicantList", otherApplicants);
+                        i12.putExtra("header", i.getStringExtra("header"));
+                        i12.putExtra("eventID", i.getStringExtra("eventID"));
+                        this.startActivity(i12);
+                    }, otherApplicants.get(0));
+                }
             }
             finish();
         }

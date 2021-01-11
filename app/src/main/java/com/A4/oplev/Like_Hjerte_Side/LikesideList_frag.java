@@ -144,8 +144,8 @@ public class LikesideList_frag extends Fragment{
                             i12.putExtra("load", 2);
                             i12.putExtra("numberOfApplicants", applicants.size()-1);
                             i12.putExtra("applicantList", applicants);
-                            i12.putExtra("header", eventHeaders.get(position));
-                            i12.putExtra("eventID", eventEventID.get(position));
+                            i12.putExtra("header", event.getTitle());
+                            i12.putExtra("eventID", event.getEventId());
                             mContext.startActivity(i12);
                         }, tempFirstApplicant.get(position));
                     }, tempEventID.get(position));
@@ -422,14 +422,14 @@ public class LikesideList_frag extends Fragment{
                                             if (user != null) {
                                                 eventOwnerPic.set(finalJ1, user.getUserPicture());
                                                 readies[0] = true;
-                                                if (readies[1] || !(eventApplicantPic.get(finalJ1).equals("") && temp.getApplicants().size() > 0)){
+                                                if (readies[1] || !(temp.getApplicants().size() > 0)){
                                                     setListView_chats(chatIds,names,dates,lastMessage,headerList,lastSender,isInitialized,otherPersonPic);
                                                 }
                                             }
                                         }
                                     },temp.getOwnerId());
 
-                                    if (eventApplicantPic.get(j).equals("") && temp.getApplicants().size() > 0) {
+                                    if (temp.getApplicants().size() > 0) {
                                         int finalJ = j;
                                         userController.getUser(new CallbackUser() {
                                             @Override
