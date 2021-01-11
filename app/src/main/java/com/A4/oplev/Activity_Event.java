@@ -7,14 +7,18 @@ import android.util.DisplayMetrics;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.A4.oplev.CreateEvent.Activity_Create_Event;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
 import Controller.EventController;
+import Controller.UserController;
+import DAL.Classes.EventDAO;
 import DTO.EventDTO;
 import DTO.UserDTO;
 
@@ -179,6 +183,23 @@ public class Activity_Event extends AppCompatActivity implements View.OnClickLis
             i.putExtra("user", user);
             i.putExtra("load", 1);
             startActivity(i);
+        }
+        else if (v == repost){
+            Intent i = new Intent(this, Activity_Create_Event.class);
+            i.putExtra("event",event);
+            startActivity(i);
+        }
+        else if (v == join) {
+            EventDAO dao = new EventDAO();
+            ArrayList<String> applicants = event.getApplicants();
+            if (!applicants.contains(UserController.getInstance().getCurrUser().getUserId())) {
+                applicants.add(UserController.getInstance().getCurrUser().getUserId());
+                event.setApplicants(applicants);
+                dao.updateEvent(event);
+                finish();
+            } else {
+                Toast.makeText(this,"Du har allerede ansøgt om at deltage",Toast.LENGTH_SHORT).show();
+            }
         }
     }
 }
