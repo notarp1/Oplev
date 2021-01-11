@@ -119,7 +119,7 @@
             app:layout_constraintEnd_toStartOf="@+id/besked_back"
             app:layout_constraintStart_toStartOf="@+id/rectimage"
             app:layout_constraintTop_toTopOf="@+id/event_back"
-            app:srcCompat="@drawable/date_and_time" />
+            app:srcCompat="@drawable/combine_merge" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
