@@ -22,6 +22,10 @@ import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.widget.Autocomplete;
 import com.google.android.libraries.places.widget.AutocompleteActivity;
 
+import java.util.Date;
+
+import DTO.EventDTO;
+
 import static com.google.android.libraries.places.widget.AutocompleteActivity.RESULT_ERROR;
 
 public class Activity_Create_Event extends AppCompatActivity implements View.OnClickListener {
@@ -31,6 +35,7 @@ public class Activity_Create_Event extends AppCompatActivity implements View.OnC
     private Uri pickedImgUri;
     private ConstraintLayout constraintLayout;
     private Button create1_next_btn;
+    private EventDTO repostEvent = null;
     public void onCreate(Bundle saveInstanceState) {
         super.onCreate(saveInstanceState);
         // uses the same topbar with empty frag below as u_settings...
@@ -76,6 +81,20 @@ public class Activity_Create_Event extends AppCompatActivity implements View.OnC
                 }
             }
         });
+
+        Log.d(TAG, "onCreate: (jbe) outside if-repost");
+        // *** TESTING
+       /* Date date = new Date();
+        repostEvent = new EventDTO();
+        repostEvent.setTitle("RepostTitle").setDescription("RepostDesc").setPrice(420)
+                .setCity("RepostCity").setType("Kultur").setDate(date).setFemaleOn(true).setMaleOn(true)
+                .setMinAge(42).setMaxAge(69);*/
+        // ***
+        //if coming from repost save the event object here to access it from fragment
+        if(((EventDTO) getIntent().getSerializableExtra("event")) != null){
+            Log.d(TAG, "onCreate: (jbe) inside if-repost");
+            repostEvent = (EventDTO) getIntent().getSerializableExtra("event");
+        }
 
     }
     @Override
@@ -130,4 +149,10 @@ public class Activity_Create_Event extends AppCompatActivity implements View.OnC
         System.out.println("jbe picked img method woop");
         return pickedImgUri;
     }
+
+    public EventDTO getRepostEvent() {
+        return repostEvent;
+    }
+
+
 }

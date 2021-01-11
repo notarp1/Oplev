@@ -17,6 +17,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import android.text.format.DateUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -42,9 +43,11 @@ import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import Controller.PictureMaker;
+import DTO.EventDTO;
 
 import static android.app.Activity.RESULT_OK;
 import static android.content.ContentValues.TAG;
@@ -111,6 +114,29 @@ public class createEvent1_frag extends Fragment implements View.OnClickListener{
         hour = cal.get(Calendar.HOUR_OF_DAY);
         minute = cal.get(Calendar.MINUTE);
 
+        Log.d(TAG, "onCreateView: (jbe) outside repost spottet");
+        //if createevent startet from repost then fill out info
+        if(((Activity_Create_Event) getActivity()).getRepostEvent() != null){
+            Log.d(TAG, "onCreateView: (jbe) repost spottet!");
+            EventDTO repostEvent = ((Activity_Create_Event) getActivity()).getRepostEvent();
+            Log.d(TAG, "onCreateView: (jbe) repost date = " + repostEvent.getDate().toString());
+            title_in.setText(repostEvent.getTitle());
+            desc_in.setText(repostEvent.getDescription());
+            price_in.setText("" + repostEvent.getPrice());
+            //extract values from Date-obj and update ui
+            Date repostDate = repostEvent.getDate();
+            day = repostDate.getDate();
+            month = repostDate.getMonth();
+            year = repostDate.getYear() + 1900;
+            minute = repostDate.getMinutes();
+            hour = repostDate.getHours();
+            updateDateUI();
+            updateTimeUI();
+            city_in.setText(repostEvent.getCity());
+            currentType = repostEvent.getType();
+            //set the dropdown to the position of repostevent's type
+            dropDown.setSelection(getTypeIndex(repostEvent.getType()));
+        }
 
         dropDown.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             // todo: sæt start text, således at motion ikke er valgt fra starten.
@@ -137,12 +163,7 @@ public class createEvent1_frag extends Fragment implements View.OnClickListener{
                 day = dayNew;
                 month = monthNew;
                 year = yearNew;
-                //update UI
-                // increment month since monthNew is zero indexed (jan = 0)
-                String dateString = day + "/" + (month+1) + "/" + year;
-                date_in.setText(dateString);
-                //remove error of missing date input
-                date_in.setError(null);
+                updateDateUI();
             }
         };
         //when time is changed update current values and show new time in UI
@@ -152,24 +173,45 @@ public class createEvent1_frag extends Fragment implements View.OnClickListener{
                 //setting values
                 hour = hourNew;
                 minute = minuteNew;
-                //update UI
-                //handle setting zeroes if one ciffer on time
-                String hourString = "" + hour;
-                String minuteString = "" + minute;
-                if(hour < 10){
-                    hourString = "0" + hour;
-                }
-                if(minute < 10){
-                    minuteString = "0" + minute;
-                }
-                String timeString = hourString + ":" + minuteString;
-                time_in.setText(timeString);
-                //remove error of missing time input
-                time_in.setError(null);
+                updateTimeUI();
             }
         };
 
         return root;
+    }
+    private int getTypeIndex(String typeToFind){
+        //takes a string with a type, returns the position it lies on in the spinner(dropdown)
+        int index = 0;
+        for (int i=0;i<dropDown.getCount();i++){
+            if (dropDown.getItemAtPosition(i).equals(typeToFind)){
+                index = i;
+            }
+        }
+        return index;
+    }
+    private void updateDateUI(){
+        //update UI
+        // increment month since monthNew is zero indexed (jan = 0)
+        String dateString = day + "/" + (month+1) + "/" + year;
+        date_in.setText(dateString);
+        //remove error of missing date input
+        date_in.setError(null);
+    }
+    private void updateTimeUI(){
+        //update UI
+        //handle setting zeroes if one ciffer on time
+        String hourString = "" + hour;
+        String minuteString = "" + minute;
+        if(hour < 10){
+            hourString = "0" + hour;
+        }
+        if(minute < 10){
+            minuteString = "0" + minute;
+        }
+        String timeString = hourString + ":" + minuteString;
+        time_in.setText(timeString);
+        //remove error of missing time input
+        time_in.setError(null);
     }
 
     @Override
@@ -188,6 +230,10 @@ public class createEvent1_frag extends Fragment implements View.OnClickListener{
                 //set strings
                 b.putString("title_in", title_in.getText().toString());
                 b.putString("desc_in", desc_in.getText().toString());
+                if(price_in.getText().toString().equals("")){
+                    //if no input price the hint showing is "0", so setting text "0"
+                    price_in.setText("0");
+                }
                 b.putString("price_in", price_in.getText().toString());
                 b.putString("date_in", date_in.getText().toString());
                 b.putString("time_in", time_in.getText().toString());
@@ -195,7 +241,7 @@ public class createEvent1_frag extends Fragment implements View.OnClickListener{
                 b.putString("type_in", currentType);
                 // *** EVENT PIC URI IS IN ACTIVITY, AVAIL FROM NEXT FRAG ALREADY
                 // WITH METHOD ((Activity_Create_Event) getActivity()).getPickedImgUri()
-
+                Log.d(TAG, "onClick: (jbe) price = " + price_in.getText());
                 //create fragment and add bundle to arguments
                 Fragment create2_frag = new createEvent2_frag();
                 create2_frag.setArguments(b);
@@ -256,6 +302,7 @@ public class createEvent1_frag extends Fragment implements View.OnClickListener{
     // Method for checking if all inputs have data. If not, prompt users with "setErrors"
     // return true if all have inputs, return false if not.
     private boolean isInputValid() {
+        Log.d(TAG, "isInputValid: (jbe) start");
         inputIsValid = true;
         if(title_in.getText().toString().equals("")){
             inputIsValid = false;
@@ -264,10 +311,6 @@ public class createEvent1_frag extends Fragment implements View.OnClickListener{
         if(desc_in.getText().toString().equals("")){
             inputIsValid = false;
             desc_in.setError("Indsæt beskrivelse");
-        }
-        if(price_in.getText().toString().equals("")){
-            inputIsValid = false;
-            price_in.setError("Indsæt pris");
         }
         if(date_in.getText().toString().equals("DD/MM/YYYY")){
             inputIsValid = false;
@@ -281,10 +324,10 @@ public class createEvent1_frag extends Fragment implements View.OnClickListener{
             inputIsValid = false;
             city_in.setError("Indsæt by");
         }
-        if( ((Activity_Create_Event) getActivity()).getPickedImgUri() == null){
+        /*if( ((Activity_Create_Event) getActivity()).getPickedImgUri() == null){
 
             // no picture selected. Ask user if they want to proceed without pic
-            /* TODO : fix below code to wait for user to answer before moving on (callback?)
+             TODO : fix below code to wait for user to answer before moving on (callback?)
             // from https://stackoverflow.com/questions/2478517/how-to-display-a-yes-no-dialog-box-on-android
             DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
                 @Override
@@ -306,13 +349,16 @@ public class createEvent1_frag extends Fragment implements View.OnClickListener{
             AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
             builder.setMessage("Billede ikke valgt. Fortsæt alligevel?").setPositiveButton("Ja", dialogClickListener)
                     .setNegativeButton("Nej", dialogClickListener).show();
-             */
-        }
+        }*/
         if(currentType.equals("--Vælg type--")){
             inputIsValid = false;
             Toast.makeText(getActivity(), "Vælg en event type", Toast.LENGTH_SHORT).show();
         }
 
+        if(inputIsValid == false){
+            Toast.makeText(getActivity(), "Mangler event-information", Toast.LENGTH_SHORT).show();
+        }
+        Log.d(TAG, "isInputValid: (jbe) end. valid status:" + inputIsValid);
         return inputIsValid;
     }
 }

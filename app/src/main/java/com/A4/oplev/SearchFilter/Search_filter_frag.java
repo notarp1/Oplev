@@ -75,8 +75,10 @@ public class Search_filter_frag extends Fragment{
             }
         });
 
-        ageText.setText(currMinAge + " - " + currMaxAge + "år");
-        // todo Find ud af hvordan man sætter thumbs til specifikke punkter?
+        ageText.setText(currMinAge + " - " + currMaxAge + " år");
+        //update ageBar UI thumbs
+        ageBar.getThumb(0).setValue(currMinAge);
+        ageBar.getThumb(1).setValue(currMaxAge);
         ageBar.setOnThumbValueChangeListener(new MultiSlider.OnThumbValueChangeListener() {
             @Override
             public void onValueChanged(MultiSlider multiSlider,
@@ -91,7 +93,7 @@ public class Search_filter_frag extends Fragment{
                     currMaxAge = (value);
                     prefs.edit().putInt("maxAge",currMaxAge).apply();
                 }
-                ageText.setText(currMinAge + " - " + currMaxAge);
+                ageText.setText(currMinAge + " - " + currMaxAge + " år");
             }
         });
 
