@@ -49,7 +49,7 @@ public class Event_Adapter extends RecyclerView.Adapter<Event_Adapter.ViewHolder
     Bitmap current_eventImg, left_eventImg, right_eventImg;
     int lastpos = 0;
     boolean start = true;
-    PictureGetter pictureGetter = new PictureGetter();
+    PictureGetter pictureGetter;
 
     Boolean dataChanged = false;
     Context ctx;
@@ -73,7 +73,7 @@ public class Event_Adapter extends RecyclerView.Adapter<Event_Adapter.ViewHolder
         this.height = height;
         this.width = width;
         this.eventListId = ids;
-
+        pictureGetter = new PictureGetter(this.ctx);
     }
 
     public List<String> getIds(){
@@ -124,9 +124,6 @@ public class Event_Adapter extends RecyclerView.Adapter<Event_Adapter.ViewHolder
             @Override
             public void onCallback(EventDTO eventDTO) {
 
-                mainPic.setImageBitmap(current_eventImg);
-
-
                 userDAO.getUser(new CallbackUser() {
                     @Override
                     public void onCallback(UserDTO user) {
@@ -137,16 +134,19 @@ public class Event_Adapter extends RecyclerView.Adapter<Event_Adapter.ViewHolder
 
                         if(position > lastpos){
                             right(position);
+                        }else if(position < lastpos) {
+                            left(position);
                         }
+
                         if(current_eventImg != null) {
                             mainPic.setImageBitmap(current_eventImg);
+                            Log.d(TAG, "onCallback: pos: " + position);
                         }else{
                             Picasso.get().load(eventDTO.getEventPic())
-                                    .resize(width / 8, height / 16)
+                                    .resize(width, height)
                                     .centerCrop()
-                                    .placeholder(R.drawable.)
+                                    .placeholder(R.drawable.load2)
                                     .error(R.drawable.question)
-                                    .transform(new RoundedTransformation(90, 0))
                                     .into(mainPic);
                         }
 
@@ -157,33 +157,55 @@ public class Event_Adapter extends RecyclerView.Adapter<Event_Adapter.ViewHolder
                                 .error(R.drawable.question)
                                 .transform(new RoundedTransformation(90, 0))
                                 .into(profilePic);
-
+                            lastpos = position;
                                    }
                                }, eventDTO.getOwnerId());
                            }
                        }
                 ,eventListId.get(position));
-        lastpos = position;
+
     }
 
     public void right(int pos){
         left_eventImg = current_eventImg;
         current_eventImg = right_eventImg;
-
-        dataA.getEvent(new CallbackEvent() {
-            @Override
-            public void onCallback(EventDTO event) {
-                pictureGetter.getPic(new CallbackBitmap() {
-                    @Override
-                    public void onCallBack(Bitmap bitmap) {
-                        right_eventImg = bitmap;
-                    }
-                },event.getEventPic());
-            }
-        }, eventListId.get(pos +1));
-
-
+        if(pos < eventListId.size()-1) {
+            dataA.getEvent(new CallbackEvent() {
+                @Override
+                public void onCallback(EventDTO event) {
+                    pictureGetter.getPic(new CallbackBitmap() {
+                        @Override
+                        public void onCallBack(Bitmap bitmap) {
+                            right_eventImg = bitmap;
+                        }
+                    }, event.getEventPic());
+                }
+            }, eventListId.get(pos + 1));
+        }else{
+            right_eventImg = null;
+        }
     }
+
+    public void left(int pos){
+        right_eventImg = current_eventImg;
+        current_eventImg = left_eventImg;
+        if(pos != 0) {
+            dataA.getEvent(new CallbackEvent() {
+                @Override
+                public void onCallback(EventDTO event) {
+                    pictureGetter.getPic(new CallbackBitmap() {
+                        @Override
+                        public void onCallBack(Bitmap bitmap) {
+                            left_eventImg = bitmap;
+                        }
+                    }, event.getEventPic());
+                }
+            }, eventListId.get(pos - 1));
+        }else{
+            left_eventImg = null;
+        }
+    }
+
 
 
     @Override
