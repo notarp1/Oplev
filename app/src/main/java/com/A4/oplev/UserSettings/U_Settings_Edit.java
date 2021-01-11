@@ -133,7 +133,6 @@ public class U_Settings_Edit extends Fragment implements View.OnClickListener, V
         if(userController.isSafe()) {
             if (v == back) {
                 accept.setVisibility(View.INVISIBLE);
-
                 getActivity().finish();
             } else if (v == accept) {
                 userController.updateUserAndGUI(this);

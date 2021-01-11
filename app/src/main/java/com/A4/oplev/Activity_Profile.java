@@ -38,9 +38,9 @@ public class Activity_Profile extends AppCompatActivity implements View.OnClickL
     UserController userController;
     ArrayList<String> pictures, currPics;
     ConstraintLayout edit;
-    View left, right, editBtn, backBtn, settingBtn, selection1, selection2, selection3, selection4, selection5, selection6;
+    View left, right, editBtn, backBtn, settingBtn, selection1, selection2, selection3, selection4, selection5, selection6, currentSelection;
     boolean noPic;
-    int height, width, currentPic, maxPic, minPic, maxPicPrint, currentSelection;
+    int height, width, currentPic, maxPic, minPic, maxPicPrint;
 
 
 
@@ -125,6 +125,14 @@ public class Activity_Profile extends AppCompatActivity implements View.OnClickL
 
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        currentSelection.setBackground(getResources().getDrawable(R.drawable.picselection));
+        pictures = userController.getUserPictures();
+
+        getPictures();
+    }
 
     private void getPictures() {
         currPics = new ArrayList<>();
@@ -145,6 +153,7 @@ public class Activity_Profile extends AppCompatActivity implements View.OnClickL
             selection1.setVisibility(View.VISIBLE);
             selection1.setBackground(getResources().getDrawable(R.drawable.picselectionfill));
         } else iniView(newCount);
+        System.out.println(newCount);
 
         for(int i=0; i<6; i++){
             if(pictures.get(i) != null){
@@ -171,6 +180,30 @@ public class Activity_Profile extends AppCompatActivity implements View.OnClickL
 
     private void iniView(int count){
 
+        for(int i = 0; i<6; i++){
+
+            switch (i){
+                case 0:
+                    selection1.setVisibility(View.INVISIBLE);
+                    break;
+                case 1:
+                    selection2.setVisibility(View.INVISIBLE);
+                    break;
+                case 2:
+                    selection3.setVisibility(View.INVISIBLE);
+                    break;
+                case 3:
+                    selection4.setVisibility(View.INVISIBLE);
+
+                    break;
+                case 4:
+                    selection5.setVisibility(View.INVISIBLE);
+                    break;
+                case 5:
+                    selection6.setVisibility(View.INVISIBLE);
+                    break;
+            }
+        }
         for(int i = 0; i<count; i++){
 
             switch (i){
@@ -195,7 +228,7 @@ public class Activity_Profile extends AppCompatActivity implements View.OnClickL
                     break;
             }
         }
-        currentSelection = 0;
+        currentSelection = selection1;
         selection1.setBackground(getResources().getDrawable(R.drawable.picselectionfill));
     }
 
@@ -209,22 +242,27 @@ public class Activity_Profile extends AppCompatActivity implements View.OnClickL
             case 1:
                 selection1.setBackground(getResources().getDrawable(R.drawable.picselection));
                 selection2.setBackground(getResources().getDrawable(R.drawable.picselectionfill));
+                currentSelection = selection2;
                 break;
             case 2:
                 selection2.setBackground(getResources().getDrawable(R.drawable.picselection));
                 selection3.setBackground(getResources().getDrawable(R.drawable.picselectionfill));
+                currentSelection = selection3;
                 break;
             case 3:
                 selection3.setBackground(getResources().getDrawable(R.drawable.picselection));
                 selection4.setBackground(getResources().getDrawable(R.drawable.picselectionfill));
+                currentSelection = selection4;
                 break;
             case 4:
                 selection4.setBackground(getResources().getDrawable(R.drawable.picselection));
                 selection5.setBackground(getResources().getDrawable(R.drawable.picselectionfill));
+                currentSelection = selection5;
                 break;
             case 5:
                 selection5.setBackground(getResources().getDrawable(R.drawable.picselection));
                 selection6.setBackground(getResources().getDrawable(R.drawable.picselectionfill));
+                currentSelection = selection6;
                 break;
         }
 
@@ -240,34 +278,33 @@ public class Activity_Profile extends AppCompatActivity implements View.OnClickL
             case 1:
                 selection2.setBackground(getResources().getDrawable(R.drawable.picselection));
                 selection1.setBackground(getResources().getDrawable(R.drawable.picselectionfill));
+                currentSelection = selection1;
                 break;
             case 2:
                 selection3.setBackground(getResources().getDrawable(R.drawable.picselection));
                 selection2.setBackground(getResources().getDrawable(R.drawable.picselectionfill));
+                currentSelection = selection2;
                 break;
             case 3:
                 selection4.setBackground(getResources().getDrawable(R.drawable.picselection));
                 selection3.setBackground(getResources().getDrawable(R.drawable.picselectionfill));
+                currentSelection = selection3;
                 break;
             case 4:
                 selection5.setBackground(getResources().getDrawable(R.drawable.picselection));
                 selection4.setBackground(getResources().getDrawable(R.drawable.picselectionfill));
+                currentSelection = selection4;
                 break;
             case 5:
                 selection6.setBackground(getResources().getDrawable(R.drawable.picselection));
                 selection5.setBackground(getResources().getDrawable(R.drawable.picselectionfill));
+                currentSelection = selection5;
                 break;
         }
 
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
 
-
-
-    }
 
 
     @Override
@@ -382,12 +419,14 @@ public class Activity_Profile extends AppCompatActivity implements View.OnClickL
                 }
             }
         }
-        if (v == editBtn || v == settingBtn){
+        if (v == editBtn){
             Intent i = new Intent(this, Activity_U_Settings.class);
             i.putExtra("selection", 1);
             startActivity(i);
+
         }
         if(v == settingBtn){
+
             Intent i = new Intent(this, Activity_U_Settings.class);
             i.putExtra("selection", 2);
             startActivity(i);
