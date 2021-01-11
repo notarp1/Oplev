@@ -73,8 +73,8 @@
                     android:background="@drawable/selection"
                     android:gravity="center"
                     android:text="1/4"
-                    android:visibility="invisible"
                     android:textColor="#A4E8E0"
+                    android:visibility="invisible"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="@+id/view" />
 
@@ -104,7 +104,7 @@
                     android:layout_height="33dp"
                     android:layout_marginStart="7dp"
                     android:layout_marginLeft="7dp"
-                    android:layout_marginTop="7dp"
+                    android:layout_marginTop="10dp"
                     android:background="@drawable/topbar3"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -123,9 +123,9 @@
 
                 <ImageView
                     android:id="@+id/settings_btn_pro"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:layout_marginTop="8dp"
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
+                    android:layout_marginTop="10dp"
                     android:layout_marginEnd="16dp"
                     android:layout_marginRight="16dp"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -150,8 +150,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:visibility="invisible"
-                        android:background="@drawable/picselection" />
+                        android:background="@drawable/picselection"
+                        android:visibility="invisible" />
 
                     <View
                         android:id="@+id/view23"
@@ -176,8 +176,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:visibility="invisible"
-                        android:background="@drawable/picselection" />
+                        android:background="@drawable/picselection"
+                        android:visibility="invisible" />
 
                     <View
                         android:id="@+id/view25"
@@ -189,8 +189,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:visibility="invisible"
-                        android:background="@drawable/picselection" />
+                        android:background="@drawable/picselection"
+                        android:visibility="invisible" />
 
                     <View
                         android:id="@+id/view26"
@@ -202,8 +202,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:visibility="invisible"
-                        android:background="@drawable/picselection" />
+                        android:background="@drawable/picselection"
+                        android:visibility="invisible" />
 
                     <View
                         android:id="@+id/view27"
@@ -215,8 +215,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:visibility="invisible"
-                        android:background="@drawable/picselection" />
+                        android:background="@drawable/picselection"
+                        android:visibility="invisible" />
 
                     <View
                         android:id="@+id/view29"
@@ -236,6 +236,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
                     android:layout_marginLeft="10dp"
+                    android:layout_marginTop="10dp"
                     android:layout_weight="1"
                     android:orientation="vertical">
 
@@ -320,11 +321,11 @@
 
                     <ImageView
                         android:id="@+id/imageView4"
-                        android:layout_width="50dp"
-                        android:layout_height="50dp"
-                        android:layout_marginTop="16dp"
-                        android:layout_marginEnd="32dp"
-                        android:layout_marginRight="32dp"
+                        android:layout_width="64dp"
+                        android:layout_height="65dp"
+                        android:layout_marginTop="25dp"
+                        android:layout_marginEnd="30dp"
+                        android:layout_marginRight="30dp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
@@ -332,11 +333,11 @@
 
                     <View
                         android:id="@+id/on_edit"
-                        android:layout_width="50dp"
-                        android:layout_height="50dp"
-                        android:layout_marginTop="16dp"
-                        android:layout_marginEnd="32dp"
-                        android:layout_marginRight="32dp"
+                        android:layout_width="66dp"
+                        android:layout_height="66dp"
+                        android:layout_marginTop="25dp"
+                        android:layout_marginEnd="29dp"
+                        android:layout_marginRight="29dp"
                         android:background="@drawable/circle2"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />

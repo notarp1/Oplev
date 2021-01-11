@@ -31,7 +31,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".UserSettings.Activity_U_Settings" />
+        <activity android:name=".UserSettings.Activity_U_Settings"
+            android:windowSoftInputMode="adjustResize"/>
         <activity android:name=".SearchFilter.Activity_Search_Filter" />
         <activity android:name=".CreateEvent.Activity_Create_Event"
             android:windowSoftInputMode="adjustResize"/>
