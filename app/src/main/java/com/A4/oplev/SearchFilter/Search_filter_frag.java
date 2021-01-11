@@ -116,33 +116,29 @@ public class Search_filter_frag extends Fragment{
                     prefs.edit().putBoolean("musikNattelivSwitch", musikNattelivSwitch.isChecked()).apply();
                     prefs.edit().putBoolean("blivKlogereSwitch", blivKlogereSwitch.isChecked()).apply();
                     prefs.edit().putBoolean("gratisSwitch", gratisSwitch.isChecked()).apply();
+                    onUpdate(prefs);
                 }
-                EventDAO dataA = new EventDAO();
-                dataA.getEventIDs(new CallBackList() {
-                    @Override
-                    public void onCallback(List<String> list) {
-                        Event_Adapter event_adapter = Event_Adapter.getInstance();
-                        event_adapter.refreshData(list);
-                    }
-                },prefs);
             }
         });
 
         motionSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked){
                 prefs.edit().putBoolean("motionswitch", motionSwitch.isChecked()).apply();
+                onUpdate(prefs);
             }
         });
 
         underholdningSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked){
                 prefs.edit().putBoolean("underholdningSwitch", underholdningSwitch.isChecked()).apply();
+                onUpdate(prefs);
             }
         });
 
         madDrikkeSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked){
                 prefs.edit().putBoolean("madDrikkeSwitch", madDrikkeSwitch.isChecked()).apply();
+                onUpdate(prefs);
             }
         });
 
@@ -150,12 +146,14 @@ public class Search_filter_frag extends Fragment{
         kulturSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked){
                 prefs.edit().putBoolean("kulturSwitch", kulturSwitch.isChecked()).apply();
+                onUpdate(prefs);
             }
         });
 
         musikNattelivSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked){
                 prefs.edit().putBoolean("musikNattelivSwitch", musikNattelivSwitch.isChecked()).apply();
+                onUpdate(prefs);
             }
         });
 
@@ -163,18 +161,30 @@ public class Search_filter_frag extends Fragment{
         blivKlogereSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked){
                 prefs.edit().putBoolean("blivKlogereSwitch", blivKlogereSwitch.isChecked()).apply();
+                onUpdate(prefs);
             }
         });
 
         gratisSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked){
                 prefs.edit().putBoolean("gratisSwitch", gratisSwitch.isChecked()).apply();
+                onUpdate(prefs);
             }
         });
 
             return root;
     }
 
+    private void onUpdate(SharedPreferences prefs){
+        EventDAO dataA = new EventDAO();
+        dataA.getEventIDs(new CallBackList() {
+            @Override
+            public void onCallback(List<String> list) {
+                Event_Adapter event_adapter = Event_Adapter.getInstance();
+                event_adapter.refreshData(list);
+            }
+        },prefs);
+    }
 
     public void loadData(){
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
