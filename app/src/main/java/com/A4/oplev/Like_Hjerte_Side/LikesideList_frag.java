@@ -29,7 +29,9 @@ import Controller.UserController;
 import DAL.Classes.ChatDAO;
 import DAL.Classes.EventDAO;
 
+import DAL.Interfaces.CallbackUser;
 import DTO.ChatDTO;
+import DTO.EventDTO;
 import DTO.UserDTO;
 
 import com.A4.oplev.R;
@@ -56,7 +58,7 @@ public class LikesideList_frag extends Fragment{
     private ArrayList<String> names = new ArrayList<>(), lastMessage = new ArrayList<>(), headerList = new ArrayList<>(), lastSender = new ArrayList<>(), isInitialized = new ArrayList<>(), chatIds = new ArrayList<>(), otherPersonPic = new ArrayList<>();
     private ArrayList<Date> dates = new ArrayList<>();
     private ArrayList<Integer> eventApplicantsSize = new ArrayList<>();
-    private ArrayList<String> eventHeaders = new ArrayList<>(), eventEventPic = new ArrayList<>(), eventApplicantPic = new ArrayList<>(), eventOwnerPic = new ArrayList<>(), eventFirstApplicants = new ArrayList<>(), eventEventID = new ArrayList<>();
+    private ArrayList<String> eventHeaders = new ArrayList<>(), eventEventPic = new ArrayList<>(), eventApplicantPic = new ArrayList<>(), eventOwnerPic = new ArrayList<>(), eventFirstApplicants = new ArrayList<>(), eventParticipant = new ArrayList<>(), eventEventID = new ArrayList<>(), tempEventID = new ArrayList<>(), tempFirstApplicant = new ArrayList<>();
     private Context mContext;
     private static ArrayList<View> footerViews = new ArrayList<>();
     private int listviewPosition = 0;
@@ -90,9 +92,10 @@ public class LikesideList_frag extends Fragment{
                                 otherPersonPic.add(user.getUserPicture());
                                 if (userDTO.getChatId().size() == otherPersonPic.size()) {
                                     chatsReady = true;
-                                    if (chatsReady && eventsReady) {
+                                    if (eventsReady) {
                                         setListView_chats(chatIds, names, dates, lastMessage, headerList, lastSender, isInitialized, otherPersonPic);
                                         setChangeListeners_chats();
+                                        setChangeListener_tilmeldinger();
                                         chatsReady = false;
                                         eventsReady = false;
                                     }
@@ -128,34 +131,31 @@ public class LikesideList_frag extends Fragment{
         tilmeldinger_listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                if (position < eventHeaders.size()) {
+                if (position < tempEventID.size()) {
                     ArrayList<String> applicants = new ArrayList<>();
                     //sendNoti();
                     //Toast.makeText(mContext, "Notifikation sendt", Toast.LENGTH_SHORT).show();
-                    if (eventFirstApplicants.get(position).equals("")) {
-                        System.out.println(eventHeaders.get(position));
-                    } else {
-                        eventDAO.getEvent(event -> {
-                            applicants.addAll(event.getApplicants());
-                            userController.getUser(user -> {
-                                Intent i12 = new Intent(mContext, Activity_Profile.class);
-                                i12.putExtra("user", user);
-                                i12.putExtra("load", 2);
-                                i12.putExtra("numberOfApplicants",eventApplicantsSize.get(position)-1);
-                                i12.putExtra("applicantList",applicants);
-                                i12.putExtra("header",eventHeaders.get(position));
-                                i12.putExtra("eventID",eventEventID.get(position));
-                                mContext.startActivity(i12);
-                            }, eventFirstApplicants.get(position));
-                        }, userDTO.getEvents().get(position));
-                    }
+
+                    eventDAO.getEvent(event -> {
+                        applicants.addAll(event.getApplicants());
+                        userController.getUser(user -> {
+                            Intent i12 = new Intent(mContext, Activity_Profile.class);
+                            i12.putExtra("user", user);
+                            i12.putExtra("load", 2);
+                            i12.putExtra("numberOfApplicants", applicants.size()-1);
+                            i12.putExtra("applicantList", applicants);
+                            i12.putExtra("header", event.getTitle());
+                            i12.putExtra("eventID", event.getEventId());
+                            mContext.startActivity(i12);
+                        }, tempFirstApplicant.get(position));
+                    }, tempEventID.get(position));
                 }
                 else {
                     // Her ville chatId'et også sendes med senere hen
                     Intent i1 = new Intent(getActivity(), Activity_Chat.class);
                     i1.putExtra("currentUser",currentUser);
-                    i1.putExtra("otherUser",names.get(position-eventHeaders.size()));
-                    i1.putExtra("chatId", userDTO.getChatId().get(position-eventHeaders.size()));
+                    i1.putExtra("otherUser",names.get(position-tempEventID.size()));
+                    i1.putExtra("chatId", userDTO.getChatId().get(position-tempEventID.size()));
                     startActivity(i1);
                 }
             }
@@ -195,51 +195,51 @@ public class LikesideList_frag extends Fragment{
                 for (int j = 0; j < userDTO.getEvents().size(); j++) {
                     eventDAO.getEvent(event -> {
                         if (event != null) {
-                            if (event.getParticipant().length() == 0) {
-                                String firstApplicant = event.getApplicants().size() == 0 ? "" : event.getApplicants().get(0);
-                                System.out.println("First applicant: " + firstApplicant);
-                                if (firstApplicant.equals("")) {
-                                    eventApplicantPic.add("");
+                            String firstApplicant = event.getApplicants().size() == 0 ? "" : event.getApplicants().get(0);
+                            if (firstApplicant.equals("")) {
+                                eventApplicantPic.add("");
+                                eventApplicantsSize.add(event.getApplicants().size());
+                                eventHeaders.add(event.getTitle());
+                                eventOwnerPic.add(event.getOwnerPic());
+                                eventEventPic.add(event.getEventPic());
+                                eventFirstApplicants.add(firstApplicant);
+                                eventEventID.add(event.getEventId());
+                                eventParticipant.add(event.getParticipant());
+                                if (eventApplicantPic.size() == userDTO.getEvents().size() && !isGettingFromDB[0]) {
+                                    eventsReady = true;
+                                    if (chatsReady) {
+                                        setListView_chats(chatIds, names, dates, lastMessage, headerList, lastSender, isInitialized, otherPersonPic);
+                                        setListView_applicants(eventEventPic, eventHeaders, eventOwnerPic, eventFirstApplicants, eventApplicantPic, eventApplicantsSize);
+                                        setChangeListener_tilmeldinger();
+                                        setChangeListeners_chats();
+                                        eventsReady = false;
+                                        chatsReady = false;
+                                    }
+                                }
+                            } else {
+                                isGettingFromDB[0] = true;
+                                userController.getUser(user -> {
+                                    eventApplicantPic.add(user.getUserPicture());
                                     eventApplicantsSize.add(event.getApplicants().size());
                                     eventHeaders.add(event.getTitle());
                                     eventOwnerPic.add(event.getOwnerPic());
                                     eventEventPic.add(event.getEventPic());
                                     eventFirstApplicants.add(firstApplicant);
                                     eventEventID.add(event.getEventId());
-                                    if (eventApplicantPic.size() == userDTO.getEvents().size() && !isGettingFromDB[0]) {
+                                    eventParticipant.add(event.getParticipant());
+                                    isGettingFromDB[0] = false;
+                                    if (eventApplicantPic.size() == userDTO.getEvents().size()) {
                                         eventsReady = true;
-                                        if (eventsReady && chatsReady) {
+                                        if (chatsReady) {
                                             setListView_chats(chatIds, names, dates, lastMessage, headerList, lastSender, isInitialized, otherPersonPic);
                                             setListView_applicants(eventEventPic, eventHeaders, eventOwnerPic, eventFirstApplicants, eventApplicantPic, eventApplicantsSize);
+                                            setChangeListener_tilmeldinger();
                                             setChangeListeners_chats();
                                             eventsReady = false;
                                             chatsReady = false;
                                         }
                                     }
-                                } else {
-                                    isGettingFromDB[0] = true;
-                                    userController.getUser(user -> {
-                                        eventApplicantPic.add(user.getUserPicture());
-                                        eventApplicantsSize.add(event.getApplicants().size());
-                                        eventHeaders.add(event.getTitle());
-                                        eventOwnerPic.add(event.getOwnerPic());
-                                        eventEventPic.add(event.getEventPic());
-                                        eventFirstApplicants.add(firstApplicant);
-                                        eventEventID.add(event.getEventId());
-                                        System.out.println("User picture: " + user.getUserPicture());
-                                        isGettingFromDB[0] = false;
-                                        if (eventApplicantPic.size() == userDTO.getEvents().size()) {
-                                            eventsReady = true;
-                                            if (eventsReady && chatsReady) {
-                                                setListView_chats(chatIds, names, dates, lastMessage, headerList, lastSender, isInitialized, otherPersonPic);
-                                                setListView_applicants(eventEventPic, eventHeaders, eventOwnerPic, eventFirstApplicants, eventApplicantPic, eventApplicantsSize);
-                                                setChangeListeners_chats();
-                                                eventsReady = false;
-                                                chatsReady = false;
-                                            }
-                                        }
-                                    }, event.getApplicants().get(0));
-                                }
+                                }, event.getApplicants().get(0));
                             }
                         }
                     }, userDTO.getEvents().get(j));
@@ -258,8 +258,6 @@ public class LikesideList_frag extends Fragment{
                 listviewPosition = firstVisibleItem;
             }
         });
-
-
 
         return root;
     }
@@ -392,25 +390,92 @@ public class LikesideList_frag extends Fragment{
         }
     }
 
+    public void setChangeListener_tilmeldinger(){
+        boolean[] readies = new boolean[2];
+        readies[0] = false;
+        readies[1] = false;
+        for (int i = 0; i < userController.getCurrUser().getEvents().size(); i++) {
+            FirebaseFirestore.getInstance().collection("events").document(userController.getCurrUser().getEvents().get(i)).addSnapshotListener(new EventListener<DocumentSnapshot>() {
+                private static final String TAG = "update from firestore";
+
+                @Override
+                public void onEvent(@Nullable DocumentSnapshot snapshot,
+                                    @Nullable FirebaseFirestoreException e) {
+                    if (e != null) {
+                        Log.w(TAG, "Listen failed.", e);
+                        return;
+                    }
+
+                    if (snapshot != null && snapshot.exists()) {
+                        EventDTO temp = snapshot.toObject(EventDTO.class);
+                        if (temp != null) {
+                            for (int j = 0; j < eventEventID.size(); j++) {
+                                if (eventEventID.get(j).equals(temp.getEventId())){
+                                    eventApplicantsSize.set(j,temp.getApplicants().size());
+                                    String applicant = temp.getApplicants().size() == 0 ? "" : temp.getApplicants().get(0);
+                                    eventFirstApplicants.set(j,applicant);
+                                    eventParticipant.set(j,temp.getParticipant());
+                                    int finalJ1 = j;
+                                    userController.getUser(new CallbackUser() {
+                                        @Override
+                                        public void onCallback(UserDTO user) {
+                                            if (user != null) {
+                                                eventOwnerPic.set(finalJ1, user.getUserPicture());
+                                                readies[0] = true;
+                                                if (readies[1] || !(temp.getApplicants().size() > 0)){
+                                                    setListView_chats(chatIds,names,dates,lastMessage,headerList,lastSender,isInitialized,otherPersonPic);
+                                                }
+                                            }
+                                        }
+                                    },temp.getOwnerId());
+
+                                    if (temp.getApplicants().size() > 0) {
+                                        int finalJ = j;
+                                        userController.getUser(new CallbackUser() {
+                                            @Override
+                                            public void onCallback(UserDTO user) {
+                                                if (user != null) {
+                                                    eventApplicantPic.set(finalJ,user.getUserPicture());
+                                                    readies[1] = true;
+                                                    if (readies[0]){
+                                                        setListView_chats(chatIds,names,dates,lastMessage,headerList,lastSender,isInitialized,otherPersonPic);
+                                                    }
+                                                }
+                                            }
+                                        },temp.getApplicants().get(0));
+                                    }
+                                }
+                            }
+                        }
+                    } else {
+                        Log.d(TAG, "Current data: null");
+                    }
+                }
+            });
+        }
+    }
+
 
     public void setListView_applicants(@NonNull ArrayList<String> eventEventPic, @NonNull ArrayList<String> eventHeaders, @NonNull ArrayList<String> eventOwnerPic, @NonNull ArrayList<String> eventFirstApplicants, @NonNull ArrayList<String> eventApplicantPic, @NonNull ArrayList<Integer> eventApplicantsSize){
         if (mContext != null) {
-            System.out.println("Applicant pics: " + eventApplicantPic.toString());
+            ArrayList<String> tempEventPic = new ArrayList<>(), tempEventHeaders = new ArrayList<>(), tempEventOwnerPic = new ArrayList<>(), tempEventFirstApplicants = new ArrayList<>(), tempEventApplicantPic = new ArrayList<>(), tempEventID = new ArrayList<>();
+            ArrayList<Integer> tempEventApplicantsSize = new ArrayList<>();
+
             for (int i = 0; i < eventHeaders.size(); i++) {
-                System.out.println("User picture 2" + eventApplicantPic.get(i) + "\t" + eventApplicantsSize);
-                if (eventApplicantsSize.get(i) == 0) {
-                    eventEventPic.remove(i);
-                    eventHeaders.remove(i);
-                    eventApplicantPic.remove(i);
-                    eventApplicantsSize.remove(i);
-                    eventOwnerPic.remove(i);
-                    eventFirstApplicants.remove(i);
-                    eventEventID.remove(i);
-                    i--;
+                if (eventApplicantsSize.get(i) != 0 && eventParticipant.get(i).equals("")) {
+                    tempEventPic.add(eventEventPic.get(i));
+                    tempEventHeaders.add(eventHeaders.get(i));
+                    tempEventApplicantPic.add(eventApplicantPic.get(i));
+                    tempEventApplicantsSize.add(eventApplicantsSize.get(i));
+                    tempEventOwnerPic.add(eventOwnerPic.get(i));
+                    tempEventFirstApplicants.add(eventFirstApplicants.get(i));
+                    tempEventID.add(eventEventID.get(i));
                 }
             }
-            System.out.println("Applicant pics: " + eventApplicantPic.toString());
-            LikeSide_Event_Adapter eventAdapter = new LikeSide_Event_Adapter(mContext, eventEventPic, eventHeaders, eventOwnerPic, eventFirstApplicants, eventApplicantPic, eventApplicantsSize);
+            this.tempEventID = tempEventID;
+            this.tempFirstApplicant = tempEventFirstApplicants;
+
+            LikeSide_Event_Adapter eventAdapter = new LikeSide_Event_Adapter(mContext, tempEventPic, tempEventHeaders, tempEventOwnerPic, tempEventFirstApplicants, tempEventApplicantPic, tempEventApplicantsSize);
             tilmeldinger_listView.setAdapter(eventAdapter);
         }
     }

@@ -40,18 +40,19 @@ public class Event_Adapter extends RecyclerView.Adapter<Event_Adapter.ViewHolder
 
     String TAG = "EventA";
     List<String> eventListId;
-    List<EventDTO> loadedEvent;
     int offset = 0;
     IEventDAO dataA;
     int height;
     int width;
+
+    Boolean dataChanged = false;
     Context ctx;
     // TODO Lav classen om så den kun henter Event en gang, og ikke 2 - 3 gange Alexander skal lave det når der er tid.
     //EventDTO eventDTO;
 
-    public static Event_Adapter getInstance(List<EventDTO> scoreList, List<String> ids, Context frame, int height, int width) {
+    public static Event_Adapter getInstance( List<String> ids, Context frame, int height, int width) {
         if (instance == null) {
-            instance = new Event_Adapter(scoreList, ids, frame, height, width);
+            instance = new Event_Adapter( ids, frame, height, width);
         }
         return instance;
     }
@@ -60,64 +61,28 @@ public class Event_Adapter extends RecyclerView.Adapter<Event_Adapter.ViewHolder
         return instance;
     }
 
-    private Event_Adapter(List<EventDTO> scoreList, List<String> ids, Context frame, int height, int width) {
+    private Event_Adapter( List<String> ids, Context frame, int height, int width) {
         this.ctx = frame;
         this.dataA = new EventDAO();
         this.height = height;
         this.width = width;
         this.eventListId = ids;
-        this.loadedEvent = scoreList;
+    }
 
+    public List<String> getIds(){
+        return eventListId;
     }
 
     public void refreshData(List<String> ids) {
         this.eventListId = ids;
-        ((EventDAO) dataA).getEvents(new CallBackEventList() {
-            @Override
-            public void onCallback(List<EventDTO> events) {
-                loadedEvent = events;
-            }
-        }, ids);
+        this.dataChanged = true;
     }
-
-
-    public void loadData(boolean way) {
-        // Metode til at hente data ind i loaded listen, så der hele tiden kun er tre udfyldte EventDto'er i hukkomelsen.
-        if (way) {
-            //Going to the right, first is dumped
-            if (offset != 0) {
-                loadedEvent.remove(0);
-            }
-            if (offset < eventListId.size()) {
-                offset++;
-                add2list(offset + 1);
-            }
-        } else {
-            if (offset != eventListId.size() - 1) {
-                loadedEvent.remove(2);
-            }
-            if (offset != 0) {
-                offset--;
-                add2listStart(offset - 1);
-            }
-        }
+    public Boolean getDataChanged(){
+        return dataChanged;
     }
-
-    public void add2list(int pos) {
-        //Henter Data ind i loadEvent, i sluttningen.
-        //loadedEvent.add(dataA.getEvent(eventListId.get(eventListId.get(pos))));
+    public void setDataChanged(Boolean dataChanged){
+        this.dataChanged = dataChanged;
     }
-
-    public void add2listStart(int pos) {
-        //Henter Data ind i loadEvent, i sluttningen.
-        List<EventDTO> newList = new ArrayList<>();
-        // newList.add(dataA.getEvent(eventListId.get(eventListId.get(pos))));
-        newList.add(loadedEvent.get(0));
-        newList.add(loadedEvent.get(1));
-        loadedEvent = newList;
-    }
-
-
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
