@@ -148,7 +148,6 @@ public class Event_Adapter extends RecyclerView.Adapter<Event_Adapter.ViewHolder
                 userDAO.getUser(new CallbackUser() {
                     @Override
                     public void onCallback(UserDTO user) {
-                        System.out.println(eventDTO.getOwnerId() + "HAHA2");
                         withWhoText.setText(user.getfName());
                         headlineText.setText(eventDTO.getTitle());
 
