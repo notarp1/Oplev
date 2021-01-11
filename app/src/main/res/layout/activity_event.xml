@@ -78,11 +78,11 @@
 
                 <View
                     android:id="@+id/back_btn_event"
-                    android:layout_width="40dp"
-                    android:layout_height="33dp"
+                    android:layout_width="45dp"
+                    android:layout_height="35dp"
                     android:layout_marginStart="7dp"
                     android:layout_marginLeft="7dp"
-                    android:layout_marginTop="7dp"
+                    android:layout_marginTop="16dp"
                     android:background="@drawable/topbar3"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -104,6 +104,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
                 android:orientation="horizontal">
 
                 <LinearLayout
@@ -205,6 +206,17 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content">
 
+                    <TextView
+                        android:id="@+id/event_person_name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Ida, 22"
+                        android:textColor="#A4E8E0"
+                        android:textStyle="bold"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="@+id/view13"
+                        app:layout_constraintStart_toStartOf="@+id/view13" />
+
                     <View
                         android:id="@+id/view13"
                         android:layout_width="112dp"
@@ -214,7 +226,9 @@
                         android:layout_marginEnd="20dp"
 
                         android:layout_marginRight="20dp"
+                        android:layout_marginBottom="24dp"
                         android:background="@drawable/circle1"
+                        app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
@@ -224,11 +238,10 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center|top"
 
-                        android:layout_marginTop="5dp"
+                        android:layout_marginTop="11dp"
                         android:layout_marginEnd="26dp"
                         android:layout_marginRight="26dp"
                         app:cardCornerRadius="100dp"
-                        app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent">
 

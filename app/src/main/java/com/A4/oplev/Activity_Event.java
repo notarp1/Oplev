@@ -23,7 +23,7 @@ import DTO.EventDTO;
 import DTO.UserDTO;
 
 public class Activity_Event extends AppCompatActivity implements View.OnClickListener {
-    public TextView eventName, eCity, eDate, ePrice, eAbout, eUname, eUabout, picNumber;
+    public TextView eventName, eCity, eDate, ePrice, eAbout, eUname, eUabout, picNumber, eventPname;
     ImageView eventPic, profilePic, repost, join;
     EventController eventController;
     ArrayList<String> pictures, currPics;
@@ -55,6 +55,7 @@ public class Activity_Event extends AppCompatActivity implements View.OnClickLis
         back = findViewById(R.id.back_btn_event);
         repost = findViewById(R.id.btn_repost);
         join = findViewById(R.id.btn_join);
+        eventPname = findViewById(R.id.event_person_name);
 
 
         //Knapper til billeder, repost og join

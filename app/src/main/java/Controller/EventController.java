@@ -103,11 +103,13 @@ public class EventController {
         String eAboutString = event.getDescription();
         String eUnameString = "Om " + user.getfName();
         String eUaboutString = user.getDescription();
+        String personTitle = user.getfName() + ", " + user.getAge();
 
         ctx.eventName.setText(eventNameString);
         ctx.eCity.setText(eCityString);
         ctx.eDate.setText(eDateString);
         ctx.ePrice.setText(ePriceString);
+        ctx.eventPname.setText(personTitle);
         //EventDescription
         ctx.eAbout.setText(eAboutString);
         ctx.eUname.setText(eUnameString);
