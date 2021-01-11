@@ -46,8 +46,8 @@ public class Activity_Likeside extends AppCompatActivity implements View.OnClick
         getWindow().getDecorView().getRootView().setOnTouchListener(new OnSwipeTouchListener(this){
             @Override
             public void onSwipeLeft() {
-                getSupportFragmentManager().beginTransaction().setCustomAnimations(android.R.anim.slide_in_left,
-                        android.R.anim.slide_out_right).replace(R.id.likeside_frameLayout,new HjerteSide_frag())
+                getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.enter_from_right,
+                        R.anim.exit_to_left).replace(R.id.likeside_frameLayout,new HjerteSide_frag())
                         .commit();
             }
         });
