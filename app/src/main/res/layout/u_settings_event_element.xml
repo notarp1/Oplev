@@ -139,7 +139,7 @@
     </androidx.cardview.widget.CardView>
 
     <TextView
-        android:id="@+id/own_events_dato"
+        android:id="@+id/own_event_beskeder_events_dato"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
 
@@ -165,7 +165,7 @@
         android:layout_marginStart="2dp"
         android:layout_marginLeft="-150dp"
 
-        android:layout_toLeftOf="@id/own_event_amount_anmodning"
+        android:layout_toLeftOf="@id/own_event_antal_anmodning"
         android:layout_toEndOf="@+id/own_event_anmodning1_holder"
         android:layout_toRightOf="@+id/own_event_anmodning1_holder"
         android:visibility="visible"
@@ -183,7 +183,7 @@
 
 
     <TextView
-        android:id="@+id/own_event_amount_anmodning"
+        android:id="@+id/own_event_antal_anmodning"
         android:layout_width="149dp"
         android:layout_height="wrap_content"
         android:layout_alignTop="@+id/own_event_anmodning2_holder"
@@ -202,7 +202,7 @@
         android:id="@+id/invibleBox"
         android:layout_width="20dp"
         android:layout_height="30dp"
-        android:layout_below="@+id/own_events_dato"
+        android:layout_below="@+id/own_event_beskeder_events_dato"
         android:layout_alignBottom="@+id/box_own_events"
         android:layout_marginLeft="0dp"
         android:layout_marginTop="0dp"
@@ -210,6 +210,5 @@
         android:layout_toRightOf="@+id/own_event_picture_holder"
         android:background="@color/black"
         android:visibility="invisible" />
-
 
 </RelativeLayout>

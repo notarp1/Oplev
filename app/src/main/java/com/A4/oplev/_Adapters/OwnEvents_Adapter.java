@@ -1,6 +1,7 @@
 package com.A4.oplev._Adapters;
 
 import android.content.Context;
+import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,18 +11,19 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 
 import com.A4.oplev.R;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
-public class LikeSide_Event_Adapter extends ArrayAdapter<String> {
+public class OwnEvents_Adapter extends ArrayAdapter<String> {
     private Context mContext;
     private ArrayList<Integer> eventApplicantsSize;
     private ArrayList<String> eventHeaders, eventEventPic, eventApplicantPic, eventOwnerPic, eventFirstApplicants;
 
-    public LikeSide_Event_Adapter(@NonNull Context context, @NonNull ArrayList<String> eventEventPic, @NonNull ArrayList<String> eventHeaders, @NonNull ArrayList<String> eventOwnerPic, @NonNull ArrayList<String> eventFirstApplicants, @NonNull ArrayList<String> eventApplicantPic, @NonNull ArrayList<Integer> eventApplicantsSize) {
+    public OwnEvents_Adapter(@NonNull Context context, @NonNull ArrayList<String> eventEventPic, @NonNull ArrayList<String> eventHeaders, @NonNull ArrayList<String> eventOwnerPic, @NonNull ArrayList<String> eventFirstApplicants, @NonNull ArrayList<String> eventApplicantPic, @NonNull ArrayList<Integer> eventApplicantsSize) {
         super(context, 0 , eventHeaders);
         this.mContext = context;
         this.eventHeaders = eventHeaders;
@@ -89,4 +91,5 @@ public class LikeSide_Event_Adapter extends ArrayAdapter<String> {
 
         return listItem;
     }
+
 }
