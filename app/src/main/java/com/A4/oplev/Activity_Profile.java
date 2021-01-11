@@ -157,68 +157,70 @@ public class Activity_Profile extends AppCompatActivity implements View.OnClickL
     @Override
     public void onClick(View v) {
         if(v == accept){
+            // hvis man accepterer en person til et event
             Intent i = getIntent();
+            // hent brugeren
             UserDTO user = (UserDTO) i.getSerializableExtra("user");
             String header = i.getStringExtra("header");
             ChatDAO chatDAO = new ChatDAO();
+            // vi laver et chatobjekt med de nødvendige informationer
             ChatDTO chatDTO = new ChatDTO(null,null,null,null,null,null,header,userController.getCurrUser().getfName(),user.getfName(),userController.getCurrUser().getUserId(),user.getUserId());
-            chatDAO.createChat(chatDTO, new ChatDAO.CreateChatCallback() {
-                @Override
-                public void onCallback(String chatID) {
-                    EventDAO eventDAO = new EventDAO();
-                    eventDAO.getEvent(new CallbackEvent() {
-                        @Override
-                        public void onCallback(EventDTO event) {
-                            if (event != null) {
-                                event.setParticipant(user.getUserId());
-                                System.out.println("EVENT ID : " + event.getEventId());
-                                eventDAO.updateEvent(event);
-                            }
-                        }
-                    }, i.getStringExtra("eventID"));
+            chatDAO.createChat(chatDTO, chatID -> {
+                // vi skal opdatere eventet til at have en participant
+                EventDAO eventDAO = new EventDAO();
+                eventDAO.getEvent(event -> {
+                    if (event != null) {
+                        event.setParticipant(user.getUserId());
+                        eventDAO.updateEvent(event);
+                    }
+                }, i.getStringExtra("eventID"));
 
-                    ArrayList<String> otherUserChatID;
-                    if (user.getChatId() == null){
-                        otherUserChatID = new ArrayList<>();
-                    } else otherUserChatID = user.getChatId();
-                    otherUserChatID.add(chatID);
+                // vi skal indsætte chatid'et på begge brugeres lister
+                ArrayList<String> otherUserChatID;
+                if (user.getChatId() == null){
+                    otherUserChatID = new ArrayList<>();
+                } else otherUserChatID = user.getChatId();
+                otherUserChatID.add(chatID);
 
 
-                    ArrayList<String> thisUserChatID;
-                    if (userController.getCurrUser().getChatId() == null){
-                        thisUserChatID = new ArrayList<>();
-                    } else thisUserChatID = userController.getCurrUser().getChatId();
-                    thisUserChatID.add(chatID);
+                ArrayList<String> thisUserChatID;
+                if (userController.getCurrUser().getChatId() == null){
+                    thisUserChatID = new ArrayList<>();
+                } else thisUserChatID = userController.getCurrUser().getChatId();
+                thisUserChatID.add(chatID);
 
-
-                    UserDAO userDAO = new UserDAO();
-                    userDAO.updateUser(user);
-                    userDAO.updateUser(userController.getCurrUser());
-                    finish();
-                }
+                // vi opdaterer begge brugere i databasen
+                UserDAO userDAO = new UserDAO();
+                userDAO.updateUser(user);
+                userDAO.updateUser(userController.getCurrUser());
+                finish();
             });
         }
         if(v == reject){
+            // hvis brugeren afviser en applicant
             Intent i = getIntent();
             ArrayList<String> otherApplicants = i.getStringArrayListExtra("applicantList");
+            // hvis der stadigvæk er nogle applicants tilbage i listen
             if (otherApplicants.size() != 0) {
                 EventDAO eventDAO = new EventDAO();
-                System.out.println("EVENT ID  " + i.getStringExtra("eventID"));
-                eventDAO.getEvent(new CallbackEvent() {
-                    @Override
-                    public void onCallback(EventDTO event) {
-                        if (event != null) {
-                            ArrayList<String> newApplicants = event.getApplicants();
-                            newApplicants.remove(0);
-                            System.out.println("APPLICANTS " + newApplicants.toString());
-                            event.setApplicants(newApplicants);
-                            eventDAO.updateEvent(event);
-                        }
+                // vi henter eventet for at kunne opdatere det
+                eventDAO.getEvent(event -> {
+                    if (event != null) {
+                        // vi fjerner den applicant man har afvist og opdaterer det i databasen
+                        ArrayList<String> newApplicants = event.getApplicants();
+                        newApplicants.remove(0);
+                        event.setApplicants(newApplicants);
+                        eventDAO.updateEvent(event);
                     }
                 }, i.getStringExtra("eventID"));
+
+                // vi fjerner den man har afvist i vores liste
                 otherApplicants.remove(0);
+                // hvis der er flere personer tilbage
                 if (otherApplicants.size() != 0) {
+                    // vi indlæser den næste applicant
                     userController.getUser(user -> {
+                        // start nyt intent med den næste applicant
                         Intent i12 = new Intent(this, Activity_Profile.class);
                         i12.putExtra("user", user);
                         i12.putExtra("load", 2);
@@ -230,6 +232,7 @@ public class Activity_Profile extends AppCompatActivity implements View.OnClickL
                     }, otherApplicants.get(0));
                 }
             }
+            // afslut aktiviteten så man ikke kan gå tilbage
             finish();
         }
         if(!noPic) {
