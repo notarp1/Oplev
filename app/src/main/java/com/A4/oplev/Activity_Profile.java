@@ -1,6 +1,7 @@
 package com.A4.oplev;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
@@ -30,12 +31,13 @@ import DTO.EventDTO;
 import DTO.UserDTO;
 
 public class Activity_Profile extends AppCompatActivity implements View.OnClickListener {
-    public TextView about, city, desc, aboutName, job, edu, picNumber, informationText;
+    public TextView about, city, desc, aboutName, job, edu, informationText;
     ImageView pb, accept, reject, p1, p2, p3, p4, p5, p6;
     LinearLayout confirmationBox;
     RecyclerView pbtest;
     UserController userController;
     ArrayList<String> pictures, currPics;
+    ConstraintLayout edit;
     View left, right, editBtn, backBtn, settingBtn, selection1, selection2, selection3, selection4, selection5, selection6;
     boolean noPic;
     int height, width, currentPic, maxPic, minPic, maxPicPrint, currentSelection;
@@ -61,12 +63,13 @@ public class Activity_Profile extends AppCompatActivity implements View.OnClickL
         edu = findViewById(R.id.text_edu);
         job = findViewById(R.id.text_job);
         pb = findViewById(R.id.imageView_pb);
-        picNumber = findViewById(R.id.text_curPic);
         left = findViewById(R.id.left_but);
         right = findViewById(R.id.right_but);
         editBtn = findViewById(R.id.on_edit);
         reject = findViewById(R.id.btn_reject);
         accept = findViewById(R.id.btn_accept);
+        edit = findViewById(R.id.constrain_edit);
+
         informationText = findViewById(R.id.text_confirmation);
         confirmationBox = findViewById(R.id.confirmationBox);
         backBtn = findViewById(R.id.btn_back_profile);
@@ -103,6 +106,7 @@ public class Activity_Profile extends AppCompatActivity implements View.OnClickL
 
 
         if(j == 1 || j == 2){
+            edit.setVisibility(View.INVISIBLE);
             if(j==2) {
                 confirmationBox.setVisibility(View.VISIBLE);
                 int numbers = myIntent.getIntExtra("numberOfApplicants",0);
@@ -122,7 +126,6 @@ public class Activity_Profile extends AppCompatActivity implements View.OnClickL
     }
 
 
-
     private void getPictures() {
         currPics = new ArrayList<>();
         maxPic = 0;
@@ -137,8 +140,11 @@ public class Activity_Profile extends AppCompatActivity implements View.OnClickL
         for(int i=0; i<6; i++){
             if(pictures.get(i) != null)newCount++;
         }
-        System.out.println(newCount);
-        iniView(newCount);
+
+        if(newCount == 0){
+            selection1.setVisibility(View.VISIBLE);
+            selection1.setBackground(getResources().getDrawable(R.drawable.picselectionfill));
+        } else iniView(newCount);
 
         for(int i=0; i<6; i++){
             if(pictures.get(i) != null){
@@ -160,9 +166,6 @@ public class Activity_Profile extends AppCompatActivity implements View.OnClickL
         maxPic = counter-1;
         maxPicPrint = maxPic +1;
 
-        String text = currentPic+1 + "/" + maxPicPrint;
-        if(noPic) picNumber.setText("1/1");
-        else picNumber.setText(text);
 
     }
 
@@ -270,7 +273,7 @@ public class Activity_Profile extends AppCompatActivity implements View.OnClickL
     @Override
     public void onClick(View v) {
         if(v == backBtn){
-          finish();
+            finish();
         } else if(v == accept){
             // hvis man accepterer en person til et event
             Intent i = getIntent();
@@ -360,9 +363,8 @@ public class Activity_Profile extends AppCompatActivity implements View.OnClickL
                             .into(pb);
 
                     currentPic = currentPic + 1;
-                    String text = currentPic + 1 + "/" + maxPicPrint;
                     updateViewRight(currentPic);
-                    picNumber.setText(text);
+
                 }
             }
             else if (v == left){
@@ -375,18 +377,21 @@ public class Activity_Profile extends AppCompatActivity implements View.OnClickL
                             .placeholder(R.drawable.load2)
                             .into(pb);
 
-                    String text = currentPic + "/" + maxPicPrint;
-                    picNumber.setText(text);
                     updateViewLeft(currentPic);
                     currentPic = currentPic - 1;
                 }
-            } else if (v == editBtn || v == settingBtn){
-
-                Intent i = new Intent(this, Activity_U_Settings.class);
-                if(v == editBtn) i.putExtra("selection", 1);
-                else i.putExtra("selection", 2);
-                startActivity(i);
             }
+        }
+        if (v == editBtn || v == settingBtn){
+            Intent i = new Intent(this, Activity_U_Settings.class);
+            i.putExtra("selection", 1);
+            startActivity(i);
+        }
+        if(v == settingBtn){
+            Intent i = new Intent(this, Activity_U_Settings.class);
+            i.putExtra("selection", 2);
+            startActivity(i);
+
         }
     }
 }
