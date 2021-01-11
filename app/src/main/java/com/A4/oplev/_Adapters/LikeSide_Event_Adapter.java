@@ -1,6 +1,7 @@
 package com.A4.oplev._Adapters;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -64,6 +65,7 @@ public class LikeSide_Event_Adapter extends ArrayAdapter<String> {
 
         ImageView profilePic2 = listItem.findViewById(R.id.beskeder_event_lilleprofilbillede2);
         if (eventApplicantPic.get(position).equals("")){
+
             profilePic2.setImageResource(R.drawable.question);
         }
         else {
@@ -84,7 +86,6 @@ public class LikeSide_Event_Adapter extends ArrayAdapter<String> {
 
         TextView date = listItem.findViewById(R.id.own_event_beskeder_events_dato);
         date.setText("");
-
 
 
         return listItem;

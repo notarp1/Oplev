@@ -2,6 +2,7 @@ package com.A4.oplev._Adapters;
 
 import android.content.Context;
 import android.os.Build;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +13,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
+import androidx.cardview.widget.CardView;
 
 import com.A4.oplev.R;
 import com.squareup.picasso.Picasso;
@@ -24,7 +26,7 @@ public class OwnEvents_Adapter extends ArrayAdapter<String> {
     private ArrayList<String> eventHeaders, eventEventPic, eventApplicantPic, eventOwnerPic, eventFirstApplicants;
 
     public OwnEvents_Adapter(@NonNull Context context, @NonNull ArrayList<String> eventEventPic, @NonNull ArrayList<String> eventHeaders, @NonNull ArrayList<String> eventOwnerPic, @NonNull ArrayList<String> eventFirstApplicants, @NonNull ArrayList<String> eventApplicantPic, @NonNull ArrayList<Integer> eventApplicantsSize) {
-        super(context, 0 , eventHeaders);
+        super(context, 0, eventHeaders);
         this.mContext = context;
         this.eventHeaders = eventHeaders;
         this.eventApplicantsSize = eventApplicantsSize;
@@ -32,31 +34,49 @@ public class OwnEvents_Adapter extends ArrayAdapter<String> {
         this.eventEventPic = eventEventPic;
         this.eventOwnerPic = eventOwnerPic;
         this.eventFirstApplicants = eventFirstApplicants;
+        Log.d("eventSize test6.1", "Goddag");
     }
 
-    @NonNull
     @Override
-    public View getView(int position, @Nullable View convertView, ViewGroup parent) {
-        View listItem = convertView;
-        if(listItem == null)
-            // Vi inflater det relative layout som vi har lavet i xml filen
-            listItem = LayoutInflater.from(mContext).inflate(R.layout.besked_liste_event_element,parent,false);
+    public int getViewTypeCount() {
+        return getCount();
+    }
 
-        ImageView eventPic = listItem.findViewById(R.id.event_picture);
+    public View getView(int position, @Nullable View convertView, ViewGroup parent) {
+
+        Log.d("Counter", getViewTypeCount() + "" + eventApplicantsSize.size() + position);
+
+        Log.d("eventSize test6.2", "Goddag");
+        View listItem = convertView;
+        if (listItem == null) {
+            Log.d("eventSize test6.3", "Goddag");
+            // Vi inflater det relative layout som vi har lavet i xml filen
+            listItem = LayoutInflater.from(mContext).inflate(R.layout.u_settings_event_element, parent, false);
+        }
+
+        ImageView eventPic = listItem.findViewById(R.id.own_event_picture);
         Picasso.get().load(eventEventPic.get(position))
-                .resize(mContext.getDisplay().getWidth(), mContext.getDisplay().getHeight()/2 + 200)
+                .resize(mContext.getDisplay().getWidth(), mContext.getDisplay().getHeight() / 2 + 200)
                 .centerCrop()
                 .placeholder(R.drawable.load2)
                 .error(R.drawable.question)
                 .into(eventPic);
 
 
-        ImageView profilePic1 = listItem.findViewById(R.id.beskeder_event_lilleprofilbillede1);
-        if (eventOwnerPic.get(position).equals("")){
-            profilePic1.setImageResource(R.drawable.question);
+        //log.d("eventSize test4", eventApplicantsSize.toString());
+        ImageView profilePic1 = listItem.findViewById(R.id.own_event_anmodning1_pic);
+        CardView profileHolder1 =  listItem.findViewById(R.id.own_event_anmodning1_holder);
+        TextView numberOfApplciants = listItem.findViewById(R.id.own_event_antal_anmodning);
+
+        if (eventFirstApplicants.get(position).equals("")){
+            numberOfApplciants.setText("");
+            profilePic1.setVisibility(View.GONE);
+            profileHolder1.setVisibility(View.GONE);
         }
         else {
-            Picasso.get().load(eventOwnerPic.get(position))
+            profilePic1.setVisibility(View.VISIBLE);
+            profileHolder1.setVisibility(View.VISIBLE);
+            Picasso.get().load(eventApplicantPic.get(position))
                     .resize(mContext.getDisplay().getWidth(), mContext.getDisplay().getHeight() / 2 + 200)
                     .centerCrop()
                     .placeholder(R.drawable.load2)
@@ -64,32 +84,38 @@ public class OwnEvents_Adapter extends ArrayAdapter<String> {
                     .into(profilePic1);
         }
 
-        ImageView profilePic2 = listItem.findViewById(R.id.beskeder_event_lilleprofilbillede2);
-        if (eventApplicantPic.get(position).equals("")){
-            profilePic2.setImageResource(R.drawable.question);
-        }
-        else {
-            Picasso.get().load(eventApplicantPic.get(position))
-                    .resize(mContext.getDisplay().getWidth(), mContext.getDisplay().getHeight() / 2 + 200)
-                    .centerCrop()
-                    .placeholder(R.drawable.load2)
-                    .error(R.drawable.question)
-                    .into(profilePic2);
+        ImageView profilePic2 = listItem.findViewById(R.id.own_event_anmodning2_pic);
+        CardView profilePic2Holder = (CardView) listItem.findViewById(R.id.own_event_anmodning2_holder);
+
+
+        if (eventApplicantsSize.get(position)==1){
+            numberOfApplciants.setText(" 1 anmodning");
+            profilePic2.setVisibility(View.GONE);
+            profilePic2Holder.setVisibility(View.GONE);
         }
 
-        // Sætter overskriften for eventet
-        TextView header = listItem.findViewById(R.id.beskeder_event_overskrift);
-        header.setText(eventHeaders.get(position));
-
-        TextView numberOfAppliants = listItem.findViewById(R.id.own_event_antal_anmodning);
-        numberOfAppliants.setText(eventApplicantsSize.get(position)+" anmoder(e)");
-
-        TextView date = listItem.findViewById(R.id.own_event_beskeder_events_dato);
-        date.setText("");
+        if (eventApplicantsSize.get(position)<1){
+            profilePic2.setVisibility(View.GONE);
+            profilePic2Holder.setVisibility(View.GONE);
+        }
 
 
+        else if (eventApplicantsSize.get(position)>= 2) {
+            numberOfApplciants.setText(" " + eventApplicantsSize.get(position) + " anmodninger");
+            profilePic2.setVisibility(View.VISIBLE);
+            profilePic2Holder.setVisibility(View.VISIBLE);
 
-        return listItem;
+        }
+
+
+            // Sætter overskriften for eventet
+            TextView header = listItem.findViewById(R.id.own_event_headline);
+            header.setText(eventHeaders.get(position));
+
+            TextView date = listItem.findViewById(R.id.own_event_beskeder_events_dato);
+            date.setText("12/12-2021");
+
+            return listItem;
+        }
+
     }
-
-}

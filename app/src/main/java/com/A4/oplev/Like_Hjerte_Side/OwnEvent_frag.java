@@ -20,6 +20,7 @@ import androidx.fragment.app.Fragment;
 
 import com.A4.oplev.R;
 import com.A4.oplev._Adapters.LikeSide_Event_Adapter;
+import com.A4.oplev._Adapters.OwnEvents_Adapter;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -28,7 +29,6 @@ import java.util.Date;
 
 import Controller.Listeners.OnSwipeTouchListener;
 import Controller.UserController;
-import DAL.Classes.ChatDAO;
 import DAL.Classes.EventDAO;
 import DTO.UserDTO;
 
@@ -45,19 +45,18 @@ public class OwnEvent_frag extends Fragment {
     private Context mContext;
 
     private static ArrayList<View> footerViews = new ArrayList<>();
-    private int listviewPosition = 0;
     boolean eventsReady = false;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater i, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View root = i.inflate(R.layout.likeside_frag, container, false);
+        View root = i.inflate(R.layout.u_settings_events_frag, container, false);
 
         userController = UserController.getInstance();
         userDTO = userController.getCurrUser();
         eventDAO = new EventDAO();
 
-        tilmeldinger_listView = root.findViewById(R.id.beskedListView_tilmeldinger);
+        tilmeldinger_listView = root.findViewById(R.id.own_events_list);
 
         tilmeldinger_listView.setOnTouchListener(new OnSwipeTouchListener(mContext){
             @SuppressLint("ResourceAsColor")
@@ -105,6 +104,7 @@ public class OwnEvent_frag extends Fragment {
                                 eventOwnerPic.add(event.getOwnerPic());
                                 eventEventPic.add(event.getEventPic());
                                 eventFirstApplicants.add(firstApplicant);
+                                Log.d("eventSize test1",  eventApplicantsSize.toString());
                                 eventEventID.add(event.getEventId());
                                 eventParticipant.add(event.getParticipant());
                                 // hvis det er den sidste event OG vi ikke henter noget fra databasen så kan vi køre den her kode
@@ -122,6 +122,7 @@ public class OwnEvent_frag extends Fragment {
                                 userController.getUser(user -> {
                                     eventApplicantPic.add(user.getUserPicture());
                                     eventApplicantsSize.add(event.getApplicants().size());
+                                    Log.d("eventSize test2",  eventApplicantsSize.toString());
                                     eventHeaders.add(event.getTitle());
                                     eventOwnerPic.add(event.getOwnerPic());
                                     eventEventPic.add(event.getEventPic());
@@ -135,7 +136,7 @@ public class OwnEvent_frag extends Fragment {
                                         eventsReady = true;
                                         // hvis chats er færdige så opsæt listview og listeners
                                         setListView_applicants(eventEventPic, eventHeaders, eventOwnerPic, eventFirstApplicants, eventApplicantPic, eventApplicantsSize);
-                                            //setChangeListener_tilmeldinger();
+                                        //setChangeListener_tilmeldinger();
                                     }
                                 }, event.getApplicants().get(0));
                             }
@@ -165,7 +166,9 @@ public class OwnEvent_frag extends Fragment {
                 this.tempEventID = tempEventID;
                 this.tempFirstApplicant = tempEventFirstApplicants;
 
-                LikeSide_Event_Adapter eventAdapter = new LikeSide_Event_Adapter(mContext, tempEventPic, tempEventHeaders, tempEventOwnerPic, tempEventFirstApplicants, tempEventApplicantPic, tempEventApplicantsSize);
+                Log.d("eventSize test3",  tempEventApplicantsSize.toString());
+
+                OwnEvents_Adapter eventAdapter = new OwnEvents_Adapter(mContext, tempEventPic, tempEventHeaders, tempEventOwnerPic, tempEventFirstApplicants, tempEventApplicantPic, tempEventApplicantsSize);
                 tilmeldinger_listView.setAdapter(eventAdapter);
             }
         }
