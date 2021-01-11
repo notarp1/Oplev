@@ -20,6 +20,8 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+
+import com.A4.oplev.Activity_Profile;
 import com.A4.oplev.R;
 import java.util.ArrayList;
 import Controller.UserController;
@@ -131,6 +133,7 @@ public class U_Settings_Edit extends Fragment implements View.OnClickListener, V
         if(userController.isSafe()) {
             if (v == back) {
                 accept.setVisibility(View.INVISIBLE);
+
                 getActivity().finish();
             } else if (v == accept) {
                 userController.updateUserAndGUI(this);

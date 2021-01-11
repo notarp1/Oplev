@@ -73,6 +73,7 @@
                     android:background="@drawable/selection"
                     android:gravity="center"
                     android:text="1/4"
+                    android:visibility="invisible"
                     android:textColor="#A4E8E0"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="@+id/view" />
@@ -310,6 +311,7 @@
                 </LinearLayout>
 
                 <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/constrain_edit"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1">
