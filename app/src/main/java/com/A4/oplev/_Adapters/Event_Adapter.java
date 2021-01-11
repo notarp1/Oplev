@@ -2,6 +2,8 @@ package com.A4.oplev._Adapters;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,14 +18,17 @@ import com.A4.oplev.Activity_Event;
 import com.A4.oplev.Activity_Profile;
 import com.A4.oplev.R;
 import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Target;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import Controller.PictureGetter;
 import Controller.UserController;
 import DAL.Classes.EventDAO;
 import DAL.Classes.UserDAO;
 import DAL.Interfaces.CallBackEventList;
+import DAL.Interfaces.CallbackBitmap;
 import DAL.Interfaces.CallbackEvent;
 import DAL.Interfaces.CallbackUser;
 import DAL.Interfaces.IEventDAO;
@@ -41,6 +46,10 @@ public class Event_Adapter extends RecyclerView.Adapter<Event_Adapter.ViewHolder
     IEventDAO dataA;
     int height;
     int width;
+    Bitmap current_eventImg, left_eventImg, right_eventImg;
+    int lastpos = 0;
+    boolean start = true;
+    PictureGetter pictureGetter = new PictureGetter();
 
     Boolean dataChanged = false;
     Context ctx;
@@ -64,6 +73,7 @@ public class Event_Adapter extends RecyclerView.Adapter<Event_Adapter.ViewHolder
         this.height = height;
         this.width = width;
         this.eventListId = ids;
+
     }
 
     public List<String> getIds(){
@@ -73,6 +83,7 @@ public class Event_Adapter extends RecyclerView.Adapter<Event_Adapter.ViewHolder
     public void refreshData(List<String> ids) {
         this.eventListId = ids;
         this.dataChanged = true;
+
     }
     public Boolean getDataChanged(){
         return dataChanged;
@@ -107,15 +118,37 @@ public class Event_Adapter extends RecyclerView.Adapter<Event_Adapter.ViewHolder
 
         // her skal dataen sættes in i holderen, der skal gøres brug af en billed controller til at håndtere billder.
 
+
+
         dataA.getEvent(new CallbackEvent() {
             @Override
             public void onCallback(EventDTO eventDTO) {
+
+                mainPic.setImageBitmap(current_eventImg);
+
+
                 userDAO.getUser(new CallbackUser() {
                     @Override
                     public void onCallback(UserDTO user) {
                         System.out.println(eventDTO.getOwnerId() + "HAHA2");
                         withWhoText.setText(user.getfName());
                         headlineText.setText(eventDTO.getTitle());
+
+
+                        if(position > lastpos){
+                            right(position);
+                        }
+                        if(current_eventImg != null) {
+                            mainPic.setImageBitmap(current_eventImg);
+                        }else{
+                            Picasso.get().load(eventDTO.getEventPic())
+                                    .resize(width / 8, height / 16)
+                                    .centerCrop()
+                                    .placeholder(R.drawable.)
+                                    .error(R.drawable.question)
+                                    .transform(new RoundedTransformation(90, 0))
+                                    .into(mainPic);
+                        }
 
                         Picasso.get().load(user.getUserPicture())
                                 .resize(width / 8, height / 16)
@@ -125,20 +158,33 @@ public class Event_Adapter extends RecyclerView.Adapter<Event_Adapter.ViewHolder
                                 .transform(new RoundedTransformation(90, 0))
                                 .into(profilePic);
 
-                        Picasso.get().load(eventDTO.getEventPic())
-                                .resize(width, height)
-                                .centerCrop()
-                                .placeholder(R.drawable.load2)
-                                .error(R.drawable.question)
-                                .into(mainPic);
-
                                    }
                                }, eventDTO.getOwnerId());
                            }
                        }
                 ,eventListId.get(position));
+        lastpos = position;
+    }
+
+    public void right(int pos){
+        left_eventImg = current_eventImg;
+        current_eventImg = right_eventImg;
+
+        dataA.getEvent(new CallbackEvent() {
+            @Override
+            public void onCallback(EventDTO event) {
+                pictureGetter.getPic(new CallbackBitmap() {
+                    @Override
+                    public void onCallBack(Bitmap bitmap) {
+                        right_eventImg = bitmap;
+                    }
+                },event.getEventPic());
+            }
+        }, eventListId.get(pos +1));
+
 
     }
+
 
     @Override
     public int getItemCount() {

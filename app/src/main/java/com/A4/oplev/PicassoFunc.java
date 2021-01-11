@@ -15,24 +15,17 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 import Controller.UserController;
+import DAL.Interfaces.CallbackBitmap;
+
 
 public class PicassoFunc {
     private static PicassoFunc instance = null;
     UserController userController;
     ArrayList<String> pictures;
-
-    private PicassoFunc(){
-
-        this.instance = this;
-
-    }
-    public static PicassoFunc getInstance(){
-        if (instance == null) instance = new PicassoFunc();
-        return instance;
-    }
-
+    String TAG = "PicassoFunc";
 
     Target picassoImageTarget(Context context, final String imageDir, final String imageName) {
         Log.d("picassoImageTarget", " picassoImageTarget");

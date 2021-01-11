@@ -8,6 +8,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.DisplayMetrics;
@@ -17,6 +19,7 @@ import android.widget.ImageView;
 
 import com.A4.oplev.Activity_NoInstance;
 import com.A4.oplev.Like_Hjerte_Side.Activity_Likeside;
+import com.A4.oplev.PicassoFunc;
 import com.A4.oplev.R;
 import com.A4.oplev.SearchFilter.Activity_Search_Filter;
 import com.A4.oplev.UserSettings.Activity_U_Settings;
@@ -25,11 +28,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.A4.oplev._Adapters.Event_Adapter;
+import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Target;
 
 //import DAL.DBAccess;
 import DAL.Classes.EventDAO;
 import DAL.Interfaces.CallBackEventList;
 import DAL.Interfaces.CallBackList;
+import DAL.Interfaces.CallbackBitmap;
 import DAL.Interfaces.CallbackEvent;
 import DTO.EventDTO;
 import swipeable.com.layoutmanager.OnItemSwiped;
@@ -64,13 +70,9 @@ public class Activity_Main extends AppCompatActivity implements View.OnClickList
 
         rcEvent = findViewById(R.id.eventRecycleView);
 
-
-
         EventDAO dataA = new EventDAO();
 
-
         dataA.getEventIDs(new CallBackList() {
-            @Override
             public void onCallback(List<String> list) {
                 eventIni(list);
             }
@@ -133,7 +135,6 @@ public class Activity_Main extends AppCompatActivity implements View.OnClickList
         Event_Adapter eventA = Event_Adapter.getInstance();
         if(eventA != null) {
             if (eventA.getDataChanged()) {
-                eventIni(eventA.getIds());
                 eventA.setDataChanged(false);
             }
         }
