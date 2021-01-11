@@ -14,6 +14,8 @@ import android.widget.TextView;
 
 import com.A4.oplev.Like_Hjerte_Side.Activity_Likeside;
 import com.A4.oplev.Like_Hjerte_Side.LikesideList_frag;
+import com.A4.oplev.SearchFilter.Activity_Search_Filter;
+import com.A4.oplev.UserSettings.Activity_U_Settings;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -34,9 +36,9 @@ public class Activity_Profile extends AppCompatActivity implements View.OnClickL
     RecyclerView pbtest;
     UserController userController;
     ArrayList<String> pictures, currPics;
-    View left, right;
+    View left, right, editBtn, backBtn, settingBtn, selection1, selection2, selection3, selection4, selection5, selection6;
     boolean noPic;
-    int height, width, currentPic, maxPic, minPic, maxPicPrint;
+    int height, width, currentPic, maxPic, minPic, maxPicPrint, currentSelection;
 
 
 
@@ -62,17 +64,28 @@ public class Activity_Profile extends AppCompatActivity implements View.OnClickL
         picNumber = findViewById(R.id.text_curPic);
         left = findViewById(R.id.left_but);
         right = findViewById(R.id.right_but);
-
+        editBtn = findViewById(R.id.on_edit);
         reject = findViewById(R.id.btn_reject);
         accept = findViewById(R.id.btn_accept);
         informationText = findViewById(R.id.text_confirmation);
         confirmationBox = findViewById(R.id.confirmationBox);
+        backBtn = findViewById(R.id.btn_back_profile);
+        settingBtn = findViewById(R.id.settings_btn_pro);
+        selection1 = findViewById(R.id.selection1);
+        selection2 = findViewById(R.id.selection2);
+        selection3 = findViewById(R.id.selection3);
+        selection4 = findViewById(R.id.selection4);
+        selection5 = findViewById(R.id.selection5);
+        selection6 = findViewById(R.id.selection6);
         confirmationBox.setVisibility(View.GONE);
 
         left.setOnClickListener(this);
         right.setOnClickListener(this);
         accept.setOnClickListener(this);
         reject.setOnClickListener(this);
+        editBtn.setOnClickListener(this);
+        backBtn.setOnClickListener(this);
+        settingBtn.setOnClickListener(this);
 
 
         DisplayMetrics displayMetrics = new DisplayMetrics();
@@ -117,8 +130,16 @@ public class Activity_Profile extends AppCompatActivity implements View.OnClickL
         currentPic = 0;
         int flag = 0;
         noPic = true;
+        int newCount = 0;
 
         int counter = 0;
+
+        for(int i=0; i<6; i++){
+            if(pictures.get(i) != null)newCount++;
+        }
+        System.out.println(newCount);
+        iniView(newCount);
+
         for(int i=0; i<6; i++){
             if(pictures.get(i) != null){
                 if(flag == 0){
@@ -145,6 +166,98 @@ public class Activity_Profile extends AppCompatActivity implements View.OnClickL
 
     }
 
+    private void iniView(int count){
+
+        for(int i = 0; i<count; i++){
+
+            switch (i){
+                case 0:
+                    selection1.setVisibility(View.VISIBLE);
+                    break;
+                case 1:
+                    selection2.setVisibility(View.VISIBLE);
+                    break;
+                case 2:
+                    selection3.setVisibility(View.VISIBLE);
+                    break;
+                case 3:
+                    selection4.setVisibility(View.VISIBLE);
+
+                    break;
+                case 4:
+                    selection5.setVisibility(View.VISIBLE);
+                    break;
+                case 5:
+                    selection6.setVisibility(View.VISIBLE);
+                    break;
+            }
+        }
+        currentSelection = 0;
+        selection1.setBackground(getResources().getDrawable(R.drawable.picselectionfill));
+    }
+
+    private void updateViewRight(int currentPic){
+
+        switch (currentPic){
+            case 0:
+              //  selection1.setBackground(getResources().getDrawable(R.drawable.picselection));
+             //   selection2.setBackground(getResources().getDrawable(R.drawable.picselectionfill));
+                break;
+            case 1:
+                selection1.setBackground(getResources().getDrawable(R.drawable.picselection));
+                selection2.setBackground(getResources().getDrawable(R.drawable.picselectionfill));
+                break;
+            case 2:
+                selection2.setBackground(getResources().getDrawable(R.drawable.picselection));
+                selection3.setBackground(getResources().getDrawable(R.drawable.picselectionfill));
+                break;
+            case 3:
+                selection3.setBackground(getResources().getDrawable(R.drawable.picselection));
+                selection4.setBackground(getResources().getDrawable(R.drawable.picselectionfill));
+                break;
+            case 4:
+                selection4.setBackground(getResources().getDrawable(R.drawable.picselection));
+                selection5.setBackground(getResources().getDrawable(R.drawable.picselectionfill));
+                break;
+            case 5:
+                selection5.setBackground(getResources().getDrawable(R.drawable.picselection));
+                selection6.setBackground(getResources().getDrawable(R.drawable.picselectionfill));
+                break;
+        }
+
+    }
+
+    private void updateViewLeft(int currentPic){
+
+        switch (currentPic){
+            case 0:
+                //  selection1.setBackground(getResources().getDrawable(R.drawable.picselection));
+                //   selection2.setBackground(getResources().getDrawable(R.drawable.picselectionfill));
+                break;
+            case 1:
+                selection2.setBackground(getResources().getDrawable(R.drawable.picselection));
+                selection1.setBackground(getResources().getDrawable(R.drawable.picselectionfill));
+                break;
+            case 2:
+                selection3.setBackground(getResources().getDrawable(R.drawable.picselection));
+                selection2.setBackground(getResources().getDrawable(R.drawable.picselectionfill));
+                break;
+            case 3:
+                selection4.setBackground(getResources().getDrawable(R.drawable.picselection));
+                selection3.setBackground(getResources().getDrawable(R.drawable.picselectionfill));
+                break;
+            case 4:
+                selection5.setBackground(getResources().getDrawable(R.drawable.picselection));
+                selection4.setBackground(getResources().getDrawable(R.drawable.picselectionfill));
+                break;
+            case 5:
+                selection6.setBackground(getResources().getDrawable(R.drawable.picselection));
+                selection5.setBackground(getResources().getDrawable(R.drawable.picselectionfill));
+                break;
+        }
+
+    }
+
     @Override
     public void onStart() {
         super.onStart();
@@ -156,7 +269,9 @@ public class Activity_Profile extends AppCompatActivity implements View.OnClickL
 
     @Override
     public void onClick(View v) {
-        if(v == accept){
+        if(v == backBtn){
+          finish();
+        } else if(v == accept){
             Intent i = getIntent();
             UserDTO user = (UserDTO) i.getSerializableExtra("user");
             String header = i.getStringExtra("header");
@@ -225,6 +340,7 @@ public class Activity_Profile extends AppCompatActivity implements View.OnClickL
 
                     currentPic = currentPic + 1;
                     String text = currentPic + 1 + "/" + maxPicPrint;
+                    updateViewRight(currentPic);
                     picNumber.setText(text);
                 }
             }
@@ -240,8 +356,15 @@ public class Activity_Profile extends AppCompatActivity implements View.OnClickL
 
                     String text = currentPic + "/" + maxPicPrint;
                     picNumber.setText(text);
+                    updateViewLeft(currentPic);
                     currentPic = currentPic - 1;
                 }
+            } else if (v == editBtn || v == settingBtn){
+
+                Intent i = new Intent(this, Activity_U_Settings.class);
+                if(v == editBtn) i.putExtra("selection", 1);
+                else i.putExtra("selection", 2);
+                startActivity(i);
             }
         }
     }

@@ -16,6 +16,7 @@ import android.view.View;
 import android.widget.ImageView;
 
 import com.A4.oplev.Activity_NoInstance;
+import com.A4.oplev.Activity_Profile;
 import com.A4.oplev.Like_Hjerte_Side.Activity_Likeside;
 import com.A4.oplev.R;
 import com.A4.oplev.SearchFilter.Activity_Search_Filter;
@@ -124,7 +125,7 @@ public class Activity_Main extends AppCompatActivity implements View.OnClickList
 
         } else if(v == user){
 
-            Intent i = new Intent(this, Activity_U_Settings.class);
+            Intent i = new Intent(this, Activity_Profile.class);
             startActivity(i);
 
         }

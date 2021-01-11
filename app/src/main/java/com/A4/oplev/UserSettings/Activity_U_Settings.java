@@ -18,6 +18,7 @@ import com.A4.oplev.UserSettings.U_Settings_Main;
 public class Activity_U_Settings extends AppCompatActivity implements View.OnClickListener{
     ImageView back, accept;
     static TextView title;
+    Fragment fragment;
 
 
     public void onCreate(Bundle saveInstanceState) {
@@ -31,12 +32,15 @@ public class Activity_U_Settings extends AppCompatActivity implements View.OnCli
         back.setOnClickListener(this);
 
         Intent intent = getIntent();
+        Intent myIntent = getIntent();
 
+        int selection = myIntent.getIntExtra("selection", 1);
 
         Bundle bundle = new Bundle();
         bundle.putSerializable("user", intent.getSerializableExtra("user"));
 
-        Fragment fragment = new U_Settings_Main();
+        if(selection == 1)fragment = new U_Settings_Edit();
+        else if(selection == 2) fragment = new U_Settings_Options();
         fragment.setArguments(bundle);
 
         getSupportFragmentManager().beginTransaction().replace(R.id.mainFragmentBox, fragment, "uSettingMainBox")

@@ -17,8 +17,11 @@ import com.A4.oplev.Activity_Profile;
 import com.A4.oplev.R;
 import com.squareup.picasso.Picasso;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.TimeZone;
 
 import Controller.UserController;
 import DAL.Classes.EventDAO;
@@ -138,6 +141,7 @@ public class Event_Adapter extends RecyclerView.Adapter<Event_Adapter.ViewHolder
         ImageView mainPic = holder.mainPic;
         TextView withWhoText = holder.withWhoText;
         TextView headlineText = holder.headlineText;
+        TextView headlineDate = holder.headlineDate;
 
 
         // her skal dataen sættes in i holderen, der skal gøres brug af en billed controller til at håndtere billder.
@@ -148,10 +152,12 @@ public class Event_Adapter extends RecyclerView.Adapter<Event_Adapter.ViewHolder
                 userDAO.getUser(new CallbackUser() {
                     @Override
                     public void onCallback(UserDTO user) {
-                        System.out.println(eventDTO.getOwnerId() + "HAHA2");
+
+                        DateFormat format1 = new SimpleDateFormat("dd-MM-yyyy");
+                        format1.setTimeZone(TimeZone.getTimeZone("GMT+1"));
                         withWhoText.setText(user.getfName());
                         headlineText.setText(eventDTO.getTitle());
-
+                        headlineDate.setText(format1.format(eventDTO.getDate()));
                         Picasso.get().load(user.getUserPicture())
                                 .resize(width / 8, height / 16)
                                 .centerCrop()
@@ -197,7 +203,7 @@ public class Event_Adapter extends RecyclerView.Adapter<Event_Adapter.ViewHolder
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         public ImageView mainPic, profilePic;
-        public TextView headlineText, withWhoText;
+        public TextView headlineText, withWhoText, headlineDate;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -205,6 +211,7 @@ public class Event_Adapter extends RecyclerView.Adapter<Event_Adapter.ViewHolder
             mainPic = (ImageView) itemView.findViewById(R.id.eventItem_Billede);
             profilePic = (ImageView) itemView.findViewById(R.id.eventItem_pp);
             withWhoText = (TextView) itemView.findViewById(R.id.evntItem_withWho);
+            headlineDate = (TextView) itemView.findViewById(R.id.txt_date);
             headlineText = (TextView) itemView.findViewById(R.id.eventitem_Headline);
             profilePic.setOnClickListener(this);
             mainPic.setOnClickListener(this);

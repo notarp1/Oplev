@@ -85,7 +85,7 @@
                     app:layout_constraintEnd_toStartOf="@+id/right_but"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintVertical_bias="0.0" />
+                    app:layout_constraintVertical_bias="1.0" />
 
                 <View
                     android:id="@+id/right_but"
@@ -97,86 +97,248 @@
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintVertical_bias="0.0" />
 
+                <View
+                    android:id="@+id/btn_back_profile"
+                    android:layout_width="40dp"
+                    android:layout_height="33dp"
+                    android:layout_marginStart="7dp"
+                    android:layout_marginLeft="7dp"
+                    android:layout_marginTop="7dp"
+                    android:background="@drawable/topbar2"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <ImageView
+                    android:id="@+id/imageView5"
+                    android:layout_width="20dp"
+                    android:layout_height="25dp"
+                    app:layout_constraintBottom_toBottomOf="@+id/btn_back_profile"
+                    app:layout_constraintEnd_toEndOf="@+id/btn_back_profile"
+                    app:layout_constraintStart_toStartOf="@+id/btn_back_profile"
+                    app:layout_constraintTop_toTopOf="@+id/btn_back_profile"
+                    app:srcCompat="@drawable/arrowleftblue" />
+
+                <ImageView
+                    android:id="@+id/settings_btn_pro"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginRight="16dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:srcCompat="@drawable/settings" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="5dp"
+                    android:orientation="horizontal"
+                    app:layout_constraintBottom_toBottomOf="@+id/imageView_pb"
+                    app:layout_constraintTop_toBottomOf="@+id/text_information"
+                    tools:layout_editor_absoluteX="-15dp">
+
+                    <View
+                        android:id="@+id/view28"
+                        android:layout_width="10dp"
+                        android:layout_height="wrap_content" />
+
+                    <View
+                        android:id="@+id/selection1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:visibility="invisible"
+                        android:background="@drawable/picselection" />
+
+                    <View
+                        android:id="@+id/view23"
+                        android:layout_width="10dp"
+                        android:layout_height="wrap_content" />
+
+                    <View
+                        android:id="@+id/selection2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:background="@drawable/picselection"
+                        android:visibility="invisible" />
+
+                    <View
+                        android:id="@+id/view24"
+                        android:layout_width="10dp"
+                        android:layout_height="wrap_content" />
+
+                    <View
+                        android:id="@+id/selection3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:visibility="invisible"
+                        android:background="@drawable/picselection" />
+
+                    <View
+                        android:id="@+id/view25"
+                        android:layout_width="10dp"
+                        android:layout_height="wrap_content" />
+
+                    <View
+                        android:id="@+id/selection4"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:visibility="invisible"
+                        android:background="@drawable/picselection" />
+
+                    <View
+                        android:id="@+id/view26"
+                        android:layout_width="10dp"
+                        android:layout_height="wrap_content" />
+
+                    <View
+                        android:id="@+id/selection5"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:visibility="invisible"
+                        android:background="@drawable/picselection" />
+
+                    <View
+                        android:id="@+id/view27"
+                        android:layout_width="10dp"
+                        android:layout_height="wrap_content" />
+
+                    <View
+                        android:id="@+id/selection6"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:visibility="invisible"
+                        android:background="@drawable/picselection" />
+
+                    <View
+                        android:id="@+id/view29"
+                        android:layout_width="10dp"
+                        android:layout_height="wrap_content" />
+                </LinearLayout>
+
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:layout_marginLeft="10dp"
-                android:orientation="vertical">
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
 
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="7dp"
-                    android:orientation="horizontal">
+                    android:layout_marginStart="10dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
 
-                    <ImageView
-                        android:id="@+id/imageView"
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
-                        android:layout_weight="1"
-                        app:srcCompat="@drawable/location" />
-
-                    <TextView
-                        android:id="@+id/text_city"
-                        android:layout_width="match_parent"
+                    <LinearLayout
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="5sp"
-                        android:layout_marginLeft="5sp"
-                        android:text="placering"
-                        android:textColor="#B5DEF6"
-                        android:textSize="18sp" />
+                        android:layout_marginTop="7dp"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:id="@+id/imageView"
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:layout_weight="1"
+                            app:srcCompat="@drawable/location" />
+
+                        <TextView
+                            android:id="@+id/text_city"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="5sp"
+                            android:layout_marginLeft="5sp"
+                            android:text="placering"
+                            android:textColor="#B5DEF6"
+                            android:textSize="18sp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="7dp"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:id="@+id/imageView2"
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:layout_weight="1"
+                            app:srcCompat="@drawable/job" />
+
+                        <TextView
+                            android:id="@+id/text_job"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="5sp"
+                            android:layout_marginLeft="5sp"
+                            android:text="Job"
+                            android:textColor="#B5DEF6"
+                            android:textSize="18sp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="7dp"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:id="@+id/imageView3"
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:layout_weight="1"
+                            app:srcCompat="@drawable/education" />
+
+                        <TextView
+                            android:id="@+id/text_edu"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="5sp"
+                            android:layout_marginLeft="5sp"
+                            android:text="Uddanelse"
+                            android:textColor="#B5DEF6"
+                            android:textSize="18sp" />
+                    </LinearLayout>
                 </LinearLayout>
 
-                <LinearLayout
+                <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="7dp"
-                    android:orientation="horizontal">
+                    android:layout_weight="1">
 
                     <ImageView
-                        android:id="@+id/imageView2"
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
-                        android:layout_weight="1"
-                        app:srcCompat="@drawable/job" />
+                        android:id="@+id/imageView4"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:layout_marginTop="16dp"
+                        android:layout_marginEnd="32dp"
+                        android:layout_marginRight="32dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:srcCompat="@drawable/edit2" />
 
-                    <TextView
-                        android:id="@+id/text_job"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="5sp"
-                        android:layout_marginLeft="5sp"
-                        android:text="Job"
-                        android:textColor="#B5DEF6"
-                        android:textSize="18sp" />
-                </LinearLayout>
+                    <View
+                        android:id="@+id/on_edit"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:layout_marginTop="16dp"
+                        android:layout_marginEnd="32dp"
+                        android:layout_marginRight="32dp"
+                        android:background="@drawable/circle2"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
 
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="7dp"
-                    android:orientation="horizontal">
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
-                    <ImageView
-                        android:id="@+id/imageView3"
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
-                        android:layout_weight="1"
-                        app:srcCompat="@drawable/education" />
-
-                    <TextView
-                        android:id="@+id/text_edu"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="5sp"
-                        android:layout_marginLeft="5sp"
-                        android:text="Uddanelse"
-                        android:textColor="#B5DEF6"
-                        android:textSize="18sp" />
-                </LinearLayout>
             </LinearLayout>
 
             <TextView
