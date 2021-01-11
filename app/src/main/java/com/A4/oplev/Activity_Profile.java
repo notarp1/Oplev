@@ -40,7 +40,7 @@ public class Activity_Profile extends AppCompatActivity implements View.OnClickL
     ConstraintLayout edit;
     View left, right, editBtn, backBtn, settingBtn, selection1, selection2, selection3, selection4, selection5, selection6, currentSelection;
     boolean noPic;
-    int height, width, currentPic, maxPic, minPic, maxPicPrint;
+    int height, width, currentPic, maxPic, minPic, maxPicPrint, j;
 
 
 
@@ -101,7 +101,7 @@ public class Activity_Profile extends AppCompatActivity implements View.OnClickL
         right.setMinimumWidth(width/2);
         left.setMinimumWidth(width/2);
 
-        int j = myIntent.getIntExtra("load", 0);
+        j = myIntent.getIntExtra("load", 0);
         System.out.println(j);
 
 
@@ -128,10 +128,12 @@ public class Activity_Profile extends AppCompatActivity implements View.OnClickL
     @Override
     protected void onResume() {
         super.onResume();
-        currentSelection.setBackground(getResources().getDrawable(R.drawable.picselection));
-        pictures = userController.getUserPictures();
+        if(j == 0) {
+            currentSelection.setBackground(getResources().getDrawable(R.drawable.picselection));
+            pictures = userController.getUserPictures();
 
-        getPictures();
+            getPictures();
+        }
     }
 
     private void getPictures() {
@@ -179,7 +181,7 @@ public class Activity_Profile extends AppCompatActivity implements View.OnClickL
     }
 
     private void iniView(int count){
-
+        //Nulstiller billede visibility
         for(int i = 0; i<6; i++){
 
             switch (i){
@@ -204,6 +206,7 @@ public class Activity_Profile extends AppCompatActivity implements View.OnClickL
                     break;
             }
         }
+        //Opdatere billede visibility
         for(int i = 0; i<count; i++){
 
             switch (i){

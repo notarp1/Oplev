@@ -105,7 +105,7 @@
                     android:layout_marginStart="7dp"
                     android:layout_marginLeft="7dp"
                     android:layout_marginTop="7dp"
-                    android:background="@drawable/topbar2"
+                    android:background="@drawable/topbar3"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 

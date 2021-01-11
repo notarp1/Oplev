@@ -76,6 +76,27 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="@+id/view_e" />
 
+                <View
+                    android:id="@+id/back_btn_event"
+                    android:layout_width="40dp"
+                    android:layout_height="33dp"
+                    android:layout_marginStart="7dp"
+                    android:layout_marginLeft="7dp"
+                    android:layout_marginTop="7dp"
+                    android:background="@drawable/topbar3"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <ImageView
+                    android:id="@+id/imageView6"
+                    android:layout_width="20dp"
+                    android:layout_height="25dp"
+                    app:layout_constraintBottom_toBottomOf="@+id/back_btn_event"
+                    app:layout_constraintEnd_toEndOf="@+id/back_btn_event"
+                    app:layout_constraintStart_toStartOf="@+id/back_btn_event"
+                    app:layout_constraintTop_toTopOf="@+id/back_btn_event"
+                    app:srcCompat="@drawable/arrowleftblue" />
+
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <LinearLayout
@@ -102,7 +123,6 @@
                             android:id="@+id/icon_place_event"
                             android:layout_width="20dp"
                             android:layout_height="20dp"
-                            android:layout_weight="1"
                             app:srcCompat="@drawable/location" />
 
                         <TextView
@@ -179,11 +199,9 @@
                 </LinearLayout>
 
 
-
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1">
+                    android:layout_height="wrap_content">
 
                     <View
                         android:id="@+id/view13"
