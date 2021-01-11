@@ -113,6 +113,7 @@ public class OwnEvents_Adapter extends ArrayAdapter<String> {
             header.setText(eventHeaders.get(position));
 
             TextView date = listItem.findViewById(R.id.own_event_beskeder_events_dato);
+            // Todo - Dato for event skal findes.
             date.setText("12/12-2021");
 
             return listItem;

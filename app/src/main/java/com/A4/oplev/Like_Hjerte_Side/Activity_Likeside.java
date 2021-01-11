@@ -42,15 +42,6 @@ public class Activity_Likeside extends AppCompatActivity implements View.OnClick
         backhjerte.setVisibility(View.INVISIBLE);
         backevents.setVisibility(View.INVISIBLE);
 
-        // Sætter en swipe listener op på skærmen for at kunne swipe til siden
-        getWindow().getDecorView().getRootView().setOnTouchListener(new OnSwipeTouchListener(this){
-            @Override
-            public void onSwipeLeft() {
-                getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.enter_from_right,
-                        R.anim.exit_to_left).replace(R.id.likeside_frameLayout,new HjerteSide_frag())
-                        .commit();
-            }
-        });
 
     }
 
@@ -79,6 +70,8 @@ public class Activity_Likeside extends AppCompatActivity implements View.OnClick
             backbesked.setVisibility(View.INVISIBLE);
             backhjerte.setVisibility(View.INVISIBLE);
             backevents.setVisibility(View.VISIBLE);
+            getSupportFragmentManager().beginTransaction().replace(R.id.likeside_frameLayout,new OwnEvent_frag())
+                    .commit();
         }
         else if (v == tilbage){
             finish();

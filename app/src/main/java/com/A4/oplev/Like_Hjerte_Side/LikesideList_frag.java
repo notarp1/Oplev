@@ -203,6 +203,12 @@ public class LikesideList_frag extends Fragment{
                 getActivity().findViewById(R.id.besked_back).setVisibility(View.INVISIBLE);
                 getActivity().findViewById(R.id.hjerte_back).setVisibility(View.INVISIBLE);
                 getActivity().findViewById(R.id.event_back).setVisibility(View.VISIBLE);
+
+                getFragmentManager().beginTransaction().setCustomAnimations(android.R.anim.slide_in_left,
+                        android.R.anim.slide_out_right).replace(R.id.likeside_frameLayout,new OwnEvent_frag())
+                        .commit();
+
+
             }
         });
 

@@ -118,21 +118,10 @@ public class OwnEvent_frag extends Fragment {
         });
 
         // Todo - Lav slet metode der fjerne det valgte element - og lav/ benyt slet metode fra backend.
-        sletKnap.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
 
-            }
-        });
 
         // todo - Lav rediger metode der virker på det valgte element - og lav/ benyt slet metode fra backend.
 
-        redigerKnap.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
-        });
 
 
 
