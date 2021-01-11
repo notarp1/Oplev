@@ -70,17 +70,41 @@
                     android:layout_marginLeft="16dp"
                     android:layout_marginBottom="6dp"
                     android:text="Søndags-is med Pia, 22"
-                    android:textColor="#FFFFFF"
+                    android:textColor="#A4E8E0"
                     android:textSize="28dp"
                     android:textStyle="bold"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="@+id/view_e" />
+
+                <View
+                    android:id="@+id/back_btn_event"
+                    android:layout_width="45dp"
+                    android:layout_height="35dp"
+                    android:layout_marginStart="7dp"
+                    android:layout_marginLeft="7dp"
+                    android:layout_marginTop="16dp"
+                    android:background="@drawable/topbar3"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <ImageView
+                    android:id="@+id/imageView6"
+                    android:layout_width="20dp"
+                    android:layout_height="25dp"
+                    android:layout_marginEnd="2dp"
+                    android:layout_marginRight="2dp"
+                    app:layout_constraintBottom_toBottomOf="@+id/back_btn_event"
+                    app:layout_constraintEnd_toEndOf="@+id/back_btn_event"
+                    app:layout_constraintStart_toStartOf="@+id/back_btn_event"
+                    app:layout_constraintTop_toTopOf="@+id/back_btn_event"
+                    app:srcCompat="@drawable/arrowleftblue" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
                 android:orientation="horizontal">
 
                 <LinearLayout
@@ -102,7 +126,6 @@
                             android:id="@+id/icon_place_event"
                             android:layout_width="20dp"
                             android:layout_height="20dp"
-                            android:layout_weight="1"
                             app:srcCompat="@drawable/location" />
 
                         <TextView
@@ -112,9 +135,9 @@
                             android:layout_height="wrap_content"
                             android:layout_marginStart="5sp"
                             android:layout_marginLeft="5sp"
-                            android:layout_marginTop="3dp"
                             android:text="Placering"
-                            android:textColor="#FFFFFF" />
+                            android:textColor="#B5DEF6"
+                            android:textSize="18sp" />
 
                     </LinearLayout>
 
@@ -138,7 +161,8 @@
                             android:layout_marginStart="5sp"
                             android:layout_marginLeft="5sp"
                             android:text="Dato"
-                            android:textColor="#FFFFFF" />
+                            android:textColor="#B5DEF6"
+                            android:textSize="18sp" />
 
                     </LinearLayout>
 
@@ -161,50 +185,83 @@
                             android:layout_height="wrap_content"
                             android:layout_marginStart="5sp"
                             android:layout_marginLeft="5sp"
-                            android:layout_marginTop="3dp"
                             android:text="Pris"
-                            android:textColor="#FFFFFF" />
+                            android:textColor="#B5DEF6"
+                            android:textSize="18sp" />
 
                     </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/text_e_oplevelse"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:text="Oplevelsen"
+                        android:textColor="#A4E8E0"
+                        android:textSize="24sp" />
                 </LinearLayout>
 
-                <androidx.cardview.widget.CardView
-                    android:id="@+id/HOLDERprofile_pic"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginTop="3dp"
-                    android:layout_marginEnd="20dp"
-                    android:layout_marginRight="20dp"
-                    app:cardCornerRadius="100dp">
 
-                    <ImageView
-                        android:id="@+id/event_profile_picture"
-                        android:layout_width="110dp"
-                        android:layout_height="110dp"
-                        android:scaleType="centerCrop"
-                        app:srcCompat="@drawable/_profiltest" />
-                </androidx.cardview.widget.CardView>
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:id="@+id/event_person_name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Ida, 22"
+                        android:textColor="#A4E8E0"
+                        android:textStyle="bold"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="@+id/view13"
+                        app:layout_constraintStart_toStartOf="@+id/view13" />
+
+                    <View
+                        android:id="@+id/view13"
+                        android:layout_width="112dp"
+                        android:layout_height="112dp"
+
+                        android:layout_marginTop="5dp"
+                        android:layout_marginEnd="20dp"
+
+                        android:layout_marginRight="20dp"
+                        android:layout_marginBottom="24dp"
+                        android:background="@drawable/circle1"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/HOLDERprofile_pic"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center|top"
+
+                        android:layout_marginTop="11dp"
+                        android:layout_marginEnd="26dp"
+                        android:layout_marginRight="26dp"
+                        app:cardCornerRadius="100dp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent">
+
+                        <ImageView
+                            android:id="@+id/event_profile_picture"
+                            android:layout_width="100dp"
+                            android:layout_height="100dp"
+                            android:scaleType="centerCrop"
+                            app:srcCompat="@drawable/_profiltest" />
+                    </androidx.cardview.widget.CardView>
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
             </LinearLayout>
-
-            <TextView
-                android:id="@+id/text_e_oplevelse"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="9dp"
-                android:layout_marginLeft="9dp"
-                android:text="Oplevelsen"
-                android:textColor="#59C3FF"
-                android:textSize="20sp"
-                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/text_e_about"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:layout_marginLeft="10dp"
+                android:layout_marginStart="12dp"
+                android:layout_marginLeft="12dp"
                 android:text="Vi skal spise is"
                 android:textColor="#B5DEF6"
                 android:textSize="16sp" />
@@ -217,9 +274,8 @@
                 android:layout_marginLeft="9dp"
                 android:layout_marginTop="20dp"
                 android:text="Om Pia"
-                android:textColor="#59C3FF"
-                android:textSize="20sp"
-                android:textStyle="bold" />
+                android:textColor="#A4E8E0"
+                android:textSize="24sp" />
 
             <TextView
                 android:id="@+id/text_u_about"

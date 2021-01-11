@@ -120,7 +120,7 @@ public class ChatList_Adapter extends ArrayAdapter<String> {
             int width = mContext.getResources().getDisplayMetrics().widthPixels;
             RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
             lp.setMargins(width/50, 0, width/4, width/20);
-            listItem.findViewById(R.id.chat_background_pic).setBackgroundResource(R.drawable.beskedbackground3);
+            listItem.findViewById(R.id.chat_background_pic).setBackgroundResource(R.drawable.beskedbackground);
         }
         else if (!dto.getSender().get(position).equals(thisUser)){
             // Vi finder skærmstørrelsen af telefonen så vi kan sætte layoutet ens for alle telefoner
@@ -133,7 +133,7 @@ public class ChatList_Adapter extends ArrayAdapter<String> {
                 besked.setLayoutParams(new RelativeLayout.LayoutParams(lp));
                 // Hvis beskeden ikke var et billede skal vi sætte baggrundens farve og tekstens farve til noget nyt
                 if (!isPic) {
-                    listItem.findViewById(R.id.chat_background_pic).setBackgroundResource(R.drawable.beskedbackground2);
+                    listItem.findViewById(R.id.chat_background_pic).setBackgroundResource(R.drawable.beskedbackground5);
                 }
                 else {
                     listItem.findViewById(R.id.chat_background_pic).setVisibility(View.INVISIBLE);

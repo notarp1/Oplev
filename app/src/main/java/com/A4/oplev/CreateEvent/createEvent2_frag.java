@@ -4,6 +4,7 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,9 +16,11 @@ import android.widget.Toast;
 import com.A4.oplev.R;
 
 import Controller.EventController;
+import DTO.EventDTO;
 import io.apptik.widget.MultiSlider;
 
 public class createEvent2_frag extends Fragment implements View.OnClickListener {
+    private static final String TAG = "createEvent2_frag";
     //topbar element
     TextView topbar_txt;
     //frag element
@@ -25,8 +28,8 @@ public class createEvent2_frag extends Fragment implements View.OnClickListener 
     Switch femaleSwitch, maleSwitch;
     Button done_btn;
     MultiSlider age_bar;
-    //min and max values for age is set here
-    String currMinAge = "18", currMaxAge = "99";
+    //min and max values for agebar is set here (also used when thumbs are moved)
+    int currMinAge = 18, currMaxAge = 99;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -41,10 +44,10 @@ public class createEvent2_frag extends Fragment implements View.OnClickListener 
 
         //setup the rangebar and its textview.
         ageVal_txt = root.findViewById(R.id.create2_ageInterval_txt);
-        ageVal_txt.setText(currMinAge + " - " + currMaxAge);
+        ageVal_txt.setText(currMinAge + " - " + currMaxAge + " år");
         age_bar = root.findViewById(R.id.create2_rangebar);
-        age_bar.setMin(Integer.parseInt(currMinAge));
-        age_bar.setMax(Integer.parseInt(currMaxAge));
+        age_bar.setMin(currMinAge);
+        age_bar.setMax(currMaxAge);
         //following listener will run when either of the thumbs on range bar is moved
         age_bar.setOnThumbValueChangeListener(new MultiSlider.OnThumbValueChangeListener() {
             @Override
@@ -55,13 +58,13 @@ public class createEvent2_frag extends Fragment implements View.OnClickListener 
             {
                 if (thumbIndex == 0) {
                     // the left thumb was moved - set value
-                    currMinAge = (String.valueOf(value));
+                    currMinAge = value;
                 } else {
                     //the right thumb was moved - set value
-                    currMaxAge = (String.valueOf(value));
+                    currMaxAge = value;
                 }
                 //update textview in UI to show new values.
-                ageVal_txt.setText(currMinAge + " - " + currMaxAge);
+                ageVal_txt.setText(currMinAge + " - " + currMaxAge +" år");
             }
         });
 

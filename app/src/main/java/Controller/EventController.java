@@ -42,7 +42,7 @@ public class EventController {
 
 
     public void createEvent(String name, String desc, String price, String date, String time, String city, String type,
-                            String minAge, String maxAge, boolean maleOn, boolean femaleOn, Uri eventImgUri){
+                            int minAge, int maxAge, boolean maleOn, boolean femaleOn, Uri eventImgUri){
         //create event dto
         eventDTO = new EventDTO();
 
@@ -68,8 +68,8 @@ public class EventController {
 
         //set rest of values
         eventDTO.setCity(city)
-                .setMinAge(Integer.parseInt(minAge))
-                .setMaxAge(Integer.parseInt(maxAge))
+                .setMinAge(minAge)
+                .setMaxAge(maxAge)
                 .setMaleOn(maleOn)
                 .setFemaleOn(femaleOn)
                 .setOwnerId(userController.getCurrUser().getUserId())
@@ -103,11 +103,13 @@ public class EventController {
         String eAboutString = event.getDescription();
         String eUnameString = "Om " + user.getfName();
         String eUaboutString = user.getDescription();
+        String personTitle = user.getfName() + ", " + user.getAge();
 
         ctx.eventName.setText(eventNameString);
         ctx.eCity.setText(eCityString);
         ctx.eDate.setText(eDateString);
         ctx.ePrice.setText(ePriceString);
+        ctx.eventPname.setText(personTitle);
         //EventDescription
         ctx.eAbout.setText(eAboutString);
         ctx.eUname.setText(eUnameString);

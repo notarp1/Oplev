@@ -17,8 +17,11 @@ import com.A4.oplev.Activity_Profile;
 import com.A4.oplev.R;
 import com.squareup.picasso.Picasso;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.TimeZone;
 
 import Controller.UserController;
 import DAL.Classes.EventDAO;
@@ -37,18 +40,19 @@ public class Event_Adapter extends RecyclerView.Adapter<Event_Adapter.ViewHolder
 
     String TAG = "EventA";
     List<String> eventListId;
-    List<EventDTO> loadedEvent;
     int offset = 0;
     IEventDAO dataA;
     int height;
     int width;
+
+    Boolean dataChanged = false;
     Context ctx;
     // TODO Lav classen om så den kun henter Event en gang, og ikke 2 - 3 gange Alexander skal lave det når der er tid.
     //EventDTO eventDTO;
 
-    public static Event_Adapter getInstance(List<EventDTO> scoreList, List<String> ids, Context frame, int height, int width) {
+    public static Event_Adapter getInstance( List<String> ids, Context frame, int height, int width) {
         if (instance == null) {
-            instance = new Event_Adapter(scoreList, ids, frame, height, width);
+            instance = new Event_Adapter( ids, frame, height, width);
         }
         return instance;
     }
@@ -57,64 +61,28 @@ public class Event_Adapter extends RecyclerView.Adapter<Event_Adapter.ViewHolder
         return instance;
     }
 
-    private Event_Adapter(List<EventDTO> scoreList, List<String> ids, Context frame, int height, int width) {
+    private Event_Adapter( List<String> ids, Context frame, int height, int width) {
         this.ctx = frame;
         this.dataA = new EventDAO();
         this.height = height;
         this.width = width;
         this.eventListId = ids;
-        this.loadedEvent = scoreList;
+    }
 
+    public List<String> getIds(){
+        return eventListId;
     }
 
     public void refreshData(List<String> ids) {
         this.eventListId = ids;
-        ((EventDAO) dataA).getEvents(new CallBackEventList() {
-            @Override
-            public void onCallback(List<EventDTO> events) {
-                loadedEvent = events;
-            }
-        }, ids);
+        this.dataChanged = true;
     }
-
-
-    public void loadData(boolean way) {
-        // Metode til at hente data ind i loaded listen, så der hele tiden kun er tre udfyldte EventDto'er i hukkomelsen.
-        if (way) {
-            //Going to the right, first is dumped
-            if (offset != 0) {
-                loadedEvent.remove(0);
-            }
-            if (offset < eventListId.size()) {
-                offset++;
-                add2list(offset + 1);
-            }
-        } else {
-            if (offset != eventListId.size() - 1) {
-                loadedEvent.remove(2);
-            }
-            if (offset != 0) {
-                offset--;
-                add2listStart(offset - 1);
-            }
-        }
+    public Boolean getDataChanged(){
+        return dataChanged;
     }
-
-    public void add2list(int pos) {
-        //Henter Data ind i loadEvent, i sluttningen.
-        //loadedEvent.add(dataA.getEvent(eventListId.get(eventListId.get(pos))));
+    public void setDataChanged(Boolean dataChanged){
+        this.dataChanged = dataChanged;
     }
-
-    public void add2listStart(int pos) {
-        //Henter Data ind i loadEvent, i sluttningen.
-        List<EventDTO> newList = new ArrayList<>();
-        // newList.add(dataA.getEvent(eventListId.get(eventListId.get(pos))));
-        newList.add(loadedEvent.get(0));
-        newList.add(loadedEvent.get(1));
-        loadedEvent = newList;
-    }
-
-
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -138,6 +106,7 @@ public class Event_Adapter extends RecyclerView.Adapter<Event_Adapter.ViewHolder
         ImageView mainPic = holder.mainPic;
         TextView withWhoText = holder.withWhoText;
         TextView headlineText = holder.headlineText;
+        TextView headlineDate = holder.headlineDate;
 
 
         // her skal dataen sættes in i holderen, der skal gøres brug af en billed controller til at håndtere billder.
@@ -148,10 +117,12 @@ public class Event_Adapter extends RecyclerView.Adapter<Event_Adapter.ViewHolder
                 userDAO.getUser(new CallbackUser() {
                     @Override
                     public void onCallback(UserDTO user) {
-                        System.out.println(eventDTO.getOwnerId() + "HAHA2");
+
+                        DateFormat format1 = new SimpleDateFormat("dd-MM-yyyy");
+                        format1.setTimeZone(TimeZone.getTimeZone("GMT+1"));
                         withWhoText.setText(user.getfName());
                         headlineText.setText(eventDTO.getTitle());
-
+                        headlineDate.setText(format1.format(eventDTO.getDate()));
                         Picasso.get().load(user.getUserPicture())
                                 .resize(width / 8, height / 16)
                                 .centerCrop()
@@ -197,7 +168,7 @@ public class Event_Adapter extends RecyclerView.Adapter<Event_Adapter.ViewHolder
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         public ImageView mainPic, profilePic;
-        public TextView headlineText, withWhoText;
+        public TextView headlineText, withWhoText, headlineDate;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -205,6 +176,7 @@ public class Event_Adapter extends RecyclerView.Adapter<Event_Adapter.ViewHolder
             mainPic = (ImageView) itemView.findViewById(R.id.eventItem_Billede);
             profilePic = (ImageView) itemView.findViewById(R.id.eventItem_pp);
             withWhoText = (TextView) itemView.findViewById(R.id.evntItem_withWho);
+            headlineDate = (TextView) itemView.findViewById(R.id.txt_date);
             headlineText = (TextView) itemView.findViewById(R.id.eventitem_Headline);
             profilePic.setOnClickListener(this);
             mainPic.setOnClickListener(this);

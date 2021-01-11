@@ -55,7 +55,7 @@ public class U_Settings_Options extends Fragment implements View.OnClickListener
             startActivity(i);
 
         } else if (view == back){
-            getActivity().getSupportFragmentManager().popBackStack();
+            getActivity().finish();
         }
     }
 }

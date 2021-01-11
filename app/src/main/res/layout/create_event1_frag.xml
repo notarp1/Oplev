@@ -37,7 +37,7 @@
 
             <ImageView
                 android:id="@+id/create_pic"
-                android:layout_width="329dp"
+                android:layout_width="200dp"
                 android:layout_height="200dp"
                 android:layout_marginStart="20dp"
                 android:layout_marginLeft="20dp"
@@ -57,7 +57,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
                 android:layout_marginBottom="5dp"
-                android:background="#63FFFFFF"
+                android:background="#81FFFFFF"
                 android:text="Skift billede"
                 android:textColor="#000000"
                 app:layout_constraintBottom_toBottomOf="@+id/create_pic"
@@ -66,6 +66,7 @@
                 app:layout_constraintTop_toTopOf="@+id/create_pic" />
 
             <EditText
+                android:inputType="textCapSentences"
                 android:id="@+id/create_title_input"
                 android:layout_width="352dp"
                 android:layout_height="59dp"
@@ -75,9 +76,9 @@
                 android:layout_marginRight="20dp"
                 android:layout_marginBottom="5dp"
                 android:ems="10"
+                android:maxLength="19"
                 android:gravity="center"
                 android:hint="Overskrift"
-                android:inputType="textPersonName"
                 android:textColor="#A4E8E0"
                 android:textColorHint="#A4E8E0"
                 android:textSize="24sp"
@@ -98,13 +99,12 @@
                 android:ems="10"
                 android:gravity="bottom|center_horizontal"
                 android:hint="Beskrivelse"
-                android:inputType="textMultiLine"
+                android:inputType="textCapSentences|textMultiLine"
                 android:textColor="#A4E8E0"
                 android:textColorHint="#A4E8E0"
                 android:textSize="18sp"
                 app:layout_constraintBottom_toTopOf="@+id/create_price_input"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.466"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/create_title_input" />
 
@@ -112,14 +112,17 @@
                 android:id="@+id/create_price_input"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="20dp"
-                android:layout_marginRight="20dp"
+                android:layout_marginEnd="2dp"
+                android:layout_marginRight="2dp"
                 android:layout_marginBottom="5dp"
-                android:ems="10"
+                android:ems="8"
+                android:gravity="center"
+                android:hint="0"
                 android:inputType="number"
                 android:textColor="#A4E8E0"
+                android:textColorHint="#A4E8E0"
                 app:layout_constraintBottom_toTopOf="@+id/create_date_input"
-                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/create_price_txt2"
                 app:layout_constraintTop_toBottomOf="@+id/create_desc_input" />
 
             <TextView
@@ -171,6 +174,21 @@
                 app:layout_constraintBottom_toBottomOf="@+id/create_price_input"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/create_price_input" />
+
+            <TextView
+                android:id="@+id/create_price_txt2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="25dp"
+                android:layout_marginRight="25dp"
+                android:gravity="left|center_vertical"
+                android:text="DKK"
+                android:textColor="#A4E8E0"
+                android:textSize="18sp"
+                app:layout_constraintBottom_toBottomOf="@+id/create_price_input"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/create_price_input"
+                app:layout_constraintVertical_bias="0.476" />
 
             <TextView
                 android:id="@+id/create_date_txt"

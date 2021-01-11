@@ -6,12 +6,17 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Rect;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -19,8 +24,13 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
+
+import com.A4.oplev.Activity_Profile;
 import com.A4.oplev.R;
+
+import java.lang.invoke.ConstantCallSite;
 import java.util.ArrayList;
 import Controller.UserController;
 
@@ -35,7 +45,7 @@ public class U_Settings_Edit extends Fragment implements View.OnClickListener, V
 
     UserController userController;
     Bitmap stockphotoBit;
-
+    ConstraintLayout editPage;
 
     private Uri[] uris;
     private ArrayList<String> pictures;
@@ -69,7 +79,7 @@ public class U_Settings_Edit extends Fragment implements View.OnClickListener, V
         textview.setText("Rediger Profil");
 
         accept = (ImageView) getActivity().findViewById(R.id.imageView_checkmark);
-        accept.setVisibility(View.VISIBLE);
+
         accept.setOnClickListener(this);
 
         back = (ImageView) getActivity().findViewById(R.id.topbar_arrow);
@@ -78,9 +88,24 @@ public class U_Settings_Edit extends Fragment implements View.OnClickListener, V
 
         about = root.findViewById(R.id.editText_description);
         city = root.findViewById(R.id.editText_city);
+        editPage = root.findViewById(R.id.edit_id);
         job = root.findViewById(R.id.editText_job);
         education = root.findViewById(R.id.editText_edu);
 
+        about.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                Rect r = new Rect();
+                editPage.getWindowVisibleDisplayFrame(r);
+                int screenHeight = editPage.getRootView().getHeight();
+                int keypadHeight = screenHeight - r.bottom;
+                //if true then keyboard is showing
+                if (keypadHeight > screenHeight * 0.15) {
+                    accept.setVisibility(View.VISIBLE);
+
+                }
+            }
+            });
         iniPictures(root);
         userController.iniEditProfile(this);
 
@@ -131,7 +156,7 @@ public class U_Settings_Edit extends Fragment implements View.OnClickListener, V
         if(userController.isSafe()) {
             if (v == back) {
                 accept.setVisibility(View.INVISIBLE);
-                getActivity().getSupportFragmentManager().popBackStack();
+                getActivity().finish();
             } else if (v == accept) {
                 userController.updateUserAndGUI(this);
             } else if (v == p0) {

@@ -16,6 +16,7 @@ import android.view.View;
 import android.widget.ImageView;
 
 import com.A4.oplev.Activity_NoInstance;
+import com.A4.oplev.Activity_Profile;
 import com.A4.oplev.Like_Hjerte_Side.Activity_Likeside;
 import com.A4.oplev.R;
 import com.A4.oplev.SearchFilter.Activity_Search_Filter;
@@ -45,6 +46,8 @@ public class Activity_Main extends AppCompatActivity implements View.OnClickList
     Boolean onInstance;
     Event_Adapter event_Adapter;
     Context ctx;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,7 +65,6 @@ public class Activity_Main extends AppCompatActivity implements View.OnClickList
 
         rcEvent = findViewById(R.id.eventRecycleView);
 
-        LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
 
 
         EventDAO dataA = new EventDAO();
@@ -71,13 +73,7 @@ public class Activity_Main extends AppCompatActivity implements View.OnClickList
         dataA.getEventIDs(new CallBackList() {
             @Override
             public void onCallback(List<String> list) {
-               dataA.getEvents(new CallBackEventList() {
-                   @Override
-                   public void onCallback(List<EventDTO> events) {
-                       System.out.println(list);
-                       eventIni(events, list, layoutManager);
-                   }
-               }, list);
+                eventIni(list);
             }
         },prefs);
 
@@ -94,16 +90,19 @@ public class Activity_Main extends AppCompatActivity implements View.OnClickList
 
     }
 
-    private void eventIni(List<EventDTO> eventList, List<String> ids, LinearLayoutManager layoutManager) {
+    private void eventIni( List<String> ids) {
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         DisplayMetrics displayMetrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
         int height = displayMetrics.heightPixels;
         int width = displayMetrics.widthPixels;
-        event_Adapter = Event_Adapter.getInstance(eventList, ids, this, height, width);
+        event_Adapter = Event_Adapter.getInstance(ids, this, height, width);
         rcEvent.setLayoutManager(layoutManager);
         rcEvent.setAdapter(event_Adapter);
+        rcEvent.setOnFlingListener(null);
         PagerSnapHelper snap = new PagerSnapHelper();
         snap.attachToRecyclerView(rcEvent);
+
     }
 
     @Override
@@ -124,9 +123,22 @@ public class Activity_Main extends AppCompatActivity implements View.OnClickList
 
         } else if(v == user){
 
-            Intent i = new Intent(this, Activity_U_Settings.class);
+            Intent i = new Intent(this, Activity_Profile.class);
             startActivity(i);
 
         }
     }
+
+    public void onResume() {
+        super.onResume();
+        Event_Adapter eventA = Event_Adapter.getInstance();
+        if(eventA != null) {
+            if (eventA.getDataChanged()) {
+                eventIni(eventA.getIds());
+                eventA.setDataChanged(false);
+            }
+        }
+
+    }
+
 }

@@ -9,14 +9,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.cardview.widget.CardView;
 
 import com.A4.oplev.R;
 import com.squareup.picasso.Picasso;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -80,7 +78,7 @@ public class  LikeSide_Adapter extends ArrayAdapter<String> {
                     } else {
                         currentLastMessage = currentName + ": " + lastMessage.get(position);
                     }
-                    currentLastMessage = currentLastMessage.replaceAll("\n","");
+                    currentLastMessage = currentLastMessage.replaceAll("\n"," ");
                 }
             } else if (lastMessageSender.get(position).equals("Oplev")){
                 if (lastMessage.get(position).length() > 30){
@@ -88,7 +86,7 @@ public class  LikeSide_Adapter extends ArrayAdapter<String> {
                 } else {
                     currentLastMessage = "Oplev: " + lastMessage.get(position);
                 }
-                currentLastMessage = currentLastMessage.replaceAll("\n","");
+                currentLastMessage = currentLastMessage.replaceAll("\n"," ");
             } else {
                 if (lastMessage.get(position).equals("pictureBlaBlaBla!:"))
                     currentLastMessage = "Dig: " + "[Picture]";
@@ -99,7 +97,7 @@ public class  LikeSide_Adapter extends ArrayAdapter<String> {
                     } else {
                         currentLastMessage = "Dig: " + lastMessage.get(position);
                     }
-                    currentLastMessage = currentLastMessage.replaceAll("\n","");
+                    currentLastMessage = currentLastMessage.replaceAll("\n"," ");
                 }
             }
         }

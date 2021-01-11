@@ -17,7 +17,7 @@
         android:layout_marginRight="20dp"
         android:layout_marginBottom="20dp"
         android:gravity="center"
-        android:text="Rækkevidde\nHvem skal kunne se opslaget?"
+        android:text="Rækkevidde.\nHvem skal kunne se opslaget?"
         android:textColor="#A4E8E0"
         android:textSize="30sp"
         app:layout_constraintBottom_toTopOf="@+id/create2_age_txt"

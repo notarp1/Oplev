@@ -35,7 +35,7 @@ public class ChatDAO implements IChatDAO {
 
     // Hvis man skal oprette en ny chat som skal være i firestore
     @Override
-    public void createChat(ChatDTO chat) {
+    public void createChat(ChatDTO chat, CreateChatCallback callback) {
         // Først skal vi opbygge et chat objekt med de attributter der skal være i firestore
         Map<String, Object> chatObject = new HashMap<>();
         ArrayList<String> tempPics = new ArrayList<>();
@@ -77,6 +77,7 @@ public class ChatDAO implements IChatDAO {
                         // Hvis vi har succesfuldt lavet en ny chat så sætter vi dets chatid til det id dokumentet har givet det
                         Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId());
                         db.collection("chats").document(documentReference.getId()).update("chatId", documentReference.getId());
+                        callback.onCallback(documentReference.getId());
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -236,4 +237,7 @@ public class ChatDAO implements IChatDAO {
     }
 
 
+    public interface CreateChatCallback {
+        void onCallback(String chatID);
+    }
 }
