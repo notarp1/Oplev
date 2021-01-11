@@ -15,6 +15,7 @@ import android.widget.ListView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.cardview.widget.CardView;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 import androidx.core.app.TaskStackBuilder;
@@ -47,12 +48,12 @@ import java.util.Date;
 
 
 public class LikesideList_frag extends Fragment{
-    private ListView tilmeldinger_listView;
     private ChatDAO chatDAO;
     private EventDAO eventDAO;
     private UserDTO userDTO;
     private UserController userController;
     private String currentUser;
+    private ListView tilmeldinger_listView;
     private ArrayList<String> names = new ArrayList<>(), lastMessage = new ArrayList<>(), headerList = new ArrayList<>(), lastSender = new ArrayList<>(), isInitialized = new ArrayList<>(), chatIds = new ArrayList<>(), otherPersonPic = new ArrayList<>();
     private ArrayList<Date> dates = new ArrayList<>();
     private ArrayList<Integer> eventApplicantsSize = new ArrayList<>();
@@ -124,7 +125,6 @@ public class LikesideList_frag extends Fragment{
             }
         }
 
-
         tilmeldinger_listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -158,6 +158,7 @@ public class LikesideList_frag extends Fragment{
                 }
             }
         });
+
 
         tilmeldinger_listView.setOnTouchListener(new OnSwipeTouchListener(mContext){
             @SuppressLint("ResourceAsColor")

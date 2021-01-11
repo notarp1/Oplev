@@ -9,17 +9,20 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.cardview.widget.CardView;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 import androidx.core.app.TaskStackBuilder;
 import androidx.fragment.app.Fragment;
 
+import com.A4.oplev.Activity_Profile;
+import com.A4.oplev.Chat.Activity_Chat;
 import com.A4.oplev.R;
-import com.A4.oplev._Adapters.LikeSide_Event_Adapter;
 import com.A4.oplev._Adapters.OwnEvents_Adapter;
 
 import org.jetbrains.annotations.NotNull;
@@ -33,18 +36,20 @@ import DAL.Classes.EventDAO;
 import DTO.UserDTO;
 
 public class OwnEvent_frag extends Fragment {
-    private ListView tilmeldinger_listView;
+    private ListView ownEvents_listView;
     private EventDAO eventDAO;
     private UserDTO userDTO;
     private UserController userController;
+    private CardView sletKnap, redigerKnap;
+    private String currentUser;
     private ArrayList<Date> dates = new ArrayList<>();
     private ArrayList<Integer> eventApplicantsSize = new ArrayList<>();
     private ArrayList<String> eventHeaders = new ArrayList<>(), eventOwnerPic = new ArrayList<>(),  eventEventPic = new ArrayList<>(),
                               eventApplicantPic = new ArrayList<>(), eventFirstApplicants = new ArrayList<>(), eventEventID = new ArrayList<>(),
-                              eventParticipant = new ArrayList<>(), tempEventID = new ArrayList<>(), tempFirstApplicant = new ArrayList<>();
+                              eventParticipant = new ArrayList<>(), tempEventID = new ArrayList<>(), tempFirstApplicant = new ArrayList<>(),
+                              names = new ArrayList<>();
     private Context mContext;
 
-    private static ArrayList<View> footerViews = new ArrayList<>();
     boolean eventsReady = false;
 
     @Nullable
@@ -56,9 +61,11 @@ public class OwnEvent_frag extends Fragment {
         userDTO = userController.getCurrUser();
         eventDAO = new EventDAO();
 
-        tilmeldinger_listView = root.findViewById(R.id.own_events_list);
+        ownEvents_listView = root.findViewById(R.id.own_events_list);
+        redigerKnap = root.findViewById(R.id.own_event_edit_holder);
+        sletKnap = root.findViewById(R.id.own_event_delete_holder);
 
-        tilmeldinger_listView.setOnTouchListener(new OnSwipeTouchListener(mContext){
+        ownEvents_listView.setOnTouchListener(new OnSwipeTouchListener(mContext){
             @SuppressLint("ResourceAsColor")
             @Override
             public void onSwipeLeft() {
@@ -73,6 +80,60 @@ public class OwnEvent_frag extends Fragment {
                         .commit();
             }
         });
+
+        // *Todo - Skal vise side for eget event (Antager at der skal laves en nyt xml dokument - Men hvad skal vises?)
+        // * Todo - Lav visuel forskel når en applicant er accepteret, og eventet dermed er faslagt. (Vis tilmeldt osv)
+        ownEvents_listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                if (position < eventHeaders.size()) {
+                    ArrayList<String> applicants = new ArrayList<>();
+                    //sendNoti();
+                    //Toast.makeText(mContext, "Notifikation sendt", Toast.LENGTH_SHORT).show();
+                    if (eventFirstApplicants.get(position).equals("")) {
+                        System.out.println(eventHeaders.get(position));
+                    } else {
+                        eventDAO.getEvent(event -> {
+                            applicants.addAll(event.getApplicants());
+                            userController.getUser(user -> {
+                                Intent i12 = new Intent(mContext, Activity_Profile.class);
+                                i12.putExtra("user", user);
+                                i12.putExtra("load", 2);
+                                i12.putExtra("numberOfApplicants",eventApplicantsSize.get(position)-1);
+                                i12.putExtra("applicantList",applicants);
+                                mContext.startActivity(i12);
+                            }, eventFirstApplicants.get(position));
+                        }, userDTO.getEvents().get(position));
+                    }
+                }
+                else {
+                    // Her ville chatId'et også sendes med senere hen
+                    Intent i1 = new Intent(getActivity(), Activity_Chat.class);
+                    i1.putExtra("currentUser",currentUser);
+                    i1.putExtra("otherUser",names.get(position-eventHeaders.size()));
+                    i1.putExtra("chatId", userDTO.getChatId().get(position-eventHeaders.size()));
+                    startActivity(i1);
+                }
+            }
+        });
+
+        // Todo - Lav slet metode der fjerne det valgte element - og lav/ benyt slet metode fra backend.
+        sletKnap.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+
+        // todo - Lav rediger metode der virker på det valgte element - og lav/ benyt slet metode fra backend.
+
+        redigerKnap.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+
 
 
         // Det her er til ens egne events som andre prøver på at ansøge om at joine
@@ -169,9 +230,12 @@ public class OwnEvent_frag extends Fragment {
                 Log.d("eventSize test3",  tempEventApplicantsSize.toString());
 
                 OwnEvents_Adapter eventAdapter = new OwnEvents_Adapter(mContext, tempEventPic, tempEventHeaders, tempEventOwnerPic, tempEventFirstApplicants, tempEventApplicantPic, tempEventApplicantsSize);
-                tilmeldinger_listView.setAdapter(eventAdapter);
+                ownEvents_listView.setAdapter(eventAdapter);
             }
         }
+
+
+
 
     @Override
     public void onAttach(@NotNull Context context){
