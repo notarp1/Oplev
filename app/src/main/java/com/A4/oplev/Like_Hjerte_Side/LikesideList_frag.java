@@ -92,6 +92,7 @@ public class LikesideList_frag extends Fragment{
                         setListView_applicants(eventEventPic, eventHeaders, eventOwnerPic, eventFirstApplicants, eventApplicantPic, eventApplicantsSize);
                         setChangeListener_tilmeldinger();
                         setChangeListeners_chats();
+                        setUserChangeListener();
                         eventsReady = false;
                         chatsReady = false;
                     }
@@ -114,6 +115,7 @@ public class LikesideList_frag extends Fragment{
                                         setListView_chats(chatIds, names, dates, lastMessage, headerList, lastSender, isInitialized, otherPersonPic);
                                         setChangeListeners_chats();
                                         setChangeListener_tilmeldinger();
+                                        setUserChangeListener();
                                         chatsReady = false;
                                         eventsReady = false;
                                     }
@@ -220,6 +222,7 @@ public class LikesideList_frag extends Fragment{
                         setListView_applicants(eventEventPic, eventHeaders, eventOwnerPic, eventFirstApplicants, eventApplicantPic, eventApplicantsSize);
                         setChangeListener_tilmeldinger();
                         setChangeListeners_chats();
+                        setUserChangeListener();
                         eventsReady = false;
                         chatsReady = false;
                     }
@@ -251,6 +254,7 @@ public class LikesideList_frag extends Fragment{
                                         setListView_applicants(eventEventPic, eventHeaders, eventOwnerPic, eventFirstApplicants, eventApplicantPic, eventApplicantsSize);
                                         setChangeListener_tilmeldinger();
                                         setChangeListeners_chats();
+                                        setUserChangeListener();
                                         eventsReady = false;
                                         chatsReady = false;
                                     }
@@ -279,6 +283,7 @@ public class LikesideList_frag extends Fragment{
                                             setListView_applicants(eventEventPic, eventHeaders, eventOwnerPic, eventFirstApplicants, eventApplicantPic, eventApplicantsSize);
                                             setChangeListener_tilmeldinger();
                                             setChangeListeners_chats();
+                                            setUserChangeListener();
                                             eventsReady = false;
                                             chatsReady = false;
                                         }
@@ -500,7 +505,7 @@ public class LikesideList_frag extends Fragment{
                                                 readies[0] = true;
                                                 // hvis vi har indlæst applicantpic eller hvis der ikke er nogle applicants så laver vi listviewet
                                                 if (readies[1] || !(temp.getApplicants().size() > 0)){
-                                                    setListView_chats(chatIds,names,dates,lastMessage,headerList,lastSender,isInitialized,otherPersonPic);
+                                                    setListView_chats(userDTO.getChatId(),names,dates,lastMessage,headerList,lastSender,isInitialized,otherPersonPic);
                                                 }
                                             }
                                         }
@@ -518,7 +523,7 @@ public class LikesideList_frag extends Fragment{
                                                     readies[1] = true;
                                                     // hvis vi har indlæst ownerpic så lav listviewet
                                                     if (readies[0]){
-                                                        setListView_chats(chatIds,names,dates,lastMessage,headerList,lastSender,isInitialized,otherPersonPic);
+                                                        setListView_chats(userDTO.getChatId(),names,dates,lastMessage,headerList,lastSender,isInitialized,otherPersonPic);
                                                     }
                                                 }
                                             }
@@ -534,6 +539,95 @@ public class LikesideList_frag extends Fragment{
             });
         }
     }
+
+    public void setUserChangeListener(){
+        FirebaseFirestore.getInstance().collection("users").document(userController.getCurrUser().getUserId()).addSnapshotListener(new EventListener<DocumentSnapshot>() {
+            private static final String TAG = "update from firestore";
+
+            @Override
+            public void onEvent(@Nullable DocumentSnapshot snapshot,
+                                @Nullable FirebaseFirestoreException e) {
+                if (e != null) {
+                    Log.w(TAG, "Listen failed.", e);
+                    return;
+                }
+
+                if (snapshot != null && snapshot.exists()) {
+                    // konverter til et event objekt
+                    UserDTO temp = snapshot.toObject(UserDTO.class);
+                    if (temp != null) {
+                        if (temp.getChatId() != null){
+                            if (temp.getChatId().size() > userDTO.getChatId().size()) {
+                                boolean isFound = false;
+                                for (int i = 0; i < temp.getChatId().size(); i++) {
+                                    for (int j = 0; j < userDTO.getChatId().size(); j++) {
+                                        if (temp.getChatId().get(i).equals(userDTO.getChatId().get(j))) {
+                                            isFound = true;
+                                        }
+                                    }
+                                    if (!isFound) {
+                                        ArrayList<String> tempchatID = userDTO.getChatId();
+                                        tempchatID.add(temp.getChatId().get(i));
+                                        userDTO.setChatId(tempchatID);
+                                        chatDAO.readChat(new ChatDAO.FirestoreCallback() {
+                                            @Override
+                                            public void onCallback(ChatDTO dto) {
+                                                String nameToAdd = dto.getUser1().equals(userController.getCurrUser().getfName()) ? dto.getUser2() : dto.getUser1();
+                                                names.add(nameToAdd);
+                                                dates.add(dto.getDates().get(dto.getDates().size() - 1));
+                                                lastMessage.add(dto.getMessages().get(dto.getMessages().size() - 1));
+                                                headerList.add(dto.getHeader());
+                                                lastSender.add(dto.getSender().get(dto.getSender().size() - 1));
+                                                isInitialized.add("true");
+                                                String otherUserID = dto.getUser1ID().equals(userController.getCurrUser().getUserId()) ? dto.getUser2ID() : dto.getUser1ID();
+                                                userController.getUser(new CallbackUser() {
+                                                    @Override
+                                                    public void onCallback(UserDTO user) {
+                                                        otherPersonPic.add(user.getUserPicture());
+                                                        chatIds = temp.getChatId();
+                                                        userDTO.setChatId(temp.getChatId());
+                                                        setListView_chats(temp.getChatId(), names, dates, lastMessage, headerList, lastSender, isInitialized, otherPersonPic);
+                                                    }
+                                                }, otherUserID);
+                                            }
+                                        }, temp.getChatId().get(i));
+                                        break;
+                                    }
+                                    isFound = false;
+                                }
+                            } else if (tilmeldinger_listView.getFooterViewsCount() < temp.getChatId().size()){
+                                chatDAO.readChat(new ChatDAO.FirestoreCallback() {
+                                    @Override
+                                    public void onCallback(ChatDTO dto) {
+                                        String nameToAdd = dto.getUser1().equals(userController.getCurrUser().getfName()) ? dto.getUser2() : dto.getUser1();
+                                        names.add(nameToAdd);
+                                        dates.add(dto.getDates().get(dto.getDates().size() - 1));
+                                        lastMessage.add(dto.getMessages().get(dto.getMessages().size() - 1));
+                                        headerList.add(dto.getHeader());
+                                        lastSender.add(dto.getSender().get(dto.getSender().size() - 1));
+                                        isInitialized.add("true");
+                                        String otherUserID = dto.getUser1ID().equals(userController.getCurrUser().getUserId()) ? dto.getUser2ID() : dto.getUser1ID();
+                                        userController.getUser(new CallbackUser() {
+                                            @Override
+                                            public void onCallback(UserDTO user) {
+                                                otherPersonPic.add(user.getUserPicture());
+                                                chatIds = temp.getChatId();
+                                                userDTO.setChatId(temp.getChatId());
+                                                setListView_chats(temp.getChatId(), names, dates, lastMessage, headerList, lastSender, isInitialized, otherPersonPic);
+                                            }
+                                        }, otherUserID);
+                                    }
+                                }, temp.getChatId().get(temp.getChatId().size()-1));
+                            }
+                        }
+                    }
+                } else {
+                    Log.d(TAG, "Current data: null");
+                }
+            }
+        });
+    }
+
 
     // laver listviewet for egne events
     public void setListView_applicants(@NonNull ArrayList<String> eventEventPic, @NonNull ArrayList<String> eventHeaders, @NonNull ArrayList<String> eventOwnerPic, @NonNull ArrayList<String> eventFirstApplicants, @NonNull ArrayList<String> eventApplicantPic, @NonNull ArrayList<Integer> eventApplicantsSize){
