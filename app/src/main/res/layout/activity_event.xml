@@ -91,6 +91,8 @@
                     android:id="@+id/imageView6"
                     android:layout_width="20dp"
                     android:layout_height="25dp"
+                    android:layout_marginEnd="2dp"
+                    android:layout_marginRight="2dp"
                     app:layout_constraintBottom_toBottomOf="@+id/back_btn_event"
                     app:layout_constraintEnd_toEndOf="@+id/back_btn_event"
                     app:layout_constraintStart_toStartOf="@+id/back_btn_event"
