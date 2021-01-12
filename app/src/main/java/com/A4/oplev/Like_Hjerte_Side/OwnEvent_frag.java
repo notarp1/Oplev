@@ -65,6 +65,7 @@ public class OwnEvent_frag extends Fragment {
         redigerKnap = root.findViewById(R.id.own_event_edit_holder);
         sletKnap = root.findViewById(R.id.own_event_delete_holder);
 
+
         ownEvents_listView.setOnTouchListener(new OnSwipeTouchListener(mContext){
             @SuppressLint("ResourceAsColor")
             @Override
@@ -82,6 +83,7 @@ public class OwnEvent_frag extends Fragment {
         });
 
         // *Todo - Skal vise side for eget event (Antager at der skal laves en nyt xml dokument - Men hvad skal vises?)
+        // *Todo - Organiser rækkefølge på events.
         // * Todo - Lav visuel forskel når en applicant er accepteret, og eventet dermed er faslagt. (Vis tilmeldt osv)
         ownEvents_listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override

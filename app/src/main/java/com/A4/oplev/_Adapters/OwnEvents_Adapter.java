@@ -34,7 +34,6 @@ public class OwnEvents_Adapter extends ArrayAdapter<String> {
         this.eventEventPic = eventEventPic;
         this.eventOwnerPic = eventOwnerPic;
         this.eventFirstApplicants = eventFirstApplicants;
-        Log.d("eventSize test6.1", "Goddag");
     }
 
     @Override
@@ -44,12 +43,8 @@ public class OwnEvents_Adapter extends ArrayAdapter<String> {
 
     public View getView(int position, @Nullable View convertView, ViewGroup parent) {
 
-        Log.d("Counter", getViewTypeCount() + "" + eventApplicantsSize.size() + position);
-
-        Log.d("eventSize test6.2", "Goddag");
         View listItem = convertView;
         if (listItem == null) {
-            Log.d("eventSize test6.3", "Goddag");
             // Vi inflater det relative layout som vi har lavet i xml filen
             listItem = LayoutInflater.from(mContext).inflate(R.layout.u_settings_event_element, parent, false);
         }
