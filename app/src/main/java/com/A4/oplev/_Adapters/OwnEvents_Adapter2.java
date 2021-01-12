@@ -148,7 +148,6 @@ public class OwnEvents_Adapter2 extends RecyclerView.Adapter<OwnEvents_Adapter2.
                 //Edit post
                 Intent i = new Intent(v.getContext(), Activity_Create_Event.class);
                 Bundle bundle = new Bundle();
-                bundle.
 
             }else if(v == delete){
                 //Delete
