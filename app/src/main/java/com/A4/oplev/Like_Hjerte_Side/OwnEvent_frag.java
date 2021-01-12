@@ -67,48 +67,10 @@ public class OwnEvent_frag extends Fragment {
 
 
 
-      /*  recyclerView.setOnTouchListener(new OnSwipeTouchListener(mContext){
-            @SuppressLint("ResourceAsColor")
-            @Override
-            public void onSwipeLeft() {
-                // Sæt farven på billederne i toppen af skærmen
-                getActivity().findViewById(R.id.besked_back).setVisibility(View.VISIBLE);
-                getActivity().findViewById(R.id.event_back).setVisibility(View.INVISIBLE);
-                getActivity().findViewById(R.id.hjerte_back).setVisibility(View.INVISIBLE);
-
-                // Kreer fragmentet over til hjertesiden
-                getFragmentManager().beginTransaction().setCustomAnimations(R.anim.enter_from_right,
-                        R.anim.exit_to_left).replace(R.id.likeside_frameLayout,new LikesideList_frag())
-                        .commit();
-            }
-        });*/
 
         // *Todo - Skal vise side for eget event (Antager at der skal laves en nyt xml dokument - Men hvad skal vises?)
         // *Todo - Organiser rækkefølge på events.
         // * Todo - Lav visuel forskel når en applicant er accepteret, og eventet dermed er faslagt. (Vis tilmeldt osv)
-        /*recyclerView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                if (position < eventHeaders.size()) {
-                    ArrayList<String> applicants = new ArrayList<>();
-
-                    eventDAO.getEvent(event -> {
-
-                        userController.getUser(user -> {
-                            Intent intent = new Intent(mContext, Activity_Event.class);
-                            intent.putExtra("user", user);
-                            intent.putExtra("load", 1);
-                            intent.putExtra("event", event);
-                            mContext.startActivity(intent);
-                        }, event.getOwnerId());
-
-                    },eventEventID.get(position));
-                }
-            }
-        });
-*/
-
-
 
         // Todo - Lav slet metode der fjerne det valgte element - og lav/ benyt slet metode fra backend.
 
