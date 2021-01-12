@@ -37,9 +37,7 @@ public class OwnEvents_Adapter extends ArrayAdapter<String> {
     }
 
     @Override
-    public int getViewTypeCount() {
-        return getCount();
-    }
+    public int getViewTypeCount() { return getCount(); }
 
     public View getView(int position, @Nullable View convertView, ViewGroup parent) {
 

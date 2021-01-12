@@ -1,7 +1,6 @@
 package com.A4.oplev.Like_Hjerte_Side;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
@@ -11,7 +10,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ListView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -20,12 +18,12 @@ import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 import androidx.core.app.TaskStackBuilder;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.A4.oplev.Activity_Event;
-import com.A4.oplev.Activity_Profile;
-import com.A4.oplev.Chat.Activity_Chat;
 import com.A4.oplev.R;
-import com.A4.oplev._Adapters.OwnEvents_Adapter;
+import com.A4.oplev._Adapters.OwnEvents_Adapter2;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -38,7 +36,7 @@ import DAL.Classes.EventDAO;
 import DTO.UserDTO;
 
 public class OwnEvent_frag extends Fragment {
-    private ListView ownEvents_listView;
+    private RecyclerView recyclerView;
     private EventDAO eventDAO;
     private UserDTO userDTO;
     private UserController userController;
@@ -63,12 +61,13 @@ public class OwnEvent_frag extends Fragment {
         userDTO = userController.getCurrUser();
         eventDAO = new EventDAO();
 
-        ownEvents_listView = root.findViewById(R.id.own_events_list);
-        redigerKnap = root.findViewById(R.id.own_event_edit_holder);
+        recyclerView = root.findViewById(R.id.ownEvents_Recycler);
+        redigerKnap = root.findViewById(R.id.own_event_edit_picture);
         sletKnap = root.findViewById(R.id.own_event_delete_holder);
 
 
-        ownEvents_listView.setOnTouchListener(new OnSwipeTouchListener(mContext){
+
+        recyclerView.setOnTouchListener(new OnSwipeTouchListener(mContext){
             @SuppressLint("ResourceAsColor")
             @Override
             public void onSwipeLeft() {
@@ -87,26 +86,29 @@ public class OwnEvent_frag extends Fragment {
         // *Todo - Skal vise side for eget event (Antager at der skal laves en nyt xml dokument - Men hvad skal vises?)
         // *Todo - Organiser rækkefølge på events.
         // * Todo - Lav visuel forskel når en applicant er accepteret, og eventet dermed er faslagt. (Vis tilmeldt osv)
-        ownEvents_listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                if (position < eventHeaders.size()) {
-                    ArrayList<String> applicants = new ArrayList<>();
+//        recyclerView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//                if (position < eventHeaders.size()) {
+//                    ArrayList<String> applicants = new ArrayList<>();
+//
+//                    eventDAO.getEvent(event -> {
+//
+//                        userController.getUser(user -> {
+//                            Intent intent = new Intent(mContext, Activity_Event.class);
+//                            intent.putExtra("user", user);
+//                            intent.putExtra("load", 1);
+//                            intent.putExtra("event", event);
+//                            mContext.startActivity(intent);
+//                        }, event.getOwnerId());
+//
+//                    },eventEventID.get(position));
+//                }
+//            }
+//        });
 
-                    eventDAO.getEvent(event -> {
 
-                        userController.getUser(user -> {
-                            Intent intent = new Intent(mContext, Activity_Event.class);
-                            intent.putExtra("user", user);
-                            intent.putExtra("load", 1);
-                            intent.putExtra("event", event);
-                            mContext.startActivity(intent);
-                        }, event.getOwnerId());
 
-                    },eventEventID.get(position));
-                }
-            }
-        });
 
         // Todo - Lav slet metode der fjerne det valgte element - og lav/ benyt slet metode fra backend.
 
@@ -209,8 +211,10 @@ public class OwnEvent_frag extends Fragment {
 
                 Log.d("eventSize test3",  tempEventApplicantsSize.toString());
 
-                OwnEvents_Adapter eventAdapter = new OwnEvents_Adapter(mContext, tempEventPic, tempEventHeaders, tempEventOwnerPic, tempEventFirstApplicants, tempEventApplicantPic, tempEventApplicantsSize);
-                ownEvents_listView.setAdapter(eventAdapter);
+                LinearLayoutManager layoutManager = new LinearLayoutManager(mContext, LinearLayoutManager.VERTICAL, false);
+                OwnEvents_Adapter2 eventAdapter = new OwnEvents_Adapter2(mContext, tempEventPic, tempEventHeaders, tempEventOwnerPic, tempEventFirstApplicants, tempEventApplicantPic, tempEventApplicantsSize);
+                recyclerView.setLayoutManager(layoutManager);
+                recyclerView.setAdapter(eventAdapter);
             }
         }
 
