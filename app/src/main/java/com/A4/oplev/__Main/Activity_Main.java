@@ -101,6 +101,7 @@ public class Activity_Main extends AppCompatActivity implements View.OnClickList
         rcEvent.setLayoutManager(layoutManager);
         rcEvent.setAdapter(event_Adapter);
         rcEvent.setOnFlingListener(null);
+
         PagerSnapHelper snap = new PagerSnapHelper();
         snap.attachToRecyclerView(rcEvent);
 

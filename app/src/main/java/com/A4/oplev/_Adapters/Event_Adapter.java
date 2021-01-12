@@ -118,8 +118,8 @@ public class Event_Adapter extends RecyclerView.Adapter<Event_Adapter.ViewHolder
 
         // her skal dataen sættes in i holderen, der skal gøres brug af en billed controller til at håndtere billder.
 
-
-
+        System.out.println("_______________________________________________________________________________pos: " + position);
+        Log.d(TAG, "onBindViewHolder: "+ position);
         dataA.getEvent(new CallbackEvent() {
             @Override
             public void onCallback(EventDTO eventDTO) {
@@ -131,8 +131,38 @@ public class Event_Adapter extends RecyclerView.Adapter<Event_Adapter.ViewHolder
                         withWhoText.setText(user.getfName());
                         headlineText.setText(eventDTO.getTitle());
 
-
-                        if(position > lastpos){
+                        if(position == 0 && lastpos == 0){
+                            Picasso.get().load(eventDTO.getEventPic())
+                                    .resize(width, height)
+                                    .centerCrop()
+                                    .placeholder(R.drawable.load2)
+                                    .error(R.drawable.question)
+                                    .into(mainPic);
+                            dataA.getEvent(new CallbackEvent() {
+                                @Override
+                                public void onCallback(EventDTO event) {
+                                    pictureGetter.getPic(new CallbackBitmap() {
+                                        @Override
+                                        public void onCallBack(Bitmap bitmap) {
+                                            right_eventImg = bitmap;
+                                        }
+                                    }, event.getEventPic());
+                                }
+                            }, eventListId.get(1));
+                            if(eventListId.size() > 1) {
+                                dataA.getEvent(new CallbackEvent() {
+                                    @Override
+                                    public void onCallback(EventDTO event) {
+                                        pictureGetter.getPic(new CallbackBitmap() {
+                                            @Override
+                                            public void onCallBack(Bitmap bitmap) {
+                                                current_eventImg = bitmap;
+                                            }
+                                        }, event.getEventPic());
+                                    }
+                                }, eventListId.get(0));
+                            }
+                        } else if(position > lastpos){
                             right(position);
                         }else if(position < lastpos) {
                             left(position);
@@ -141,14 +171,14 @@ public class Event_Adapter extends RecyclerView.Adapter<Event_Adapter.ViewHolder
                         if(current_eventImg != null) {
                             mainPic.setImageBitmap(current_eventImg);
                             Log.d(TAG, "onCallback: pos: " + position);
-                        }else{
+                        } /* }else{
                             Picasso.get().load(eventDTO.getEventPic())
                                     .resize(width, height)
                                     .centerCrop()
                                     .placeholder(R.drawable.load2)
                                     .error(R.drawable.question)
                                     .into(mainPic);
-                        }
+                        }*/
 
                         Picasso.get().load(user.getUserPicture())
                                 .resize(width / 8, height / 16)
@@ -181,8 +211,6 @@ public class Event_Adapter extends RecyclerView.Adapter<Event_Adapter.ViewHolder
                     }, event.getEventPic());
                 }
             }, eventListId.get(pos + 1));
-        }else{
-            right_eventImg = null;
         }
     }
 
@@ -201,8 +229,6 @@ public class Event_Adapter extends RecyclerView.Adapter<Event_Adapter.ViewHolder
                     }, event.getEventPic());
                 }
             }, eventListId.get(pos - 1));
-        }else{
-            left_eventImg = null;
         }
     }
 
@@ -223,6 +249,7 @@ public class Event_Adapter extends RecyclerView.Adapter<Event_Adapter.ViewHolder
     }
 
 
+
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         public ImageView mainPic, profilePic;
         public TextView headlineText, withWhoText;
@@ -237,6 +264,8 @@ public class Event_Adapter extends RecyclerView.Adapter<Event_Adapter.ViewHolder
             profilePic.setOnClickListener(this);
             mainPic.setOnClickListener(this);
         }
+
+
 
         @Override
         public void onClick(View view) {
