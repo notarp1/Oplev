@@ -21,6 +21,8 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 
 import Controller.UserController;
+import DAL.Interfaces.CallbackUser;
+import DTO.UserDTO;
 
 public class Activity_Login extends AppCompatActivity implements View.OnClickListener {
 
@@ -88,12 +90,17 @@ public class Activity_Login extends AppCompatActivity implements View.OnClickLis
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "signInWithEmail:success");
 
-                            userController = userController.getInstance();
+                            userController = UserController.getInstance();
+                            userController.getUser(new CallbackUser() {
+                                @Override
+                                public void onCallback(UserDTO user) {
+                                    userController.setCurrUser(user);
+                                    Intent i = new Intent(ctx, Activity_Ini.class);
+                                    i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                    startActivity(i);
+                                }
+                            }, task.getResult().getUser().getUid());
                             //prefs = PreferenceManager.getDefaultSharedPreferences(ctx);
-
-                            Intent i = new Intent(ctx, Activity_Ini.class);
-                            i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                            startActivity(i);
 
 
                     } else {
