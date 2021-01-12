@@ -5,6 +5,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -317,105 +318,107 @@ public class LikesideList_frag extends Fragment{
         ArrayList<String> tempNames = new ArrayList<>(), tempLastmessage = new ArrayList<>(), tempHeaderList = new ArrayList<>(), tempLastSender = new ArrayList<>(), tempIsInitialized = new ArrayList<>(), tempChatIds = new ArrayList<>(), tempOtherPersonPic = new ArrayList<>();
         ArrayList<Date> tempDates = new ArrayList<>();
 
-        // iterer over hele listen
-        for (int i = 0; i < dates.size(); i++) {
-            // hvis det er det første element så tilføjer vi det bare
-            if (i == 0){
-                tempChatIds.add(chatIds.get(i));
-                tempNames.add(names.get(i));
-                tempLastmessage.add(lastMessage.get(i));
-                tempDates.add(dates.get(i));
-                tempHeaderList.add(headerList.get(i));
-                tempIsInitialized.add(isInitialized.get(i));
-                tempLastSender.add(lastSender.get(i));
-                tempOtherPersonPic.add(otherPersonPic.get(i));
-            }
-            // hvis den dato man vil ligge ind kommer før den forrige så indsætter vi det bare
-            else if (tempDates.get(i-1).after(dates.get(i))){
-                tempChatIds.add(chatIds.get(i));
-                tempNames.add(names.get(i));
-                tempLastmessage.add(lastMessage.get(i));
-                tempDates.add(dates.get(i));
-                tempHeaderList.add(headerList.get(i));
-                tempIsInitialized.add(isInitialized.get(i));
-                tempLastSender.add(lastSender.get(i));
-                tempOtherPersonPic.add(otherPersonPic.get(i));
-            }
-            // hvis den man vil indsætte har en dato der kommer før nogle andre datoer
-            else {
-                // iterer over alle temp dates
-                for (int j = 0; j < i; j++) {
-                    // hvis den man vil indsætte kommer efter den dato på plads j
-                    if (dates.get(i).after(tempDates.get(j))){
-                        // iterer fra i'endes plads til j
-                        for (int k = i; k >= j; k--) {
-                            // ved den første tilføjer vi fra den forriges plads (flyt den sidste dato til en ny plads)
-                            if (k == i){
-                                tempChatIds.add(tempChatIds.get(i-1));
-                                tempNames.add(tempNames.get(i-1));
-                                tempLastmessage.add(tempLastmessage.get(i-1));
-                                tempDates.add(tempDates.get(i-1));
-                                tempHeaderList.add(tempHeaderList.get(i-1));
-                                tempIsInitialized.add(tempIsInitialized.get(i-1));
-                                tempLastSender.add(tempLastSender.get(i-1));
-                                tempOtherPersonPic.add(tempOtherPersonPic.get(i-1));
+        if (chatIds.size() >= userDTO.getChatId().size()) {
+            // iterer over hele listen
+            for (int i = 0; i < otherPersonPic.size(); i++) {
+                // hvis det er det første element så tilføjer vi det bare
+                if (i == 0) {
+                    tempChatIds.add(chatIds.get(i));
+                    tempNames.add(names.get(i));
+                    tempLastmessage.add(lastMessage.get(i));
+                    tempDates.add(dates.get(i));
+                    tempHeaderList.add(headerList.get(i));
+                    tempIsInitialized.add(isInitialized.get(i));
+                    tempLastSender.add(lastSender.get(i));
+                    tempOtherPersonPic.add(otherPersonPic.get(i));
+                }
+                // hvis den dato man vil ligge ind kommer før den forrige så indsætter vi det bare
+                else if (tempDates.get(i - 1).after(dates.get(i))) {
+                    tempChatIds.add(chatIds.get(i));
+                    tempNames.add(names.get(i));
+                    tempLastmessage.add(lastMessage.get(i));
+                    tempDates.add(dates.get(i));
+                    tempHeaderList.add(headerList.get(i));
+                    tempIsInitialized.add(isInitialized.get(i));
+                    tempLastSender.add(lastSender.get(i));
+                    tempOtherPersonPic.add(otherPersonPic.get(i));
+                }
+                // hvis den man vil indsætte har en dato der kommer før nogle andre datoer
+                else {
+                    // iterer over alle temp dates
+                    for (int j = 0; j < i; j++) {
+                        // hvis den man vil indsætte kommer efter den dato på plads j
+                        if (dates.get(i).after(tempDates.get(j))) {
+                            // iterer fra i'endes plads til j
+                            for (int k = i; k >= j; k--) {
+                                // ved den første tilføjer vi fra den forriges plads (flyt den sidste dato til en ny plads)
+                                if (k == i) {
+                                    tempChatIds.add(tempChatIds.get(i - 1));
+                                    tempNames.add(tempNames.get(i - 1));
+                                    tempLastmessage.add(tempLastmessage.get(i - 1));
+                                    tempDates.add(tempDates.get(i - 1));
+                                    tempHeaderList.add(tempHeaderList.get(i - 1));
+                                    tempIsInitialized.add(tempIsInitialized.get(i - 1));
+                                    tempLastSender.add(tempLastSender.get(i - 1));
+                                    tempOtherPersonPic.add(tempOtherPersonPic.get(i - 1));
+                                }
+                                // fra alle pladser derefter så rykker vi pladsen 1 til højre
+                                else if (k != 0) {
+                                    tempChatIds.set(k, tempChatIds.get(Math.max(k - 1, 0)));
+                                    tempNames.set(k, tempNames.get(Math.max(k - 1, 0)));
+                                    tempLastmessage.set(k, tempLastmessage.get(Math.max(k - 1, 0)));
+                                    tempDates.set(k, tempDates.get(Math.max(k - 1, 0)));
+                                    tempHeaderList.set(k, tempHeaderList.get(Math.max(k - 1, 0)));
+                                    tempIsInitialized.set(k, tempIsInitialized.get(Math.max(k - 1, 0)));
+                                    tempLastSender.set(k, tempLastSender.get(Math.max(k - 1, 0)));
+                                    tempOtherPersonPic.set(k, otherPersonPic.get(Math.max(k - 1, 0)));
+                                }
                             }
-                            // fra alle pladser derefter så rykker vi pladsen 1 til højre
-                            else if (k != 0 ){
-                                tempChatIds.set(k, tempChatIds.get(Math.max(k - 1,0)));
-                                tempNames.set(k, tempNames.get(Math.max(k - 1,0)));
-                                tempLastmessage.set(k, tempLastmessage.get(Math.max(k - 1,0)));
-                                tempDates.set(k, tempDates.get(Math.max(k - 1,0)));
-                                tempHeaderList.set(k, tempHeaderList.get(Math.max(k - 1,0)));
-                                tempIsInitialized.set(k, tempIsInitialized.get(Math.max(k - 1,0)));
-                                tempLastSender.set(k, tempLastSender.get(Math.max(k - 1,0)));
-                                tempOtherPersonPic.set(k,otherPersonPic.get(Math.max(k-1,0)));
-                            }
+                            // når vi har rykket alle gamle datoer så indsætter vi den nye dato vi vil indsætte
+                            tempChatIds.set(j, chatIds.get(i));
+                            tempNames.set(j, names.get(i));
+                            tempLastmessage.set(j, lastMessage.get(i));
+                            tempDates.set(j, dates.get(i));
+                            tempHeaderList.set(j, headerList.get(i));
+                            tempIsInitialized.set(j, isInitialized.get(i));
+                            tempLastSender.set(j, lastSender.get(i));
+                            tempOtherPersonPic.set(j, otherPersonPic.get(i));
+                            break;
                         }
-                        // når vi har rykket alle gamle datoer så indsætter vi den nye dato vi vil indsætte
-                        tempChatIds.set(j,chatIds.get(i));
-                        tempNames.set(j,names.get(i));
-                        tempLastmessage.set(j,lastMessage.get(i));
-                        tempDates.set(j,dates.get(i));
-                        tempHeaderList.set(j,headerList.get(i));
-                        tempIsInitialized.set(j,isInitialized.get(i));
-                        tempLastSender.set(j,lastSender.get(i));
-                        tempOtherPersonPic.set(j,otherPersonPic.get(i));
-                        break;
                     }
                 }
             }
-        }
-        // vi overskriver brugerens chatid liste med den nye
-        userDTO.setChatId(tempChatIds);
+            // vi overskriver brugerens chatid liste med den nye
+            userDTO.setChatId(tempChatIds);
 
-        // Så vi ikke crasher noget
-        if (mContext != null) {
-            // Fjern alle gamle footviews hvis der var nogle
-            while(footerViews.size() != 0){
-                tilmeldinger_listView.removeFooterView(footerViews.get(0));
-                footerViews.remove(0);
+            // Så vi ikke crasher noget
+            if (mContext != null) {
+                // Fjern alle gamle footviews hvis der var nogle
+                while (footerViews.size() != 0) {
+                    tilmeldinger_listView.removeFooterView(footerViews.get(0));
+                    footerViews.remove(0);
+                }
+                // Vi laver listviewet for eventsne
+                setListView_applicants(eventEventPic, eventHeaders, eventOwnerPic, eventFirstApplicants, eventApplicantPic, eventApplicantsSize);
+                LikeSide_Adapter adapter = new LikeSide_Adapter(mContext, tempNames, tempDates, tempLastmessage, tempHeaderList, tempLastSender, tempIsInitialized, otherPersonPic);
+                // vi indsætter footviews for alle chats og tilføjer dem til vores liste
+                for (int i = 0; i < tempNames.size(); i++) {
+                    View v = adapter.getView(i, null, null);
+                    tilmeldinger_listView.addFooterView(v);
+                    footerViews.add(v);
+                }
+                // Vi sætter selectionen til det vi har fået fra vores overrided scrolllistener
+                tilmeldinger_listView.setSelection(listviewPosition);
             }
-            // Vi laver listviewet for eventsne
-            setListView_applicants(eventEventPic, eventHeaders, eventOwnerPic, eventFirstApplicants, eventApplicantPic, eventApplicantsSize);
-            LikeSide_Adapter adapter = new LikeSide_Adapter(mContext, tempNames, tempDates, tempLastmessage, tempHeaderList, tempLastSender, tempIsInitialized, otherPersonPic);
-            // vi indsætter footviews for alle chats og tilføjer dem til vores liste
-            for (int i = 0; i < tempNames.size(); i++) {
-                View v = adapter.getView(i,null,null);
-                tilmeldinger_listView.addFooterView(v);
-                footerViews.add(v);
-            }
-            // Vi sætter selectionen til det vi har fået fra vores overrided scrolllistener
-            tilmeldinger_listView.setSelection(listviewPosition);
+            // vi overskriver de lister vi har med den rigtige rækkefølge
+            this.dates = tempDates;
+            this.names = tempNames;
+            this.lastMessage = tempLastmessage;
+            this.headerList = tempHeaderList;
+            this.lastSender = tempLastSender;
+            this.isInitialized = tempIsInitialized;
+            this.chatIds = tempChatIds;
         }
-        // vi overskriver de lister vi har med den rigtige rækkefølge
-        this.dates = tempDates;
-        this.names = tempNames;
-        this.lastMessage = tempLastmessage;
-        this.headerList = tempHeaderList;
-        this.lastSender = tempLastSender;
-        this.isInitialized = tempIsInitialized;
-        this.chatIds = tempChatIds;
     }
 
     // vi opsætter en lytter til alle brugerens chats
@@ -447,7 +450,7 @@ public class LikesideList_frag extends Fragment{
                                             lastMessage.set(k, temp.getMessages().get(temp.getMessages().size() - 1));
                                             lastSender.set(k, temp.getSender().get(temp.getMessages().size() - 1));
                                             // genlaver listviewet
-                                            setListView_chats(chatIds, names, dates, lastMessage, headerList, lastSender, isInitialized, otherPersonPic);
+                                            setListView_chats(userDTO.getChatId(), names, dates, lastMessage, headerList, lastSender, isInitialized, otherPersonPic);
                                         }
                                         break;
                                     }
@@ -504,8 +507,8 @@ public class LikesideList_frag extends Fragment{
                                                 // vi har indlæst owner pic og derfor er den klar til at lave listviewet
                                                 readies[0] = true;
                                                 // hvis vi har indlæst applicantpic eller hvis der ikke er nogle applicants så laver vi listviewet
-                                                if (readies[1] || !(temp.getApplicants().size() > 0)){
-                                                    setListView_chats(userDTO.getChatId(),names,dates,lastMessage,headerList,lastSender,isInitialized,otherPersonPic);
+                                                if (readies[1] || !(temp.getApplicants().size() > 0)) {
+                                                    setListView_chats(userDTO.getChatId(), names, dates, lastMessage, headerList, lastSender, isInitialized, otherPersonPic);
                                                 }
                                             }
                                         }
@@ -572,20 +575,18 @@ public class LikesideList_frag extends Fragment{
                                         chatDAO.readChat(new ChatDAO.FirestoreCallback() {
                                             @Override
                                             public void onCallback(ChatDTO dto) {
-                                                String nameToAdd = dto.getUser1().equals(userController.getCurrUser().getfName()) ? dto.getUser2() : dto.getUser1();
-                                                names.add(nameToAdd);
-                                                dates.add(dto.getDates().get(dto.getDates().size() - 1));
-                                                lastMessage.add(dto.getMessages().get(dto.getMessages().size() - 1));
-                                                headerList.add(dto.getHeader());
-                                                lastSender.add(dto.getSender().get(dto.getSender().size() - 1));
-                                                isInitialized.add("true");
                                                 String otherUserID = dto.getUser1ID().equals(userController.getCurrUser().getUserId()) ? dto.getUser2ID() : dto.getUser1ID();
                                                 userController.getUser(new CallbackUser() {
                                                     @Override
                                                     public void onCallback(UserDTO user) {
                                                         otherPersonPic.add(user.getUserPicture());
-                                                        chatIds = temp.getChatId();
-                                                        userDTO.setChatId(temp.getChatId());
+                                                        String nameToAdd = dto.getUser1().equals(userController.getCurrUser().getfName()) ? dto.getUser2() : dto.getUser1();
+                                                        names.add(nameToAdd);
+                                                        dates.add(dto.getDates().get(dto.getDates().size() - 1));
+                                                        lastMessage.add(dto.getMessages().get(dto.getMessages().size() - 1));
+                                                        headerList.add(dto.getHeader());
+                                                        lastSender.add(dto.getSender().get(dto.getSender().size() - 1));
+                                                        isInitialized.add("true");
                                                         setListView_chats(temp.getChatId(), names, dates, lastMessage, headerList, lastSender, isInitialized, otherPersonPic);
                                                     }
                                                 }, otherUserID);
@@ -599,13 +600,6 @@ public class LikesideList_frag extends Fragment{
                                 chatDAO.readChat(new ChatDAO.FirestoreCallback() {
                                     @Override
                                     public void onCallback(ChatDTO dto) {
-                                        String nameToAdd = dto.getUser1().equals(userController.getCurrUser().getfName()) ? dto.getUser2() : dto.getUser1();
-                                        names.add(nameToAdd);
-                                        dates.add(dto.getDates().get(dto.getDates().size() - 1));
-                                        lastMessage.add(dto.getMessages().get(dto.getMessages().size() - 1));
-                                        headerList.add(dto.getHeader());
-                                        lastSender.add(dto.getSender().get(dto.getSender().size() - 1));
-                                        isInitialized.add("true");
                                         String otherUserID = dto.getUser1ID().equals(userController.getCurrUser().getUserId()) ? dto.getUser2ID() : dto.getUser1ID();
                                         userController.getUser(new CallbackUser() {
                                             @Override
@@ -613,6 +607,13 @@ public class LikesideList_frag extends Fragment{
                                                 otherPersonPic.add(user.getUserPicture());
                                                 chatIds = temp.getChatId();
                                                 userDTO.setChatId(temp.getChatId());
+                                                String nameToAdd = dto.getUser1().equals(userController.getCurrUser().getfName()) ? dto.getUser2() : dto.getUser1();
+                                                names.add(nameToAdd);
+                                                dates.add(dto.getDates().get(dto.getDates().size() - 1));
+                                                lastMessage.add(dto.getMessages().get(dto.getMessages().size() - 1));
+                                                headerList.add(dto.getHeader());
+                                                lastSender.add(dto.getSender().get(dto.getSender().size() - 1));
+                                                isInitialized.add("true");
                                                 setListView_chats(temp.getChatId(), names, dates, lastMessage, headerList, lastSender, isInitialized, otherPersonPic);
                                             }
                                         }, otherUserID);
