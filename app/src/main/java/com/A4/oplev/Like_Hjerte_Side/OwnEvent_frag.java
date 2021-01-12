@@ -105,16 +105,7 @@ public class OwnEvent_frag extends Fragment {
                             mContext.startActivity(intent);
                         }, event.getOwnerId());
 
-                    },"1v3EKAc0iNWJvebUDW6u");
-                }
-
-                else {
-                    // Her ville chatId'et også sendes med senere hen
-                    Intent i1 = new Intent(getActivity(), Activity_Chat.class);
-                    i1.putExtra("currentUser",currentUser);
-                    i1.putExtra("otherUser",names.get(position-eventHeaders.size()));
-                    i1.putExtra("chatId", userDTO.getChatId().get(position-eventHeaders.size()));
-                    startActivity(i1);
+                    },eventEventID.get(position));
                 }
             }
         });
