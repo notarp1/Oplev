@@ -27,7 +27,8 @@ import Controller.UserController;
 import DAL.Classes.EventDAO;
 
 public class OwnEvents_Adapter2 extends RecyclerView.Adapter<OwnEvents_Adapter2.ViewHolder> implements View.OnClickListener {
-
+    private EventDAO eventDAO = new EventDAO();
+    private UserController userController = UserController.getInstance();
     private Context mContext;
     private ArrayList<Integer> eventApplicantsSize;
     private ArrayList<String> eventHeaders, eventEventPic, eventApplicantPic, eventOwnerPic, eventFirstApplicants,eventID ;
@@ -151,8 +152,6 @@ public class OwnEvents_Adapter2 extends RecyclerView.Adapter<OwnEvents_Adapter2.
         @Override
         public void onClick(View v) {
             if (v == box_own_events){
-                EventDAO eventDAO = new EventDAO();
-                UserController userController = UserController.getInstance();
 
                 eventDAO.getEvent(event -> {
                     userController.getUser(user -> {
