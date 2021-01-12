@@ -4,18 +4,22 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+import android.content.Context;
+import android.content.ContextWrapper;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import android.os.Environment;
 import android.text.format.DateUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -33,13 +37,21 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.A4.oplev.R;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.libraries.places.api.Places;
 import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.api.model.TypeFilter;
 import com.google.android.libraries.places.widget.Autocomplete;
 import com.google.android.libraries.places.widget.model.AutocompleteActivityMode;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Target;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -120,6 +132,26 @@ public class createEvent1_frag extends Fragment implements View.OnClickListener{
             Log.d(TAG, "onCreateView: (jbe) repost spottet!");
             EventDTO repostEvent = ((Activity_Create_Event) getActivity()).getRepostEvent();
             Log.d(TAG, "onCreateView: (jbe) repost date = " + repostEvent.getDate().toString());
+            Picasso.get().load(repostEvent.getEventPic()).into(pic);
+            //check if repost pic is default pic (no reupload)
+            FirebaseStorage.getInstance().getReference().child(getString(R.string.defaultpic_db_path)).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                @Override
+                public void onSuccess(Uri uri) {
+                    //download and set image URI
+                    Log.d(TAG, "onSuccess: defaultpic download uri: " + uri.toString() + "\n repostpic: " + repostEvent.getEventPic());
+                    if(repostEvent.getEventPic().equals(uri.toString())) {
+                        Log.d(TAG, "onSuccess: eventpic is defaultpic");
+                        ((Activity_Create_Event) getActivity()).setPickedImgUri(null);
+                        Log.d(TAG, "onSuccess: eventpicUri: " + ((Activity_Create_Event) getActivity()).getPickedImgUri());
+                    }
+                    else{
+                        Log.d(TAG, "onSuccess: eventpic is not deafaultpic");
+                        imageDownload(repostEvent.getEventPic());
+                    }
+                }
+            });
+
+            //set values from repost event
             title_in.setText(repostEvent.getTitle());
             desc_in.setText(repostEvent.getDescription());
             price_in.setText("" + repostEvent.getPrice());
@@ -139,7 +171,6 @@ public class createEvent1_frag extends Fragment implements View.OnClickListener{
         }
 
         dropDown.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            // todo: sæt start text, således at motion ikke er valgt fra starten.
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 // An item was selected. You can retrieve the selected item using
@@ -212,6 +243,61 @@ public class createEvent1_frag extends Fragment implements View.OnClickListener{
         time_in.setText(timeString);
         //remove error of missing time input
         time_in.setError(null);
+    }
+
+    ImageView targetHolder;
+    //save image from repost locally
+    private void imageDownload(String url){
+        Log.d(TAG, "imageDownload: (jbe) trying to save img");
+        targetHolder = new ImageView(this.getContext());
+        targetHolder.setTag((Target) getTarget(url));
+        Picasso.get()
+                .load(url)
+                .into((Target) targetHolder.getTag());
+    }
+    //target to save
+    private Target getTarget(final String url){
+        Log.d(TAG, "getTarget: (jbe) trying to find target");
+        Target target = new Target(){
+            @Override
+            public void onBitmapLoaded(final Bitmap bitmap, Picasso.LoadedFrom from) {
+                Log.d(TAG, "onBitmapLoaded: (jbe) bitmaploaded");
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Log.d(TAG, "run: (jbe)");
+                        ContextWrapper cw = new ContextWrapper(getActivity().getApplicationContext());
+                        File directory = cw.getDir("imageDir", Context.MODE_PRIVATE);
+
+                        File file = new File(directory,"OplevRepostTemp.jpg");
+                        try {
+                            FileOutputStream ostream = new FileOutputStream(file, false);
+                            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, ostream);
+                            ostream.flush();
+                            ostream.close();
+                            Log.d(TAG, "run: (jbe) file saved to " + file.getPath());
+                            //setting picked img URI
+                            ((Activity_Create_Event) getActivity()).setPickedImgUri(Uri.fromFile(file));
+                            Log.d(TAG, "run: (jbe) file absoulute path " + file.getAbsolutePath());
+                            Log.d(TAG, "run: (jbe) uri set to " + Uri.fromFile(file).toString());
+                        } catch (IOException e) {
+                            Log.e("IOException", e.getLocalizedMessage());
+                            Log.d(TAG, "run: (jbe) file save exception" + e.getLocalizedMessage()+ "\n"+
+                            e.getStackTrace().toString());
+                        }
+                    }
+                }).start();
+            }
+            @Override
+            public void onBitmapFailed(Exception e, Drawable errorDrawable) {
+                Log.d(TAG, "onBitmapFailed: (jbe)" + e.getLocalizedMessage());
+            }
+            @Override
+            public void onPrepareLoad(Drawable placeHolderDrawable) {
+                Log.d(TAG, "onPrepareLoad: (jbe)");
+            }
+        };
+        return target;
     }
 
     @Override
@@ -324,32 +410,6 @@ public class createEvent1_frag extends Fragment implements View.OnClickListener{
             inputIsValid = false;
             city_in.setError("Indsæt by");
         }
-        /*if( ((Activity_Create_Event) getActivity()).getPickedImgUri() == null){
-
-            // no picture selected. Ask user if they want to proceed without pic
-             TODO : fix below code to wait for user to answer before moving on (callback?)
-            // from https://stackoverflow.com/questions/2478517/how-to-display-a-yes-no-dialog-box-on-android
-            DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    switch (which){
-                        case DialogInterface.BUTTON_POSITIVE:
-                            //Yes button clicked
-                            //input still ok
-                            break;
-                        case DialogInterface.BUTTON_NEGATIVE:
-                            //No button clicked
-                            //input not ok
-                            inputIsValid = false;
-                            break;
-                    }
-                }
-            };
-
-            AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-            builder.setMessage("Billede ikke valgt. Fortsæt alligevel?").setPositiveButton("Ja", dialogClickListener)
-                    .setNegativeButton("Nej", dialogClickListener).show();
-        }*/
         if(currentType.equals("--Vælg type--")){
             inputIsValid = false;
             Toast.makeText(getActivity(), "Vælg en event type", Toast.LENGTH_SHORT).show();

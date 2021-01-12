@@ -146,8 +146,12 @@ public class Activity_Create_Event extends AppCompatActivity implements View.OnC
     }
 
     public Uri getPickedImgUri() {
-        System.out.println("jbe picked img method woop");
+        Log.d(TAG, "getPickedImgUri: (jbe) get picked imgUri");
         return pickedImgUri;
+    }
+    public void setPickedImgUri(Uri uri) {
+        Log.d(TAG, "setPickedImgUri: (jbe) set picked imgUri");
+        pickedImgUri = uri;
     }
 
     public EventDTO getRepostEvent() {
