@@ -28,6 +28,7 @@ import java.util.List;
 import com.A4.oplev._Adapters.Event_Adapter;
 
 //import DAL.DBAccess;
+import Controller.UserController;
 import DAL.Classes.EventDAO;
 import DAL.Interfaces.CallBackEventList;
 import DAL.Interfaces.CallBackList;
@@ -64,7 +65,6 @@ public class Activity_Main extends AppCompatActivity implements View.OnClickList
         List<EventDTO> eventList = new ArrayList<>();
 
         rcEvent = findViewById(R.id.eventRecycleView);
-
 
 
         EventDAO dataA = new EventDAO();
