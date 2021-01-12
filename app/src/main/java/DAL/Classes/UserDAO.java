@@ -1,35 +1,40 @@
 package DAL.Classes;
 
+import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
 
+import com.A4.oplev.Activity_Ini;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
+import com.google.firebase.firestore.WriteBatch;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
 import Controller.UserController;
-import DAL.Interfaces.CallbackEvent;
 import DAL.Interfaces.CallbackUser;
+import DAL.Interfaces.CallbackUserDelete;
 import DAL.Interfaces.IUserDAO;
-import DTO.EventDTO;
+import DTO.ChatDTO;
 import DTO.UserDTO;
 
-public class UserDAO implements IUserDAO, CallbackUser {
+public class UserDAO implements IUserDAO, CallbackUser, CallbackUserDelete {
 
     public FirebaseFirestore db;
     private static final String TAG = "userLog" ;
+    private boolean wait = false;
 
 
     public UserDAO(){
@@ -121,62 +126,213 @@ public class UserDAO implements IUserDAO, CallbackUser {
 
 
     @Override
-    public void deleteUser(UserDTO user) {
-
+    public void deleteUser(UserDTO user, Context ctx) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
         ArrayList<String> events = user.getEvents();
-        ArrayList<String> pictures = user.getPictures();
-        EventDAO eventDAO = new EventDAO();
 
-        for(int i = 0; i<6; i++){
-            if(pictures.get(i) != null){
-                String location = pictures.get(i);
-                deleteFromStorage(location);
-            }
-            i++;
-        }
+        ArrayList<String> chats = user.getChatId();
 
-        for(int i = 0; i < events.size(); i++){
-            String location = events.get(i);
+        ChatDAO chatDAO = new ChatDAO();
 
-            eventDAO.getEvent(new CallbackEvent() {
-                @Override
-                public void onCallback(EventDTO event) {
-                    String location = event.getEventPic();
-                    deleteFromStorage(location);
+
+        deleteRefs(new CallbackUserDelete() {
+            @Override
+                public void onCallbackDelete() {
+
+                    deleterUserLocal(new CallbackUserDelete() {
+                        @Override
+                        public void onCallbackDelete() {
+
+                            deleteUserOnline(new CallbackUserDelete() {
+
+                              @Override
+                                public void onCallbackDelete() {
+
+                                      loopThing(new CallbackUserDelete() {
+                                        @Override
+                                        public void onCallbackDelete() {
+                                            Intent i = new Intent(ctx, Activity_Ini.class);
+                                            ctx.startActivity(i);
+                                        }
+                                    }, chats, chatDAO, user);
+                                }
+                            });
+
+                        }
+                    }, user, db);
                 }
-            }, location);
+            }, events, chats);
 
-            i++;
+    }
+
+    private void loopThing(CallbackUserDelete delete,  ArrayList<String> chats, ChatDAO chatDAO, UserDTO user){
+
+        ArrayList<String> newChat = new ArrayList<>();
+        ArrayList<String> userVisited = new ArrayList<>();
+        UserDTO userTest = new UserDTO();
+        for(int i = 0; i<chats.size(); i++){
+            newChat.add(chats.get(i));
         }
 
+        for(int i = 0; i<newChat.size(); i++){
+            System.out.println("HAHA: " + newChat.get(i));;
+        }
+        for (int i = 0; i < chats.size(); i++) {
 
 
+            int finalI = i;
+            chatDAO.readChat(new ChatDAO.FirestoreCallback() {
+                @Override
+                public void onCallback(ChatDTO dto) {
+                    String userId;
+                    if(dto.getUser1ID().equals(user.getUserId())){
+                        userId = dto.getUser2ID();
+                    } else userId = dto.getUser1ID();
 
+
+                    if(userVisited.contains(userId)){
+                        System.out.println("suckadicxk");
+                    } else {
+
+                        userVisited.add(userId);
+
+                        getUser(new CallbackUser() {
+                            @Override
+                            public void onCallback(UserDTO user1) {
+
+                                //Henter chatIds
+                                ArrayList<String> uChats = user1.getChatId();
+
+                                //Finder chatID
+                                for(int i = 0; i<newChat.size(); i++){
+
+                                    //chat 1 -> new chat
+                                    for(int j = 0; j < uChats.size(); j++){
+
+                                        if(uChats.get(j).equals(newChat.get(i))){
+                                            //hvis chat1 ->
+                                            //fjerneer corresponding ID
+
+                                            uChats.remove(j);
+
+                                            user1.setChatId(uChats);
+
+                                            updateOtherUser(new CallbackUserDelete() {
+                                                @Override
+                                                public void onCallbackDelete() {
+
+
+                                                }
+                                            }, user1);
+
+                                        }
+                                    }
+                                }
+                                for(int i = 0; i<uChats.size(); i++){
+                                    System.out.println("ID: " + i + " noob " + uChats.get(i));
+                                }
+
+                               /*  */
+                            }
+                        }, userId);
+                    }
+                }
+            }, chats.get(i));
+        }
+        delete.onCallbackDelete();
+    }
+
+    private void updateOtherUser(CallbackUserDelete delete, UserDTO user){
+        updateUser(user);
+        delete.onCallbackDelete();
+    }
+
+    private void deleterUserLocal(CallbackUserDelete delete, UserDTO user, FirebaseFirestore db){
+        System.out.println("HEJHEJ");
+
+        db.collection("users").document(user.getUserId())
+                .delete()
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        System.out.println("slettet");
+                        delete.onCallbackDelete();
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        System.out.println("IkkeSlettet");
+                    }
+                });
 
 
     }
 
-    public void deleteFromStorage(String location){
+    private void deleteUserOnline(CallbackUserDelete delete){
+        FirebaseUser currUser = FirebaseAuth.getInstance().getCurrentUser();
 
-        StorageReference storageReference = FirebaseStorage.getInstance().getReferenceFromUrl(location);
-        storageReference.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+        currUser.delete()
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            Log.d(TAG, "User account deleted.");
+                            delete.onCallbackDelete();
+                        }
+                    }
+                });
+
+    }
+
+    private void deleteRefs(CallbackUserDelete delete, ArrayList<String> events, ArrayList<String> chats){
+        /*
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+        WriteBatch writeBatch = db.batch();
+        System.out.println("NONNA");
+
+        for (int i = 0; i < events.size(); i++) {
+            DocumentReference documentReference = db.collection("events").document(events.get(i));
+            writeBatch.delete(documentReference);
+            System.out.println("EVENTS");
+        }
+
+
+        for (int i = 0; i < chats.size(); i++) {
+            DocumentReference documentReference = db.collection("chats").document(chats.get(i));
+            writeBatch.delete(documentReference);
+            System.out.println("CHATS");
+        }
+
+        writeBatch.commit().addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
-                // File deleted successfully
-                Log.d(TAG, "onSuccess: deleted file");
+                // Do anything here
             }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception exception) {
-                // Uh-oh, an error occurred!
-                Log.d(TAG, "onFailure: did not delete file");
-            }
-        });
+        }); */
+        delete.onCallbackDelete();
+    }
 
+
+
+    public void setWait(boolean wait) {
+        this.wait = wait;
+    }
+
+    public boolean isWait() {
+        return wait;
     }
 
     @Override
     public void onCallback(UserDTO user) {
 
     }
+
+
+    @Override
+    public void onCallbackDelete() {
+
+    }
 }
+

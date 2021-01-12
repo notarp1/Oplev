@@ -1,5 +1,6 @@
 package Controller;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.util.Log;
@@ -141,8 +142,8 @@ public class UserController {
         return user.getPictures();
     }
 
-    public void deleteUser(UserDTO user){
-        userDAO.deleteUser(user);
+    public void deleteUser(UserDTO user, Context ctx){
+        userDAO.deleteUser(user, ctx);
     }
 
 

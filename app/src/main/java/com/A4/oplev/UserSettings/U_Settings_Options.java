@@ -77,7 +77,7 @@ public class U_Settings_Options extends Fragment implements View.OnClickListener
 
                 public void onClick(DialogInterface dialog, int which) {
                     // Do nothing but close the dialog
-                    userController.deleteUser(userController.getCurrUser());
+                    userController.deleteUser(userController.getCurrUser(), getActivity());
                     dialog.dismiss();
                 }
             });
