@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -79,7 +80,16 @@ public class LikesideList_frag extends Fragment{
         tilmeldinger_listView = root.findViewById(R.id.beskedListView_tilmeldinger);
 
         // Denne linje er til test
-        //chatDAO.createChat(new ChatDTO(null,null,null,null,null,null,"Spasser","John dillermand","Aben"));
+
+        /*
+        chatDAO.createChat(new ChatDTO(null, null, null, null, null, null, "Tester", "John", "Karl", userDTO.getUserId(), "Lvg4pSi5MehhmwaFmhK5NwZ88hB3"), new ChatDAO.CreateChatCallback() {
+            @Override
+            public void onCallback(String chatID) {
+                Toast.makeText(mContext, chatID, Toast.LENGTH_SHORT).show();
+            }
+        });
+         */
+
 
         // Hvis vi af en eller anden grund ikke har en user så prøv på at få den igen
         if (userDTO == null) userDTO = userController.getCurrUser();
@@ -152,6 +162,19 @@ public class LikesideList_frag extends Fragment{
                         }
                         headerList.add(dto.getHeader());
                         chatIds.add(dto.getChatId());
+                        if (userDTO.getChatId().size() == otherPersonPic.size() && !otherPersonPic.contains("")) {
+                            chatsReady = true;
+                            // hvis eventsne er klar så køres dette
+                            if (eventsReady) {
+                                // vi opsætter listviewet samt changelistenerne for chats og events
+                                setListView_chats(chatIds, names, dates, lastMessage, headerList, lastSender, isInitialized, otherPersonPic);
+                                setChangeListeners_chats();
+                                setChangeListener_tilmeldinger();
+                                setUserChangeListener();
+                                chatsReady = false;
+                                eventsReady = false;
+                            }
+                        }
                     }, userDTO.getChatId().get(j));
                 }
             }
@@ -414,7 +437,7 @@ public class LikesideList_frag extends Fragment{
                 }
                 // Vi laver listviewet for eventsne
                 setListView_applicants(eventEventPic, eventHeaders, eventOwnerPic, eventFirstApplicants, eventApplicantPic, eventApplicantsSize);
-                LikeSide_Adapter adapter = new LikeSide_Adapter(mContext, tempNames, tempDates, tempLastmessage, tempHeaderList, tempLastSender, tempIsInitialized, otherPersonPic);
+                LikeSide_Adapter adapter = new LikeSide_Adapter(mContext, tempNames, tempDates, tempLastmessage, tempHeaderList, tempLastSender, tempIsInitialized, tempOtherPersonPic);
                 // vi indsætter footviews for alle chats og tilføjer dem til vores liste
                 for (int i = 0; i < tempNames.size(); i++) {
                     View v = adapter.getView(i, null, null);
@@ -506,17 +529,17 @@ public class LikesideList_frag extends Fragment{
                             for (int j = 0; j < eventEventID.size(); j++) {
                                 // vi finder det sted med det rigtige eventid og erstatter gamle værdier
                                 if (eventEventID.get(j).equals(temp.getEventId())){
-                                    eventApplicantsSize.set(j,temp.getApplicants().size());
-                                    // ternary operator til at få applicanten
-                                    String applicant = temp.getApplicants().size() == 0 ? "" : temp.getApplicants().get(0);
-                                    eventFirstApplicants.set(j,applicant);
-                                    eventParticipant.set(j,temp.getParticipant());
                                     int finalJ1 = j;
                                     // vi bliver altid nødt til at indlæse ejeren billede hvis det nu er blevet ændret
                                     userController.getUser(new CallbackUser() {
                                         @Override
                                         public void onCallback(UserDTO user) {
                                             if (user != null) {
+                                                eventApplicantsSize.set(finalJ1,temp.getApplicants().size());
+                                                // ternary operator til at få applicanten
+                                                String applicant = temp.getApplicants().size() == 0 ? "" : temp.getApplicants().get(0);
+                                                eventFirstApplicants.set(finalJ1,applicant);
+                                                eventParticipant.set(finalJ1,temp.getParticipant());
                                                 eventOwnerPic.set(finalJ1, user.getUserPicture());
                                                 // vi har indlæst owner pic og derfor er den klar til at lave listviewet
                                                 readies[0] = true;
@@ -531,6 +554,7 @@ public class LikesideList_frag extends Fragment{
                                     // hvis der er mindst 1 applicant så skal vi hente personens billede ind
                                     if (temp.getApplicants().size() > 0) {
                                         int finalJ = j;
+                                        System.out.println("IDET " + temp.getEventId());
                                         userController.getUser(new CallbackUser() {
                                             @Override
                                             public void onCallback(UserDTO user) {
@@ -574,16 +598,16 @@ public class LikesideList_frag extends Fragment{
                     UserDTO temp = snapshot.toObject(UserDTO.class);
                     if (temp != null) {
                         if (temp.getChatId() != null){
-                            if (temp.getChatId().size() > userDTO.getChatId().size()) {
+                            if (temp.getChatId().size() > chatIds.size()) {
                                 boolean isFound = false;
                                 for (int i = 0; i < temp.getChatId().size(); i++) {
-                                    for (int j = 0; j < userDTO.getChatId().size(); j++) {
-                                        if (temp.getChatId().get(i).equals(userDTO.getChatId().get(j))) {
+                                    for (int j = 0; j < chatIds.size(); j++) {
+                                        if (temp.getChatId().get(i).equals(chatIds.get(j))) {
                                             isFound = true;
                                         }
                                     }
                                     if (!isFound) {
-                                        ArrayList<String> tempchatID = userDTO.getChatId();
+                                        ArrayList<String> tempchatID = chatIds;
                                         tempchatID.add(temp.getChatId().get(i));
                                         userDTO.setChatId(tempchatID);
                                         chatDAO.readChat(new ChatDAO.FirestoreCallback() {
@@ -614,13 +638,14 @@ public class LikesideList_frag extends Fragment{
                                 chatDAO.readChat(new ChatDAO.FirestoreCallback() {
                                     @Override
                                     public void onCallback(ChatDTO dto) {
+                                        System.out.println("BAGUGAN");
+                                        System.out.println(dto.getChatId());
                                         String otherUserID = dto.getUser1ID().equals(userController.getCurrUser().getUserId()) ? dto.getUser2ID() : dto.getUser1ID();
+                                        System.out.println(otherUserID);
                                         userController.getUser(new CallbackUser() {
                                             @Override
                                             public void onCallback(UserDTO user) {
                                                 otherPersonPic.add(user.getUserPicture());
-                                                chatIds = temp.getChatId();
-                                                userDTO.setChatId(temp.getChatId());
                                                 String nameToAdd = dto.getUser1().equals(userController.getCurrUser().getfName()) ? dto.getUser2() : dto.getUser1();
                                                 names.add(nameToAdd);
                                                 dates.add(dto.getDates().get(dto.getDates().size() - 1));
