@@ -17,6 +17,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.firestore.auth.User;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -89,12 +90,22 @@ public class EventDAO implements IEventDAO {
         if (prefs.getBoolean("madDrikkeSwitch", true)) { types.add("Mad og Drikke"); }
         if (prefs.getBoolean("musikNattelivSwitch", true)) { types.add("Musik og Natteliv"); }
         if (prefs.getBoolean("gratisSwitch", true)) { types.add("Gratis"); }
+        if (prefs.getBoolean("blivKlogereSwitch", true)) { types.add("Bliv klogere"); }
 
         docRef.whereIn("type", types).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>(){
                 @Override
                 public void onComplete(@NonNull Task<QuerySnapshot> task) {
                     if (task.isSuccessful()) {
-                        for (QueryDocumentSnapshot document : task.getResult()) { completeList.add(document.getId()); }
+                        for (QueryDocumentSnapshot document : task.getResult()) {
+                            EventDTO dto = document.toObject(EventDTO.class);
+                            if (UserController.getInstance().getCurrUser() != null) {
+                                if (!dto.getOwnerId().equals(UserController.getInstance().getCurrUser().getUserId()) && dto.getParticipant().equals("") && !dto.getApplicants().contains(UserController.getInstance().getCurrUser().getUserId())) {
+                                    completeList.add(document.getId());
+                                }
+                            } else {
+                                completeList.add(document.getId());
+                            }
+                        }
                         Collections.shuffle(completeList);
                         callBackList.onCallback(completeList);
                     } else {
