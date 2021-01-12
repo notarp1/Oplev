@@ -1,6 +1,7 @@
 package com.A4.oplev.Like_Hjerte_Side;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
@@ -20,6 +21,7 @@ import androidx.core.app.NotificationManagerCompat;
 import androidx.core.app.TaskStackBuilder;
 import androidx.fragment.app.Fragment;
 
+import com.A4.oplev.Activity_Event;
 import com.A4.oplev.Activity_Profile;
 import com.A4.oplev.Chat.Activity_Chat;
 import com.A4.oplev.R;
@@ -92,22 +94,20 @@ public class OwnEvent_frag extends Fragment {
                     ArrayList<String> applicants = new ArrayList<>();
                     //sendNoti();
                     //Toast.makeText(mContext, "Notifikation sendt", Toast.LENGTH_SHORT).show();
-                    if (eventFirstApplicants.get(position).equals("")) {
-                        System.out.println(eventHeaders.get(position));
-                    } else {
-                        eventDAO.getEvent(event -> {
-                            applicants.addAll(event.getApplicants());
-                            userController.getUser(user -> {
-                                Intent i12 = new Intent(mContext, Activity_Profile.class);
-                                i12.putExtra("user", user);
-                                i12.putExtra("load", 2);
-                                i12.putExtra("numberOfApplicants",eventApplicantsSize.get(position)-1);
-                                i12.putExtra("applicantList",applicants);
-                                mContext.startActivity(i12);
-                            }, eventFirstApplicants.get(position));
-                        }, userDTO.getEvents().get(position));
-                    }
+
+                    eventDAO.getEvent(event -> {
+
+                        userController.getUser(user -> {
+                            Intent intent = new Intent(mContext, Activity_Event.class);
+                            intent.putExtra("user", user);
+                            intent.putExtra("load", 1);
+                            intent.putExtra("event", event);
+                            mContext.startActivity(intent);
+                        }, event.getOwnerId());
+
+                    },"1v3EKAc0iNWJvebUDW6u");
                 }
+
                 else {
                     // Her ville chatId'et også sendes med senere hen
                     Intent i1 = new Intent(getActivity(), Activity_Chat.class);

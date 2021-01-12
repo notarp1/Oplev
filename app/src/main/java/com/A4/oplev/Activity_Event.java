@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -26,6 +27,7 @@ public class Activity_Event extends AppCompatActivity implements View.OnClickLis
     public TextView eventName, eCity, eDate, ePrice, eAbout, eUname, eUabout, picNumber, eventPname;
     ImageView eventPic, profilePic, repost, join;
     EventController eventController;
+    LinearLayout box;
     ArrayList<String> pictures, currPics;
     UserDTO user;
     EventDTO event;
@@ -56,6 +58,7 @@ public class Activity_Event extends AppCompatActivity implements View.OnClickLis
         repost = findViewById(R.id.btn_repost);
         join = findViewById(R.id.btn_join);
         eventPname = findViewById(R.id.event_person_name);
+        box = findViewById(R.id.buttons_on_event);
 
 
         //Knapper til billeder, repost og join
@@ -90,8 +93,14 @@ public class Activity_Event extends AppCompatActivity implements View.OnClickLis
                 .placeholder(R.drawable.load2)
                 .into(profilePic);
 
-        eventController.iniEvents(this, event, user);
 
+
+        int j = myIntent.getIntExtra("load", 0);
+
+        if(j == 1){
+            box.setVisibility(View.GONE);
+        } else   box.setVisibility(View.VISIBLE);
+        eventController.iniEvents(this, event, user, j);
 
     }
 
