@@ -98,8 +98,11 @@ public class EventDAO implements IEventDAO {
                     if (task.isSuccessful()) {
                         for (QueryDocumentSnapshot document : task.getResult()) {
                             EventDTO dto = document.toObject(EventDTO.class);
-                            System.out.println("EVENT ID ER " + dto.getEventId());
-                            if (!dto.getOwnerId().equals(UserController.getInstance().getCurrUser().getUserId()) && dto.getParticipant().equals("") && !dto.getApplicants().contains(UserController.getInstance().getCurrUser().getUserId())) {
+                            if (UserController.getInstance().getCurrUser() != null) {
+                                if (!dto.getOwnerId().equals(UserController.getInstance().getCurrUser().getUserId()) && dto.getParticipant().equals("") && !dto.getApplicants().contains(UserController.getInstance().getCurrUser().getUserId())) {
+                                    completeList.add(document.getId());
+                                }
+                            } else {
                                 completeList.add(document.getId());
                             }
                         }
