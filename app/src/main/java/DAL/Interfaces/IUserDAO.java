@@ -8,7 +8,7 @@ public interface IUserDAO {
     void getUser(CallbackUser callback, String userId);
     void createUser(UserDTO user);
     void updateUser(UserDTO user);
-    void deleteUser(String userId);
+    void deleteUser(UserDTO user);
 
 
 }

@@ -12,14 +12,18 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
 import Controller.UserController;
+import DAL.Interfaces.CallbackEvent;
 import DAL.Interfaces.CallbackUser;
 import DAL.Interfaces.IUserDAO;
+import DTO.EventDTO;
 import DTO.UserDTO;
 
 public class UserDAO implements IUserDAO, CallbackUser {
@@ -117,10 +121,59 @@ public class UserDAO implements IUserDAO, CallbackUser {
 
 
     @Override
-    public void deleteUser(String userId) {
+    public void deleteUser(UserDTO user) {
+
+        ArrayList<String> events = user.getEvents();
+        ArrayList<String> pictures = user.getPictures();
+        EventDAO eventDAO = new EventDAO();
+
+        for(int i = 0; i<6; i++){
+            if(pictures.get(i) != null){
+                String location = pictures.get(i);
+                deleteFromStorage(location);
+            }
+            i++;
+        }
+
+        for(int i = 0; i < events.size(); i++){
+            String location = events.get(i);
+
+            eventDAO.getEvent(new CallbackEvent() {
+                @Override
+                public void onCallback(EventDTO event) {
+                    String location = event.getEventPic();
+                    deleteFromStorage(location);
+                }
+            }, location);
+
+            i++;
+        }
+
+
+
+
+
 
     }
 
+    public void deleteFromStorage(String location){
+
+        StorageReference storageReference = FirebaseStorage.getInstance().getReferenceFromUrl(location);
+        storageReference.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                // File deleted successfully
+                Log.d(TAG, "onSuccess: deleted file");
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception exception) {
+                // Uh-oh, an error occurred!
+                Log.d(TAG, "onFailure: did not delete file");
+            }
+        });
+
+    }
 
     @Override
     public void onCallback(UserDTO user) {
