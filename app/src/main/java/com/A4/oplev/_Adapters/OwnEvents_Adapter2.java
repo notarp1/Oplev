@@ -1,7 +1,9 @@
 package com.A4.oplev._Adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Build;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +15,8 @@ import androidx.annotation.RequiresApi;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.A4.oplev.CreateEvent.Activity_Create_Event;
+import com.A4.oplev.Like_Hjerte_Side.Activity_Likeside;
 import com.A4.oplev.R;
 import com.squareup.picasso.Picasso;
 
@@ -34,6 +38,7 @@ public class OwnEvents_Adapter2 extends RecyclerView.Adapter<OwnEvents_Adapter2.
         this.eventOwnerPic = eventOwnerPic;
         this.eventFirstApplicants = eventFirstApplicants;
     }
+
 
     @Override
     public void onClick(View v) {
@@ -117,6 +122,7 @@ public class OwnEvents_Adapter2 extends RecyclerView.Adapter<OwnEvents_Adapter2.
         public ImageView eventPic,profilePic1, profilePic2;
         public CardView profileHolder1, profilePic2Holder;
         public TextView numberOfApplciants, header, date;
+        public View edit, delete;
 
 
         public ViewHolder(@NonNull View itemView) {
@@ -129,16 +135,30 @@ public class OwnEvents_Adapter2 extends RecyclerView.Adapter<OwnEvents_Adapter2.
             numberOfApplciants = (TextView)itemView.findViewById(R.id.own_event_antal_anmodning);
             header = (TextView)itemView.findViewById(R.id.own_event_headline);
             date = (TextView)itemView.findViewById(R.id.own_event_beskeder_events_dato);
+            edit = itemView.findViewById(R.id.own_event_edit_picture);
+            delete = itemView.findViewById(R.id.own_event_delete_picture);
+
+            edit.setOnClickListener(this);
+            delete.setOnClickListener(this);
         }
 
         @Override
         public void onClick(View v) {
+            if(v == edit){
+                //Edit post
+                Intent i = new Intent(v.getContext(), Activity_Create_Event.class);
+                Bundle bundle = new Bundle();
+                bundle.
 
+            }else if(v == delete){
+                //Delete
+
+            }
         }
     }
 
     @Override
     public int getItemCount() {
-        return 0;
+        return this.eventOwnerPic.size();
     }
 }

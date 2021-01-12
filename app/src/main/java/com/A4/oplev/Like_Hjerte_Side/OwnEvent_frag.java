@@ -49,14 +49,14 @@ public class OwnEvent_frag extends Fragment {
                               eventParticipant = new ArrayList<>(), tempEventID = new ArrayList<>(), tempFirstApplicant = new ArrayList<>(),
                               names = new ArrayList<>();
     private Context mContext;
-
+    View root2;
     boolean eventsReady = false;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater i, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View root = i.inflate(R.layout.u_settings_events_frag, container, false);
-
+        root2 = root;
         userController = UserController.getInstance();
         userDTO = userController.getCurrUser();
         eventDAO = new EventDAO();
@@ -67,7 +67,7 @@ public class OwnEvent_frag extends Fragment {
 
 
 
-        recyclerView.setOnTouchListener(new OnSwipeTouchListener(mContext){
+      /*  recyclerView.setOnTouchListener(new OnSwipeTouchListener(mContext){
             @SuppressLint("ResourceAsColor")
             @Override
             public void onSwipeLeft() {
@@ -81,7 +81,7 @@ public class OwnEvent_frag extends Fragment {
                         R.anim.exit_to_left).replace(R.id.likeside_frameLayout,new LikesideList_frag())
                         .commit();
             }
-        });
+        });*/
 
         // *Todo - Skal vise side for eget event (Antager at der skal laves en nyt xml dokument - Men hvad skal vises?)
         // *Todo - Organiser rækkefølge på events.
@@ -211,14 +211,12 @@ public class OwnEvent_frag extends Fragment {
 
                 Log.d("eventSize test3",  tempEventApplicantsSize.toString());
 
-                LinearLayoutManager layoutManager = new LinearLayoutManager(mContext, LinearLayoutManager.VERTICAL, false);
-                OwnEvents_Adapter2 eventAdapter = new OwnEvents_Adapter2(mContext, tempEventPic, tempEventHeaders, tempEventOwnerPic, tempEventFirstApplicants, tempEventApplicantPic, tempEventApplicantsSize);
+                LinearLayoutManager layoutManager = new LinearLayoutManager(root2.getContext(), LinearLayoutManager.VERTICAL, false);
+                OwnEvents_Adapter2 eventAdapter = new OwnEvents_Adapter2(root2.getContext(), tempEventPic, tempEventHeaders, tempEventOwnerPic, tempEventFirstApplicants, tempEventApplicantPic, tempEventApplicantsSize);
                 recyclerView.setLayoutManager(layoutManager);
                 recyclerView.setAdapter(eventAdapter);
             }
         }
-
-
 
 
     @Override
