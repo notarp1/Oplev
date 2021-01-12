@@ -89,7 +89,7 @@ public class EventController {
         return ePictures;
     }
 
-    public void iniEvents(Activity_Event ctx, EventDTO event, UserDTO user){
+    public void iniEvents(Activity_Event ctx, EventDTO event, UserDTO user, int j){
 
         DateFormat format1 = new SimpleDateFormat("dd-MM-yyyy HH:mm");
         format1.setTimeZone(TimeZone.getTimeZone("GMT+1"));
@@ -114,6 +114,9 @@ public class EventController {
         ctx.eAbout.setText(eAboutString);
         ctx.eUname.setText(eUnameString);
         ctx.eUabout.setText(eUaboutString);
+        if(j == 1){
+            ctx.eventName.setText(event.getTitle());
+        }
 
 
     }
