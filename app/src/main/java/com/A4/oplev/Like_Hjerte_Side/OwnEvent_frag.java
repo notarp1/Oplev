@@ -92,8 +92,6 @@ public class OwnEvent_frag extends Fragment {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 if (position < eventHeaders.size()) {
                     ArrayList<String> applicants = new ArrayList<>();
-                    //sendNoti();
-                    //Toast.makeText(mContext, "Notifikation sendt", Toast.LENGTH_SHORT).show();
 
                     eventDAO.getEvent(event -> {
 
