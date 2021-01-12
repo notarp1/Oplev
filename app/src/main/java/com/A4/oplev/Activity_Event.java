@@ -35,8 +35,6 @@ public class Activity_Event extends AppCompatActivity implements View.OnClickLis
     int height, width, currentPic, maxPic, minPic, maxPicPrint;
 
 
-
-
     @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
