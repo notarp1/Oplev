@@ -15,6 +15,7 @@ import androidx.annotation.RequiresApi;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.A4.oplev.Activity_Event;
 import com.A4.oplev.CreateEvent.Activity_Create_Event;
 import com.A4.oplev.Like_Hjerte_Side.Activity_Likeside;
 import com.A4.oplev.R;
@@ -22,14 +23,17 @@ import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
+import Controller.UserController;
+import DAL.Classes.EventDAO;
+
 public class OwnEvents_Adapter2 extends RecyclerView.Adapter<OwnEvents_Adapter2.ViewHolder> implements View.OnClickListener {
 
     private Context mContext;
     private ArrayList<Integer> eventApplicantsSize;
-    private ArrayList<String> eventHeaders, eventEventPic, eventApplicantPic, eventOwnerPic, eventFirstApplicants;
+    private ArrayList<String> eventHeaders, eventEventPic, eventApplicantPic, eventOwnerPic, eventFirstApplicants,eventID ;
 
 
-    public OwnEvents_Adapter2(@NonNull Context context, @NonNull ArrayList<String> eventEventPic, @NonNull ArrayList<String> eventHeaders, @NonNull ArrayList<String> eventOwnerPic, @NonNull ArrayList<String> eventFirstApplicants, @NonNull ArrayList<String> eventApplicantPic, @NonNull ArrayList<Integer> eventApplicantsSize) {
+    public OwnEvents_Adapter2(@NonNull Context context, @NonNull ArrayList<String> eventEventPic, @NonNull ArrayList<String> eventHeaders, @NonNull ArrayList<String> eventOwnerPic, @NonNull ArrayList<String> eventFirstApplicants, @NonNull ArrayList<String> eventApplicantPic, @NonNull ArrayList<Integer> eventApplicantsSize, ArrayList<String> eventID) {
         this.mContext = context;
         this.eventHeaders = eventHeaders;
         this.eventApplicantsSize = eventApplicantsSize;
@@ -37,6 +41,7 @@ public class OwnEvents_Adapter2 extends RecyclerView.Adapter<OwnEvents_Adapter2.
         this.eventEventPic = eventEventPic;
         this.eventOwnerPic = eventOwnerPic;
         this.eventFirstApplicants = eventFirstApplicants;
+        this.eventID = eventID;
     }
 
 
@@ -119,14 +124,14 @@ public class OwnEvents_Adapter2 extends RecyclerView.Adapter<OwnEvents_Adapter2.
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        public ImageView eventPic,profilePic1, profilePic2;
+        public ImageView eventPic,profilePic1, profilePic2, box_own_events;
         public CardView profileHolder1, profilePic2Holder;
         public TextView numberOfApplciants, header, date;
         public View edit, delete;
 
-
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
+            box_own_events = (ImageView)itemView.findViewById(R.id.box_own_events);
             eventPic = (ImageView)itemView.findViewById(R.id.own_event_picture);
             profilePic1 = (ImageView)itemView.findViewById(R.id.own_event_anmodning1_pic);
             profileHolder1 =  (CardView)itemView.findViewById(R.id.own_event_anmodning1_holder);
@@ -140,10 +145,28 @@ public class OwnEvents_Adapter2 extends RecyclerView.Adapter<OwnEvents_Adapter2.
 
             edit.setOnClickListener(this);
             delete.setOnClickListener(this);
+            box_own_events.setOnClickListener(this);
         }
 
         @Override
         public void onClick(View v) {
+            if (v == box_own_events){
+                EventDAO eventDAO = new EventDAO();
+                UserController userController = UserController.getInstance();
+
+                eventDAO.getEvent(event -> {
+                    userController.getUser(user -> {
+                        Intent intent = new Intent(mContext, Activity_Event.class);
+                        intent.putExtra("user", user);
+                        intent.putExtra("load", 1);
+                        intent.putExtra("event", event);
+                        mContext.startActivity(intent);
+                    }, event.getOwnerId());
+
+                },eventID.get(getPosition()));
+            }
+
+
             if(v == edit){
                 //Edit post
                 Intent i = new Intent(v.getContext(), Activity_Create_Event.class);

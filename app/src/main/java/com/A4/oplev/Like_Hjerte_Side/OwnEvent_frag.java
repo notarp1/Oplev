@@ -86,27 +86,27 @@ public class OwnEvent_frag extends Fragment {
         // *Todo - Skal vise side for eget event (Antager at der skal laves en nyt xml dokument - Men hvad skal vises?)
         // *Todo - Organiser rækkefølge på events.
         // * Todo - Lav visuel forskel når en applicant er accepteret, og eventet dermed er faslagt. (Vis tilmeldt osv)
-//        recyclerView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//                if (position < eventHeaders.size()) {
-//                    ArrayList<String> applicants = new ArrayList<>();
-//
-//                    eventDAO.getEvent(event -> {
-//
-//                        userController.getUser(user -> {
-//                            Intent intent = new Intent(mContext, Activity_Event.class);
-//                            intent.putExtra("user", user);
-//                            intent.putExtra("load", 1);
-//                            intent.putExtra("event", event);
-//                            mContext.startActivity(intent);
-//                        }, event.getOwnerId());
-//
-//                    },eventEventID.get(position));
-//                }
-//            }
-//        });
+        /*recyclerView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                if (position < eventHeaders.size()) {
+                    ArrayList<String> applicants = new ArrayList<>();
 
+                    eventDAO.getEvent(event -> {
+
+                        userController.getUser(user -> {
+                            Intent intent = new Intent(mContext, Activity_Event.class);
+                            intent.putExtra("user", user);
+                            intent.putExtra("load", 1);
+                            intent.putExtra("event", event);
+                            mContext.startActivity(intent);
+                        }, event.getOwnerId());
+
+                    },eventEventID.get(position));
+                }
+            }
+        });
+*/
 
 
 
@@ -212,7 +212,7 @@ public class OwnEvent_frag extends Fragment {
                 Log.d("eventSize test3",  tempEventApplicantsSize.toString());
 
                 LinearLayoutManager layoutManager = new LinearLayoutManager(root2.getContext(), LinearLayoutManager.VERTICAL, false);
-                OwnEvents_Adapter2 eventAdapter = new OwnEvents_Adapter2(root2.getContext(), tempEventPic, tempEventHeaders, tempEventOwnerPic, tempEventFirstApplicants, tempEventApplicantPic, tempEventApplicantsSize);
+                OwnEvents_Adapter2 eventAdapter = new OwnEvents_Adapter2(root2.getContext(), tempEventPic, tempEventHeaders, tempEventOwnerPic, tempEventFirstApplicants, tempEventApplicantPic, tempEventApplicantsSize, tempEventID);
                 recyclerView.setLayoutManager(layoutManager);
                 recyclerView.setAdapter(eventAdapter);
             }
