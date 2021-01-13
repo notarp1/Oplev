@@ -3,9 +3,9 @@
     package="com.A4.oplev">
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.CAMERA"/>
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
@@ -17,6 +17,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".Edit_Event"></activity>
         <activity android:name=".Activity_NoInstance" />
         <activity android:name=".Login.Activity_CreateUser" />
         <activity android:name=".Login.Activity_Login" />
@@ -33,14 +34,18 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".UserSettings.Activity_U_Settings"
-            android:windowSoftInputMode="adjustResize"/>
+        <activity
+            android:name=".UserSettings.Activity_U_Settings"
+            android:windowSoftInputMode="adjustResize" />
         <activity android:name=".SearchFilter.Activity_Search_Filter" />
-        <activity android:name=".CreateEvent.Activity_Create_Event"
-            android:windowSoftInputMode="adjustResize"/>
+        <activity
+            android:name=".CreateEvent.Activity_Create_Event"
+            android:windowSoftInputMode="adjustResize" />
         <activity android:name=".Like_Hjerte_Side.Activity_Likeside" />
-        <activity android:name=".Chat.Activity_Chat"
-            android:windowSoftInputMode="adjustPan"/>
+        <activity
+            android:name=".Chat.Activity_Chat"
+            android:windowSoftInputMode="adjustPan" />
+
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="${applicationId}.provider"
@@ -51,4 +56,5 @@
                 android:resource="@xml/provider_paths" />
         </provider>
     </application>
+
 </manifest>

@@ -3,7 +3,6 @@ package com.A4.oplev._Adapters;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
-import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,8 +15,7 @@ import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.A4.oplev.Activity_Event;
-import com.A4.oplev.CreateEvent.Activity_Create_Event;
-import com.A4.oplev.Like_Hjerte_Side.Activity_Likeside;
+import com.A4.oplev.Edit_Event;
 import com.A4.oplev.R;
 import com.squareup.picasso.Picasso;
 
@@ -25,6 +23,8 @@ import java.util.ArrayList;
 
 import Controller.UserController;
 import DAL.Classes.EventDAO;
+import DAL.Interfaces.CallbackEvent;
+import DTO.EventDTO;
 
 public class OwnEvents_Adapter2 extends RecyclerView.Adapter<OwnEvents_Adapter2.ViewHolder> implements View.OnClickListener {
     private EventDAO eventDAO = new EventDAO();
@@ -168,8 +168,19 @@ public class OwnEvents_Adapter2 extends RecyclerView.Adapter<OwnEvents_Adapter2.
 
             if(v == edit){
                 //Edit post
-                Intent i = new Intent(v.getContext(), Activity_Create_Event.class);
-                Bundle bundle = new Bundle();
+
+                eventDAO.getEvent(new CallbackEvent() {
+                    @Override
+                    public void onCallback(EventDTO event) {
+                        Intent i = new Intent(v.getContext(), Edit_Event.class);
+                        i.putExtra("EventDTO", event);
+                        i.putExtra("edit", true);
+                        mContext.startActivity(i);
+                    }
+                }, eventID.get(getPosition()));
+
+
+
 
             }else if(v == delete){
                 //Delete
