@@ -31,6 +31,8 @@ public class HjerteSide_frag extends Fragment implements View.OnClickListener{
         //listView.setOnItemClickListener(this);
         listView.setAdapter(adapter);
 
+
+
         // Sætter en swipelistener op for at kunne swipe til siden og kunne gå tilbage til likesiden (med chatsne)
         listView.setOnTouchListener(new OnSwipeTouchListener(getContext()){
             @Override

@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ListView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -53,6 +54,7 @@ public class OwnEvent_frag extends Fragment {
     View root2;
     boolean eventsReady = false;
 
+    @SuppressLint("ClickableViewAccessibility")
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater i, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -65,6 +67,7 @@ public class OwnEvent_frag extends Fragment {
         recyclerView = root.findViewById(R.id.ownEvents_Recycler);
         redigerKnap = root.findViewById(R.id.own_event_edit_picture);
         sletKnap = root.findViewById(R.id.own_event_delete_holder);
+
 
 
 
@@ -147,7 +150,25 @@ public class OwnEvent_frag extends Fragment {
                     }, userDTO.getEvents().get(j));
                 }
             }
-        }
+        };
+
+        // Todo - OnSwipe virker ikke på recylerviewet - HELP
+      /*  recyclerView.setOnTouchListener(new OnSwipeTouchListener(mContext){
+            @Override
+            public void onSwipeLeft() {
+                // Sæt farven på billederne i toppen af skærmen
+                getActivity().findViewById(R.id.besked_back).setVisibility(View.INVISIBLE);
+                getActivity().findViewById(R.id.event_back).setVisibility(View.VISIBLE);
+                getActivity().findViewById(R.id.hjerte_back).setVisibility(View.INVISIBLE);
+
+                // Kreer fragmentet over til hjertesiden
+                getFragmentManager().beginTransaction().setCustomAnimations(R.anim.enter_from_right,
+                        R.anim.exit_to_left).replace(R.id.likeside_frameLayout,new LikesideList_frag())
+                        .commit();
+            }
+        });*/
+
+
         return root;
     }
 
@@ -179,6 +200,8 @@ public class OwnEvent_frag extends Fragment {
                 recyclerView.setAdapter(eventAdapter);
             }
         }
+
+
 
 
     @Override
