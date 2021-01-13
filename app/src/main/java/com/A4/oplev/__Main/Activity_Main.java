@@ -51,6 +51,7 @@ import swipeable.com.layoutmanager.SwipeableTouchHelperCallback;
 import swipeable.com.layoutmanager.touchelper.ItemTouchHelper;
 
 public class Activity_Main extends AppCompatActivity implements View.OnClickListener{
+    private static final String TAG = "Activity_Main";
     private GpsTracker gpsTracker;
     ImageView options, match, user;
     RecyclerView rcEvent;
@@ -64,18 +65,41 @@ public class Activity_Main extends AppCompatActivity implements View.OnClickList
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        prefs = PreferenceManager.getDefaultSharedPreferences(this);
 
-        /*
         try {
             if (ContextCompat.checkSelfPermission(getApplicationContext(), android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                Log.d(TAG, "onCreate: gps permission not already granted on start");
+                //permission not granted
+                SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+                prefs.edit().putBoolean("gpsOn", false).apply();
+                //request for permission
                 ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION}, 101);
+            }
+            else {
+                Log.d(TAG, "onCreate: gps permission already granted on start");
+                //permission granted
+                prefs.edit().putBoolean("gpsOn", true).apply();
+                // save location in SharedPref
+                saveLocationPref();
+                // TODO bestem afstand til andre events
+                gpsTracker = getLocation();
+
+                Location location1 = new Location("locationA");
+                location1.setLatitude(gpsTracker.getLatitude());
+                location1.setLongitude(gpsTracker.getLongitude());
+                Location location2 = new Location("locationB");
+                location2.setLongitude(133.2813);
+                location2.setLatitude(-26.4391);
+                Toast.makeText(this, "Afstand til australien " + (location1.distanceTo(location2) / 1000) + " km", Toast.LENGTH_LONG).show();
+                Log.d(TAG, "onCreate: (jbe) my location: " + location1.toString());
+                Log.d(TAG, "onCreate: (jbe) " + "Afstand til australien " + (location1.distanceTo(location2) / 1000) + " km");
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
-         */
 
-        prefs = PreferenceManager.getDefaultSharedPreferences(this);
+
         this.ctx = this;
 
         //Tjekker om hvorvidt man er logget ind
@@ -163,7 +187,6 @@ public class Activity_Main extends AppCompatActivity implements View.OnClickList
 
     }
 
-    /*
     public GpsTracker getLocation(){
         gpsTracker = new GpsTracker(Activity_Main.this);
         if(gpsTracker.canGetLocation()){
@@ -173,9 +196,7 @@ public class Activity_Main extends AppCompatActivity implements View.OnClickList
         }
         return null;
     }
-    */
 
-    /*
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions,
                                            int[] grantResults) {
@@ -183,36 +204,36 @@ public class Activity_Main extends AppCompatActivity implements View.OnClickList
             case 101:
                 // If request is cancelled, the result arrays are empty.
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    // gps permission granted
+                    prefs.edit().putBoolean("gpsOn", true).apply();
+                    //save location in SharedPref
+                    saveLocationPref();
                     // TODO bestem afstand til andre events
                     gpsTracker = getLocation();
+                    Location location1 = new Location("locationA");
+                    location1.setLatitude(gpsTracker.getLatitude());
+                    location1.setLongitude(gpsTracker.getLongitude());
+                    Location location2 = new Location("locationB");
+                    location2.setLongitude(133.2813);
+                    location2.setLatitude(-26.4391);
+                    Toast.makeText(this, "Afstand til australien " + (location1.distanceTo(location2) / 1000) + " km", Toast.LENGTH_LONG).show();
+                    Log.d(TAG, "onRequestPermissionsResult: gps permission granted");
 
-                    Geocoder geocoder;
-                    List<Address> addresses;
-                    geocoder = new Geocoder(this, Locale.getDefault());
-
-                    try {
-                        addresses = geocoder.getFromLocation(gpsTracker.getLatitude(), gpsTracker.getLongitude(), 1); // Here 1 represent max location result to returned, by documents it recommended 1 to 5
-                        String address = addresses.get(0).getAddressLine(0); // If any additional address line present than only, check with max available address lines by getMaxAddressLineIndex()
-                        String city = addresses.get(0).getLocality();
-                        String country = addresses.get(0).getCountryName();
-                        Location location1 = new Location("locationA");
-                        location1.setLatitude(gpsTracker.getLatitude());
-                        location1.setLongitude(gpsTracker.getLongitude());
-                        Location location2 = new Location("locationB");
-                        location2.setLongitude(133.2813);
-                        location2.setLatitude(-26.4391);
-                        Toast.makeText(this, address + "\t" + city + "\t" + country + "\nAfstand til australien " + (location1.distanceTo(location2) / 1000) + " km", Toast.LENGTH_LONG).show();
-
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
                 }  else {
-                    Toast.makeText(this, "No permission given", Toast.LENGTH_SHORT).show();
+                    //permission not granted
+                    prefs.edit().putBoolean("gpsOn", false).apply();
+                    Log.d(TAG, "onRequestPermissionsResult: gps permission not granted");
                 }
                 return;
         }
         // Other 'case' lines to check for other
         // permissions this app might request.
     }
-     */
+    private void saveLocationPref(){
+        gpsTracker = getLocation();
+        Log.d(TAG, "saveLocationPref: gpslat: " + gpsTracker.getLatitude() +" gpslong: " + gpsTracker.getLongitude());
+        prefs.edit().putString("gpsLat", String.valueOf(gpsTracker.getLatitude())).apply();
+        prefs.edit().putString("gpsLong", String.valueOf(gpsTracker.getLongitude())).apply();
+        Log.d(TAG, "saveLocationPref: " + prefs.getString("gpsLat","0"));
+    }
 }

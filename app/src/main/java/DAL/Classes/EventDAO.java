@@ -1,11 +1,13 @@
 package DAL.Classes;
 
 import android.content.SharedPreferences;
+import android.location.Location;
 import android.net.Uri;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
 
+import com.A4.oplev.GpsTracker;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -98,13 +100,41 @@ public class EventDAO implements IEventDAO {
                 @Override
                 public void onComplete(@NonNull Task<QuerySnapshot> task) {
                     if (task.isSuccessful()) {
+                        //setup location of phone/user
+                        Location phoneLocation = new Location("LocationA");
+                        phoneLocation.setLatitude(Double.parseDouble(prefs.getString("gpsLat","0")));
+                        phoneLocation.setLongitude(Double.parseDouble(prefs.getString("gpsLong","0")));
+                        Log.d(TAG, "onComplete: phonelocation: " + phoneLocation.toString());
+                        int maxDistance = prefs.getInt("distance",150);
+                        Log.d(TAG, "onComplete: maxDistance (filter): " + maxDistance);
                         for (QueryDocumentSnapshot document : task.getResult()) {
+                            //for each event
                             EventDTO dto = document.toObject(EventDTO.class);
                             if (UserController.getInstance().getCurrUser() != null) {
-                                if (!dto.getOwnerId().equals(UserController.getInstance().getCurrUser().getUserId()) && dto.getParticipant().equals("") && !dto.getApplicants().contains(UserController.getInstance().getCurrUser().getUserId())) {
-                                    completeList.add(document.getId());
+                                // if youre logged in
+                                if (!dto.getOwnerId().equals(UserController.getInstance().getCurrUser().getUserId())
+                                        && dto.getParticipant().equals("")
+                                        && !dto.getApplicants().contains(UserController.getInstance().getCurrUser().getUserId())) {
+                                    //if youre not owner, no participant on event, and you havent applied to event
+                                    //setup distance check
+                                    Location eventLocation = new Location("locationB");
+                                    //is saved in dto with format "latitude,longitude" so split by ","
+                                    Log.d(TAG, "onComplete: coordinate dto string: " + dto.getCoordinates());
+                                    eventLocation.setLatitude(Double.parseDouble(dto.getCoordinates().split(",")[0]));
+                                    eventLocation.setLongitude(Double.parseDouble(dto.getCoordinates().split(",")[1]));
+                                    Log.d(TAG, "onComplete: eventlocation: " + eventLocation.toString());
+                                    float distance = phoneLocation.distanceTo(eventLocation)/1000;
+                                    Log.d(TAG, "onComplete: distance to event: " + distance + "km");
+
+                                    if(distance <= maxDistance){
+                                        //if within distancelimit
+                                        completeList.add(document.getId());
+                                    }
+
+
                                 }
                             } else {
+                                // not logged in
                                 completeList.add(document.getId());
                             }
                         }
@@ -141,6 +171,7 @@ public class EventDAO implements IEventDAO {
         eventObject.put("eventPic", event.getEventPic());
         eventObject.put("applicants", event.getApplicants());
         eventObject.put("type", event.getType());
+        eventObject.put("coordinates", event.getCoordinates());
 
 
         //first add event (no pic, no eventid)

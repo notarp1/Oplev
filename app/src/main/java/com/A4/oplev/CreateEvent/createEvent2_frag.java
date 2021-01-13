@@ -93,7 +93,8 @@ public class createEvent2_frag extends Fragment implements View.OnClickListener 
                         currMaxAge,
                         maleSwitch.isChecked(),
                         femaleSwitch.isChecked(),
-                        ((Activity_Create_Event) getActivity()).getPickedImgUri()
+                        ((Activity_Create_Event) getActivity()).getPickedImgUri(),
+                        ((Activity_Create_Event) getActivity()).getCoordinates()
                 );
 
 

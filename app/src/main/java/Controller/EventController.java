@@ -3,6 +3,7 @@ package Controller;
 import android.net.Uri;
 
 import com.A4.oplev.Activity_Event;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.firestore.auth.User;
 
 import java.text.DateFormat;
@@ -42,7 +43,7 @@ public class EventController {
 
 
     public void createEvent(String name, String desc, String price, String date, String time, String city, String type,
-                            int minAge, int maxAge, boolean maleOn, boolean femaleOn, Uri eventImgUri){
+                            int minAge, int maxAge, boolean maleOn, boolean femaleOn, Uri eventImgUri, String coordinates){
         //create event dto
         eventDTO = new EventDTO();
 
@@ -78,7 +79,8 @@ public class EventController {
                 .setEventId(null)
                 .setApplicants(new ArrayList<>())
                 .setParticipant(null)
-                .setType(type);
+                .setType(type)
+                .setCoordinates(coordinates);
 
         eventDAO.createEvent(eventDTO, eventImgUri);
     }
