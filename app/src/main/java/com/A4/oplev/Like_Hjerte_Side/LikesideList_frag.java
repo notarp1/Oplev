@@ -80,7 +80,6 @@ public class LikesideList_frag extends Fragment{
         tilmeldinger_listView = root.findViewById(R.id.beskedListView_tilmeldinger);
 
         // Denne linje er til test
-
         /*
         chatDAO.createChat(new ChatDTO(null, null, null, null, null, null, "Tester", "John", "Karl", userDTO.getUserId(), "Lvg4pSi5MehhmwaFmhK5NwZ88hB3"), new ChatDAO.CreateChatCallback() {
             @Override
@@ -118,29 +117,6 @@ public class LikesideList_frag extends Fragment{
                         // ternary operator til at få den anden brugers userid som vi skal hente fra databasen
                         String otherUserID = dto.getUser1ID().equals(userDTO.getUserId()) ? dto.getUser2ID() : dto.getUser1ID();
                         userController.getUser(user -> {
-                            if (user != null){
-                                // Vi tilføjer billedet af den anden person
-                                for (int k = 0; k < userDTO.getChatId().size(); k++) {
-                                    if (userDTO.getChatId().get(k).equals(dto.getChatId())){
-                                        otherPersonPic.set(k,user.getUserPicture());
-                                        // Hvis dette er den sidste chat som vi har loadet ind så skal vi enten vente på eventsne eller også så laver vi listviewet
-                                        if (userDTO.getChatId().size() == otherPersonPic.size() && !otherPersonPic.contains("")) {
-                                            chatsReady = true;
-                                            // hvis eventsne er klar så køres dette
-                                            if (eventsReady) {
-                                                // vi opsætter listviewet samt changelistenerne for chats og events
-                                                setListView_chats(chatIds, names, dates, lastMessage, headerList, lastSender, isInitialized, otherPersonPic);
-                                                setChangeListeners_chats();
-                                                setChangeListener_tilmeldinger();
-                                                setUserChangeListener();
-                                                chatsReady = false;
-                                                eventsReady = false;
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }, otherUserID);
                         // dette er nok redundant nu da vi sender en auto genereret besked, men hvis chatten ikke er instantieret så får den nogle default værdier
                         if (dto.getSender() != null) {
                             dates.add(dto.getDates().get(dto.getDates().size() - 1));
@@ -162,6 +138,29 @@ public class LikesideList_frag extends Fragment{
                         }
                         headerList.add(dto.getHeader());
                         chatIds.add(dto.getChatId());
+                            if (user != null){
+                                // Vi tilføjer billedet af den anden person
+                                for (int k = 0; k < chatIds.size(); k++) {
+                                    if (chatIds.get(k).equals(dto.getChatId())){
+                                        otherPersonPic.set(k,user.getUserPicture());
+                                        // Hvis dette er den sidste chat som vi har loadet ind så skal vi enten vente på eventsne eller også så laver vi listviewet
+                                        if (userDTO.getChatId().size() == otherPersonPic.size() && !otherPersonPic.contains("")) {
+                                            chatsReady = true;
+                                            // hvis eventsne er klar så køres dette
+                                            if (eventsReady) {
+                                                // vi opsætter listviewet samt changelistenerne for chats og events
+                                                setListView_chats(chatIds, names, dates, lastMessage, headerList, lastSender, isInitialized, otherPersonPic);
+                                                setChangeListeners_chats();
+                                                setChangeListener_tilmeldinger();
+                                                setUserChangeListener();
+                                                chatsReady = false;
+                                                eventsReady = false;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }, otherUserID);
                         if (userDTO.getChatId().size() == otherPersonPic.size() && !otherPersonPic.contains("")) {
                             chatsReady = true;
                             // hvis eventsne er klar så køres dette
@@ -455,6 +454,7 @@ public class LikesideList_frag extends Fragment{
             this.lastSender = tempLastSender;
             this.isInitialized = tempIsInitialized;
             this.chatIds = tempChatIds;
+            this.otherPersonPic = tempOtherPersonPic;
         }
     }
 
