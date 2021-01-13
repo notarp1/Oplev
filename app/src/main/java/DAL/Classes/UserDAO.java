@@ -2,6 +2,8 @@ package DAL.Classes;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -12,6 +14,8 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthCredential;
+import com.google.firebase.auth.EmailAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
@@ -35,6 +39,7 @@ public class UserDAO implements IUserDAO, CallbackUser, CallbackUserDelete {
     public FirebaseFirestore db;
     private static final String TAG = "userLog" ;
     private boolean wait = false;
+
 
 
     public UserDAO(){
@@ -139,24 +144,24 @@ public class UserDAO implements IUserDAO, CallbackUser, CallbackUserDelete {
             @Override
                 public void onCallbackDelete() {
                 deleteUserOnline(new CallbackUserDelete() {
-                    @Override
-                    public void onCallbackDelete() {
-                        deleterUserLocal(new CallbackUserDelete() {
-                            @Override
-                            public void onCallbackDelete() {
+                        @Override
+                        public void onCallbackDelete() {
+                            deleterUserLocal(new CallbackUserDelete() {
+                                @Override
+                                public void onCallbackDelete() {
 
-                                System.out.println("hej med dig");
-                                loopThing(new CallbackUserDelete() {
-                                    @Override
-                                    public void onCallbackDelete() {
-                                         Intent i = new Intent(ctx, Activity_Ini.class);
-                                         ctx.startActivity(i);
-                                    }
-                                }, chats, chatDAO, user);
-                            }
-                        }, user, db);
-                    }
-                });
+                                    System.out.println("hej med dig");
+                                    loopThing(new CallbackUserDelete() {
+                                        @Override
+                                        public void onCallbackDelete() {
+                                             Intent i = new Intent(ctx, Activity_Ini.class);
+                                             ctx.startActivity(i);
+                                        }
+                                    }, chats, chatDAO, user);
+                                }
+                            }, user, db);
+                        }
+                    }, ctx);
                 }
             }, events, chats);
 
@@ -245,7 +250,7 @@ public class UserDAO implements IUserDAO, CallbackUser, CallbackUserDelete {
     }
 
     private void deleterUserLocal(CallbackUserDelete delete, UserDTO user, FirebaseFirestore db){
-        System.out.println("HEJHEJ");
+
 
         db.collection("users").document(user.getUserId())
                 .delete()
@@ -259,62 +264,91 @@ public class UserDAO implements IUserDAO, CallbackUser, CallbackUserDelete {
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        System.out.println("IkkeSlettet");
+                        System.out.println("IkkeSlettetLokal");
+
                     }
                 });
 
-        delete.onCallbackDelete();
+
     }
 
-    private void deleteUserOnline(CallbackUserDelete delete){
-        FirebaseUser currUser = FirebaseAuth.getInstance().getCurrentUser();
+    private void deleteUserOnline(CallbackUserDelete delete, Context ctx){
+        System.out.println("HEJHEJ");
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(ctx);
+        FirebaseUser currUser  = FirebaseAuth.getInstance().getCurrentUser() ;
+        String username = prefs.getString("username", "username");
+        String password = prefs.getString("password", "password");
 
-        currUser.delete()
+        System.out.println(username);
+        System.out.println(password);
+        AuthCredential credential = EmailAuthProvider
+                .getCredential(username, password);
+
+        currUser.reauthenticate(credential)
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
-                        if (task.isSuccessful()) {
-                            System.out.println("UserSucces");
-                            delete.onCallbackDelete();
-                        }
+                        currUser.delete()
+                                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<Void> task) {
+                                        if (task.isSuccessful()) {
+                                            System.out.println("UserSucces");
+                                            delete.onCallbackDelete();
+                                        }
+                                    }
+                                })   .addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                System.out.println("IkkeSlettetOnline");
+                                System.out.println(e);
+                            }
+                        });
                     }
-                }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                System.out.println("User fejl");
-            }
-          });
+                });
+
 
 
     }
 
     private void deleteRefs(CallbackUserDelete delete, ArrayList<String> events, ArrayList<String> chats){
-        /*
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+      FirebaseFirestore db = FirebaseFirestore.getInstance();
 
         WriteBatch writeBatch = db.batch();
         System.out.println("NONNA");
 
-        for (int i = 0; i < events.size(); i++) {
-            DocumentReference documentReference = db.collection("events").document(events.get(i));
-            writeBatch.delete(documentReference);
-            System.out.println("EVENTS");
+        if(events.size() != 0) {
+            for (int i = 0; i < events.size(); i++) {
+                DocumentReference documentReference = db.collection("events").document(events.get(i));
+                writeBatch.delete(documentReference);
+                System.out.println("EVENTS");
+            }
         }
 
 
-        for (int i = 0; i < chats.size(); i++) {
-            DocumentReference documentReference = db.collection("chats").document(chats.get(i));
-            writeBatch.delete(documentReference);
-            System.out.println("CHATS");
+        if(chats.size() != 0) {
+            for (int i = 0; i < chats.size(); i++) {
+
+                DocumentReference documentReference = db.collection("chats").document(chats.get(i));
+                writeBatch.delete(documentReference);
+                System.out.println("CHATS");
+            }
         }
 
         writeBatch.commit().addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
-                // Do anything here
+                System.out.println("VIRKER");
+                delete.onCallbackDelete();
             }
-        }); */
-        delete.onCallbackDelete();
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                System.out.println("WHHAW");
+            }
+        });
+
     }
 
 
