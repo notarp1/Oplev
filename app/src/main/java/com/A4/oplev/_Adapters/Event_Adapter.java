@@ -61,6 +61,10 @@ public class Event_Adapter extends RecyclerView.Adapter<Event_Adapter.ViewHolder
         return instance;
     }
 
+    public static void setInstance(Event_Adapter instance2){
+        instance = instance2;
+    }
+
     private Event_Adapter( List<String> ids, Context frame, int height, int width) {
         this.ctx = frame;
         this.dataA = new EventDAO();

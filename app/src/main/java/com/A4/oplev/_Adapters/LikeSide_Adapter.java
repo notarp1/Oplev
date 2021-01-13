@@ -110,6 +110,9 @@ public class  LikeSide_Adapter extends ArrayAdapter<String> {
         lastMessage.setText(currentLastMessage);
 
         TextView header = (TextView) listItem.findViewById(R.id.beskeder_overskrift);
+        if (currentHeader.length() > 15) {
+            header.setTextSize(13);
+        }
         header.setText(currentHeader);
 
         TextView date = (TextView) listItem.findViewById(R.id.beskeder_dato);

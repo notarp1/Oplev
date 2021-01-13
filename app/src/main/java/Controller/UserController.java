@@ -1,7 +1,9 @@
 package Controller;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.util.Log;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -140,8 +142,8 @@ public class UserController {
         return user.getPictures();
     }
 
-    public void deleteUser(String userId){
-        userDAO.deleteUser(userId);
+    public void deleteUser(UserDTO user, Context ctx){
+        userDAO.deleteUser(user, ctx);
     }
 
 
@@ -291,9 +293,26 @@ public class UserController {
     public void deletePicture(int number, ArrayList<String> pictures, U_Settings_Edit ctx, Bitmap stockphotoBit) {
 
        if(pictures.get(number) != null){
-            pictures.set(number, null);
-            setSafe(false);
-            updateUserAndGUI(ctx);
+
+           //put i DAL
+           StorageReference storageReference = FirebaseStorage.getInstance().getReferenceFromUrl(pictures.get(number));
+           storageReference.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+               @Override
+               public void onSuccess(Void aVoid) {
+                   // File deleted successfully
+
+               }
+           }).addOnFailureListener(new OnFailureListener() {
+               @Override
+               public void onFailure(@NonNull Exception exception) {
+                   // Uh-oh, an error occurred!
+
+               }
+           });
+
+           pictures.set(number, null);
+           setSafe(false);
+           updateUserAndGUI(ctx);
             ImageView pic = getPictureNumber(number, ctx);
             pic.setImageBitmap(stockphotoBit);
         }
