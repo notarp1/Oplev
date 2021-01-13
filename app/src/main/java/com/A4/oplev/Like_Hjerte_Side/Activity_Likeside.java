@@ -2,6 +2,7 @@ package com.A4.oplev.Like_Hjerte_Side;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -13,11 +14,16 @@ import Controller.Listeners.OnSwipeTouchListener;
 import com.A4.oplev.R;
 
 public class Activity_Likeside extends AppCompatActivity implements View.OnClickListener{
+    private  Integer position;
     ImageView hjerte, besked, tilbage, backhjerte, backbesked, events, backevents;
     Button opret;
 
 
     public void onCreate(Bundle saveInstanceState) {
+
+        position = 1;
+        Log.d("pos3", position.toString());
+
         super.onCreate(saveInstanceState);
         setContentView(R.layout.activity_likeside);
         opret = findViewById(R.id.opretOpslag_Knap2);
@@ -41,15 +47,40 @@ public class Activity_Likeside extends AppCompatActivity implements View.OnClick
 
         backhjerte.setVisibility(View.INVISIBLE);
         backevents.setVisibility(View.INVISIBLE);
+
+        // Todo -  Sætter en swipe listener op som også virker når listerne er tomme. (Forsøget nedenstående virker ikke)
+
+        /*getWindow().getDecorView().getRootView().setOnTouchListener(new OnSwipeTouchListener(this){
+            @Override
+            public void onSwipeLeft() {
+                if (position==1){
+                    Log.d("pos", position.toString());
+                    getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.enter_from_right,
+                            R.anim.exit_to_left).replace(R.id.likeside_frameLayout, new HjerteSide_frag())
+                            .commit();
+                    backbesked.setVisibility(View.INVISIBLE);
+                    backhjerte.setVisibility(View.VISIBLE);
+                    position = 0;
+                }
+                if (position==2) {
+                    Log.d("pos2", position.toString());
+                    getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.enter_from_right,
+                            R.anim.exit_to_left).replace(R.id.likeside_frameLayout, new LikesideList_frag())
+                            .commit();
+                    backbesked.setVisibility(View.VISIBLE);
+                    backevents.setVisibility(View.INVISIBLE);
+                    position=1;
+                }
+            }
+        });*/
+
     }
-
-
-
 
 
     @Override
     public void onClick(View v) {
         if (v == hjerte){
+            // position = 0;
             backbesked.setVisibility(View.INVISIBLE);
             backevents.setVisibility(View.INVISIBLE);
 
@@ -58,13 +89,15 @@ public class Activity_Likeside extends AppCompatActivity implements View.OnClick
                     .commit();
         }
         else if (v == besked){
-
+           //  position = 1;
             backbesked.setVisibility(View.VISIBLE);
             backhjerte.setVisibility(View.INVISIBLE);
             backevents.setVisibility(View.INVISIBLE);
             getSupportFragmentManager().beginTransaction().replace(R.id.likeside_frameLayout,new LikesideList_frag())
                     .commit();
         } else if (v == events){
+            // position = 2;
+            Log.d("pos", position.toString());
             backbesked.setVisibility(View.INVISIBLE);
             backhjerte.setVisibility(View.INVISIBLE);
             backevents.setVisibility(View.VISIBLE);
