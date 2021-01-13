@@ -138,28 +138,25 @@ public class UserDAO implements IUserDAO, CallbackUser, CallbackUserDelete {
         deleteRefs(new CallbackUserDelete() {
             @Override
                 public void onCallbackDelete() {
+                deleteUserOnline(new CallbackUserDelete() {
+                    @Override
+                    public void onCallbackDelete() {
+                        deleterUserLocal(new CallbackUserDelete() {
+                            @Override
+                            public void onCallbackDelete() {
 
-                    deleterUserLocal(new CallbackUserDelete() {
-                        @Override
-                        public void onCallbackDelete() {
-
-                            deleteUserOnline(new CallbackUserDelete() {
-
-                              @Override
-                                public void onCallbackDelete() {
-
-                                      loopThing(new CallbackUserDelete() {
-                                        @Override
-                                        public void onCallbackDelete() {
-                                            Intent i = new Intent(ctx, Activity_Ini.class);
-                                            ctx.startActivity(i);
-                                        }
-                                    }, chats, chatDAO, user);
-                                }
-                            });
-
-                        }
-                    }, user, db);
+                                System.out.println("hej med dig");
+                                loopThing(new CallbackUserDelete() {
+                                    @Override
+                                    public void onCallbackDelete() {
+                                         Intent i = new Intent(ctx, Activity_Ini.class);
+                                         ctx.startActivity(i);
+                                    }
+                                }, chats, chatDAO, user);
+                            }
+                        }, user, db);
+                    }
+                });
                 }
             }, events, chats);
 
@@ -266,7 +263,7 @@ public class UserDAO implements IUserDAO, CallbackUser, CallbackUserDelete {
                     }
                 });
 
-
+        delete.onCallbackDelete();
     }
 
     private void deleteUserOnline(CallbackUserDelete delete){
@@ -277,11 +274,17 @@ public class UserDAO implements IUserDAO, CallbackUser, CallbackUserDelete {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         if (task.isSuccessful()) {
-                            Log.d(TAG, "User account deleted.");
+                            System.out.println("UserSucces");
                             delete.onCallbackDelete();
                         }
                     }
-                });
+                }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                System.out.println("User fejl");
+            }
+          });
+
 
     }
 
