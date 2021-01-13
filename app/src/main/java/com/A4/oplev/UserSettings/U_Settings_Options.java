@@ -17,6 +17,8 @@ import com.A4.oplev.Activity_Ini;
 import com.A4.oplev.R;
 import com.google.firebase.auth.FirebaseAuth;
 
+import Controller.UserController;
+
 public class U_Settings_Options extends Fragment implements View.OnClickListener {
 
     TextView logud;
@@ -47,6 +49,7 @@ public class U_Settings_Options extends Fragment implements View.OnClickListener
         if(view == logud){
             FirebaseAuth.getInstance().signOut();
             PreferenceManager.getDefaultSharedPreferences(getActivity()).edit().clear().apply();
+            UserController.getInstance().setCurrUser(null);
             FragmentManager fm = getActivity().getSupportFragmentManager();
             for(int i = 0; i < fm.getBackStackEntryCount(); ++i) {
                 fm.popBackStack();
