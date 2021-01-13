@@ -104,7 +104,7 @@ public class Activity_Profile extends AppCompatActivity implements View.OnClickL
         j = myIntent.getIntExtra("load", 0);
         System.out.println(j);
 
-
+        currentSelection = selection1;
         if(j == 1 || j == 2){
             edit.setVisibility(View.INVISIBLE);
             if(j==2) {
@@ -128,7 +128,11 @@ public class Activity_Profile extends AppCompatActivity implements View.OnClickL
     @Override
     protected void onResume() {
         super.onResume();
-        if(j == 0) {
+
+
+        if (j == 0) {
+            if(currentSelection == null) currentSelection = selection1;
+
             currentSelection.setBackground(getResources().getDrawable(R.drawable.picselection));
             pictures = userController.getUserPictures();
 

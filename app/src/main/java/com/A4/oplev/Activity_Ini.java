@@ -1,5 +1,6 @@
 package com.A4.oplev;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.NotificationChannel;
@@ -10,8 +11,11 @@ import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.util.Log;
 
 import com.A4.oplev.__Main.Activity_Main;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -62,7 +66,7 @@ public class Activity_Ini extends AppCompatActivity implements Serializable {
         onInstance = prefs.getBoolean("onInstance", false);
 
 
-        if(currentUser == null){
+       if(currentUser == null){
             prefs.edit().putBoolean("onInstance", false).apply();
             Intent i = new Intent(this, Activity_Main.class);
             i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);

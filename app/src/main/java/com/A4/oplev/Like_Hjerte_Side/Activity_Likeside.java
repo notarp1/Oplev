@@ -2,6 +2,7 @@ package com.A4.oplev.Like_Hjerte_Side;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.service.autofill.UserData;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -10,7 +11,15 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.A4.oplev.CreateEvent.Activity_Create_Event;
 import Controller.Listeners.OnSwipeTouchListener;
+import Controller.UserController;
+import DAL.Classes.ChatDAO;
+import DAL.Classes.UserDAO;
+import DTO.ChatDTO;
+import DTO.UserDTO;
+
 import com.A4.oplev.R;
+
+import java.util.ArrayList;
 
 public class Activity_Likeside extends AppCompatActivity implements View.OnClickListener{
     ImageView hjerte, besked, tilbage, backhjerte, backbesked, events, backevents;
@@ -21,6 +30,7 @@ public class Activity_Likeside extends AppCompatActivity implements View.OnClick
         super.onCreate(saveInstanceState);
         setContentView(R.layout.activity_likeside);
         opret = findViewById(R.id.opretOpslag_Knap2);
+
 
         hjerte = findViewById(R.id.likeside_hjertbillede);
         besked = findViewById(R.id.likeside_beskedbillede);
@@ -41,6 +51,7 @@ public class Activity_Likeside extends AppCompatActivity implements View.OnClick
 
         backhjerte.setVisibility(View.INVISIBLE);
         backevents.setVisibility(View.INVISIBLE);
+
 
 
     }
