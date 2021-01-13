@@ -9,8 +9,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ListView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -22,17 +20,14 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.A4.oplev.Activity_Event;
 import com.A4.oplev.R;
 import com.A4.oplev._Adapters.OwnEvents_Adapter2;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Date;
 
-import Controller.Listeners.OnSwipeTouchListener;
 import Controller.UserController;
 import DAL.Classes.EventDAO;
 import DTO.UserDTO;
@@ -89,7 +84,7 @@ public class OwnEvent_frag extends Fragment {
                 // hvis brugeren ikke har nogle events så skal vi sikre os at det ikke går i stå
                 if (userDTO.getEvents().size() == 0) {
                     eventsReady = true;
-                    setListView_applicants(eventEventPic, eventHeaders, eventOwnerPic, eventFirstApplicants, eventApplicantPic, eventApplicantsSize, eventEventID, dates);
+                    setListView_events(eventEventPic, eventHeaders, eventOwnerPic, eventFirstApplicants, eventApplicantPic, eventApplicantsSize, eventEventID, dates);
                     // setChangeListener_tilmeldinger();
 
                 }
@@ -117,7 +112,7 @@ public class OwnEvent_frag extends Fragment {
                                     // events er loadet færdigt
                                     eventsReady = true;
                                     // hvis chats er loadet færdigt så opsæt listviewet og listeners
-                                    setListView_applicants(eventEventPic, eventHeaders, eventOwnerPic, eventFirstApplicants, eventApplicantPic, eventApplicantsSize, eventEventID, dates);
+                                    setListView_events(eventEventPic, eventHeaders, eventOwnerPic, eventFirstApplicants, eventApplicantPic, eventApplicantsSize, eventEventID, dates);
                                     // setChangeListener_tilmeldinger();
                                 }
                             } else {
@@ -141,7 +136,7 @@ public class OwnEvent_frag extends Fragment {
                                     if (eventApplicantPic.size() == userDTO.getEvents().size()) {
                                         eventsReady = true;
                                         // hvis chats er færdige så opsæt listview og listeners
-                                        setListView_applicants(eventEventPic, eventHeaders, eventOwnerPic, eventFirstApplicants, eventApplicantPic, eventApplicantsSize, eventEventID, dates);
+                                        setListView_events(eventEventPic, eventHeaders, eventOwnerPic, eventFirstApplicants, eventApplicantPic, eventApplicantsSize, eventEventID, dates);
                                         //setChangeListener_tilmeldinger();
                                     }
                                 }, event.getApplicants().get(0));
@@ -171,8 +166,8 @@ public class OwnEvent_frag extends Fragment {
 
         return root;
     }
-
-        public void setListView_applicants(@NonNull ArrayList < String > eventEventPic, @NonNull ArrayList < String > eventHeaders, @NonNull ArrayList < String > eventOwnerPic, @NonNull ArrayList < String > eventFirstApplicants, @NonNull ArrayList < String > eventApplicantPic, @NonNull ArrayList < Integer > eventApplicantsSize, @NonNull ArrayList < String > eventEventID,  @NonNull ArrayList < Date > dates )
+// Todo - Listing virker ikke efter hensigten endnu.
+        public void setListView_events(@NonNull ArrayList < String > eventEventPic, @NonNull ArrayList < String > eventHeaders, @NonNull ArrayList < String > eventOwnerPic, @NonNull ArrayList < String > eventFirstApplicants, @NonNull ArrayList < String > eventApplicantPic, @NonNull ArrayList < Integer > eventApplicantsSize, @NonNull ArrayList < String > eventEventID, @NonNull ArrayList < Date > dates )
         {
             if (mContext != null) {
                 ArrayList<String> tempEventPic = new ArrayList<>(), tempEventHeaders = new ArrayList<>(), tempEventOwnerPic = new ArrayList<>(), tempEventFirstApplicants = new ArrayList<>(), tempEventApplicantPic = new ArrayList<>(), tempEventID = new ArrayList<>();
@@ -180,6 +175,9 @@ public class OwnEvent_frag extends Fragment {
                 ArrayList<Date> tempDate = new ArrayList<>();
 
                 for (int i = 0; i < eventHeaders.size(); i++) {
+                    Log.d("list1", String.valueOf(eventApplicantsSize.size()));
+
+                    if(i==0) {
                         tempEventPic.add(eventEventPic.get(i));
                         tempEventHeaders.add(eventHeaders.get(i));
                         tempEventApplicantPic.add(eventApplicantPic.get(i));
@@ -188,6 +186,61 @@ public class OwnEvent_frag extends Fragment {
                         tempEventFirstApplicants.add(eventFirstApplicants.get(i));
                         tempEventID.add(eventEventID.get(i));
                         tempDate.add(dates.get(i));
+                    }
+                    else if (tempDate.get(i-1).after(dates.get(i))){
+                        tempEventPic.add(eventEventPic.get(i));
+                        tempEventHeaders.add(eventHeaders.get(i));
+                        tempEventApplicantPic.add(eventApplicantPic.get(i));
+                        tempEventApplicantsSize.add(eventApplicantsSize.get(i));
+                        tempEventOwnerPic.add(eventOwnerPic.get(i));
+                        tempEventFirstApplicants.add(eventFirstApplicants.get(i));
+                        tempEventID.add(eventEventID.get(i));
+                        tempDate.add(dates.get(i));
+                    }
+                    else  {
+                        // iterer over alle temp dates
+                        for (int j = 0; j < i; j++) {
+                            // hvis den man vil indsætte kommer efter den dato på plads j
+                            if (dates.get(i).after(tempDate.get(j))) {
+                                // iterer fra i'endes plads til j
+                                for (int k = i; k >= j; k--) {
+                                    // ved den første tilføjer vi fra den forriges plads (flyt den sidste dato til en ny plads)
+                                    if (k == i) {
+                                        tempEventPic.add(eventEventPic.get(i-1));
+                                        tempEventHeaders.add(eventHeaders.get(i-1));
+                                        tempEventApplicantPic.add(eventApplicantPic.get(i-1));
+                                        tempEventApplicantsSize.add(eventApplicantsSize.get(i-1));
+                                        tempEventOwnerPic.add(eventOwnerPic.get(i-1));
+                                        tempEventFirstApplicants.add(eventFirstApplicants.get(i-1));
+                                        tempEventID.add(eventEventID.get(i-1));
+                                        tempDate.add(dates.get(i-1));
+                                    }
+                                    // fra alle pladser derefter så rykker vi pladsen 1 til højre
+                                    else if (k != 0) {
+                                        tempEventPic.add(eventEventPic.get(Math.max(i-1,0)));
+                                        tempEventHeaders.add(eventHeaders.get(Math.max(i-1,0)));
+                                        tempEventApplicantPic.add(eventApplicantPic.get(Math.max(i-1,0)));
+                                        tempEventApplicantsSize.add(eventApplicantsSize.get(Math.max(i-1,0)));
+                                        tempEventOwnerPic.add(eventOwnerPic.get(Math.max(i-1,0)));
+                                        tempEventFirstApplicants.add(eventFirstApplicants.get(Math.max(i-1,0)));
+                                        tempEventID.add(eventEventID.get(Math.max(i-1,0)));
+                                        tempDate.add(dates.get(Math.max(i-1,0)));
+                                    }
+                                }
+                                // når vi har rykket alle gamle datoer så indsætter vi den nye dato vi vil indsætte
+                                tempEventPic.set(j,eventEventPic.get(i));
+                                tempEventHeaders.set(j,eventHeaders.get(i));
+                                tempEventApplicantPic.set(j, eventApplicantPic.get(i));
+                                tempEventApplicantsSize.set(j, eventApplicantsSize.get(i));
+                                tempEventOwnerPic.set(j, eventOwnerPic.get(i));
+                                tempEventFirstApplicants.set(j, eventFirstApplicants.get(i));
+                                tempEventID.set (j, eventEventID.get(i));
+                                tempDate.set(j, dates.get(i));
+                                break;
+                            }
+                        }
+
+                    }
                 }
                 this.tempEventID = tempEventID;
                 this.tempFirstApplicant = tempEventFirstApplicants;
