@@ -175,8 +175,17 @@ public class OwnEvent_frag extends Fragment {
                 ArrayList<Date> tempDate = new ArrayList<>();
 
                 for (int i = 0; i < eventHeaders.size(); i++) {
+                    tempEventPic.add(eventEventPic.get(i));
+                    tempEventHeaders.add(eventHeaders.get(i));
+                    tempEventApplicantPic.add(eventApplicantPic.get(i));
+                    tempEventApplicantsSize.add(eventApplicantsSize.get(i));
+                    tempEventOwnerPic.add(eventOwnerPic.get(i));
+                    tempEventFirstApplicants.add(eventFirstApplicants.get(i));
+                    tempEventID.add(eventEventID.get(i));
+                    tempDate.add(dates.get(i));
                     Log.d("list1", String.valueOf(eventApplicantsSize.size()));
 
+                    /*
                     if(i==0) {
                         tempEventPic.add(eventEventPic.get(i));
                         tempEventHeaders.add(eventHeaders.get(i));
@@ -240,7 +249,7 @@ public class OwnEvent_frag extends Fragment {
                             }
                         }
 
-                    }
+                    }*/
                 }
                 this.tempEventID = tempEventID;
                 this.tempFirstApplicant = tempEventFirstApplicants;
