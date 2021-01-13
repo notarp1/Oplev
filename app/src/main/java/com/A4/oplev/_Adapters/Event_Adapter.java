@@ -224,6 +224,7 @@ public class Event_Adapter extends RecyclerView.Adapter<Event_Adapter.ViewHolder
                                 Intent i = new Intent(ctx, Activity_Event.class);
                                 i.putExtra("user", user);
                                 i.putExtra("event", event);
+                                i.putExtra("eventId", event.getEventId());
                                 ctx.startActivity(i);
                             }
                         }, event.getOwnerId());

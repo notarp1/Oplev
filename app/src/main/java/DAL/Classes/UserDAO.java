@@ -28,10 +28,12 @@ import java.util.HashMap;
 import java.util.Map;
 
 import Controller.UserController;
+import DAL.Interfaces.CallbackEvent;
 import DAL.Interfaces.CallbackUser;
 import DAL.Interfaces.CallbackUserDelete;
 import DAL.Interfaces.IUserDAO;
 import DTO.ChatDTO;
+import DTO.EventDTO;
 import DTO.UserDTO;
 
 public class UserDAO implements IUserDAO, CallbackUser, CallbackUserDelete {
@@ -39,7 +41,8 @@ public class UserDAO implements IUserDAO, CallbackUser, CallbackUserDelete {
     public FirebaseFirestore db;
     private static final String TAG = "userLog" ;
     private boolean wait = false;
-
+    private  ArrayList<String> requested = new ArrayList<>();
+    String userIdremove;
 
 
     public UserDAO(){
@@ -79,7 +82,7 @@ public class UserDAO implements IUserDAO, CallbackUser, CallbackUserDelete {
         userObject.put("city", user.getCity());
         userObject.put("description", user.getDescription());
         userObject.put("email", user.getEmail());
-        userObject.put("joinedEvents", user.getJoinedEvents());
+        userObject.put("requestedEvents", user.getRequestedEvents());
         userObject.put("events", new ArrayList<String>());
         userObject.put("pictures", user.getPictures());
         userObject.put("chatId", new ArrayList<>());
@@ -126,9 +129,13 @@ public class UserDAO implements IUserDAO, CallbackUser, CallbackUserDelete {
     }
 
 
+    public void setRequested(ArrayList<String> requested) {
+        this.requested = requested;
+    }
 
-
-
+    public ArrayList<String> getRequested() {
+        return requested;
+    }
 
     @Override
     public void deleteUser(UserDTO user, Context ctx) {
@@ -138,7 +145,11 @@ public class UserDAO implements IUserDAO, CallbackUser, CallbackUserDelete {
         ArrayList<String> chats = user.getChatId();
 
         ChatDAO chatDAO = new ChatDAO();
-
+        UserController userController = UserController.getInstance();
+        UserDTO userDTO = userController.getCurrUser();
+        ArrayList<String> userRequests = userDTO.getRequestedEvents();
+        setRequested(userRequests);
+        userIdremove = userDTO.getUserId();
 
         deleteRefs(new CallbackUserDelete() {
             @Override
@@ -154,8 +165,18 @@ public class UserDAO implements IUserDAO, CallbackUser, CallbackUserDelete {
                                     loopThing(new CallbackUserDelete() {
                                         @Override
                                         public void onCallbackDelete() {
-                                             Intent i = new Intent(ctx, Activity_Ini.class);
-                                             ctx.startActivity(i);
+
+                                            removeLastApps(new CallbackUserDelete() {
+                                                @Override
+                                                public void onCallbackDelete() {
+                                                   /* Intent i = new Intent(ctx, Activity_Ini.class);
+                                                    ctx.startActivity(i);*/
+                                                }
+                                            });
+
+
+
+
                                         }
                                     }, chats, chatDAO, user);
                                 }
@@ -167,6 +188,29 @@ public class UserDAO implements IUserDAO, CallbackUser, CallbackUserDelete {
 
     }
 
+    private void removeLastApps(CallbackUserDelete delete){
+        EventDAO eventDAO = new EventDAO();
+        for(int m = 0; m<requested.size(); m++){
+            eventDAO.getEvent(new CallbackEvent() {
+                @Override
+                public void onCallback(EventDTO event) {
+
+
+                    ArrayList<String> apps = event.getApplicants();
+
+                    for(int i = 0; i<apps.size(); i++){
+                        if(apps.get(i).equals(userIdremove)){
+                            apps.remove(i);
+
+                        }
+                    }
+
+                    event.setApplicants(apps);
+                    eventDAO.updateEvent(event);
+                }
+            }, requested.get(m));
+        }
+    }
     private void loopThing(CallbackUserDelete delete,  ArrayList<String> chats, ChatDAO chatDAO, UserDTO user){
 
         ArrayList<String> newChat = new ArrayList<>();
@@ -191,53 +235,72 @@ public class UserDAO implements IUserDAO, CallbackUser, CallbackUserDelete {
                         userId = dto.getUser2ID();
                     } else userId = dto.getUser1ID();
 
+                    String eventId = dto.getEventId();
 
-                    if(userVisited.contains(userId)){
-                        System.out.println("suckadicxk");
-                    } else {
+                    deleteParticipants(new CallbackUserDelete() {
+                        @Override
+                        public void onCallbackDelete() {
 
-                        userVisited.add(userId);
+                            if(userVisited.contains(userId)){
+                                System.out.println("suckadicxk");
+                            } else {
 
-                        getUser(new CallbackUser() {
-                            @Override
-                            public void onCallback(UserDTO user1) {
+                                userVisited.add(userId);
 
-                                //Henter chatIds
-                                ArrayList<String> uChats = user1.getChatId();
+                                getUser(new CallbackUser() {
+                                    @Override
+                                    public void onCallback(UserDTO user1) {
 
-                                //Finder chatID
-                                for(int i = 0; i<newChat.size(); i++){
+                                        //Henter chatIds
+                                        ArrayList<String> uChats = user1.getChatId();
 
-                                    //chat 1 -> new chat
-                                    for(int j = 0; j < uChats.size(); j++){
+                                        //Finder chatID
+                                        for(int i = 0; i<newChat.size(); i++){
 
-                                        if(uChats.get(j).equals(newChat.get(i))){
-                                            //hvis chat1 ->
-                                            //fjerneer corresponding ID
+                                            //chat 1 -> new chat
+                                            for(int j = 0; j < uChats.size(); j++){
 
-                                            uChats.remove(j);
+                                                if(uChats.get(j).equals(newChat.get(i))){
+                                                    //hvis chat1 ->
+                                                    //fjerneer corresponding ID
 
-                                            user1.setChatId(uChats);
+                                                    db.collection("chats").document(uChats.get(j))
+                                                            .delete()
+                                                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                                @Override
+                                                                public void onSuccess(Void aVoid) {
+                                                                    System.out.println("CHAT DELETED");
 
-                                            updateOtherUser(new CallbackUserDelete() {
-                                                @Override
-                                                public void onCallbackDelete() {
+                                                                }
+                                                            }).addOnFailureListener(new OnFailureListener() {
+                                                        @Override
+                                                        public void onFailure(@NonNull Exception e) {
+                                                            System.out.println(e + "HAHA");
+                                                        }
+                                                    });
+                                                    uChats.remove(j);
+
+                                                    user1.setChatId(uChats);
+
 
 
                                                 }
-                                            }, user1);
-
+                                            }
                                         }
-                                    }
-                                }
-                                for(int i = 0; i<uChats.size(); i++){
-                                    System.out.println("ID: " + i + " noob " + uChats.get(i));
-                                }
+                                        updateOtherUser(new CallbackUserDelete() {
+                                            @Override
+                                            public void onCallbackDelete() {
 
-                               /*  */
+                                            }
+                                        }, user1);
+
+                                    }
+                                }, userId);
                             }
-                        }, userId);
-                    }
+
+                        }
+                    }, eventId, user.getUserId());
+
                 }
             }, chats.get(i));
         }
@@ -249,6 +312,46 @@ public class UserDAO implements IUserDAO, CallbackUser, CallbackUserDelete {
         delete.onCallbackDelete();
     }
 
+    private void deleteParticipants(CallbackUserDelete delete, String eventId, String userId){
+
+        EventDAO eventDAO = new EventDAO();
+
+
+        ArrayList<String> userRequests = getRequested();
+
+        eventDAO.getEvent(new CallbackEvent() {
+            @Override
+            public void onCallback(EventDTO event) {
+
+                String participant = event.getParticipant();
+                ArrayList<String> applicants = event.getApplicants();
+                System.out.println(participant + "HAHA");
+                event.setParticipant("");
+
+                for(int i = 0; i<userRequests.size(); i++){
+
+                    if(applicants.contains(userRequests.get(i))){
+
+                        userRequests.remove(i);
+                    }
+
+                }
+                for(int i = 0; i<applicants.size(); i++){
+                    if(applicants.get(i).equals(userId)){
+                        applicants.remove(i);
+
+                    }
+                }
+
+
+                setRequested(userRequests);
+                eventDAO.updateEvent(event);
+                delete.onCallbackDelete();
+            }
+        }, eventId);
+
+
+    }
     private void deleterUserLocal(CallbackUserDelete delete, UserDTO user, FirebaseFirestore db){
 
 
@@ -270,11 +373,13 @@ public class UserDAO implements IUserDAO, CallbackUser, CallbackUserDelete {
                 });
 
 
+
+
     }
 
     private void deleteUserOnline(CallbackUserDelete delete, Context ctx){
-        System.out.println("HEJHEJ");
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(ctx);
+
+        /*SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(ctx);
         FirebaseUser currUser  = FirebaseAuth.getInstance().getCurrentUser() ;
         String username = prefs.getString("username", "username");
         String password = prefs.getString("password", "password");
@@ -305,9 +410,8 @@ public class UserDAO implements IUserDAO, CallbackUser, CallbackUserDelete {
                             }
                         });
                     }
-                });
-
-
+                }); */
+        delete.onCallbackDelete();
 
     }
 
@@ -326,7 +430,7 @@ public class UserDAO implements IUserDAO, CallbackUser, CallbackUserDelete {
             }
         }
 
-
+        /*
         if(chats.size() != 0) {
             for (int i = 0; i < chats.size(); i++) {
 
@@ -334,7 +438,7 @@ public class UserDAO implements IUserDAO, CallbackUser, CallbackUserDelete {
                 writeBatch.delete(documentReference);
                 System.out.println("CHATS");
             }
-        }
+        } */
 
         writeBatch.commit().addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override

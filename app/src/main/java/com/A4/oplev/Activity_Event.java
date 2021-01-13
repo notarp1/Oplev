@@ -33,6 +33,8 @@ public class Activity_Event extends AppCompatActivity implements View.OnClickLis
     UserDTO user;
     EventDTO event;
     View back;
+    UserController userController;
+    String eventId;
     int height, width, currentPic, maxPic, minPic, maxPicPrint;
 
 
@@ -42,7 +44,7 @@ public class Activity_Event extends AppCompatActivity implements View.OnClickLis
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_event);
         Intent myIntent = getIntent();
-
+        userController = UserController.getInstance();
         eventName = findViewById(R.id.text_event_information);
         eCity = findViewById(R.id.text_e_city);
         eDate = findViewById(R.id.text_date);
@@ -81,6 +83,7 @@ public class Activity_Event extends AppCompatActivity implements View.OnClickLis
 
         user = (UserDTO) myIntent.getSerializableExtra("user");
         event = (EventDTO) myIntent.getSerializableExtra("event");
+        eventId = myIntent.getStringExtra("eventId");
 
         Picasso.get().load(event.getEventPic())
                 .resize(width, height/2 + 200)
@@ -135,10 +138,24 @@ public class Activity_Event extends AppCompatActivity implements View.OnClickLis
             if (UserController.getInstance().getCurrUser() != null) {
                 EventDAO dao = new EventDAO();
                 ArrayList<String> applicants = event.getApplicants();
+
+
+
                 if (!applicants.contains(UserController.getInstance().getCurrUser().getUserId())) {
                     applicants.add(UserController.getInstance().getCurrUser().getUserId());
                     event.setApplicants(applicants);
                     dao.updateEvent(event);
+
+
+                    UserDTO sendMe = userController.getCurrUser();
+                    ArrayList<String> requested = sendMe.getRequestedEvents();
+                    if(requested == null){
+                        requested = new ArrayList<>();
+                    }
+                    requested.add(eventId);
+
+                    sendMe.setRequestedEvents(requested);
+                    userController.updateUserSimple(sendMe);
                     finish();
                 } else {
                     Toast.makeText(this, "Du har allerede ansøgt om at deltage", Toast.LENGTH_SHORT).show();
