@@ -124,7 +124,7 @@ public class OwnEvents_Adapter2 extends RecyclerView.Adapter<OwnEvents_Adapter2.
         // Sætter overskriften for eventet
         header.setText(eventHeaders.get(position));
 
-        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM");
+        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/YYYY");
         String strDate = formatter.format(eventDate.get(position));
         date.setText(strDate);
 

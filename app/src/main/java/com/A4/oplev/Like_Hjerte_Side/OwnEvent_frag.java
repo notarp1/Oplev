@@ -174,19 +174,9 @@ public class OwnEvent_frag extends Fragment {
                 ArrayList<Integer> tempEventApplicantsSize = new ArrayList<>();
                 ArrayList<Date> tempDate = new ArrayList<>();
 
-                for (int i = 0; i < eventHeaders.size(); i++) {
-                    tempEventPic.add(eventEventPic.get(i));
-                    tempEventHeaders.add(eventHeaders.get(i));
-                    tempEventApplicantPic.add(eventApplicantPic.get(i));
-                    tempEventApplicantsSize.add(eventApplicantsSize.get(i));
-                    tempEventOwnerPic.add(eventOwnerPic.get(i));
-                    tempEventFirstApplicants.add(eventFirstApplicants.get(i));
-                    tempEventID.add(eventEventID.get(i));
-                    tempDate.add(dates.get(i));
-                    Log.d("list1", String.valueOf(eventApplicantsSize.size()));
+                for (int i = 0; i < eventApplicantsSize.size(); i++) {
 
-                    /*
-                    if(i==0) {
+                    if (i==0) {
                         tempEventPic.add(eventEventPic.get(i));
                         tempEventHeaders.add(eventHeaders.get(i));
                         tempEventApplicantPic.add(eventApplicantPic.get(i));
@@ -195,8 +185,11 @@ public class OwnEvent_frag extends Fragment {
                         tempEventFirstApplicants.add(eventFirstApplicants.get(i));
                         tempEventID.add(eventEventID.get(i));
                         tempDate.add(dates.get(i));
+                        Log.d("list1", String.valueOf(eventApplicantsSize.size()));
                     }
-                    else if (tempDate.get(i-1).after(dates.get(i))){
+
+                    else if (dates.get(i).before(tempDate.get(tempDate.size()-1))){
+                     //else if (tempDate.get(i-1).after(dates.get(i)))
                         tempEventPic.add(eventEventPic.get(i));
                         tempEventHeaders.add(eventHeaders.get(i));
                         tempEventApplicantPic.add(eventApplicantPic.get(i));
@@ -215,41 +208,41 @@ public class OwnEvent_frag extends Fragment {
                                 for (int k = i; k >= j; k--) {
                                     // ved den første tilføjer vi fra den forriges plads (flyt den sidste dato til en ny plads)
                                     if (k == i) {
-                                        tempEventPic.add(eventEventPic.get(i-1));
-                                        tempEventHeaders.add(eventHeaders.get(i-1));
-                                        tempEventApplicantPic.add(eventApplicantPic.get(i-1));
-                                        tempEventApplicantsSize.add(eventApplicantsSize.get(i-1));
-                                        tempEventOwnerPic.add(eventOwnerPic.get(i-1));
-                                        tempEventFirstApplicants.add(eventFirstApplicants.get(i-1));
-                                        tempEventID.add(eventEventID.get(i-1));
-                                        tempDate.add(dates.get(i-1));
+                                        tempEventPic.add(eventEventPic.get(i - 1));
+                                        tempEventHeaders.add(eventHeaders.get(i - 1));
+                                        tempEventApplicantPic.add(eventApplicantPic.get(i - 1));
+                                        tempEventApplicantsSize.add(eventApplicantsSize.get(i - 1));
+                                        tempEventOwnerPic.add(eventOwnerPic.get(i - 1));
+                                        tempEventFirstApplicants.add(eventFirstApplicants.get(i - 1));
+                                        tempEventID.add(eventEventID.get(i - 1));
+                                        tempDate.add(dates.get(i - 1));
                                     }
                                     // fra alle pladser derefter så rykker vi pladsen 1 til højre
                                     else if (k != 0) {
-                                        tempEventPic.add(eventEventPic.get(Math.max(i-1,0)));
-                                        tempEventHeaders.add(eventHeaders.get(Math.max(i-1,0)));
-                                        tempEventApplicantPic.add(eventApplicantPic.get(Math.max(i-1,0)));
-                                        tempEventApplicantsSize.add(eventApplicantsSize.get(Math.max(i-1,0)));
-                                        tempEventOwnerPic.add(eventOwnerPic.get(Math.max(i-1,0)));
-                                        tempEventFirstApplicants.add(eventFirstApplicants.get(Math.max(i-1,0)));
-                                        tempEventID.add(eventEventID.get(Math.max(i-1,0)));
-                                        tempDate.add(dates.get(Math.max(i-1,0)));
+                                        tempEventPic.set(k, tempEventPic.get(k - 1));
+                                        tempEventHeaders.set(k, tempEventHeaders.get(k - 1));
+                                        tempEventApplicantPic.set(k, tempEventApplicantPic.get(k - 1));
+                                        tempEventApplicantsSize.set(k, tempEventApplicantsSize.get(k - 1));
+                                        tempEventOwnerPic.set(k, tempEventOwnerPic.get((k - 1)));
+                                        tempEventFirstApplicants.set(k, tempEventFirstApplicants.get((k - 1)));
+                                        tempEventID.set(k, tempEventID.get(k - 1));
+                                        tempDate.set(k, tempDate.get((k - 1)));
                                     }
                                 }
                                 // når vi har rykket alle gamle datoer så indsætter vi den nye dato vi vil indsætte
-                                tempEventPic.set(j,eventEventPic.get(i));
-                                tempEventHeaders.set(j,eventHeaders.get(i));
+                                tempEventPic.set(j, eventEventPic.get(i));
+                                tempEventHeaders.set(j, eventHeaders.get(i));
                                 tempEventApplicantPic.set(j, eventApplicantPic.get(i));
                                 tempEventApplicantsSize.set(j, eventApplicantsSize.get(i));
                                 tempEventOwnerPic.set(j, eventOwnerPic.get(i));
                                 tempEventFirstApplicants.set(j, eventFirstApplicants.get(i));
-                                tempEventID.set (j, eventEventID.get(i));
+                                tempEventID.set(j, eventEventID.get(i));
                                 tempDate.set(j, dates.get(i));
                                 break;
                             }
                         }
 
-                    }*/
+                    }
                 }
                 this.tempEventID = tempEventID;
                 this.tempFirstApplicant = tempEventFirstApplicants;
