@@ -399,14 +399,14 @@ public class LikesideList_frag extends Fragment{
                                 }
                                 // fra alle pladser derefter så rykker vi pladsen 1 til højre
                                 else if (k != 0) {
-                                    tempChatIds.set(k, tempChatIds.get(Math.max(k - 1, 0)));
-                                    tempNames.set(k, tempNames.get(Math.max(k - 1, 0)));
-                                    tempLastmessage.set(k, tempLastmessage.get(Math.max(k - 1, 0)));
-                                    tempDates.set(k, tempDates.get(Math.max(k - 1, 0)));
-                                    tempHeaderList.set(k, tempHeaderList.get(Math.max(k - 1, 0)));
-                                    tempIsInitialized.set(k, tempIsInitialized.get(Math.max(k - 1, 0)));
-                                    tempLastSender.set(k, tempLastSender.get(Math.max(k - 1, 0)));
-                                    tempOtherPersonPic.set(k, otherPersonPic.get(Math.max(k - 1, 0)));
+                                    tempChatIds.set(k, tempChatIds.get(k - 1));
+                                    tempNames.set(k, tempNames.get(k - 1));
+                                    tempLastmessage.set(k, tempLastmessage.get(k - 1));
+                                    tempDates.set(k, tempDates.get(k - 1));
+                                    tempHeaderList.set(k, tempHeaderList.get(k - 1));
+                                    tempIsInitialized.set(k, tempIsInitialized.get(k - 1));
+                                    tempLastSender.set(k, tempLastSender.get(k - 1));
+                                    tempOtherPersonPic.set(k, tempOtherPersonPic.get(k - 1));
                                 }
                             }
                             // når vi har rykket alle gamle datoer så indsætter vi den nye dato vi vil indsætte
