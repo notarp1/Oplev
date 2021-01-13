@@ -1,6 +1,8 @@
 package com.A4.oplev._Adapters;
 
 import android.content.Context;
+import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,23 +13,34 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.A4.oplev.CreateEvent.Activity_Create_Event;
 import com.A4.oplev.R;
+import com.google.firebase.firestore.auth.User;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import Controller.UserController;
+import DAL.Classes.EventDAO;
+import DAL.Classes.UserDAO;
+import DAL.Interfaces.CallbackEvent;
+import DAL.Interfaces.CallbackUser;
+import DTO.EventDTO;
+import DTO.UserDTO;
+
 public class Hjerteside_Adapter extends ArrayAdapter<String> {
+    private String tag = "Hjerteside";
     private Context mContext;
-    private List<String> nameList = new ArrayList<>(), ageList = new ArrayList<>(), profilePictures = new ArrayList<>(), headerList = new ArrayList<>(), placementList = new ArrayList<>(), eventPictureList = new ArrayList<>();
+    private List<String> nameList = new ArrayList<>(), ageList = new ArrayList<>(), profilePictures = new ArrayList<>(), headerList = new ArrayList<>(), placementList = new ArrayList<>(), eventPictureList = new ArrayList<>(), eventIDList = new ArrayList<>();
     private List<Integer> priceList = new ArrayList<>();
     private List<Date> timeList = new ArrayList<>();
 
     public Hjerteside_Adapter(@NonNull Context context, @NonNull ArrayList<String> headerList,
                               @NonNull ArrayList<String> names,
                               @NonNull ArrayList<String> profilePictures, @NonNull ArrayList<String> placementList,
-                              @NonNull ArrayList<Date> timeList, @NonNull ArrayList<Integer> priceList, @NonNull ArrayList<String> eventPictureList, @NonNull ArrayList<String> ageList) {
+                              @NonNull ArrayList<Date> timeList, @NonNull ArrayList<Integer> priceList, @NonNull ArrayList<String> eventPictureList, @NonNull ArrayList<String> ageList, @NonNull ArrayList<String> eventIDList) {
         super(context, 0 , headerList);
         this.mContext = context;
         this.headerList = headerList;
@@ -38,6 +51,7 @@ public class Hjerteside_Adapter extends ArrayAdapter<String> {
         this.placementList = placementList;
         this.timeList = timeList;
         this.priceList = priceList;
+        this.eventIDList = eventIDList;
     }
 
     @NonNull
@@ -78,6 +92,46 @@ public class Hjerteside_Adapter extends ArrayAdapter<String> {
                 .placeholder(R.drawable.load2)
                 .error(R.drawable.question)
                 .into(eventBillede);
+
+        ImageView repost = (ImageView) listItem.findViewById(R.id.hjerteside_share);
+        repost.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // send til repost side
+                EventDAO eventDAO = new EventDAO();
+                eventDAO.getEvent(new CallbackEvent() {
+                    @Override
+                    public void onCallback(EventDTO event) {
+                        Intent i = new Intent(mContext, Activity_Create_Event.class);
+                        i.putExtra("event",event);
+                        mContext.startActivity(i);
+                    }
+                }, eventIDList.get(position));
+            }
+        });
+
+        ImageView delete = (ImageView) listItem.findViewById(R.id.hjerteside_bin);
+        delete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                /* fjern posten fra ens likede events
+                UserController.getInstance().getUser(new CallbackUser() {
+                    @Override
+                    public void onCallback(UserDTO user) {
+                        ArrayList<String> likeEventsID = user.getLikedeEvents();
+                        for (int i = 0; i < likeEventsID.size(); i++) {
+                            if (likeEventsID.get(i).equals(eventIDList.get(position))){
+                                likeEventsID.remove(i);
+                                user.setLikedeEvents(likeEventsID);
+                                UserDAO userDAO = new UserDAO();
+                                userDAO.updateUser(user);
+                            }
+                        }
+                    }
+                }, UserController.getInstance().getCurrUser().getUserId());
+                 */
+            }
+        });
 
         return listItem;
     }

@@ -7,7 +7,9 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ScrollView;
 
@@ -28,13 +30,13 @@ import com.A4.oplev._Adapters.Hjerteside_Adapter;
 import java.util.ArrayList;
 import java.util.Date;
 
-public class HjerteSide_frag extends Fragment implements View.OnClickListener{
+public class HjerteSide_frag extends Fragment{
     private Context mContext;
     private ListView listView;
     private UserDTO currentUser;
     private UserDAO dao = new UserDAO();
     private EventDAO eventDAO = new EventDAO();
-    private ArrayList<String> headerList = new ArrayList<>(), names = new ArrayList<>(), profilePictures = new ArrayList<>(), placementList = new ArrayList<>(), eventPictureList = new ArrayList<>(), ageList = new ArrayList<>();
+    private ArrayList<String> headerList = new ArrayList<>(), names = new ArrayList<>(), profilePictures = new ArrayList<>(), placementList = new ArrayList<>(), eventPictureList = new ArrayList<>(), ageList = new ArrayList<>(), eventIDList = new ArrayList<>();
     private ArrayList<Date> timeList = new ArrayList<>();
     private ArrayList<Integer> priceList = new ArrayList<>();
 
@@ -56,9 +58,10 @@ public class HjerteSide_frag extends Fragment implements View.OnClickListener{
                         eventPictureList.add(event.getEventPic());
                         timeList.add(event.getDate());
                         priceList.add(event.getPrice());
+                        eventIDList.add(event.getEventId());
                         ageList.add(user.getAge() + "");
                         if (headerList.size() == currentUser.getEvents().size()) {
-                            Hjerteside_Adapter adapter = new Hjerteside_Adapter(mContext, headerList, names, profilePictures, placementList, timeList, priceList, eventPictureList, ageList);
+                            Hjerteside_Adapter adapter = new Hjerteside_Adapter(mContext, headerList, names, profilePictures, placementList, timeList, priceList, eventPictureList, ageList, eventIDList);
                             listView.setAdapter(adapter);
                         }
                     }, event.getOwnerId()), currentUser.getEvents().get(j));
@@ -80,11 +83,6 @@ public class HjerteSide_frag extends Fragment implements View.OnClickListener{
 
 
         return root;
-    }
-
-        @Override
-    public void onClick(View v) {
-
     }
 
     @Override
