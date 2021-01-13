@@ -239,7 +239,6 @@ public class LikesideList_frag extends Fragment{
                         android.R.anim.slide_out_right).replace(R.id.likeside_frameLayout,new OwnEvent_frag())
                         .commit();
 
-
             }
         });
 

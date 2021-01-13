@@ -21,7 +21,9 @@ import com.A4.oplev.Like_Hjerte_Side.Activity_Likeside;
 import com.A4.oplev.R;
 import com.squareup.picasso.Picasso;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 import Controller.UserController;
 import DAL.Classes.EventDAO;
@@ -30,11 +32,12 @@ public class OwnEvents_Adapter2 extends RecyclerView.Adapter<OwnEvents_Adapter2.
     private EventDAO eventDAO = new EventDAO();
     private UserController userController = UserController.getInstance();
     private Context mContext;
+    private ArrayList<Date> eventDate;
     private ArrayList<Integer> eventApplicantsSize;
     private ArrayList<String> eventHeaders, eventEventPic, eventApplicantPic, eventOwnerPic, eventFirstApplicants,eventID ;
 
 
-    public OwnEvents_Adapter2(@NonNull Context context, @NonNull ArrayList<String> eventEventPic, @NonNull ArrayList<String> eventHeaders, @NonNull ArrayList<String> eventOwnerPic, @NonNull ArrayList<String> eventFirstApplicants, @NonNull ArrayList<String> eventApplicantPic, @NonNull ArrayList<Integer> eventApplicantsSize, ArrayList<String> eventID) {
+    public OwnEvents_Adapter2(@NonNull Context context, @NonNull ArrayList<String> eventEventPic, @NonNull ArrayList<String> eventHeaders, @NonNull ArrayList<String> eventOwnerPic, @NonNull ArrayList<String> eventFirstApplicants, @NonNull ArrayList<String> eventApplicantPic, @NonNull ArrayList<Integer> eventApplicantsSize, ArrayList<String> eventID, ArrayList<Date> eventDate) {
         this.mContext = context;
         this.eventHeaders = eventHeaders;
         this.eventApplicantsSize = eventApplicantsSize;
@@ -43,6 +46,7 @@ public class OwnEvents_Adapter2 extends RecyclerView.Adapter<OwnEvents_Adapter2.
         this.eventOwnerPic = eventOwnerPic;
         this.eventFirstApplicants = eventFirstApplicants;
         this.eventID = eventID;
+        this.eventDate = eventDate;
     }
 
 
@@ -119,8 +123,10 @@ public class OwnEvents_Adapter2 extends RecyclerView.Adapter<OwnEvents_Adapter2.
 
         // Sætter overskriften for eventet
         header.setText(eventHeaders.get(position));
-        // Todo - Dato for event skal findes.
-        date.setText("12/12-2021");
+
+        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM");
+        String strDate = formatter.format(eventDate.get(position));
+        date.setText(strDate);
 
     }
 
