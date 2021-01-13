@@ -118,6 +118,7 @@ public class Activity_Main extends AppCompatActivity implements View.OnClickList
         getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
         int height = displayMetrics.heightPixels;
         int width = displayMetrics.widthPixels;
+        Event_Adapter.setInstance(null);
         event_Adapter = Event_Adapter.getInstance(ids, this, height, width);
         rcEvent.setLayoutManager(layoutManager);
         rcEvent.setAdapter(event_Adapter);

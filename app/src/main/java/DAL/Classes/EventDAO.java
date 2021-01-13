@@ -21,7 +21,9 @@ import com.google.firebase.firestore.auth.User;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.squareup.picasso.Picasso;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -159,7 +161,7 @@ public class EventDAO implements IEventDAO {
 
                         //if a picture to upload was chosen then upload pic else skip that part
                         if(picUri!=null) {
-                            //set picture reference (path where pic will be saved
+                            //set picture reference (path where pic will be saved in db
                             picRef = mStorageRef.child("events/" + documentReference.getId() + "/1");
                             picRef.putFile(picUri)
                                     .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
