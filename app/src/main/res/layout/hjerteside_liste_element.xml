@@ -17,8 +17,8 @@
             android:layout_height="21dp"
             android:layout_marginTop="4dp"
             android:text="Med mig :)"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.008"
+            app:layout_constraintEnd_toStartOf="@+id/hjerteside_bin"
+            app:layout_constraintHorizontal_bias="0.166"
             app:layout_constraintStart_toEndOf="@+id/hjerteside_profilbillede"
             app:layout_constraintTop_toBottomOf="@+id/hjertside_overskrift" />
 
@@ -45,14 +45,6 @@
             app:layout_constraintStart_toEndOf="@+id/hjerteside_profilbillede"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <ImageView
-            android:id="@+id/hjerteside_billede_background"
-            android:layout_width="match_parent"
-            android:layout_height="227dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/hjerteside_medhvem"
-            app:srcCompat="@drawable/gradientback" />
 
         <ImageView
             android:id="@+id/hjerteside_billede"
@@ -61,7 +53,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/hjerteside_medhvem"
-            app:srcCompat="@drawable/user_icon" />
+            app:srcCompat="@drawable/avatar" />
 
 
         <ImageView

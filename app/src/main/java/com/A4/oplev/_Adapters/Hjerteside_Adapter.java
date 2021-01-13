@@ -13,6 +13,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.A4.oplev.Activity_Event;
+import com.A4.oplev.Activity_Profile;
 import com.A4.oplev.CreateEvent.Activity_Create_Event;
 import com.A4.oplev.R;
 import com.google.firebase.firestore.auth.User;
@@ -36,6 +38,8 @@ public class Hjerteside_Adapter extends ArrayAdapter<String> {
     private List<String> nameList = new ArrayList<>(), ageList = new ArrayList<>(), profilePictures = new ArrayList<>(), headerList = new ArrayList<>(), placementList = new ArrayList<>(), eventPictureList = new ArrayList<>(), eventIDList = new ArrayList<>();
     private List<Integer> priceList = new ArrayList<>();
     private List<Date> timeList = new ArrayList<>();
+    private EventDAO eventDAO = new EventDAO();
+    private UserDAO userDAO = new UserDAO();
 
     public Hjerteside_Adapter(@NonNull Context context, @NonNull ArrayList<String> headerList,
                               @NonNull ArrayList<String> names,
@@ -85,6 +89,15 @@ public class Hjerteside_Adapter extends ArrayAdapter<String> {
                 .error(R.drawable.question)
                 .into(profilBillede);
 
+        profilBillede.setOnClickListener(v -> eventDAO.getEvent
+                (event -> userDAO.getUser
+                        (user -> {
+                            Intent i = new Intent(mContext, Activity_Profile.class);
+                            i.putExtra("user", user);
+                            i.putExtra("load", 1);
+                            mContext.startActivity(i);
+                        }, event.getOwnerId()), eventIDList.get(position)));
+
         ImageView eventBillede = (ImageView) listItem.findViewById(R.id.hjerteside_billede);
         Picasso.get().load(eventPictureList.get(position))
                 //.resize(mContext.getDisplay().getWidth(), mContext.getDisplay().getHeight() / 2 + 200)
@@ -93,12 +106,20 @@ public class Hjerteside_Adapter extends ArrayAdapter<String> {
                 .error(R.drawable.question)
                 .into(eventBillede);
 
+        eventBillede.setOnClickListener(v -> eventDAO.getEvent
+                (event -> userDAO.getUser
+                        (user -> {
+                            Intent i = new Intent(mContext, Activity_Event.class);
+                            i.putExtra("user", user);
+                            i.putExtra("event", event);
+                            mContext.startActivity(i);
+                        }, event.getOwnerId()), eventIDList.get(position)));
+
         ImageView repost = (ImageView) listItem.findViewById(R.id.hjerteside_share);
         repost.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // send til repost side
-                EventDAO eventDAO = new EventDAO();
                 eventDAO.getEvent(new CallbackEvent() {
                     @Override
                     public void onCallback(EventDTO event) {
@@ -123,7 +144,6 @@ public class Hjerteside_Adapter extends ArrayAdapter<String> {
                             if (likeEventsID.get(i).equals(eventIDList.get(position))){
                                 likeEventsID.remove(i);
                                 user.setLikedeEvents(likeEventsID);
-                                UserDAO userDAO = new UserDAO();
                                 userDAO.updateUser(user);
                             }
                         }
