@@ -60,7 +60,6 @@ public class EventDAO implements IEventDAO {
 
                 DocumentSnapshot documentSnapshot = task.getResult();
                 if(documentSnapshot != null){
-                    System.out.println(documentSnapshot.getData());
                     EventDTO event = documentSnapshot.toObject(EventDTO.class);
                     callbackEvent.onCallback(event);
                 }
@@ -283,6 +282,7 @@ public class EventDAO implements IEventDAO {
         eventObject.put("eventPic", event.getEventPic());
         eventObject.put("applicants", event.getApplicants());
         eventObject.put("type", event.getType());
+        eventObject.put("coordinates", event.getCoordinates());
 
 
         db.collection("events").document(event.getEventId())
