@@ -378,7 +378,8 @@ public class createEvent1_frag extends Fragment implements View.OnClickListener{
             //open the places autocomplete api
             List<Place.Field> fieldList = Arrays.asList(Place.Field.ADDRESS,
                     Place.Field.NAME,
-                    Place.Field.LAT_LNG);
+                    Place.Field.LAT_LNG,
+                    Place.Field.TYPES);
             //create intent for activity overlay
             //(context getActivity might be off)
             Intent intent = new Autocomplete.IntentBuilder(AutocompleteActivityMode.OVERLAY, fieldList)
