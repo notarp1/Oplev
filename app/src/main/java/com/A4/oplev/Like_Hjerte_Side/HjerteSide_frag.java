@@ -53,13 +53,20 @@ public class HjerteSide_frag extends Fragment{
     public View onCreateView(LayoutInflater i, ViewGroup container, Bundle savedInstanceState) {
         View root = i.inflate(R.layout.hjerteside_frag,container,false);
 
+        // sæt positionen til hjeteside inde i activity likeside
+        Activity_Likeside.setPosition(2);
+
         listView = root.findViewById(R.id.hjerteside_listview);
         currentUser = UserController.getInstance().getCurrUser();
 
+        // find alle likede events
         for (int j = 0; j < currentUser.getLikedeEvents().size(); j++) {
+            // hent eventet
             eventDAO.getEvent(event ->
+                    // hent ejerens bruger
                     dao.getUser(user ->
                     {
+                        // tilføj nødvendige informationer som skal bruges i adapteren
                         headerList.add(event.getTitle());
                         names.add(user.getfName());
                         profilePictures.add(user.getUserPicture());
@@ -69,6 +76,7 @@ public class HjerteSide_frag extends Fragment{
                         priceList.add(event.getPrice());
                         eventIDList.add(event.getEventId());
                         ageList.add(user.getAge() + "");
+                        // hvis det er den sidste tilføjede event så opsæt views og sæt change listener på brugeren
                         if (headerList.size() == currentUser.getLikedeEvents().size()) {
                             Hjerteside_Adapter adapter = new Hjerteside_Adapter(mContext, headerList, names, profilePictures, placementList, timeList, priceList, eventPictureList, ageList, eventIDList);
                             listView.setAdapter(adapter);
@@ -97,7 +105,7 @@ public class HjerteSide_frag extends Fragment{
         return root;
     }
 
-    public void setUserChangeListener(){
+    public void setUserChangeListener() {
         FirebaseFirestore.getInstance().collection("users").document(currentUser.getUserId()).addSnapshotListener(new EventListener<DocumentSnapshot>() {
             private static final String TAG = "update from firestore";
 
@@ -109,44 +117,51 @@ public class HjerteSide_frag extends Fragment{
                     return;
                 }
 
+                // vi skal ikke ændre noget hvis aktiviteten er stoppet
                 if (mContext != null) {
                     if (snapshot != null && snapshot.exists()) {
                         // konverter til et event objekt
                         UserDTO temp = snapshot.toObject(UserDTO.class);
                         if (temp != null) {
                             if (temp.getLikedeEvents() != null) {
-                                if (temp.getLikedeEvents().size() != eventIDList.size()) {
-                                    if (temp.getLikedeEvents().size() < eventIDList.size()) {
-                                        boolean isFound = false;
-                                        for (int i = 0; i < eventIDList.size(); i++) {
-                                            isFound = false;
-                                            for (int j = 0; j < temp.getLikedeEvents().size(); j++) {
-                                                if (eventIDList.get(i).equals(temp.getLikedeEvents().get(j))) {
-                                                    isFound = true;
-                                                }
+                                // Tjek om et liket event er blevet fjernet (man kan ikke like nogle events mens man er på denne side så at tjekke om det er under er ligegyldigt)
+                                if (temp.getLikedeEvents().size() < eventIDList.size()) {
+                                    // boolean til at tjekke om vi har fundet det event der er blevet fjernet
+                                    boolean isFound = false;
+                                    // iterer alle events
+                                    for (int i = 0; i < eventIDList.size(); i++) {
+                                        // nulstil boolean til næste iteration
+                                        isFound = false;
+                                        for (int j = 0; j < temp.getLikedeEvents().size(); j++) {
+                                            // hvis et event id er det samme så sæt til true for at være fundet
+                                            if (eventIDList.get(i).equals(temp.getLikedeEvents().get(j))) {
+                                                isFound = true;
                                             }
-                                            if (!isFound) {
-                                                eventIDList.remove(i);
-                                                headerList.remove(i);
-                                                names.remove(i);
-                                                profilePictures.remove(i);
-                                                placementList.remove(i);
-                                                eventPictureList.remove(i);
-                                                timeList.remove(i);
-                                                priceList.remove(i);
-                                                ageList.remove(i);
-                                                Hjerteside_Adapter adapter = new Hjerteside_Adapter(mContext, headerList, names, profilePictures, placementList, timeList, priceList, eventPictureList, ageList, eventIDList);
-                                                listView.setAdapter(adapter);
-                                                break;
-                                            }
+                                        }
+                                        // hvis eventet ikke findes i temp listen så skal det fjernes fra vores lister
+                                        if (!isFound) {
+                                            eventIDList.remove(i);
+                                            headerList.remove(i);
+                                            names.remove(i);
+                                            profilePictures.remove(i);
+                                            placementList.remove(i);
+                                            eventPictureList.remove(i);
+                                            timeList.remove(i);
+                                            priceList.remove(i);
+                                            ageList.remove(i);
+                                            // genlav viewsne
+                                            Hjerteside_Adapter adapter = new Hjerteside_Adapter(mContext, headerList, names, profilePictures, placementList, timeList, priceList, eventPictureList, ageList, eventIDList);
+                                            listView.setAdapter(adapter);
+                                            // stop loopsne
+                                            break;
                                         }
                                     }
                                 }
                             }
                         }
-                    } else {
-                        Log.d(TAG, "Current data: null");
                     }
+                } else {
+                    Log.d(TAG, "Current data: null");
                 }
             }
         });
