@@ -14,16 +14,12 @@ import Controller.Listeners.OnSwipeTouchListener;
 import com.A4.oplev.R;
 
 public class Activity_Likeside extends AppCompatActivity implements View.OnClickListener{
-    private  Integer position;
-    ImageView hjerte, besked, tilbage, backhjerte, backbesked, events, backevents;
-    Button opret;
+    private static int position;
+    private ImageView hjerte, besked, tilbage, backhjerte, backbesked, events, backevents;
+    private Button opret;
 
 
     public void onCreate(Bundle saveInstanceState) {
-
-        position = 1;
-        Log.d("pos3", position.toString());
-
         super.onCreate(saveInstanceState);
         setContentView(R.layout.activity_likeside);
         opret = findViewById(R.id.opretOpslag_Knap2);
@@ -48,31 +44,59 @@ public class Activity_Likeside extends AppCompatActivity implements View.OnClick
         backhjerte.setVisibility(View.INVISIBLE);
         backevents.setVisibility(View.INVISIBLE);
 
-        // Todo -  Sætter en swipe listener op som også virker når listerne er tomme. (Forsøget nedenstående virker ikke)
 
-        /*getWindow().getDecorView().getRootView().setOnTouchListener(new OnSwipeTouchListener(this){
+        getWindow().getDecorView().getRootView().setOnTouchListener(new OnSwipeTouchListener(this){
             @Override
             public void onSwipeLeft() {
-                if (position==1){
-                    Log.d("pos", position.toString());
-                    getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.enter_from_right,
-                            R.anim.exit_to_left).replace(R.id.likeside_frameLayout, new HjerteSide_frag())
-                            .commit();
-                    backbesked.setVisibility(View.INVISIBLE);
-                    backhjerte.setVisibility(View.VISIBLE);
-                    position = 0;
-                }
-                if (position==2) {
-                    Log.d("pos2", position.toString());
+                // Swiper til venstre fra ownevent siden skifter til likesiden
+                if (position==0) {
+                    Log.d("pos2", position+"");
                     getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.enter_from_right,
                             R.anim.exit_to_left).replace(R.id.likeside_frameLayout, new LikesideList_frag())
                             .commit();
                     backbesked.setVisibility(View.VISIBLE);
+                    backhjerte.setVisibility(View.INVISIBLE);
                     backevents.setVisibility(View.INVISIBLE);
+                }
+                // Swiper til venstre fra likesiden siden skifter til hjertesiden
+                if (position==1){
+                    Log.d("pos", position+"");
+                    getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.enter_from_right,
+                            R.anim.exit_to_left).replace(R.id.likeside_frameLayout, new HjerteSide_frag())
+                            .commit();
+                    backbesked.setVisibility(View.INVISIBLE);
+                    backevents.setVisibility(View.INVISIBLE);
+                    backhjerte.setVisibility(View.VISIBLE);
+                }
+            }
+
+            @Override
+            public void onSwipeRight(){
+                // Swiper til højre fra likesiden siden skifter til ownevent
+                if (position==1){
+                    Log.d("pos", position+"");
+                    getSupportFragmentManager().beginTransaction().setCustomAnimations(android.R.anim.slide_in_left,
+                            android.R.anim.slide_out_right).replace(R.id.likeside_frameLayout, new OwnEvent_frag())
+                            .commit();
+                    backbesked.setVisibility(View.INVISIBLE);
+                    backhjerte.setVisibility(View.INVISIBLE);
+                    backevents.setVisibility(View.VISIBLE);
+                    position = 0;
+                }
+                // Swiper til højre fra hjertesiden siden skifter til likesiden
+                if (position==2) {
+                    Log.d("pos2", position+"");
+                    getSupportFragmentManager().beginTransaction().setCustomAnimations(android.R.anim.slide_in_left,
+                            android.R.anim.slide_out_right).replace(R.id.likeside_frameLayout, new LikesideList_frag())
+                            .commit();
+                    backbesked.setVisibility(View.VISIBLE);
+                    backevents.setVisibility(View.INVISIBLE);
+                    backhjerte.setVisibility(View.INVISIBLE);
                     position=1;
                 }
             }
-        });*/
+
+        });
 
     }
 
@@ -80,24 +104,19 @@ public class Activity_Likeside extends AppCompatActivity implements View.OnClick
     @Override
     public void onClick(View v) {
         if (v == hjerte){
-            // position = 0;
             backbesked.setVisibility(View.INVISIBLE);
             backevents.setVisibility(View.INVISIBLE);
-
             backhjerte.setVisibility(View.VISIBLE);
             getSupportFragmentManager().beginTransaction().replace(R.id.likeside_frameLayout,new HjerteSide_frag())
                     .commit();
         }
         else if (v == besked){
-           //  position = 1;
             backbesked.setVisibility(View.VISIBLE);
             backhjerte.setVisibility(View.INVISIBLE);
             backevents.setVisibility(View.INVISIBLE);
             getSupportFragmentManager().beginTransaction().replace(R.id.likeside_frameLayout,new LikesideList_frag())
                     .commit();
         } else if (v == events){
-            // position = 2;
-            Log.d("pos", position.toString());
             backbesked.setVisibility(View.INVISIBLE);
             backhjerte.setVisibility(View.INVISIBLE);
             backevents.setVisibility(View.VISIBLE);
@@ -112,5 +131,10 @@ public class Activity_Likeside extends AppCompatActivity implements View.OnClick
             startActivity(o);
         }
 
+    }
+
+    // for at sætte positionen til swipe funktionen (0 = ownevent, 1 = likeside, 2 = hjerteside)
+    public static void setPosition(int position1){
+        position = position1;
     }
 }

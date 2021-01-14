@@ -5,7 +5,6 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.SystemClock;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,7 +12,6 @@ import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -70,6 +68,8 @@ public class LikesideList_frag extends Fragment{
     @SuppressLint("ClickableViewAccessibility")
     public View onCreateView(LayoutInflater i, ViewGroup container, Bundle savedInstanceState) {
         View root = i.inflate(R.layout.likeside_frag,container,false);
+        // sæt positionen til likeside inde i activity likeside
+        Activity_Likeside.setPosition(1);
         // Vi henter nogle informationer fra userControlleren så vi ved hvilken person vi er i gang med at sætte listen op for
         userController = UserController.getInstance();
         userDTO = userController.getCurrUser();
@@ -400,14 +400,14 @@ public class LikesideList_frag extends Fragment{
                                 }
                                 // fra alle pladser derefter så rykker vi pladsen 1 til højre
                                 else if (k != 0) {
-                                    tempChatIds.set(k, tempChatIds.get(Math.max(k - 1, 0)));
-                                    tempNames.set(k, tempNames.get(Math.max(k - 1, 0)));
-                                    tempLastmessage.set(k, tempLastmessage.get(Math.max(k - 1, 0)));
-                                    tempDates.set(k, tempDates.get(Math.max(k - 1, 0)));
-                                    tempHeaderList.set(k, tempHeaderList.get(Math.max(k - 1, 0)));
-                                    tempIsInitialized.set(k, tempIsInitialized.get(Math.max(k - 1, 0)));
-                                    tempLastSender.set(k, tempLastSender.get(Math.max(k - 1, 0)));
-                                    tempOtherPersonPic.set(k, otherPersonPic.get(Math.max(k - 1, 0)));
+                                    tempChatIds.set(k, tempChatIds.get(k - 1));
+                                    tempNames.set(k, tempNames.get(k - 1));
+                                    tempLastmessage.set(k, tempLastmessage.get(k - 1));
+                                    tempDates.set(k, tempDates.get(k - 1));
+                                    tempHeaderList.set(k, tempHeaderList.get(k - 1));
+                                    tempIsInitialized.set(k, tempIsInitialized.get(k - 1));
+                                    tempLastSender.set(k, tempLastSender.get(k - 1));
+                                    tempOtherPersonPic.set(k, tempOtherPersonPic.get(k - 1));
                                 }
                             }
                             // når vi har rykket alle gamle datoer så indsætter vi den nye dato vi vil indsætte
@@ -554,7 +554,6 @@ public class LikesideList_frag extends Fragment{
                                     // hvis der er mindst 1 applicant så skal vi hente personens billede ind
                                     if (temp.getApplicants().size() > 0) {
                                         int finalJ = j;
-                                        System.out.println("IDET " + temp.getEventId());
                                         userController.getUser(new CallbackUser() {
                                             @Override
                                             public void onCallback(UserDTO user) {
@@ -581,6 +580,7 @@ public class LikesideList_frag extends Fragment{
         }
     }
 
+    // change listener på nuværende bruger for at tjekke om han har fået nogle nye chatids
     public void setUserChangeListener(){
         FirebaseFirestore.getInstance().collection("users").document(userController.getCurrUser().getUserId()).addSnapshotListener(new EventListener<DocumentSnapshot>() {
             private static final String TAG = "update from firestore";
@@ -598,7 +598,9 @@ public class LikesideList_frag extends Fragment{
                     UserDTO temp = snapshot.toObject(UserDTO.class);
                     if (temp != null) {
                         if (temp.getChatId() != null){
+                            // hvis der er kommet nye chatids til brugeren
                             if (temp.getChatId().size() > chatIds.size()) {
+                                // vi finder det nye chatid som ikke findes i vores liste i forvejen
                                 boolean isFound = false;
                                 for (int i = 0; i < temp.getChatId().size(); i++) {
                                     for (int j = 0; j < chatIds.size(); j++) {
@@ -606,17 +608,23 @@ public class LikesideList_frag extends Fragment{
                                             isFound = true;
                                         }
                                     }
+                                    // hvis temps chatid ikke er fundet så skal vi have nogle informationer til adapteren
                                     if (!isFound) {
+                                        // vi erstatter vores userdto objekts chatid med de nye
                                         ArrayList<String> tempchatID = chatIds;
                                         tempchatID.add(temp.getChatId().get(i));
                                         userDTO.setChatId(tempchatID);
+                                        // vi indlæser den nye chat
                                         chatDAO.readChat(new ChatDAO.FirestoreCallback() {
                                             @Override
                                             public void onCallback(ChatDTO dto) {
+                                                // vi finder ud af hvem den anden bruger er ved hjælp af ternary operator
                                                 String otherUserID = dto.getUser1ID().equals(userController.getCurrUser().getUserId()) ? dto.getUser2ID() : dto.getUser1ID();
+                                                // vi indlæser den anden bruger fra databasen
                                                 userController.getUser(new CallbackUser() {
                                                     @Override
                                                     public void onCallback(UserDTO user) {
+                                                        // vi tilføjer nødvendige data til vores lister
                                                         otherPersonPic.add(user.getUserPicture());
                                                         String nameToAdd = dto.getUser1().equals(userController.getCurrUser().getfName()) ? dto.getUser2() : dto.getUser1();
                                                         names.add(nameToAdd);
@@ -625,6 +633,7 @@ public class LikesideList_frag extends Fragment{
                                                         headerList.add(dto.getHeader());
                                                         lastSender.add(dto.getSender().get(dto.getSender().size() - 1));
                                                         isInitialized.add("true");
+                                                        // Vi erstatter vores gamle views med de nye
                                                         setListView_chats(temp.getChatId(), names, dates, lastMessage, headerList, lastSender, isInitialized, otherPersonPic);
                                                     }
                                                 }, otherUserID);
@@ -634,17 +643,18 @@ public class LikesideList_frag extends Fragment{
                                     }
                                     isFound = false;
                                 }
+                                // hvis vores chatids er blevet opdateret af en eller anden grund men vi stadig ikke har fået opdateret viewsne så køres dette
                             } else if (tilmeldinger_listView.getFooterViewsCount() < temp.getChatId().size()){
+                                // vi indhenter det sidste chatid fra databasen
                                 chatDAO.readChat(new ChatDAO.FirestoreCallback() {
                                     @Override
                                     public void onCallback(ChatDTO dto) {
-                                        System.out.println("BAGUGAN");
-                                        System.out.println(dto.getChatId());
+                                        // vi finder ud af hvem den anden bruger er og indlæser dem fra databasen
                                         String otherUserID = dto.getUser1ID().equals(userController.getCurrUser().getUserId()) ? dto.getUser2ID() : dto.getUser1ID();
-                                        System.out.println(otherUserID);
                                         userController.getUser(new CallbackUser() {
                                             @Override
                                             public void onCallback(UserDTO user) {
+                                                // vi tilføjer de nødvendige data til vores lister
                                                 otherPersonPic.add(user.getUserPicture());
                                                 String nameToAdd = dto.getUser1().equals(userController.getCurrUser().getfName()) ? dto.getUser2() : dto.getUser1();
                                                 names.add(nameToAdd);
@@ -653,6 +663,7 @@ public class LikesideList_frag extends Fragment{
                                                 headerList.add(dto.getHeader());
                                                 lastSender.add(dto.getSender().get(dto.getSender().size() - 1));
                                                 isInitialized.add("true");
+                                                // vi erstatter de gamle views med de nye
                                                 setListView_chats(temp.getChatId(), names, dates, lastMessage, headerList, lastSender, isInitialized, otherPersonPic);
                                             }
                                         }, otherUserID);

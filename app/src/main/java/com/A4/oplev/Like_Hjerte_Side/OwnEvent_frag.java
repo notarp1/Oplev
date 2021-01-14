@@ -54,6 +54,8 @@ public class OwnEvent_frag extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater i, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View root = i.inflate(R.layout.u_settings_events_frag, container, false);
+        // sæt positionen til ownevent inde i activity likeside
+        Activity_Likeside.setPosition(0);
         root2 = root;
         userController = UserController.getInstance();
         userDTO = userController.getCurrUser();

@@ -3,7 +3,6 @@ package Controller;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.net.Uri;
-import android.util.Log;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -96,7 +95,7 @@ public class UserController {
         user.setAge(Integer.parseInt(String.valueOf(ctx.age.getText())));
         user.setUserId(userId);
         user.setEvents(null);
-        user.setJoinedEvents(null);
+        user.setRequestedEvents(null);
         user.setUserPicture(userPic);
 
         userDAO.createUser(user);
@@ -122,6 +121,11 @@ public class UserController {
         user.setEducation(ctx.education.getText().toString());
         user.setPictures(pictures);
         user.setUserPicture(userPic);
+        userDAO.updateUser(user);
+
+    }
+    public void updateUserSimple(UserDTO user){
+
         userDAO.updateUser(user);
 
     }

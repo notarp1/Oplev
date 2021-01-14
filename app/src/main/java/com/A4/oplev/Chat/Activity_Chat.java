@@ -9,7 +9,6 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.SystemClock;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -159,8 +158,6 @@ public class Activity_Chat extends AppCompatActivity  implements View.OnClickLis
             }
         }, chatDocumentPath);
 
-        // Vi sleeper bare 1 sek for at det ikke ser mærkeligt ud når den bliver loadet (måske skal det fjernes eller ændres)
-        SystemClock.sleep(1000);
 
         // Vi opstiller en eventlistener på den chat som vi er inde i lige nu, som vil opdatere listviewet hvis der kommer en opdatering fra databasen
         FirebaseFirestore.getInstance().collection("chats").document(chatDocumentPath)
