@@ -15,6 +15,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.cardview.widget.CardView;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.A4.oplev.Activity_Event;
@@ -90,9 +91,7 @@ public class OwnEvents_Adapter2 extends RecyclerView.Adapter<OwnEvents_Adapter2.
                 .error(R.drawable.question)
                 .into(eventPic);
 
-        if(eventParticipant.get(position)!=""){
-            box.setBackgroundColor(Color.parseColor("#3a0842"));
-        }
+
 
 
         if (eventFirstApplicants.get(position).equals("")){
@@ -100,6 +99,10 @@ public class OwnEvents_Adapter2 extends RecyclerView.Adapter<OwnEvents_Adapter2.
             profilePic1.setVisibility(View.GONE);
             profileHolder1.setVisibility(View.GONE);
         }
+        else if (eventParticipant.get(position)!=""){
+            box.setBackgroundDrawable(ContextCompat.getDrawable(mContext,R.drawable.own_events_occupied_background));
+        }
+
         else {
             profilePic1.setVisibility(View.VISIBLE);
             profileHolder1.setVisibility(View.VISIBLE);
