@@ -2,6 +2,9 @@ package com.A4.oplev._Adapters;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.location.Location;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -107,6 +110,7 @@ public class Event_Adapter extends RecyclerView.Adapter<Event_Adapter.ViewHolder
         TextView withWhoText = holder.withWhoText;
         TextView headlineText = holder.headlineText;
         TextView headlineDate = holder.headlineDate;
+        TextView distanceText = holder.distanceText;
 
 
         // her skal dataen sættes in i holderen, der skal gøres brug af en billed controller til at håndtere billder.
@@ -123,6 +127,7 @@ public class Event_Adapter extends RecyclerView.Adapter<Event_Adapter.ViewHolder
                         withWhoText.setText(user.getfName());
                         headlineText.setText(eventDTO.getTitle());
                         headlineDate.setText(format1.format(eventDTO.getDate()));
+                        distanceText.setText(calculateDistance(eventDTO) + " km");
                         Picasso.get().load(user.getUserPicture())
                                 .resize(width / 8, height / 16)
                                 .centerCrop()
@@ -150,7 +155,26 @@ public class Event_Adapter extends RecyclerView.Adapter<Event_Adapter.ViewHolder
 
     }
 
-
+    private int calculateDistance(EventDTO event){
+        int distanceRounded;
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(ctx);
+        Location userLocation = new Location("locationA");
+        userLocation.setLatitude(Double.parseDouble(prefs.getString("gpsLat", "0")));
+        userLocation.setLongitude(Double.parseDouble(prefs.getString("gpsLong", "0")));
+        int maxDistance = prefs.getInt("distance", 150);
+        //setup distance check
+        Location eventLocation = new Location("locationB");
+        //is saved in dto with format "latitude,longitude" so split by ","
+        Log.d(TAG, "calculateDistance: coordinate dto string: " + event.getCoordinates());
+        eventLocation.setLatitude(Double.parseDouble(event.getCoordinates().split(",")[0]));
+        eventLocation.setLongitude(Double.parseDouble(event.getCoordinates().split(",")[1]));
+        Log.d(TAG, "calculateDistance: eventlocation: " + eventLocation.toString());
+        float distance = userLocation.distanceTo(eventLocation)/1000;
+        Log.d(TAG, "calculateDistance: distance to event: " + distance + " km");
+        distanceRounded = (int) distance;
+        Log.d(TAG, "calculateDistance: distance rounded: " + distanceRounded + " km");
+        return distanceRounded;
+    }
     @Override
     public int getItemCount() {
         return eventListId.size();
@@ -168,7 +192,7 @@ public class Event_Adapter extends RecyclerView.Adapter<Event_Adapter.ViewHolder
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         public ImageView mainPic, profilePic;
-        public TextView headlineText, withWhoText, headlineDate;
+        public TextView headlineText, withWhoText, headlineDate, distanceText;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -178,6 +202,8 @@ public class Event_Adapter extends RecyclerView.Adapter<Event_Adapter.ViewHolder
             withWhoText = (TextView) itemView.findViewById(R.id.evntItem_withWho);
             headlineDate = (TextView) itemView.findViewById(R.id.txt_date);
             headlineText = (TextView) itemView.findViewById(R.id.eventitem_Headline);
+            headlineText = (TextView) itemView.findViewById(R.id.eventitem_Headline);
+            distanceText = (TextView) itemView.findViewById(R.id.eventitem_distancetext);
             profilePic.setOnClickListener(this);
             mainPic.setOnClickListener(this);
         }
