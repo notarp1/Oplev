@@ -188,34 +188,23 @@ public class OwnEvent_frag extends Fragment {
                         Log.d("list1", String.valueOf(eventApplicantsSize.size()));
                     }
 
-                    else if (dates.get(i).before(tempDate.get(tempDate.size()-1))){
-                     //else if (tempDate.get(i-1).after(dates.get(i)))
-                        tempEventPic.add(eventEventPic.get(i));
-                        tempEventHeaders.add(eventHeaders.get(i));
-                        tempEventApplicantPic.add(eventApplicantPic.get(i));
-                        tempEventApplicantsSize.add(eventApplicantsSize.get(i));
-                        tempEventOwnerPic.add(eventOwnerPic.get(i));
-                        tempEventFirstApplicants.add(eventFirstApplicants.get(i));
-                        tempEventID.add(eventEventID.get(i));
-                        tempDate.add(dates.get(i));
-                    }
-                    else  {
-                        // iterer over alle temp dates
+                    //else if (dates.get(i).before(tempDate.get(tempDate.size()-1))){
+                    else if (dates.get(i).before(tempDate.get(i-1))){
                         for (int j = 0; j < i; j++) {
                             // hvis den man vil indsætte kommer efter den dato på plads j
-                            if (dates.get(i).after(tempDate.get(j))) {
+                            if (dates.get(i).before(tempDate.get(j))) {
                                 // iterer fra i'endes plads til j
                                 for (int k = i; k >= j; k--) {
                                     // ved den første tilføjer vi fra den forriges plads (flyt den sidste dato til en ny plads)
                                     if (k == i) {
-                                        tempEventPic.add(eventEventPic.get(i - 1));
-                                        tempEventHeaders.add(eventHeaders.get(i - 1));
-                                        tempEventApplicantPic.add(eventApplicantPic.get(i - 1));
-                                        tempEventApplicantsSize.add(eventApplicantsSize.get(i - 1));
-                                        tempEventOwnerPic.add(eventOwnerPic.get(i - 1));
-                                        tempEventFirstApplicants.add(eventFirstApplicants.get(i - 1));
-                                        tempEventID.add(eventEventID.get(i - 1));
-                                        tempDate.add(dates.get(i - 1));
+                                        tempEventPic.add(tempEventPic.get(i - 1));
+                                        tempEventHeaders.add(tempEventHeaders.get(i - 1));
+                                        tempEventApplicantPic.add(tempEventApplicantPic.get(i - 1));
+                                        tempEventApplicantsSize.add(tempEventApplicantsSize.get(i - 1));
+                                        tempEventOwnerPic.add(tempEventOwnerPic.get(i - 1));
+                                        tempEventFirstApplicants.add(tempEventFirstApplicants.get(i - 1));
+                                        tempEventID.add(tempEventID.get(i - 1));
+                                        tempDate.add(tempDate.get(i - 1));
                                     }
                                     // fra alle pladser derefter så rykker vi pladsen 1 til højre
                                     else if (k != 0) {
@@ -241,7 +230,17 @@ public class OwnEvent_frag extends Fragment {
                                 break;
                             }
                         }
+                    }
 
+                    else  {
+                        tempEventPic.add(eventEventPic.get(i));
+                        tempEventHeaders.add(eventHeaders.get(i));
+                        tempEventApplicantPic.add(eventApplicantPic.get(i));
+                        tempEventApplicantsSize.add(eventApplicantsSize.get(i));
+                        tempEventOwnerPic.add(eventOwnerPic.get(i));
+                        tempEventFirstApplicants.add(eventFirstApplicants.get(i));
+                        tempEventID.add(eventEventID.get(i));
+                        tempDate.add(dates.get(i));
                     }
                 }
                 this.tempEventID = tempEventID;
@@ -255,7 +254,6 @@ public class OwnEvent_frag extends Fragment {
                 recyclerView.setAdapter(eventAdapter);
             }
         }
-
 
 
 
