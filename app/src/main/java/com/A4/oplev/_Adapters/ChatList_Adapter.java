@@ -120,7 +120,7 @@ public class ChatList_Adapter extends ArrayAdapter<String> {
             int width = mContext.getResources().getDisplayMetrics().widthPixels;
             RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
             lp.setMargins(width/50, 0, width/4, width/20);
-            listItem.findViewById(R.id.chat_background_pic).setBackgroundResource(R.drawable.beskedbackground);
+            listItem.findViewById(R.id.chat_background_pic).setBackgroundResource(R.drawable.beskedbackground6);
         }
         else if (!dto.getSender().get(position).equals(thisUser)){
             // Vi finder skærmstørrelsen af telefonen så vi kan sætte layoutet ens for alle telefoner

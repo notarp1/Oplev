@@ -23,12 +23,13 @@ import java.util.ArrayList;
 import Controller.EventController;
 import Controller.UserController;
 import DAL.Classes.EventDAO;
+import DAL.Classes.UserDAO;
 import DTO.EventDTO;
 import DTO.UserDTO;
 
 public class Activity_Event extends AppCompatActivity implements View.OnClickListener {
     public TextView eventName, eCity, eDate, ePrice, eAbout, eUname, eUabout, picNumber, eventPname, eDistance;
-    ImageView eventPic, profilePic, repost, join;
+    ImageView eventPic, profilePic, repost, join, like;
     EventController eventController;
     LinearLayout box;
     ArrayList<String> pictures, currPics;
@@ -65,6 +66,7 @@ public class Activity_Event extends AppCompatActivity implements View.OnClickLis
         join = findViewById(R.id.btn_join);
         eventPname = findViewById(R.id.event_person_name);
         box = findViewById(R.id.buttons_on_event);
+        like = findViewById(R.id.btn_like);
 
 
         //Knapper til billeder, repost og join
@@ -72,6 +74,7 @@ public class Activity_Event extends AppCompatActivity implements View.OnClickLis
         repost.setOnClickListener(this);
         join.setOnClickListener(this);
         back.setOnClickListener(this);
+        like.setOnClickListener(this);
 
         eventController =  eventController.getInstance();
         pictures = eventController.getEventPictures();
@@ -168,6 +171,26 @@ public class Activity_Event extends AppCompatActivity implements View.OnClickLis
             } else {
                 Intent i = new Intent(this, Activity_NoInstance.class);
                 startActivity(i);
+            }
+        }
+        else if (v == like) {
+            if (UserController.getInstance().getCurrUser() != null) {
+                UserDTO user = UserController.getInstance().getCurrUser();
+                ArrayList<String> likedeEvents;
+                if (user.getLikedeEvents() == null) {
+                    likedeEvents = new ArrayList<>();
+                } else likedeEvents = user.getLikedeEvents();
+                if (!likedeEvents.contains(event.getEventId())) {
+                    likedeEvents.add(event.getEventId());
+                    UserDAO dao = new UserDAO();
+                    dao.updateUser(user);
+                    Toast.makeText(this,"Event liket",Toast.LENGTH_SHORT).show();
+                } else {
+                    likedeEvents.remove(event.getEventId());
+                    UserDAO dao = new UserDAO();
+                    dao.updateUser(user);
+                    Toast.makeText(this,"Event fjernet fra likes",Toast.LENGTH_SHORT).show();
+                }
             }
         }
         else if(v == back){

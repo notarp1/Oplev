@@ -11,7 +11,7 @@ public class UserDTO implements Serializable {
 
     ArrayList<String> pictures = new ArrayList<>(Arrays.asList(null, null, null, null, null, null));
 
-    ArrayList<String> chatId, events, requestedEvents;
+    ArrayList<String> chatId, events, requestedEvents, likedeEvents;
 
     public String getUserId() {
         return userId;
@@ -138,5 +138,13 @@ public class UserDTO implements Serializable {
     public UserDTO setRequestedEvents(ArrayList<String> requestedEvents) {
         this.requestedEvents = requestedEvents;
         return this;
+    }
+
+    public ArrayList<String> getLikedeEvents() {
+        return likedeEvents;
+    }
+
+    public void setLikedeEvents(ArrayList<String> likedeEvents) {
+        this.likedeEvents = likedeEvents;
     }
 }

@@ -335,6 +335,7 @@ public class Activity_Profile extends AppCompatActivity implements View.OnClickL
                 EventDAO eventDAO = new EventDAO();
                 eventDAO.getEvent(event -> {
                     if (event != null) {
+                        //event.setApplicants(new ArrayList<>());
                         event.setParticipant(user.getUserId());
                         eventDAO.updateEvent(event);
                     }
