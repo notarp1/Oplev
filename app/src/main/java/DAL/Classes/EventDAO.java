@@ -283,6 +283,7 @@ public class EventDAO implements IEventDAO {
         eventObject.put("eventPic", event.getEventPic());
         eventObject.put("applicants", event.getApplicants());
         eventObject.put("type", event.getType());
+        eventObject.put("coordinates", event.getCoordinates());
 
 
         db.collection("events").document(event.getEventId())
