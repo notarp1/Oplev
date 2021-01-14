@@ -211,7 +211,7 @@ public class UserDAO implements IUserDAO, CallbackUser, CallbackUserDelete {
             }, requested.get(m));
         }
     }
-    private void loopThing(CallbackUserDelete delete,  ArrayList<String> chats, ChatDAO chatDAO, UserDTO user){
+     private void loopThing(CallbackUserDelete delete,  ArrayList<String> chats, ChatDAO chatDAO, UserDTO user){
 
         ArrayList<String> newChat = new ArrayList<>();
         ArrayList<String> userVisited = new ArrayList<>();
