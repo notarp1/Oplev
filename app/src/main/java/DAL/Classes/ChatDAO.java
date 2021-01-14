@@ -65,7 +65,7 @@ public class ChatDAO implements IChatDAO {
         chatObject.put("user2",chat.getUser2());
         chatObject.put("user1ID", chat.getUser1ID());
         chatObject.put("user2ID",chat.getUser2ID());
-        chatObject.put("eventId", chat.getEventId());
+        chatObject.put("eventID", chat.getEventID());
 
         // Dernæst vil vi adde objektet i vores chats collection
         db.collection("chats")
@@ -116,7 +116,7 @@ public class ChatDAO implements IChatDAO {
         chatObject.put("header", chat.getHeader());
         chatObject.put("user1ID", chat.getUser1ID());
         chatObject.put("user2ID",chat.getUser2ID());
-        chatObject.put("eventId", chat.getEventId());
+        chatObject.put("eventID", chat.getEventID());
 
         // Vi opdaterer en chat der eksisterer i forvejen og derfor bruger vi documentreference ved chatid'et hvor vi indsætter det chatobjekt vii har lavet
         db.collection("chats").document(chat.getChatId())
@@ -176,7 +176,7 @@ public class ChatDAO implements IChatDAO {
                         ChatDTO dto = document.toObject(ChatDTO.class);
                         if (dto.getChatId() == null){
                             // Det her bliver redundant senere men ikke lige nu hvis man prøver at indlæse et helt tomt dokument
-                            dto = new ChatDTO(new ArrayList<>(), new ArrayList<>(), chatId, new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), dto.getHeader(), dto.getUser1(), dto.getUser2(), dto.getUser1ID(), dto.getUser2ID(), dto.getEventId());
+                            dto = new ChatDTO(new ArrayList<>(), new ArrayList<>(), chatId, new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), dto.getHeader(), dto.getUser1(), dto.getUser2(), dto.getUser1ID(), dto.getUser2ID(), dto.getEventID());
                             firestoreCallback.onCallback(dto);
                         }
                         else {
@@ -218,8 +218,6 @@ public class ChatDAO implements IChatDAO {
                     @Override
                     public void onSuccess(Uri uri) {
                         // Når vi kan hente URL'en så kalder vi callbackpic i den klasse der ville uploade et billede og giver den URI'en
-                        System.out.println(uri);
-                        Log.d("downloadUrl-->", "" + uri);
                         firestoreCallbackPic.onCallBackPic(uri);
                     }
                 });

@@ -60,7 +60,6 @@ public class EventDAO implements IEventDAO {
 
                 DocumentSnapshot documentSnapshot = task.getResult();
                 if(documentSnapshot != null){
-                    System.out.println(documentSnapshot.getData());
                     EventDTO event = documentSnapshot.toObject(EventDTO.class);
                     callbackEvent.onCallback(event);
                 }

@@ -236,7 +236,7 @@ public class UserDAO implements IUserDAO, CallbackUser, CallbackUserDelete {
                         userId = dto.getUser2ID();
                     } else userId = dto.getUser1ID();
 
-                    String eventId = dto.getEventId();
+                    String eventId = dto.getEventID();
 
                     deleteParticipants(new CallbackUserDelete() {
                         @Override
