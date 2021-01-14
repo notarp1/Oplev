@@ -109,41 +109,50 @@ public class HjerteSide_frag extends Fragment{
                     return;
                 }
 
-                if (snapshot != null && snapshot.exists()) {
-                    // konverter til et event objekt
-                    UserDTO temp = snapshot.toObject(UserDTO.class);
-                    if (temp != null) {
-                        if (temp.getLikedeEvents() != null){
-                            if (temp.getLikedeEvents().size() != eventIDList.size()){
-                                if (temp.getLikedeEvents().size() < eventIDList.size()){
-                                    boolean isFound = false;
-                                    for (int i = 0; i < eventIDList.size(); i++) {
-                                        for (int j = 0; j < temp.getLikedeEvents().size(); j++) {
-                                            if (eventIDList.get(i).equals(temp.getLikedeEvents().get(j))){
-                                                isFound = true;
+                if (mContext != null) {
+                    if (snapshot != null && snapshot.exists()) {
+                        // konverter til et event objekt
+                        UserDTO temp = snapshot.toObject(UserDTO.class);
+                        if (temp != null) {
+                            if (temp.getLikedeEvents() != null) {
+                                if (temp.getLikedeEvents().size() != eventIDList.size()) {
+                                    if (temp.getLikedeEvents().size() < eventIDList.size()) {
+                                        System.out.println("OHEKAOPGKEA");
+                                        System.out.println(eventIDList.toString());
+                                        System.out.println(temp.getLikedeEvents().toString());
+                                        boolean isFound = false;
+                                        for (int i = 0; i < eventIDList.size(); i++) {
+                                            isFound = false;
+                                            for (int j = 0; j < temp.getLikedeEvents().size(); j++) {
+                                                System.out.println(eventIDList.get(i));
+                                                System.out.println(temp.getLikedeEvents().get(j));
+                                                if (eventIDList.get(i).equals(temp.getLikedeEvents().get(j))) {
+                                                    System.out.println(eventIDList.get(i).equals(temp.getLikedeEvents().get(j)));
+                                                    isFound = true;
+                                                }
                                             }
-                                        }
-                                        if (!isFound){
-                                            eventIDList.remove(i);
-                                            headerList.remove(i);
-                                            names.remove(i);
-                                            profilePictures.remove(i);
-                                            placementList.remove(i);
-                                            eventPictureList.remove(i);
-                                            timeList.remove(i);
-                                            priceList.remove(i);
-                                            ageList.remove(i);
-                                            Hjerteside_Adapter adapter = new Hjerteside_Adapter(mContext, headerList, names, profilePictures, placementList, timeList, priceList, eventPictureList, ageList, eventIDList);
-                                            listView.setAdapter(adapter);
-                                            break;
+                                            if (!isFound) {
+                                                eventIDList.remove(i);
+                                                headerList.remove(i);
+                                                names.remove(i);
+                                                profilePictures.remove(i);
+                                                placementList.remove(i);
+                                                eventPictureList.remove(i);
+                                                timeList.remove(i);
+                                                priceList.remove(i);
+                                                ageList.remove(i);
+                                                Hjerteside_Adapter adapter = new Hjerteside_Adapter(mContext, headerList, names, profilePictures, placementList, timeList, priceList, eventPictureList, ageList, eventIDList);
+                                                listView.setAdapter(adapter);
+                                                break;
+                                            }
                                         }
                                     }
                                 }
                             }
                         }
+                    } else {
+                        Log.d(TAG, "Current data: null");
                     }
-                } else {
-                    Log.d(TAG, "Current data: null");
                 }
             }
         });
