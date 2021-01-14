@@ -707,7 +707,7 @@ public class LikesideList_frag extends Fragment{
             this.tempFirstApplicant = tempEventFirstApplicants;
 
             // lav adapteren til listviewet og opdater viewet
-            LikeSide_Event_Adapter eventAdapter = new LikeSide_Event_Adapter(mContext, tempEventPic, tempEventHeaders, tempEventOwnerPic, tempEventFirstApplicants, tempEventApplicantPic, tempEventApplicantsSize, eventEventID);
+            LikeSide_Event_Adapter eventAdapter = new LikeSide_Event_Adapter(mContext, tempEventPic, tempEventHeaders, tempEventOwnerPic, tempEventFirstApplicants, tempEventApplicantPic, tempEventApplicantsSize, tempEventID);
             tilmeldinger_listView.setAdapter(eventAdapter);
         }
     }
