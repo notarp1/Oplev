@@ -38,6 +38,7 @@ public class Activity_Create_Event extends AppCompatActivity implements View.OnC
     private ConstraintLayout constraintLayout;
     private Button create1_next_btn;
     private EventDTO repostEvent = null;
+    Boolean edit = false;
     private String coordinates;
     public void onCreate(Bundle saveInstanceState) {
         super.onCreate(saveInstanceState);
@@ -48,10 +49,8 @@ public class Activity_Create_Event extends AppCompatActivity implements View.OnC
         back = findViewById(R.id.topbar_arrow);
         //set onlick listner
         back.setOnClickListener(this);
-
         //set value of title text in topbar
         title.setText("Opret Event");
-
         //fill fragment holder with createvent 1
         getSupportFragmentManager().beginTransaction().replace(R.id.mainFragmentBox,  new createEvent1_frag(), "uSettingMainBox")
                 .commit();
@@ -98,6 +97,9 @@ public class Activity_Create_Event extends AppCompatActivity implements View.OnC
             Log.d(TAG, "onCreate: (jbe) inside if-repost");
             repostEvent = (EventDTO) getIntent().getSerializableExtra("event");
         }
+        edit = getIntent().getBooleanExtra("edit", false);
+
+
 
     }
     @Override

@@ -307,7 +307,20 @@ public class EventDAO implements IEventDAO {
     }
 
     @Override
-    public void deleteEvent(int eventId) {
-
+    public void deleteEvent(String eventId) {
+        db.collection("events").document(eventId)
+                .delete()
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d(TAG, "DocumentSnapshot successfully deleted!");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w(TAG, "Error deleting document", e);
+                    }
+                });
     }
 }
