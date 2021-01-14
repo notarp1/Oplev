@@ -162,7 +162,7 @@ public class UserDAO implements IUserDAO, CallbackUser, CallbackUserDelete {
                                 @Override
                                 public void onCallbackDelete() {
 
-                                    System.out.println("hej med dig");
+
                                     loopThing(new CallbackUserDelete() {
                                         @Override
                                         public void onCallbackDelete() {
@@ -355,7 +355,8 @@ public class UserDAO implements IUserDAO, CallbackUser, CallbackUserDelete {
     }
     private void deleterUserLocal(CallbackUserDelete delete, UserDTO user, FirebaseFirestore db){
 
-
+        delete.onCallbackDelete();
+        /*
         db.collection("users").document(user.getUserId())
                 .delete()
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -372,7 +373,7 @@ public class UserDAO implements IUserDAO, CallbackUser, CallbackUserDelete {
 
                     }
                 });
-
+        */
 
 
 
@@ -417,7 +418,7 @@ public class UserDAO implements IUserDAO, CallbackUser, CallbackUserDelete {
     }
 
     private void deleteRefs(CallbackUserDelete delete, ArrayList<String> events, ArrayList<String> chats){
-
+/*
       FirebaseFirestore db = FirebaseFirestore.getInstance();
 
         WriteBatch writeBatch = db.batch();
@@ -439,7 +440,7 @@ public class UserDAO implements IUserDAO, CallbackUser, CallbackUserDelete {
                 writeBatch.delete(documentReference);
                 System.out.println("CHATS");
             }
-        } */
+        }
 
         writeBatch.commit().addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
@@ -452,8 +453,8 @@ public class UserDAO implements IUserDAO, CallbackUser, CallbackUserDelete {
             public void onFailure(@NonNull Exception e) {
                 System.out.println("WHHAW");
             }
-        });
-
+        }); */
+        delete.onCallbackDelete();
     }
 
 
