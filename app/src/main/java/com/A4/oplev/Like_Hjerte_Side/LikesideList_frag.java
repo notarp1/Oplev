@@ -5,7 +5,6 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.SystemClock;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,7 +12,6 @@ import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -553,7 +551,6 @@ public class LikesideList_frag extends Fragment{
                                     // hvis der er mindst 1 applicant så skal vi hente personens billede ind
                                     if (temp.getApplicants().size() > 0) {
                                         int finalJ = j;
-                                        System.out.println("IDET " + temp.getEventId());
                                         userController.getUser(new CallbackUser() {
                                             @Override
                                             public void onCallback(UserDTO user) {
@@ -637,10 +634,7 @@ public class LikesideList_frag extends Fragment{
                                 chatDAO.readChat(new ChatDAO.FirestoreCallback() {
                                     @Override
                                     public void onCallback(ChatDTO dto) {
-                                        System.out.println("BAGUGAN");
-                                        System.out.println(dto.getChatId());
                                         String otherUserID = dto.getUser1ID().equals(userController.getCurrUser().getUserId()) ? dto.getUser2ID() : dto.getUser1ID();
-                                        System.out.println(otherUserID);
                                         userController.getUser(new CallbackUser() {
                                             @Override
                                             public void onCallback(UserDTO user) {
