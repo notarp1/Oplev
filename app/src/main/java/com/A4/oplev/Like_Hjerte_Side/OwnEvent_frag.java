@@ -207,7 +207,7 @@ public class OwnEvent_frag extends Fragment {
                                         tempEventFirstApplicants.add(tempEventFirstApplicants.get(i - 1));
                                         tempEventID.add(tempEventID.get(i - 1));
                                         tempDate.add(tempDate.get(i - 1));
-                                        tempEventParticipant.add(eventParticipant.get(i-1));
+                                        tempEventParticipant.add(tempEventParticipant.get(i-1));
                                     }
                                     // fra alle pladser derefter så rykker vi pladsen 1 til højre
                                     else if (k != 0) {
@@ -219,7 +219,7 @@ public class OwnEvent_frag extends Fragment {
                                         tempEventFirstApplicants.set(k, tempEventFirstApplicants.get((k - 1)));
                                         tempEventID.set(k, tempEventID.get(k - 1));
                                         tempDate.set(k, tempDate.get((k - 1)));
-                                        tempEventParticipant.set(k, eventParticipant.get(k-1));
+                                        tempEventParticipant.set(k, tempEventParticipant.get(k-1));
 
                                     }
                                 }
