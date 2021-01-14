@@ -84,7 +84,7 @@ public class OwnEvent_frag extends Fragment {
                 // hvis brugeren ikke har nogle events så skal vi sikre os at det ikke går i stå
                 if (userDTO.getEvents().size() == 0) {
                     eventsReady = true;
-                    setListView_events(eventEventPic, eventHeaders, eventOwnerPic, eventFirstApplicants, eventApplicantPic, eventApplicantsSize, eventEventID, dates);
+                    setListView_events(eventEventPic, eventHeaders, eventOwnerPic, eventFirstApplicants, eventApplicantPic, eventApplicantsSize, eventEventID, dates, eventParticipant);
                     // setChangeListener_tilmeldinger();
 
                 }
@@ -112,7 +112,7 @@ public class OwnEvent_frag extends Fragment {
                                     // events er loadet færdigt
                                     eventsReady = true;
                                     // hvis chats er loadet færdigt så opsæt listviewet og listeners
-                                    setListView_events(eventEventPic, eventHeaders, eventOwnerPic, eventFirstApplicants, eventApplicantPic, eventApplicantsSize, eventEventID, dates);
+                                    setListView_events(eventEventPic, eventHeaders, eventOwnerPic, eventFirstApplicants, eventApplicantPic, eventApplicantsSize, eventEventID, dates, eventParticipant);
                                     // setChangeListener_tilmeldinger();
                                 }
                             } else {
@@ -136,7 +136,7 @@ public class OwnEvent_frag extends Fragment {
                                     if (eventApplicantPic.size() == userDTO.getEvents().size()) {
                                         eventsReady = true;
                                         // hvis chats er færdige så opsæt listview og listeners
-                                        setListView_events(eventEventPic, eventHeaders, eventOwnerPic, eventFirstApplicants, eventApplicantPic, eventApplicantsSize, eventEventID, dates);
+                                        setListView_events(eventEventPic, eventHeaders, eventOwnerPic, eventFirstApplicants, eventApplicantPic, eventApplicantsSize, eventEventID, dates, eventParticipant);
                                         //setChangeListener_tilmeldinger();
                                     }
                                 }, event.getApplicants().get(0));
@@ -167,10 +167,10 @@ public class OwnEvent_frag extends Fragment {
         return root;
     }
 // Todo - Listing virker ikke efter hensigten endnu.
-        public void setListView_events(@NonNull ArrayList < String > eventEventPic, @NonNull ArrayList < String > eventHeaders, @NonNull ArrayList < String > eventOwnerPic, @NonNull ArrayList < String > eventFirstApplicants, @NonNull ArrayList < String > eventApplicantPic, @NonNull ArrayList < Integer > eventApplicantsSize, @NonNull ArrayList < String > eventEventID, @NonNull ArrayList < Date > dates )
+        public void setListView_events(@NonNull ArrayList < String > eventEventPic, @NonNull ArrayList < String > eventHeaders, @NonNull ArrayList < String > eventOwnerPic, @NonNull ArrayList < String > eventFirstApplicants, @NonNull ArrayList < String > eventApplicantPic, @NonNull ArrayList < Integer > eventApplicantsSize, @NonNull ArrayList < String > eventEventID, @NonNull ArrayList < Date > dates, @NonNull ArrayList < String > eventParticipant )
         {
             if (mContext != null) {
-                ArrayList<String> tempEventPic = new ArrayList<>(), tempEventHeaders = new ArrayList<>(), tempEventOwnerPic = new ArrayList<>(), tempEventFirstApplicants = new ArrayList<>(), tempEventApplicantPic = new ArrayList<>(), tempEventID = new ArrayList<>();
+                ArrayList<String> tempEventPic = new ArrayList<>(), tempEventHeaders = new ArrayList<>(), tempEventOwnerPic = new ArrayList<>(), tempEventFirstApplicants = new ArrayList<>(), tempEventApplicantPic = new ArrayList<>(), tempEventID = new ArrayList<>(), tempEventParticipant = new ArrayList<>();
                 ArrayList<Integer> tempEventApplicantsSize = new ArrayList<>();
                 ArrayList<Date> tempDate = new ArrayList<>();
 
@@ -185,14 +185,14 @@ public class OwnEvent_frag extends Fragment {
                         tempEventFirstApplicants.add(eventFirstApplicants.get(i));
                         tempEventID.add(eventEventID.get(i));
                         tempDate.add(dates.get(i));
+                        tempEventParticipant.add(eventParticipant.get(i));
                         Log.d("list1", String.valueOf(eventApplicantsSize.size()));
                     }
 
-                    //else if (dates.get(i).before(tempDate.get(tempDate.size()-1))){
-                    else if (dates.get(i).before(tempDate.get(i-1))){
+                    else if (dates.get(i).before(tempDate.get(i-1)) || eventParticipant.get(i)!=""){
                         for (int j = 0; j < i; j++) {
                             // hvis den man vil indsætte kommer efter den dato på plads j
-                            if (dates.get(i).before(tempDate.get(j))) {
+                            if (dates.get(i).before(tempDate.get(j)) || eventParticipant.get(i)!="") {
                                 // iterer fra i'endes plads til j
                                 for (int k = i; k >= j; k--) {
                                     // ved den første tilføjer vi fra den forriges plads (flyt den sidste dato til en ny plads)
@@ -205,6 +205,7 @@ public class OwnEvent_frag extends Fragment {
                                         tempEventFirstApplicants.add(tempEventFirstApplicants.get(i - 1));
                                         tempEventID.add(tempEventID.get(i - 1));
                                         tempDate.add(tempDate.get(i - 1));
+                                        tempEventParticipant.add(eventParticipant.get(i-1));
                                     }
                                     // fra alle pladser derefter så rykker vi pladsen 1 til højre
                                     else if (k != 0) {
@@ -216,6 +217,8 @@ public class OwnEvent_frag extends Fragment {
                                         tempEventFirstApplicants.set(k, tempEventFirstApplicants.get((k - 1)));
                                         tempEventID.set(k, tempEventID.get(k - 1));
                                         tempDate.set(k, tempDate.get((k - 1)));
+                                        tempEventParticipant.set(k, eventParticipant.get(k-1));
+
                                     }
                                 }
                                 // når vi har rykket alle gamle datoer så indsætter vi den nye dato vi vil indsætte
@@ -227,29 +230,31 @@ public class OwnEvent_frag extends Fragment {
                                 tempEventFirstApplicants.set(j, eventFirstApplicants.get(i));
                                 tempEventID.set(j, eventEventID.get(i));
                                 tempDate.set(j, dates.get(i));
+                                tempEventParticipant.set(j,eventParticipant.get(i));
                                 break;
                             }
                         }
                     }
 
                     else  {
-                        tempEventPic.add(eventEventPic.get(i));
-                        tempEventHeaders.add(eventHeaders.get(i));
-                        tempEventApplicantPic.add(eventApplicantPic.get(i));
-                        tempEventApplicantsSize.add(eventApplicantsSize.get(i));
-                        tempEventOwnerPic.add(eventOwnerPic.get(i));
-                        tempEventFirstApplicants.add(eventFirstApplicants.get(i));
-                        tempEventID.add(eventEventID.get(i));
-                        tempDate.add(dates.get(i));
+                        if (eventParticipant.get(i)=="") {
+                            tempEventPic.add(eventEventPic.get(i));
+                            tempEventHeaders.add(eventHeaders.get(i));
+                            tempEventApplicantPic.add(eventApplicantPic.get(i));
+                            tempEventApplicantsSize.add(eventApplicantsSize.get(i));
+                            tempEventOwnerPic.add(eventOwnerPic.get(i));
+                            tempEventFirstApplicants.add(eventFirstApplicants.get(i));
+                            tempEventID.add(eventEventID.get(i));
+                            tempDate.add(dates.get(i));
+                            tempEventParticipant.add(eventParticipant.get(i));
+                        }
                     }
                 }
                 this.tempEventID = tempEventID;
                 this.tempFirstApplicant = tempEventFirstApplicants;
 
-                Log.d("eventSize test3",  tempEventApplicantsSize.toString());
-
                 LinearLayoutManager layoutManager = new LinearLayoutManager(root2.getContext(), LinearLayoutManager.VERTICAL, false);
-                OwnEvents_Adapter2 eventAdapter = new OwnEvents_Adapter2(root2.getContext(), tempEventPic, tempEventHeaders, tempEventOwnerPic, tempEventFirstApplicants, tempEventApplicantPic, tempEventApplicantsSize, tempEventID, tempDate);
+                OwnEvents_Adapter2 eventAdapter = new OwnEvents_Adapter2(root2.getContext(), tempEventPic, tempEventHeaders, tempEventOwnerPic, tempEventFirstApplicants, tempEventApplicantPic, tempEventApplicantsSize, tempEventID, tempDate, tempEventParticipant);
                 recyclerView.setLayoutManager(layoutManager);
                 recyclerView.setAdapter(eventAdapter);
             }

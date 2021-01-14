@@ -2,6 +2,8 @@ package com.A4.oplev._Adapters;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -34,10 +36,10 @@ public class OwnEvents_Adapter2 extends RecyclerView.Adapter<OwnEvents_Adapter2.
     private Context mContext;
     private ArrayList<Date> eventDate;
     private ArrayList<Integer> eventApplicantsSize;
-    private ArrayList<String> eventHeaders, eventEventPic, eventApplicantPic, eventOwnerPic, eventFirstApplicants,eventID ;
+    private ArrayList<String> eventHeaders, eventEventPic, eventApplicantPic, eventOwnerPic, eventFirstApplicants,eventID, eventParticipant;
 
 
-    public OwnEvents_Adapter2(@NonNull Context context, @NonNull ArrayList<String> eventEventPic, @NonNull ArrayList<String> eventHeaders, @NonNull ArrayList<String> eventOwnerPic, @NonNull ArrayList<String> eventFirstApplicants, @NonNull ArrayList<String> eventApplicantPic, @NonNull ArrayList<Integer> eventApplicantsSize, ArrayList<String> eventID, ArrayList<Date> eventDate) {
+    public OwnEvents_Adapter2(@NonNull Context context, @NonNull ArrayList<String> eventEventPic, @NonNull ArrayList<String> eventHeaders, @NonNull ArrayList<String> eventOwnerPic, @NonNull ArrayList<String> eventFirstApplicants, @NonNull ArrayList<String> eventApplicantPic, @NonNull ArrayList<Integer> eventApplicantsSize, ArrayList<String> eventID, ArrayList<Date> eventDate, ArrayList<String> eventParticipant) {
         this.mContext = context;
         this.eventHeaders = eventHeaders;
         this.eventApplicantsSize = eventApplicantsSize;
@@ -47,6 +49,7 @@ public class OwnEvents_Adapter2 extends RecyclerView.Adapter<OwnEvents_Adapter2.
         this.eventFirstApplicants = eventFirstApplicants;
         this.eventID = eventID;
         this.eventDate = eventDate;
+        this.eventParticipant = eventParticipant;
     }
 
 
@@ -72,6 +75,7 @@ public class OwnEvents_Adapter2 extends RecyclerView.Adapter<OwnEvents_Adapter2.
 
         ImageView eventPic = holder.eventPic;
         ImageView profilePic1 = holder.profilePic1;
+        ImageView box = holder.box_own_events;
         CardView profileHolder1 = holder.profileHolder1;
         TextView numberOfApplciants = holder.numberOfApplciants;
         ImageView profilePic2 = holder.profilePic2;
@@ -85,6 +89,11 @@ public class OwnEvents_Adapter2 extends RecyclerView.Adapter<OwnEvents_Adapter2.
                 .placeholder(R.drawable.load2)
                 .error(R.drawable.question)
                 .into(eventPic);
+
+        if(eventParticipant.get(position)!=""){
+            box.setBackgroundColor(Color.parseColor("#3a0842"));
+        }
+
 
         if (eventFirstApplicants.get(position).equals("")){
             numberOfApplciants.setText("");
