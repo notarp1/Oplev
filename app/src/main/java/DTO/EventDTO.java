@@ -2,6 +2,8 @@ package DTO;
 
 import android.util.EventLog;
 
+import com.google.android.gms.maps.model.LatLng;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
@@ -13,6 +15,16 @@ public class EventDTO implements Serializable {
     private Date date;
     private boolean maleOn, femaleOn;
     private ArrayList<String>  applicants;
+    private String coordinates;
+
+    public String getCoordinates() {
+        return coordinates;
+    }
+
+    public EventDTO setCoordinates(String coordinates) {
+        this.coordinates = coordinates;
+        return this;
+    }
 
     public String getEventId() {
         return eventId;

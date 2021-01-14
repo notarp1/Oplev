@@ -327,6 +327,8 @@ public class createEvent1_frag extends Fragment implements View.OnClickListener{
                 b.putString("type_in", currentType);
                 // *** EVENT PIC URI IS IN ACTIVITY, AVAIL FROM NEXT FRAG ALREADY
                 // WITH METHOD ((Activity_Create_Event) getActivity()).getPickedImgUri()
+                // *** EVENT coordinates string IS IN ACTIVITY, AVAIL FROM NEXT FRAG ALREADY
+                // WITH METHOD ((Activity_Create_Event) getActivity()).getCoordinates()
                 Log.d(TAG, "onClick: (jbe) price = " + price_in.getText());
                 //create fragment and add bundle to arguments
                 Fragment create2_frag = new createEvent2_frag();
