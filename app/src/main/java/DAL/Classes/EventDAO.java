@@ -32,6 +32,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import Controller.EventController;
 import Controller.UserController;
 import DAL.Interfaces.CallBackEventList;
 import DAL.Interfaces.CallBackList;
@@ -117,21 +118,11 @@ public class EventDAO implements IEventDAO {
                                         && !dto.getApplicants().contains(UserController.getInstance().getCurrUser().getUserId())) {
                                     //if youre not owner, no participant on event, and you havent applied to event
                                     //setup distance check
-                                    Location eventLocation = new Location("locationB");
-                                    //is saved in dto with format "latitude,longitude" so split by ","
-                                    Log.d(TAG, "onComplete: coordinate dto string: " + dto.getCoordinates());
-                                    eventLocation.setLatitude(Double.parseDouble(dto.getCoordinates().split(",")[0]));
-                                    eventLocation.setLongitude(Double.parseDouble(dto.getCoordinates().split(",")[1]));
-                                    Log.d(TAG, "onComplete: eventlocation: " + eventLocation.toString());
-                                    float distance = phoneLocation.distanceTo(eventLocation)/1000;
-                                    Log.d(TAG, "onComplete: distance to event: " + distance + "km");
-
+                                    int distance = EventController.getInstance().calculateDistance(dto, prefs);
                                     if(distance <= maxDistance){
                                         //if within distancelimit
                                         completeList.add(document.getId());
                                     }
-
-
                                 }
                             } else {
                                 // not logged in

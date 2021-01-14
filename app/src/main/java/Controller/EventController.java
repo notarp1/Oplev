@@ -1,6 +1,9 @@
 package Controller;
 
+import android.content.SharedPreferences;
+import android.location.Location;
 import android.net.Uri;
+import android.util.Log;
 
 import com.A4.oplev.Activity_Event;
 import com.google.android.gms.maps.model.LatLng;
@@ -21,6 +24,7 @@ import DTO.UserDTO;
 public class EventController {
 
 
+    private static final String TAG = "EventController";
     private static EventController instance = null;
     private ArrayList<String> uPictures, ePictures;
     static UserDAO userDAO;
@@ -109,6 +113,7 @@ public class EventController {
 
         ctx.eventName.setText(eventNameString);
         ctx.eCity.setText(eCityString);
+        ctx.eDistance.setText(calculateDistance(event,ctx.prefs) + " km");
         ctx.eDate.setText(eDateString);
         ctx.ePrice.setText(ePriceString);
         ctx.eventPname.setText(personTitle);
@@ -119,7 +124,24 @@ public class EventController {
         if(j == 1){
             ctx.eventName.setText(event.getTitle());
         }
-
-
+    }
+    public int calculateDistance(EventDTO event, SharedPreferences prefs){
+        int distanceRounded;
+        Location userLocation = new Location("locationA");
+        userLocation.setLatitude(Double.parseDouble(prefs.getString("gpsLat", "0")));
+        userLocation.setLongitude(Double.parseDouble(prefs.getString("gpsLong", "0")));
+        int maxDistance = prefs.getInt("distance", 150);
+        //setup distance check
+        Location eventLocation = new Location("locationB");
+        //is saved in dto with format "latitude,longitude" so split by ","
+        Log.d(TAG, "calculateDistance: coordinate dto string: " + event.getCoordinates());
+        eventLocation.setLatitude(Double.parseDouble(event.getCoordinates().split(",")[0]));
+        eventLocation.setLongitude(Double.parseDouble(event.getCoordinates().split(",")[1]));
+        Log.d(TAG, "calculateDistance: eventlocation: " + eventLocation.toString());
+        float distance = userLocation.distanceTo(eventLocation)/1000;
+        Log.d(TAG, "calculateDistance: distance to event: " + distance + " km");
+        distanceRounded = Math.round(distance);
+        Log.d(TAG, "calculateDistance: distance rounded: " + distanceRounded + " km");
+        return distanceRounded;
     }
 }

@@ -2,7 +2,9 @@ package com.A4.oplev;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.widget.ImageView;
@@ -25,7 +27,7 @@ import DTO.EventDTO;
 import DTO.UserDTO;
 
 public class Activity_Event extends AppCompatActivity implements View.OnClickListener {
-    public TextView eventName, eCity, eDate, ePrice, eAbout, eUname, eUabout, picNumber, eventPname;
+    public TextView eventName, eCity, eDate, ePrice, eAbout, eUname, eUabout, picNumber, eventPname, eDistance;
     ImageView eventPic, profilePic, repost, join;
     EventController eventController;
     LinearLayout box;
@@ -34,6 +36,7 @@ public class Activity_Event extends AppCompatActivity implements View.OnClickLis
     EventDTO event;
     View back;
     int height, width, currentPic, maxPic, minPic, maxPicPrint;
+    public SharedPreferences prefs;
 
 
     @SuppressLint("ClickableViewAccessibility")
@@ -41,10 +44,12 @@ public class Activity_Event extends AppCompatActivity implements View.OnClickLis
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_event);
+        prefs = PreferenceManager.getDefaultSharedPreferences(this);
         Intent myIntent = getIntent();
 
         eventName = findViewById(R.id.text_event_information);
         eCity = findViewById(R.id.text_e_city);
+        eDistance = findViewById(R.id.text_distance);
         eDate = findViewById(R.id.text_date);
         ePrice = findViewById(R.id.text_price);
         eAbout = findViewById(R.id.text_e_about);

@@ -26,6 +26,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.TimeZone;
 
+import Controller.EventController;
 import Controller.UserController;
 import DAL.Classes.EventDAO;
 import DAL.Classes.UserDAO;
@@ -47,6 +48,8 @@ public class Event_Adapter extends RecyclerView.Adapter<Event_Adapter.ViewHolder
     IEventDAO dataA;
     int height;
     int width;
+    SharedPreferences prefs;
+    EventController eController;
 
     Boolean dataChanged = false;
     Context ctx;
@@ -70,6 +73,8 @@ public class Event_Adapter extends RecyclerView.Adapter<Event_Adapter.ViewHolder
         this.height = height;
         this.width = width;
         this.eventListId = ids;
+        this.prefs = PreferenceManager.getDefaultSharedPreferences(ctx);
+        this.eController = EventController.getInstance();
     }
 
     public List<String> getIds(){
@@ -100,7 +105,6 @@ public class Event_Adapter extends RecyclerView.Adapter<Event_Adapter.ViewHolder
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-
         IUserDAO userDAO = new UserDAO();
         // Get the data model based on position
         //eventDTO = loadedEvent.get(position);
@@ -127,7 +131,7 @@ public class Event_Adapter extends RecyclerView.Adapter<Event_Adapter.ViewHolder
                         withWhoText.setText(user.getfName());
                         headlineText.setText(eventDTO.getTitle());
                         headlineDate.setText(format1.format(eventDTO.getDate()));
-                        distanceText.setText(calculateDistance(eventDTO) + " km");
+                        distanceText.setText(eController.calculateDistance(eventDTO, prefs) + " km");
                         Picasso.get().load(user.getUserPicture())
                                 .resize(width / 8, height / 16)
                                 .centerCrop()
@@ -153,27 +157,6 @@ public class Event_Adapter extends RecyclerView.Adapter<Event_Adapter.ViewHolder
 
     public void dataCleanUp(int pos) {
 
-    }
-
-    private int calculateDistance(EventDTO event){
-        int distanceRounded;
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(ctx);
-        Location userLocation = new Location("locationA");
-        userLocation.setLatitude(Double.parseDouble(prefs.getString("gpsLat", "0")));
-        userLocation.setLongitude(Double.parseDouble(prefs.getString("gpsLong", "0")));
-        int maxDistance = prefs.getInt("distance", 150);
-        //setup distance check
-        Location eventLocation = new Location("locationB");
-        //is saved in dto with format "latitude,longitude" so split by ","
-        Log.d(TAG, "calculateDistance: coordinate dto string: " + event.getCoordinates());
-        eventLocation.setLatitude(Double.parseDouble(event.getCoordinates().split(",")[0]));
-        eventLocation.setLongitude(Double.parseDouble(event.getCoordinates().split(",")[1]));
-        Log.d(TAG, "calculateDistance: eventlocation: " + eventLocation.toString());
-        float distance = userLocation.distanceTo(eventLocation)/1000;
-        Log.d(TAG, "calculateDistance: distance to event: " + distance + " km");
-        distanceRounded = (int) distance;
-        Log.d(TAG, "calculateDistance: distance rounded: " + distanceRounded + " km");
-        return distanceRounded;
     }
     @Override
     public int getItemCount() {

@@ -71,10 +71,10 @@ public class Activity_Main extends AppCompatActivity implements View.OnClickList
             if (ContextCompat.checkSelfPermission(getApplicationContext(), android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                 Log.d(TAG, "onCreate: gps permission not already granted on start");
                 //permission not granted
-                SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
                 prefs.edit().putBoolean("gpsOn", false).apply();
                 //request for permission
                 ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION}, 101);
+                //response activates onRequestPermissionResult
             }
             else {
                 Log.d(TAG, "onCreate: gps permission already granted on start");
@@ -82,18 +82,6 @@ public class Activity_Main extends AppCompatActivity implements View.OnClickList
                 prefs.edit().putBoolean("gpsOn", true).apply();
                 // save location in SharedPref
                 saveLocationPref();
-                // TODO bestem afstand til andre events
-                gpsTracker = getLocation();
-
-                Location location1 = new Location("locationA");
-                location1.setLatitude(gpsTracker.getLatitude());
-                location1.setLongitude(gpsTracker.getLongitude());
-                Location location2 = new Location("locationB");
-                location2.setLongitude(133.2813);
-                location2.setLatitude(-26.4391);
-                Toast.makeText(this, "Afstand til australien " + (location1.distanceTo(location2) / 1000) + " km", Toast.LENGTH_LONG).show();
-                Log.d(TAG, "onCreate: (jbe) my location: " + location1.toString());
-                Log.d(TAG, "onCreate: (jbe) " + "Afstand til australien " + (location1.distanceTo(location2) / 1000) + " km");
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -208,15 +196,6 @@ public class Activity_Main extends AppCompatActivity implements View.OnClickList
                     prefs.edit().putBoolean("gpsOn", true).apply();
                     //save location in SharedPref
                     saveLocationPref();
-                    // TODO bestem afstand til andre events
-                    gpsTracker = getLocation();
-                    Location location1 = new Location("locationA");
-                    location1.setLatitude(gpsTracker.getLatitude());
-                    location1.setLongitude(gpsTracker.getLongitude());
-                    Location location2 = new Location("locationB");
-                    location2.setLongitude(133.2813);
-                    location2.setLatitude(-26.4391);
-                    Toast.makeText(this, "Afstand til australien " + (location1.distanceTo(location2) / 1000) + " km", Toast.LENGTH_LONG).show();
                     Log.d(TAG, "onRequestPermissionsResult: gps permission granted");
 
                 }  else {
