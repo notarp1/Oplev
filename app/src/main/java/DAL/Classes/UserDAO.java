@@ -85,6 +85,7 @@ public class UserDAO implements IUserDAO, CallbackUser, CallbackUserDelete {
         userObject.put("chatId", new ArrayList<>());
         userObject.put("userId", user.getUserId());
         userObject.put("userPicture", "https://firebasestorage.googleapis.com/v0/b/opleva4.appspot.com/o/question.png?alt=media&token=9dea34be-a183-4b37-bfb7-afd7a9db81f2");
+        userObject.put("likedeEvents",new ArrayList<>());
 
 
         db.collection("users")

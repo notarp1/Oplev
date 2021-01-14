@@ -135,21 +135,19 @@ public class Hjerteside_Adapter extends ArrayAdapter<String> {
         delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                /* fjern posten fra ens likede events
+                // fjern posten fra ens likede events
                 UserController.getInstance().getUser(new CallbackUser() {
                     @Override
                     public void onCallback(UserDTO user) {
                         ArrayList<String> likeEventsID = user.getLikedeEvents();
                         for (int i = 0; i < likeEventsID.size(); i++) {
-                            if (likeEventsID.get(i).equals(eventIDList.get(position))){
-                                likeEventsID.remove(i);
-                                user.setLikedeEvents(likeEventsID);
-                                userDAO.updateUser(user);
-                            }
+                            likeEventsID.remove(eventIDList.get(position));
+                            user.setLikedeEvents(likeEventsID);
+                            userDAO.updateUser(user);
+                            UserController.getInstance().setCurrUser(user);
                         }
                     }
                 }, UserController.getInstance().getCurrUser().getUserId());
-                 */
             }
         });
 
