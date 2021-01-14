@@ -324,7 +324,7 @@ public class Edit_Event extends AppCompatActivity implements View.OnClickListene
                eventDTO.setDescription(desc_in.getText().toString());
                eventDTO.setPrice(Integer.parseInt(price_in.getText().toString()));
 
-               pictureGet picG = new pictureGet();
+              /* pictureGet picG = new pictureGet();
                picG.getUrl(new CallBackURL() {
                    @Override
                    public void onCallBack(String url) {
@@ -336,8 +336,11 @@ public class Edit_Event extends AppCompatActivity implements View.OnClickListene
 
                    }
                }, eventDTO.getEventId(), pickedImgUri);
+            */
+               EventDAO dataA = new EventDAO();
+               dataA.updateEvent(eventDTO);
 
-
+               finish();
            }
         }
         else if(v == date_in){
