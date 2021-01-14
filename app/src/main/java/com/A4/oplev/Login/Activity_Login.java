@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -38,6 +39,7 @@ public class Activity_Login extends AppCompatActivity implements View.OnClickLis
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         mAuth = FirebaseAuth.getInstance();
+        prefs = PreferenceManager.getDefaultSharedPreferences(this);
 
         this.ctx = this;
 
@@ -81,7 +83,10 @@ public class Activity_Login extends AppCompatActivity implements View.OnClickLis
             emailInput = " ";
         } else emailInput = String.valueOf(email.getText());
 
-
+        System.out.println(emailInput);
+        System.out.println(passInput);
+        prefs.edit().putString("username", emailInput).apply();
+        prefs.edit().putString("password", passInput).apply();
         mAuth.signInWithEmailAndPassword(emailInput, passInput)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override

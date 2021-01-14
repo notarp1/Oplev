@@ -322,20 +322,24 @@ public class Activity_Profile extends AppCompatActivity implements View.OnClickL
             // hvis man accepterer en person til et event
             Intent i = getIntent();
             // hent brugeren
+
             UserDTO user = (UserDTO) i.getSerializableExtra("user");
             String header = i.getStringExtra("header");
+            String eventId = i.getStringExtra("eventID");
+
             ChatDAO chatDAO = new ChatDAO();
             // vi laver et chatobjekt med de nødvendige informationer
-            ChatDTO chatDTO = new ChatDTO(null,null,null,null,null,null,header,userController.getCurrUser().getfName(),user.getfName(),userController.getCurrUser().getUserId(),user.getUserId());
+            ChatDTO chatDTO = new ChatDTO(null,null,null,null,null,null,header,userController.getCurrUser().getfName(),user.getfName(),userController.getCurrUser().getUserId(),user.getUserId(),eventId);
             chatDAO.createChat(chatDTO, chatID -> {
                 // vi skal opdatere eventet til at have en participant
                 EventDAO eventDAO = new EventDAO();
                 eventDAO.getEvent(event -> {
                     if (event != null) {
+                        //event.setApplicants(new ArrayList<>());
                         event.setParticipant(user.getUserId());
                         eventDAO.updateEvent(event);
                     }
-                }, i.getStringExtra("eventID"));
+                }, eventId);
 
                 // vi skal indsætte chatid'et på begge brugeres lister
                 ArrayList<String> otherUserChatID;
@@ -353,6 +357,7 @@ public class Activity_Profile extends AppCompatActivity implements View.OnClickL
 
                 // vi opdaterer begge brugere i databasen
                 UserDAO userDAO = new UserDAO();
+
                 userDAO.updateUser(user);
                 userDAO.updateUser(userController.getCurrUser());
                 finish();

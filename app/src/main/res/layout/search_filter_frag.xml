@@ -45,7 +45,7 @@
                     android:id="@+id/sf_seekBarDistance"
                     android:layout_width="233dp"
                     android:layout_height="32dp"
-                    android:max="60"
+                    android:max="150"
                     android:min="1"
                     android:progress="30"
                     app:layout_constraintBottom_toBottomOf="parent"

@@ -190,7 +190,7 @@ public class Search_filter_frag extends Fragment{
 
     public void loadData(){
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        currDistance = prefs.getInt("distance",45);
+        currDistance = prefs.getInt("distance",150);
         currMinAge = prefs.getInt("minAge", 18);
         currMaxAge = prefs.getInt("maxAge", 99);
     }

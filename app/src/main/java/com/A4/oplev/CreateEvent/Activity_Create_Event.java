@@ -18,9 +18,11 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.A4.oplev.R;
 import com.google.android.gms.common.api.Status;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.widget.Autocomplete;
 import com.google.android.libraries.places.widget.AutocompleteActivity;
+import com.google.api.LogDescriptor;
 
 import java.util.Date;
 
@@ -36,7 +38,8 @@ public class Activity_Create_Event extends AppCompatActivity implements View.OnC
     private ConstraintLayout constraintLayout;
     private Button create1_next_btn;
     private EventDTO repostEvent = null;
-    public boolean edit = false;
+    Boolean edit = false;
+    private String coordinates;
     public void onCreate(Bundle saveInstanceState) {
         super.onCreate(saveInstanceState);
         // uses the same topbar with empty frag below as u_settings...
@@ -134,7 +137,10 @@ public class Activity_Create_Event extends AppCompatActivity implements View.OnC
             //set the text in the edittext view
             EditText city_in = findViewById(R.id.create__city_input);
             city_in.setText(place.getAddress());
+            //set coordinates
+            coordinates = place.getLatLng().latitude + "," + place.getLatLng().longitude;
             Log.d(TAG, "onActivityResult: jbe, adress: " + place.getAddress());
+            Log.d(TAG, "onActivityResult: (jbe) coordinates: " + coordinates);
             city_in.setError(null);
         }
         else if(resultCode== RESULT_ERROR){
@@ -145,6 +151,10 @@ public class Activity_Create_Event extends AppCompatActivity implements View.OnC
                     status.getStatusMessage(),
                     Toast.LENGTH_SHORT).show();
         }
+    }
+
+    public String getCoordinates() {
+        return coordinates;
     }
 
     public Uri getPickedImgUri() {
