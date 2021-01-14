@@ -202,12 +202,18 @@ public class LikesideList_frag extends Fragment{
                     }, tempEventID.get(position));
                 }
                 else {
-                    // hvis den position man clicker på er en chat så sender vi disse værdier
-                    Intent i1 = new Intent(getActivity(), Activity_Chat.class);
-                    i1.putExtra("currentUser",currentUser);
-                    i1.putExtra("otherUser",names.get(position-tempEventID.size()));
-                    i1.putExtra("chatId", userDTO.getChatId().get(position-tempEventID.size()));
-                    startActivity(i1);
+                    chatDAO.readChat(new ChatDAO.FirestoreCallback() {
+                        @Override
+                        public void onCallback(ChatDTO dto) {
+                            // hvis den position man clicker på er en chat så sender vi disse værdier
+                            Intent i1 = new Intent(getActivity(), Activity_Chat.class);
+                            i1.putExtra("currentUser",currentUser);
+                            i1.putExtra("otherUser",names.get(position-tempEventID.size()));
+                            i1.putExtra("chatId", userDTO.getChatId().get(position-tempEventID.size()));
+                            i1.putExtra("eventID",dto.getEventID());
+                            startActivity(i1);
+                        }
+                    },userDTO.getChatId().get(position-tempEventID.size()));
                 }
             }
         });
@@ -436,7 +442,7 @@ public class LikesideList_frag extends Fragment{
                 }
                 // Vi laver listviewet for eventsne
                 setListView_applicants(eventEventPic, eventHeaders, eventOwnerPic, eventFirstApplicants, eventApplicantPic, eventApplicantsSize);
-                LikeSide_Adapter adapter = new LikeSide_Adapter(mContext, tempNames, tempDates, tempLastmessage, tempHeaderList, tempLastSender, tempIsInitialized, tempOtherPersonPic);
+                LikeSide_Adapter adapter = new LikeSide_Adapter(mContext, tempNames, tempDates, tempLastmessage, tempHeaderList, tempLastSender, tempIsInitialized, tempOtherPersonPic, tempChatIds);
                 // vi indsætter footviews for alle chats og tilføjer dem til vores liste
                 for (int i = 0; i < tempNames.size(); i++) {
                     View v = adapter.getView(i, null, null);
@@ -702,7 +708,7 @@ public class LikesideList_frag extends Fragment{
             this.tempFirstApplicant = tempEventFirstApplicants;
 
             // lav adapteren til listviewet og opdater viewet
-            LikeSide_Event_Adapter eventAdapter = new LikeSide_Event_Adapter(mContext, tempEventPic, tempEventHeaders, tempEventOwnerPic, tempEventFirstApplicants, tempEventApplicantPic, tempEventApplicantsSize);
+            LikeSide_Event_Adapter eventAdapter = new LikeSide_Event_Adapter(mContext, tempEventPic, tempEventHeaders, tempEventOwnerPic, tempEventFirstApplicants, tempEventApplicantPic, tempEventApplicantsSize, eventEventID);
             tilmeldinger_listView.setAdapter(eventAdapter);
         }
     }

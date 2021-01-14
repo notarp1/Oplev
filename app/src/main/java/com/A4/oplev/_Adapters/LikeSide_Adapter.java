@@ -1,6 +1,7 @@
 package com.A4.oplev._Adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +11,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.A4.oplev.Activity_Profile;
 import com.A4.oplev.R;
 import com.squareup.picasso.Picasso;
 
@@ -20,13 +22,19 @@ import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
 
+import DAL.Classes.ChatDAO;
+import DAL.Classes.UserDAO;
+import DAL.Interfaces.CallbackUser;
+import DTO.ChatDTO;
+import DTO.UserDTO;
+
 
 public class  LikeSide_Adapter extends ArrayAdapter<String> {
     private Context mContext;
-    private List<String> nameList = new ArrayList<>(), lastMessage = new ArrayList<>(), headerList = new ArrayList<>(), lastMessageSender = new ArrayList<>(), isInitialized = new ArrayList<>(), otherPersonPic = new ArrayList<>();
+    private List<String> nameList = new ArrayList<>(), lastMessage = new ArrayList<>(), headerList = new ArrayList<>(), lastMessageSender = new ArrayList<>(), isInitialized = new ArrayList<>(), otherPersonPic = new ArrayList<>(), chatIDs = new ArrayList<>();
     private List<Date> dateList = new ArrayList<>();
 
-    public LikeSide_Adapter(@NonNull Context context, @NonNull ArrayList<String> names, @NonNull ArrayList<Date> dates, @NonNull ArrayList<String> lastMessage, @NonNull ArrayList<String> headerList, @NonNull ArrayList<String> lastMessageSender, ArrayList<String> isInitialized, ArrayList<String> otherPersonPic) {
+    public LikeSide_Adapter(@NonNull Context context, @NonNull ArrayList<String> names, @NonNull ArrayList<Date> dates, @NonNull ArrayList<String> lastMessage, @NonNull ArrayList<String> headerList, @NonNull ArrayList<String> lastMessageSender, ArrayList<String> isInitialized, ArrayList<String> otherPersonPic, ArrayList<String> chatIDs) {
         super(context, 0 , names);
         this.mContext = context;
         this.nameList = names;
@@ -36,6 +44,7 @@ public class  LikeSide_Adapter extends ArrayAdapter<String> {
         this.lastMessageSender = lastMessageSender;
         this.isInitialized = isInitialized;
         this.otherPersonPic = otherPersonPic;
+        this.chatIDs = chatIDs;
     }
 
     @NonNull
@@ -128,6 +137,29 @@ public class  LikeSide_Adapter extends ArrayAdapter<String> {
                 .placeholder(R.drawable.load2)
                 .error(R.drawable.question)
                 .into(profilBillede);
+
+        profilBillede.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ChatDAO chatDAO = new ChatDAO();
+                chatDAO.readChat(new ChatDAO.FirestoreCallback() {
+                    @Override
+                    public void onCallback(ChatDTO dto) {
+                        String otherUser = dto.getUser1().equals(nameList.get(position)) ? dto.getUser1ID() : dto.getUser2ID();
+                        UserDAO userDAO = new UserDAO();
+                        userDAO.getUser(new CallbackUser() {
+                            @Override
+                            public void onCallback(UserDTO user) {
+                                Intent i = new Intent(mContext, Activity_Profile.class);
+                                i.putExtra("user", user);
+                                i.putExtra("load", 1);
+                                mContext.startActivity(i);
+                            }
+                        }, otherUser);
+                    }
+                },chatIDs.get(position));
+            }
+        });
 
         return listItem;
     }
