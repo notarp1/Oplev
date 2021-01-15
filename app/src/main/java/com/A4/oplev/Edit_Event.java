@@ -1,25 +1,20 @@
-package com.A4.oplev.CreateEvent;
+package com.A4.oplev;
 
-import android.app.Activity;
-import android.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+
+import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.ContextWrapper;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
-
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-
-import android.os.Environment;
 import android.text.format.DateUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -36,46 +31,51 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
-import com.A4.oplev.R;
+import com.A4.oplev.CreateEvent.Activity_Create_Event;
+import com.A4.oplev.CreateEvent.createEvent2_frag;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.libraries.places.api.Places;
 import com.google.android.libraries.places.api.model.Place;
-import com.google.android.libraries.places.api.model.TypeFilter;
 import com.google.android.libraries.places.widget.Autocomplete;
 import com.google.android.libraries.places.widget.model.AutocompleteActivityMode;
+import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
+import java.net.MalformedURLException;
+import java.net.URI;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
 import Controller.PictureMaker;
+import Controller.pictureGet;
+import DAL.Classes.EventDAO;
+import DAL.Interfaces.CallBackURL;
 import DTO.EventDTO;
 
-import static android.app.Activity.RESULT_OK;
 import static android.content.ContentValues.TAG;
 
-public class createEvent1_frag extends Fragment implements View.OnClickListener{
+public class Edit_Event extends AppCompatActivity implements View.OnClickListener {
     //topbar text
     TextView topbar_txt;
     //fragment elements
     ImageView pic;
+    Uri pickedImgUri;
     EditText title_in, desc_in, price_in, city_in;
     TextView price_txt, date_txt, city_txt, date_in, time_in;
     Button next_btn;
     Spinner dropDown;
     AdapterView.OnItemSelectedListener onItemSelectedListener;
     String currentType = "--Vælg type--";
-
+    EventDTO eventDTO; 
     //dialog changelisteners
     DatePickerDialog.OnDateSetListener onDateSetListener;
     TimePickerDialog.OnTimeSetListener onTimeSetListener;
@@ -86,22 +86,21 @@ public class createEvent1_frag extends Fragment implements View.OnClickListener{
     // for input validation
     boolean inputIsValid;
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        View root = inflater.inflate(R.layout.create_event1_frag, container, false);
-
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_edit__event);
         //get elements from fragment
-        pic = root.findViewById(R.id.create_pic);
-        title_in = root.findViewById(R.id.create_title_input);
-        desc_in = root.findViewById(R.id.create_desc_input);
-        price_in = root.findViewById(R.id.create_price_input);
-        date_in = root.findViewById(R.id.create_date_input);
-        city_in = root.findViewById(R.id.create__city_input);
-        next_btn = root.findViewById(R.id.create_next_btn);
-        time_in = root.findViewById(R.id.create_time_input);
-        dropDown = root.findViewById(R.id.create_dropDown);
+        pic = findViewById(R.id.edit_event_pic);
+        title_in = findViewById(R.id.edit_event_title_input);
+        desc_in = findViewById(R.id.edit_event_desc_input);
+        price_in = findViewById(R.id.edit_event_price_input);
+        date_in = findViewById(R.id.edit_event_date_input);
+        city_in = findViewById(R.id.edit_event_city_input);
+        next_btn = findViewById(R.id.edit_event_next_btn);
+        time_in = findViewById(R.id.edit_event_time_input);
+        dropDown = findViewById(R.id.edit_event_dropDown);
 
-        ArrayAdapter<CharSequence> dropDownAdapter = ArrayAdapter.createFromResource(getContext(),R.array.createDropDown, R.layout.support_simple_spinner_dropdown_item);
+        ArrayAdapter<CharSequence> dropDownAdapter = ArrayAdapter.createFromResource(this,R.array.createDropDown, R.layout.support_simple_spinner_dropdown_item);
         dropDownAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         dropDown.setAdapter(dropDownAdapter);
         dropDown.setPrompt("Vælg type af oplevelse");
@@ -110,7 +109,7 @@ public class createEvent1_frag extends Fragment implements View.OnClickListener{
         city_in.setFocusable(false);
         city_in.setOnClickListener(this);
         //initialize places (API key saved in string resources
-        Places.initialize(getActivity().getApplicationContext(), getString(R.string.googlePlaces_api_key));
+        Places.initialize(getApplicationContext(), getString(R.string.googlePlaces_api_key));
 
         //set onclick listeners
         pic.setOnClickListener(this);
@@ -126,38 +125,40 @@ public class createEvent1_frag extends Fragment implements View.OnClickListener{
         hour = cal.get(Calendar.HOUR_OF_DAY);
         minute = cal.get(Calendar.MINUTE);
 
+        eventDTO = (EventDTO) getIntent().getSerializableExtra("EventDTO");
+
+        pickedImgUri = Uri.parse(eventDTO.getEventPic());
+        Log.d("imgload", "uri: "+ pickedImgUri.toString());
         Log.d(TAG, "onCreateView: (jbe) outside repost spottet");
         //if createevent startet from repost then fill out info
-        if(((Activity_Create_Event) getActivity()).getRepostEvent() != null){
+        if(eventDTO != null){
             Log.d(TAG, "onCreateView: (jbe) repost spottet!");
-            EventDTO repostEvent = ((Activity_Create_Event) getActivity()).getRepostEvent();
-            Log.d(TAG, "onCreateView: (jbe) repost date = " + repostEvent.getDate().toString());
-            Picasso.get().load(repostEvent.getEventPic()).into(pic);
+            Log.d(TAG, "onCreateView: (jbe) repost date = " + eventDTO.getDate().toString());
+            Picasso.get().load(eventDTO.getEventPic()).into(pic);
             //check if repost pic is default pic (no reupload)
             FirebaseStorage.getInstance().getReference().child(getString(R.string.defaultpic_db_path)).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                 @Override
                 public void onSuccess(Uri uri) {
                     //download and set image URI
-                    Log.d(TAG, "onSuccess: defaultpic download uri: " + uri.toString() + "\n repostpic: " + repostEvent.getEventPic());
-                    if(repostEvent.getEventPic().equals(uri.toString())) {
+                    Log.d(TAG, "onSuccess: defaultpic download uri: " + uri.toString() + "\n repostpic: " + eventDTO.getEventPic());
+                    if(eventDTO.getEventPic().equals(uri.toString())) {
                         Log.d(TAG, "onSuccess: eventpic is defaultpic");
-                        ((Activity_Create_Event) getActivity()).setPickedImgUri(null);
-                        Log.d(TAG, "onSuccess: eventpicUri: " + ((Activity_Create_Event) getActivity()).getPickedImgUri());
+                         pickedImgUri = null;
+                        Log.d(TAG, "onSuccess: eventpicUri: " + pickedImgUri);
                     }
                     else{
                         Log.d(TAG, "onSuccess: eventpic is not deafaultpic");
-                        imageDownload(repostEvent.getEventPic());
+                        imageDownload(eventDTO.getEventPic());
                     }
                 }
             });
 
             //set values from repost event
-            title_in.setText(repostEvent.getTitle());
-            desc_in.setText(repostEvent.getDescription());
-            price_in.setText("" + repostEvent.getPrice());
-            ((Activity_Create_Event) getActivity()).setCoordinates(repostEvent.getCoordinates());
+            title_in.setText(eventDTO.getTitle());
+            desc_in.setText(eventDTO.getDescription());
+            price_in.setText("" + eventDTO.getPrice());
             //extract values from Date-obj and update ui
-            Date repostDate = repostEvent.getDate();
+            Date repostDate = eventDTO.getDate();
             day = repostDate.getDate();
             month = repostDate.getMonth();
             year = repostDate.getYear() + 1900;
@@ -165,10 +166,10 @@ public class createEvent1_frag extends Fragment implements View.OnClickListener{
             hour = repostDate.getHours();
             updateDateUI();
             updateTimeUI();
-            city_in.setText(repostEvent.getCity());
-            currentType = repostEvent.getType();
-            //set the dropdown to the position of repostevent's type
-            dropDown.setSelection(getTypeIndex(repostEvent.getType()));
+            city_in.setText(eventDTO.getCity());
+            currentType = eventDTO.getType();
+            //set the dropdown to the position of eventDTO's type
+            dropDown.setSelection(getTypeIndex(eventDTO.getType()));
         }
 
         dropDown.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -208,8 +209,7 @@ public class createEvent1_frag extends Fragment implements View.OnClickListener{
                 updateTimeUI();
             }
         };
-
-        return root;
+        
     }
     private int getTypeIndex(String typeToFind){
         //takes a string with a type, returns the position it lies on in the spinner(dropdown)
@@ -250,7 +250,7 @@ public class createEvent1_frag extends Fragment implements View.OnClickListener{
     //save image from repost locally
     private void imageDownload(String url){
         Log.d(TAG, "imageDownload: (jbe) trying to save img");
-        targetHolder = new ImageView(this.getContext());
+        targetHolder = new ImageView(this);
         targetHolder.setTag((Target) getTarget(url));
         Picasso.get()
                 .load(url)
@@ -267,7 +267,7 @@ public class createEvent1_frag extends Fragment implements View.OnClickListener{
                     @Override
                     public void run() {
                         Log.d(TAG, "run: (jbe)");
-                        ContextWrapper cw = new ContextWrapper(getActivity().getApplicationContext());
+                        ContextWrapper cw = new ContextWrapper(getApplicationContext());
                         File directory = cw.getDir("imageDir", Context.MODE_PRIVATE);
 
                         File file = new File(directory,"OplevRepostTemp.jpg");
@@ -278,13 +278,13 @@ public class createEvent1_frag extends Fragment implements View.OnClickListener{
                             ostream.close();
                             Log.d(TAG, "run: (jbe) file saved to " + file.getPath());
                             //setting picked img URI
-                            ((Activity_Create_Event) getActivity()).setPickedImgUri(Uri.fromFile(file));
+                            setPickedImgUri(Uri.fromFile(file));
                             Log.d(TAG, "run: (jbe) file absoulute path " + file.getAbsolutePath());
                             Log.d(TAG, "run: (jbe) uri set to " + Uri.fromFile(file).toString());
                         } catch (IOException e) {
                             Log.e("IOException", e.getLocalizedMessage());
                             Log.d(TAG, "run: (jbe) file save exception" + e.getLocalizedMessage()+ "\n"+
-                            e.getStackTrace().toString());
+                                    e.getStackTrace().toString());
                         }
                     }
                 }).start();
@@ -307,46 +307,47 @@ public class createEvent1_frag extends Fragment implements View.OnClickListener{
             System.out.println("BILLED PRESSED");
             //Is mainly handled from actitity
             //triggers onActivityResult in activity_create_event.java when picture is picked
-            PictureMaker.getInstance().uploadPic(getActivity());
+            PictureMaker.getInstance().uploadPic(this);
         }
         else if(v == next_btn){
             //validate that inputs are entered (shows "errors" if not)
-            if(isInputValid()){
-                //setup bundle to transfer data to next frag
-                Bundle b = new Bundle();
-                //set strings
-                b.putString("title_in", title_in.getText().toString());
-                b.putString("desc_in", desc_in.getText().toString());
-                if(price_in.getText().toString().equals("")){
-                    //if no input price the hint showing is "0", so setting text "0"
-                    price_in.setText("0");
-                }
-                b.putString("price_in", price_in.getText().toString());
-                b.putString("date_in", date_in.getText().toString());
-                b.putString("time_in", time_in.getText().toString());
-                b.putString("city_in", city_in.getText().toString());
-                b.putString("type_in", currentType);
-                // *** EVENT PIC URI IS IN ACTIVITY, AVAIL FROM NEXT FRAG ALREADY
-                // WITH METHOD ((Activity_Create_Event) getActivity()).getPickedImgUri()
-                // *** EVENT coordinates string IS IN ACTIVITY, AVAIL FROM NEXT FRAG ALREADY
-                // WITH METHOD ((Activity_Create_Event) getActivity()).getCoordinates()
-                Log.d(TAG, "onClick: (jbe) price = " + price_in.getText());
-                //create fragment and add bundle to arguments
-                Fragment create2_frag = new createEvent2_frag();
-                create2_frag.setArguments(b);
+           if(isInputValid()){
+               eventDTO.setType(currentType);
+               Date newDate = new Date();
+               newDate.setDate(day);
+               newDate.setMonth(month);
+               newDate.setYear(year);
+               newDate.setHours(hour);
+               newDate.setMinutes(minute);
+               eventDTO.setCity(city_in.getText().toString());
+               eventDTO.setTitle(title_in.getText().toString());
+               eventDTO.setDescription(desc_in.getText().toString());
+               eventDTO.setPrice(Integer.parseInt(price_in.getText().toString()));
 
-                //move to createEvent2 frag
-                getFragmentManager().beginTransaction()
-                        .replace(R.id.mainFragmentBox, create2_frag)
-                        .addToBackStack(null)
-                        .commit();
-            }
+              /* pictureGet picG = new pictureGet();
+               picG.getUrl(new CallBackURL() {
+                   @Override
+                   public void onCallBack(String url) {
+                       eventDTO.setEventPic(url);
+                       EventDAO dataA = new EventDAO();
+                       dataA.updateEvent(eventDTO);
+
+                       finish();
+
+                   }
+               }, eventDTO.getEventId(), pickedImgUri);
+            */
+               EventDAO dataA = new EventDAO();
+               dataA.updateEvent(eventDTO);
+
+               finish();
+           }
         }
         else if(v == date_in){
             //show date picker dialog
             //triggers "OnDateSetListener" when date is changed
             DatePickerDialog dialog = new DatePickerDialog(
-                    getContext(),
+                    this,
                     android.R.style.Theme_Holo_Light_Dialog_MinWidth,
                     onDateSetListener,
                     year, month, day);
@@ -363,7 +364,7 @@ public class createEvent1_frag extends Fragment implements View.OnClickListener{
             //show time picker dialog
             //triggers "OnTimeSetListener" when time is changed
             TimePickerDialog dialog = new TimePickerDialog(
-                    getContext(),
+                    this,
                     onTimeSetListener,
                     hour, day, true);
             dialog.show();
@@ -378,13 +379,11 @@ public class createEvent1_frag extends Fragment implements View.OnClickListener{
             //open the places autocomplete api
             List<Place.Field> fieldList = Arrays.asList(Place.Field.ADDRESS,
                     Place.Field.NAME,
-                    Place.Field.LAT_LNG,
-                    Place.Field.TYPES);
+                    Place.Field.LAT_LNG);
             //create intent for activity overlay
-            //(context getActivity might be off)
+            //(context this might be off)
             Intent intent = new Autocomplete.IntentBuilder(AutocompleteActivityMode.OVERLAY, fieldList)
-                    .setCountry("DK")
-                    .build(getActivity());
+                    .build(this);
             startActivityForResult(intent, 100);
             // ***OBS*** onActivityResult (result of intent) handled in activity! (create event activity)
         }
@@ -417,13 +416,23 @@ public class createEvent1_frag extends Fragment implements View.OnClickListener{
         }
         if(currentType.equals("--Vælg type--")){
             inputIsValid = false;
-            Toast.makeText(getActivity(), "Vælg en event type", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Vælg en event type", Toast.LENGTH_SHORT).show();
         }
 
         if(inputIsValid == false){
-            Toast.makeText(getActivity(), "Mangler event-information", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Mangler event-information", Toast.LENGTH_SHORT).show();
         }
         Log.d(TAG, "isInputValid: (jbe) end. valid status:" + inputIsValid);
         return inputIsValid;
     }
+    public Uri getPickedImgUri() {
+        Log.d(TAG, "getPickedImgUri: (jbe) get picked imgUri");
+        return pickedImgUri;
+    }
+    public void setPickedImgUri(Uri uri) {
+        Log.d(TAG, "setPickedImgUri: (jbe) set picked imgUri");
+        pickedImgUri = uri;
+    }
+   
 }
+

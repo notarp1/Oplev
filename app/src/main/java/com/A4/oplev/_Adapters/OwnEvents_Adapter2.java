@@ -5,12 +5,12 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
-import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
@@ -19,8 +19,7 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.A4.oplev.Activity_Event;
-import com.A4.oplev.CreateEvent.Activity_Create_Event;
-import com.A4.oplev.Like_Hjerte_Side.Activity_Likeside;
+import com.A4.oplev.Edit_Event;
 import com.A4.oplev.R;
 import com.squareup.picasso.Picasso;
 
@@ -28,8 +27,11 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
+import Controller.EventController;
 import Controller.UserController;
 import DAL.Classes.EventDAO;
+import DAL.Interfaces.CallbackEvent;
+import DTO.EventDTO;
 
 public class OwnEvents_Adapter2 extends RecyclerView.Adapter<OwnEvents_Adapter2.ViewHolder> implements View.OnClickListener {
     private EventDAO eventDAO = new EventDAO();
@@ -194,11 +196,32 @@ public class OwnEvents_Adapter2 extends RecyclerView.Adapter<OwnEvents_Adapter2.
 
             if(v == edit){
                 //Edit post
-                Intent i = new Intent(v.getContext(), Activity_Create_Event.class);
-                Bundle bundle = new Bundle();
+                eventDAO.getEvent(new CallbackEvent() {
+                    @Override
+                    public void onCallback(EventDTO event) {
+                        if(event.getParticipant() == null && event.getApplicants().isEmpty()) {
+                            Intent i = new Intent(v.getContext(), Edit_Event.class);
+                            i.putExtra("EventDTO", event);
+                            i.putExtra("edit", true);
+                            mContext.startActivity(i);
+                        }else{
+                            Toast toast = Toast.makeText(mContext,"Denne event har ansøgere eller en deltager, slet for dem for at redigere", Toast.LENGTH_SHORT);
+                            toast.show();
+                        }
+
+                    }
+                }, eventID.get(getPosition()));
 
             }else if(v == delete){
                 //Delete
+
+                eventDAO.getEvent(new CallbackEvent() {
+                    @Override
+                    public void onCallback(EventDTO event) {
+                        EventController eventController = EventController.getInstance();
+                        eventController.deleteEvent(event.getEventId());
+                    }
+                }, eventID.get(getPosition()));
 
             }
         }

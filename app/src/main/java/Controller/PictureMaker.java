@@ -1,22 +1,15 @@
 package Controller;
 
-import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.util.Base64;
 
 import androidx.core.content.FileProvider;
 
 import com.A4.oplev.BuildConfig;
-import com.A4.oplev.UserSettings.U_Settings_Edit;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 
 import static androidx.core.app.ActivityCompat.startActivityForResult;

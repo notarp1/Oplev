@@ -18,6 +18,8 @@ import java.util.TimeZone;
 
 import DAL.Classes.EventDAO;
 import DAL.Classes.UserDAO;
+import DAL.Interfaces.CallbackEvent;
+import DAL.Interfaces.CallbackUser;
 import DTO.EventDTO;
 import DTO.UserDTO;
 
@@ -144,4 +146,25 @@ public class EventController {
         Log.d(TAG, "calculateDistance: distance rounded: " + distanceRounded + " km");
         return distanceRounded;
     }
+
+    public void deleteEvent(String eventId){
+        eventDAO.getEvent(new CallbackEvent(){
+            @Override
+            public void onCallback(EventDTO event) {
+                for(String userID : event.getApplicants()){
+                    userDAO.getUser(new CallbackUser() {
+                        @Override
+                        public void onCallback(UserDTO user) {
+                            user.getRequestedEvents().remove(eventId);
+                            userDAO.updateUser(user);
+                        }
+                    }, userID);
+                }
+
+            }
+        }, eventId);
+
+        eventDAO.deleteEvent(eventId);
+    }
+
 }
