@@ -150,6 +150,7 @@ public class Activity_Create_Event extends AppCompatActivity implements View.OnC
             Log.d(TAG, "onActivityResult: (jbe) place name: " + place.getName());
             Log.d(TAG, "onActivityResult: jbe, place address: " + place.getAddress());
             Log.d(TAG, "onActivityResult: (jbe) place coordinates: " + coordinates);
+            Log.d(TAG, "onActivityResult: (jbe) place type: " + place.getTypes().toString());
             city_in.setError(null);
         }
         else if(resultCode== RESULT_ERROR){

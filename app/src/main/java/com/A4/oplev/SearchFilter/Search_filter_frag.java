@@ -72,6 +72,7 @@ public class Search_filter_frag extends Fragment{
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
                 prefs.edit().putInt("distance",currDistance).apply();
+                onUpdate(prefs);
             }
         });
 

@@ -1,16 +1,23 @@
 package com.A4.oplev.Chat;
 
 import android.Manifest;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.text.SpannableString;
+import android.text.style.BackgroundColorSpan;
+import android.text.style.ForegroundColorSpan;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -51,11 +58,10 @@ import DTO.UserDTO;
 
 
 public class Activity_Chat extends AppCompatActivity  implements View.OnClickListener, PopupMenu.OnMenuItemClickListener {
-    private ImageView settings, tilbage;
+    private ImageView settings, tilbage, sendBillede, sendMessage;
     private TextView navn;
     private ScrollView beskeder;
     private LinearLayout linearLayout;
-    private ImageView sendBillede, sendMessage;
     private ArrayList<String> beskederStrings = new ArrayList<>();
     private EditText inputTekst;
     private ChatDTO dto;
@@ -102,37 +108,38 @@ public class Activity_Chat extends AppCompatActivity  implements View.OnClickLis
                 if (actionId == EditorInfo.IME_ACTION_GO | actionId == EditorInfo.IME_ACTION_DONE | actionId == EditorInfo.IME_ACTION_SEND | actionId == EditorInfo.IME_ACTION_NEXT) {
                     // Vi gider kun sende teksten hvis den ikke er tom
                     if (!inputTekst.getText().toString().equals("")) {
+                        if (person1 != null && person2 != null && inputTekst.getText().toString() != null) {
+                            // Selvlavet funktion til at opdatere attributterne i vores ChatDTO objekt
+                            updateChatDTO(person1, person2, inputTekst.getText().toString(), null);
+                            // vi adder beskeden til vores liste af beskeder
+                            beskederStrings.add(inputTekst.getText().toString());
 
-                        // Selvlavet funktion til at opdatere attributterne i vores ChatDTO objekt
-                        updateChatDTO(person1, person2, inputTekst.getText().toString(), null);
-                        // vi adder beskeden til vores liste af beskeder
-                        beskederStrings.add(inputTekst.getText().toString());
-
-                        // Nu når vi har sendt en besked vil vi gerne opdatere den i firestore
-                        dao.updateChat(new ChatDAO.FirestoreCallback() {
-                            @Override
-                            // Der skal ventes på et callback for at få det nye objekt fra databasen
-                            public void onCallback(ChatDTO dto) {
-                                if (dto.getChatId() != null) {
-                                    // Sætter klassens objekt til at være det nye (kan åbenbart ikke gøres inde fra funktionen)
-                                    setChatDTO(dto);
-                                    // Selvlavet adapter der tager listen af beskeder, Chat-objektet og den nuværende brugers navn som input og laver listviewet over chatten
-                                    ChatList_Adapter adapter = new ChatList_Adapter(ctx, beskederStrings, dto, person1);
-                                    View item = adapter.getView(beskederStrings.size()-1, null, null);
-                                    linearLayout.addView(item);
-                                    // clear tekstboksen
-                                    inputTekst.setText("");
-                                    beskeder.post(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            beskeder.fullScroll(View.FOCUS_DOWN);
-                                        }
-                                    });
+                            // Nu når vi har sendt en besked vil vi gerne opdatere den i firestore
+                            dao.updateChat(new ChatDAO.FirestoreCallback() {
+                                @Override
+                                // Der skal ventes på et callback for at få det nye objekt fra databasen
+                                public void onCallback(ChatDTO dto) {
+                                    if (dto.getChatId() != null) {
+                                        // Sætter klassens objekt til at være det nye (kan åbenbart ikke gøres inde fra funktionen)
+                                        setChatDTO(dto);
+                                        // Selvlavet adapter der tager listen af beskeder, Chat-objektet og den nuværende brugers navn som input og laver listviewet over chatten
+                                        ChatList_Adapter adapter = new ChatList_Adapter(ctx, beskederStrings, dto, person1);
+                                        View item = adapter.getView(beskederStrings.size() - 1, null, null);
+                                        linearLayout.addView(item);
+                                        // clear tekstboksen
+                                        inputTekst.setText("");
+                                        beskeder.post(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                beskeder.fullScroll(View.FOCUS_DOWN);
+                                            }
+                                        });
+                                    }
                                 }
-                            }
-                        }, dto);
-                    }
-                    handled = true;
+                            }, dto);
+                        }
+                        handled = true;
+                    } else Toast.makeText(ctx, "Der opstod en fejl ved afsendelse af besked. Prøv venligst igen", Toast.LENGTH_SHORT).show();
                 }
                 return handled;
             }
@@ -250,35 +257,36 @@ public class Activity_Chat extends AppCompatActivity  implements View.OnClickLis
         } else if (v == sendMessage){
             // Vi gider kun sende teksten hvis den ikke er tom
             if (!inputTekst.getText().toString().equals("")) {
+                if (person1 != null && person2 != null && inputTekst.getText().toString() != null) {
+                    // Selvlavet funktion til at opdatere attributterne i vores ChatDTO objekt
+                    updateChatDTO(person1, person2, inputTekst.getText().toString(), null);
+                    // vi adder beskeden til vores liste af beskeder
+                    beskederStrings.add(inputTekst.getText().toString());
 
-                // Selvlavet funktion til at opdatere attributterne i vores ChatDTO objekt
-                updateChatDTO(person1, person2, inputTekst.getText().toString(), null);
-                // vi adder beskeden til vores liste af beskeder
-                beskederStrings.add(inputTekst.getText().toString());
-
-                // Nu når vi har sendt en besked vil vi gerne opdatere den i firestore
-                dao.updateChat(new ChatDAO.FirestoreCallback() {
-                    @Override
-                    // Der skal ventes på et callback for at få det nye objekt fra databasen
-                    public void onCallback(ChatDTO dto) {
-                        if (dto.getChatId() != null) {
-                            // Sætter klassens objekt til at være det nye (kan åbenbart ikke gøres inde fra funktionen)
-                            setChatDTO(dto);
-                            // Selvlavet adapter der tager listen af beskeder, Chat-objektet og den nuværende brugers navn som input og laver listviewet over chatten
-                            ChatList_Adapter adapter = new ChatList_Adapter(ctx, beskederStrings, dto, person1);
-                            View item = adapter.getView(beskederStrings.size()-1, null, null);
-                            linearLayout.addView(item);
-                            // clear tekstboksen
-                            inputTekst.setText("");
-                            beskeder.post(new Runnable() {
-                                @Override
-                                public void run() {
-                                    beskeder.fullScroll(View.FOCUS_DOWN);
-                                }
-                            });
+                    // Nu når vi har sendt en besked vil vi gerne opdatere den i firestore
+                    dao.updateChat(new ChatDAO.FirestoreCallback() {
+                        @Override
+                        // Der skal ventes på et callback for at få det nye objekt fra databasen
+                        public void onCallback(ChatDTO dto) {
+                            if (dto.getChatId() != null) {
+                                // Sætter klassens objekt til at være det nye (kan åbenbart ikke gøres inde fra funktionen)
+                                setChatDTO(dto);
+                                // Selvlavet adapter der tager listen af beskeder, Chat-objektet og den nuværende brugers navn som input og laver listviewet over chatten
+                                ChatList_Adapter adapter = new ChatList_Adapter(ctx, beskederStrings, dto, person1);
+                                View item = adapter.getView(beskederStrings.size() - 1, null, null);
+                                linearLayout.addView(item);
+                                // clear tekstboksen
+                                inputTekst.setText("");
+                                beskeder.post(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        beskeder.fullScroll(View.FOCUS_DOWN);
+                                    }
+                                });
+                            }
                         }
-                    }
-                }, dto);
+                    }, dto);
+                } else Toast.makeText(ctx, "Der opstod en fejl ved afsendelse af besked. Prøv venligst igen", Toast.LENGTH_SHORT).show();
             }
         }
     }
@@ -338,45 +346,51 @@ public class Activity_Chat extends AppCompatActivity  implements View.OnClickLis
                     @Override
                     // Vi har brug for et callback til at vide om det lykkesdes
                     public void onCallBackPic(Uri url) {
-                        // Nu skal vi opdatere vores klasse objekt (lige nu skelner vi forskel med at et billede har messagen nedenunder men er meget ustabilt og skal ændres)
-                        updateChatDTO(person1, person2, "pictureBlaBlaBla!:", url);
+                        if (person1 != null && person2 != null) {
+                            // Nu skal vi opdatere vores klasse objekt (lige nu skelner vi forskel med at et billede har messagen nedenunder men er meget ustabilt og skal ændres)
+                            updateChatDTO(person1, person2, "pictureBlaBlaBla!:", url);
 
-                        // Vi opdaterer vores chatobjekt i firestore
-                        dao.updateChat(new ChatDAO.FirestoreCallback() {
-                            @Override
-                            public void onCallback(ChatDTO dto) {
-                                if (dto.getChatId() != null) {
-                                    setChatDTO(dto);
-                                    if (dto.getMessages() != null){
-                                        beskederStrings.clear();
-                                        beskederStrings.addAll(dto.getMessages());
+                            // Vi opdaterer vores chatobjekt i firestore
+                            dao.updateChat(new ChatDAO.FirestoreCallback() {
+                                @Override
+                                public void onCallback(ChatDTO dto) {
+                                    if (dto.getChatId() != null) {
+                                        setChatDTO(dto);
+                                        if (dto.getMessages() != null) {
+                                            beskederStrings.clear();
+                                            beskederStrings.addAll(dto.getMessages());
+                                        }
+                                        ChatList_Adapter adapter = new ChatList_Adapter(ctx, beskederStrings, dto, person1);
+                                        View item = adapter.getView(beskederStrings.size() - 1, null, null);
+                                        linearLayout.addView(item);
+                                        // clear tekstboksen
+                                        inputTekst.setText("");
                                     }
-                                    ChatList_Adapter adapter = new ChatList_Adapter(ctx, beskederStrings, dto, person1);
-                                    View item = adapter.getView(beskederStrings.size() - 1, null, null);
-                                    linearLayout.addView(item);
-                                    // clear tekstboksen
-                                    inputTekst.setText("");
                                 }
-                            }
-                        }, dto);
+                            }, dto);
+                        } else Toast.makeText(ctx, "Der opstod en fejl ved afsendelse af besked. Prøv venligst igen", Toast.LENGTH_SHORT).show();
                     }
                 },chatDocumentPath, person1);
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
-                Toast.makeText(Activity_Chat.this, "Something went wrong", Toast.LENGTH_LONG).show();
+                Toast.makeText(Activity_Chat.this, "Der skete en fejl ved indlæsning af billedet. Prøv venligst igen", Toast.LENGTH_LONG).show();
             }
         }else {
-            Toast.makeText(Activity_Chat.this, "You haven't picked Image",Toast.LENGTH_LONG).show();
+            Toast.makeText(Activity_Chat.this, "Der blev ikke valgt noget billede",Toast.LENGTH_LONG).show();
         }
     }
-
 
 
     public void showPopup(View v) {
         PopupMenu popup = new PopupMenu(this, v);
         MenuInflater inflater = popup.getMenuInflater();
         popup.setOnMenuItemClickListener(Activity_Chat.this);
-        inflater.inflate(R.menu.menu_chats_popup, popup.getMenu());
+        Menu m = popup.getMenu();
+        inflater.inflate(R.menu.menu_chats_popup, m);
+        MenuItem item = m.findItem(R.id.chat_forlad);
+        SpannableString spanString = new SpannableString(item.getTitle().toString());
+        spanString.setSpan(new ForegroundColorSpan(Color.RED), 0, spanString.length(), 0);
+        item.setTitle(spanString);
         popup.show();
     }
 
@@ -406,7 +420,22 @@ public class Activity_Chat extends AppCompatActivity  implements View.OnClickLis
                 Toast.makeText(ctx,"Denne funktion er ikke blevet implementeret endnu :(", Toast.LENGTH_SHORT).show();
                 return true;
             case R.id.chat_forlad:
-                Toast.makeText(ctx,"Denne funktion er ikke blevet implementeret endnu :(", Toast.LENGTH_SHORT).show();
+                new AlertDialog.Builder(ctx)
+                        .setTitle("Forlad chat")
+                        .setMessage("Er du sikker på at du vil forlade denne chat med " + person2 + "?\nDette vil resultere i at eventet bliver aflyst og alle beskeder bliver fjernet")
+
+                        // Specifying a listener allows you to take an action before dismissing the dialog.
+                        // The dialog is automatically dismissed when a dialog button is clicked.
+                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                Toast.makeText(ctx, "Denne funktion er ikke blevet implementeret endnu", Toast.LENGTH_SHORT).show();
+                            }
+                        })
+
+                        // A null listener allows the button to dismiss the dialog and take no further action.
+                        .setNegativeButton(android.R.string.no, null)
+                        .setIcon(android.R.drawable.ic_dialog_alert)
+                        .show();
                 return true;
             default:
                 return false;
