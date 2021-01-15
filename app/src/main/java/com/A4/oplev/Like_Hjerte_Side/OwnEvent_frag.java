@@ -178,7 +178,7 @@ public class OwnEvent_frag extends Fragment {
 
                 for (int i = 0; i < eventApplicantsSize.size(); i++) {
 
-                    if (i==0) {
+                    if (i == 0) {
                         tempEventPic.add(eventEventPic.get(i));
                         tempEventHeaders.add(eventHeaders.get(i));
                         tempEventApplicantPic.add(eventApplicantPic.get(i));
@@ -190,13 +190,70 @@ public class OwnEvent_frag extends Fragment {
                         tempEventParticipant.add(eventParticipant.get(i));
                         Log.d("list1", String.valueOf(eventApplicantsSize.size()));
                     }
+                    // hvis der findes en participant
+                    else if (!eventParticipant.get(i).equals("")) {
+                        // lav en counter til hvor den nye skal indsættes
+                        int placement = 0;
+                        // gå alle participants igennem som har været der før denne
+                        for (int j = 0; j < tempEventParticipant.size(); j++) {
+                            // hvis der ikke er nogen participant så ved vi at den nye skal indsættes før j
+                            if (tempEventParticipant.get(j).equals("")) {
+                                // nu tjekker vi om den nye dato er før de forrige datoer med en participant
+                                for (int k = j-1; k >= 0; k--) {
+                                    if (!dates.get(i).before(tempDate.get(k))) {
+                                        // hvis den ikke er før k så sæt placement counteren til k+1
+                                        placement = k+1;
+                                    }
+                                }
+                                // vi looper fra i ned til placement for at rykke alle informationerne
+                                for (int k = i; k > placement; k--) {
+                                    // tilføj det sidste element i listen igen
+                                    if (k == i) {
+                                        tempEventPic.add(tempEventPic.get(i - 1));
+                                        tempEventHeaders.add(tempEventHeaders.get(i - 1));
+                                        tempEventApplicantPic.add(tempEventApplicantPic.get(i - 1));
+                                        tempEventApplicantsSize.add(tempEventApplicantsSize.get(i - 1));
+                                        tempEventOwnerPic.add(tempEventOwnerPic.get(i - 1));
+                                        tempEventFirstApplicants.add(tempEventFirstApplicants.get(i - 1));
+                                        tempEventID.add(tempEventID.get(i - 1));
+                                        tempDate.add(tempDate.get(i - 1));
+                                        tempEventParticipant.add(tempEventParticipant.get(i - 1));
+                                    }
+                                    // fra alle pladser derefter så rykker vi pladsen 1 til højre
+                                    else if (k != 0) {
+                                        tempEventPic.set(k, tempEventPic.get(k - 1));
+                                        tempEventHeaders.set(k, tempEventHeaders.get(k - 1));
+                                        tempEventApplicantPic.set(k, tempEventApplicantPic.get(k - 1));
+                                        tempEventApplicantsSize.set(k, tempEventApplicantsSize.get(k - 1));
+                                        tempEventOwnerPic.set(k, tempEventOwnerPic.get((k - 1)));
+                                        tempEventFirstApplicants.set(k, tempEventFirstApplicants.get((k - 1)));
+                                        tempEventID.set(k, tempEventID.get(k - 1));
+                                        tempDate.set(k, tempDate.get((k - 1)));
+                                        tempEventParticipant.set(k, tempEventParticipant.get(k - 1));
 
-                    else if (dates.get(i).before(tempDate.get(i-1)) || eventParticipant.get(i)!=""){
+                                    }
+                                }
+                                // når vi har rykket alle gamle datoer så indsætter vi den nye dato vi vil indsætte
+                                tempEventPic.set(placement, eventEventPic.get(i));
+                                tempEventHeaders.set(placement, eventHeaders.get(i));
+                                tempEventApplicantPic.set(placement, eventApplicantPic.get(i));
+                                tempEventApplicantsSize.set(placement, eventApplicantsSize.get(i));
+                                tempEventOwnerPic.set(placement, eventOwnerPic.get(i));
+                                tempEventFirstApplicants.set(placement, eventFirstApplicants.get(i));
+                                tempEventID.set(placement, eventEventID.get(i));
+                                tempDate.set(placement, dates.get(i));
+                                tempEventParticipant.set(placement, eventParticipant.get(i));
+                                break;
+                            }
+                        }
+                    }
+
+                    else if (dates.get(i).before(tempDate.get(i-1)) && tempEventParticipant.get(i-1).equals("")){
                         for (int j = 0; j < i; j++) {
                             // hvis den man vil indsætte kommer efter den dato på plads j
-                            if (dates.get(i).before(tempDate.get(j)) || eventParticipant.get(i)!="") {
+                            if (dates.get(i).before(tempDate.get(j)) && tempEventParticipant.get(j).equals("")) {
                                 // iterer fra i'endes plads til j
-                                for (int k = i; k >= j; k--) {
+                                for (int k = i; k > j; k--) {
                                     // ved den første tilføjer vi fra den forriges plads (flyt den sidste dato til en ny plads)
                                     if (k == i) {
                                         tempEventPic.add(tempEventPic.get(i - 1));
@@ -238,22 +295,28 @@ public class OwnEvent_frag extends Fragment {
                         }
                     }
 
-                    else  {
-                        if (eventParticipant.get(i)=="") {
-                            tempEventPic.add(eventEventPic.get(i));
-                            tempEventHeaders.add(eventHeaders.get(i));
-                            tempEventApplicantPic.add(eventApplicantPic.get(i));
-                            tempEventApplicantsSize.add(eventApplicantsSize.get(i));
-                            tempEventOwnerPic.add(eventOwnerPic.get(i));
-                            tempEventFirstApplicants.add(eventFirstApplicants.get(i));
-                            tempEventID.add(eventEventID.get(i));
-                            tempDate.add(dates.get(i));
-                            tempEventParticipant.add(eventParticipant.get(i));
-                        }
+                    else {
+                        tempEventPic.add(eventEventPic.get(i));
+                        tempEventHeaders.add(eventHeaders.get(i));
+                        tempEventApplicantPic.add(eventApplicantPic.get(i));
+                        tempEventApplicantsSize.add(eventApplicantsSize.get(i));
+                        tempEventOwnerPic.add(eventOwnerPic.get(i));
+                        tempEventFirstApplicants.add(eventFirstApplicants.get(i));
+                        tempEventID.add(eventEventID.get(i));
+                        tempDate.add(dates.get(i));
+                        tempEventParticipant.add(eventParticipant.get(i));
                     }
                 }
                 this.tempEventID = tempEventID;
                 this.tempFirstApplicant = tempEventFirstApplicants;
+                this.eventApplicantPic = tempEventApplicantPic;
+                this.eventFirstApplicants = tempFirstApplicant;
+                this.eventEventID = tempEventID;
+                this.eventHeaders = tempEventHeaders;
+                this.eventApplicantsSize = tempEventApplicantsSize;
+                this.eventOwnerPic = tempEventOwnerPic;
+                this.eventEventPic = tempEventPic;
+                this.eventParticipant = tempEventParticipant;
 
                 LinearLayoutManager layoutManager = new LinearLayoutManager(root2.getContext(), LinearLayoutManager.VERTICAL, false);
                 OwnEvents_Adapter2 eventAdapter = new OwnEvents_Adapter2(root2.getContext(), tempEventPic, tempEventHeaders, tempEventOwnerPic, tempEventFirstApplicants, tempEventApplicantPic, tempEventApplicantsSize, tempEventID, tempDate, tempEventParticipant);
