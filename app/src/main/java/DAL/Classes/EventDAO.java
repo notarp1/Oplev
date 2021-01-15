@@ -60,7 +60,6 @@ public class EventDAO implements IEventDAO {
 
                 DocumentSnapshot documentSnapshot = task.getResult();
                 if(documentSnapshot != null){
-                    System.out.println(documentSnapshot.getData());
                     EventDTO event = documentSnapshot.toObject(EventDTO.class);
                     callbackEvent.onCallback(event);
                 }
@@ -265,7 +264,6 @@ public class EventDAO implements IEventDAO {
 
     @Override
     public void updateEvent(EventDTO event) {
-
         Map<String, Object> eventObject = new HashMap<>();
         eventObject.put("ownerId", event.getOwnerId());
         eventObject.put("ownerPic", event.getOwnerPic());
@@ -283,6 +281,8 @@ public class EventDAO implements IEventDAO {
         eventObject.put("eventPic", event.getEventPic());
         eventObject.put("applicants", event.getApplicants());
         eventObject.put("type", event.getType());
+        eventObject.put("coordinates", event.getCoordinates());
+
         eventObject.put("coordinates", event.getCoordinates());
 
 

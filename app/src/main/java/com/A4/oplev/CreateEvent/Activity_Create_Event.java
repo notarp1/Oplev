@@ -147,8 +147,9 @@ public class Activity_Create_Event extends AppCompatActivity implements View.OnC
             city_in.setText(place.getAddress());
             //set coordinates
             coordinates = place.getLatLng().latitude + "," + place.getLatLng().longitude;
-            Log.d(TAG, "onActivityResult: jbe, adress: " + place.getAddress());
-            Log.d(TAG, "onActivityResult: (jbe) coordinates: " + coordinates);
+            Log.d(TAG, "onActivityResult: (jbe) place name: " + place.getName());
+            Log.d(TAG, "onActivityResult: jbe, place address: " + place.getAddress());
+            Log.d(TAG, "onActivityResult: (jbe) place coordinates: " + coordinates);
             city_in.setError(null);
         }
         else if(resultCode== RESULT_ERROR){
@@ -159,6 +160,10 @@ public class Activity_Create_Event extends AppCompatActivity implements View.OnC
                     status.getStatusMessage(),
                     Toast.LENGTH_SHORT).show();
         }
+    }
+
+    public void setCoordinates(String coordinates) {
+        this.coordinates = coordinates;
     }
 
     public String getCoordinates() {

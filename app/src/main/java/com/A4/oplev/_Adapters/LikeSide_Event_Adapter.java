@@ -1,6 +1,7 @@
 package com.A4.oplev._Adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,17 +13,21 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.A4.oplev.Activity_Event;
 import com.A4.oplev.R;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
+import DAL.Classes.EventDAO;
+import DAL.Classes.UserDAO;
+
 public class LikeSide_Event_Adapter extends ArrayAdapter<String> {
     private Context mContext;
     private ArrayList<Integer> eventApplicantsSize;
-    private ArrayList<String> eventHeaders, eventEventPic, eventApplicantPic, eventOwnerPic, eventFirstApplicants;
+    private ArrayList<String> eventHeaders, eventEventPic, eventApplicantPic, eventOwnerPic, eventFirstApplicants, eventIDs;
 
-    public LikeSide_Event_Adapter(@NonNull Context context, @NonNull ArrayList<String> eventEventPic, @NonNull ArrayList<String> eventHeaders, @NonNull ArrayList<String> eventOwnerPic, @NonNull ArrayList<String> eventFirstApplicants, @NonNull ArrayList<String> eventApplicantPic, @NonNull ArrayList<Integer> eventApplicantsSize) {
+    public LikeSide_Event_Adapter(@NonNull Context context, @NonNull ArrayList<String> eventEventPic, @NonNull ArrayList<String> eventHeaders, @NonNull ArrayList<String> eventOwnerPic, @NonNull ArrayList<String> eventFirstApplicants, @NonNull ArrayList<String> eventApplicantPic, @NonNull ArrayList<Integer> eventApplicantsSize, @NonNull ArrayList<String> eventIDs) {
         super(context, 0 , eventHeaders);
         this.mContext = context;
         this.eventHeaders = eventHeaders;
@@ -31,6 +36,7 @@ public class LikeSide_Event_Adapter extends ArrayAdapter<String> {
         this.eventEventPic = eventEventPic;
         this.eventOwnerPic = eventOwnerPic;
         this.eventFirstApplicants = eventFirstApplicants;
+        this.eventIDs = eventIDs;
     }
 
     @NonNull
@@ -86,6 +92,22 @@ public class LikeSide_Event_Adapter extends ArrayAdapter<String> {
 
         TextView date = listItem.findViewById(R.id.own_event_beskeder_events_dato);
         date.setText("");
+
+
+        eventPic.setOnClickListener(v -> {
+            EventDAO eventDAO = new EventDAO();
+            eventDAO.getEvent
+                    (event -> {
+                        UserDAO userDAO = new UserDAO();
+                        userDAO.getUser
+                                (user -> {
+                                    Intent i = new Intent(mContext, Activity_Event.class);
+                                    i.putExtra("user", user);
+                                    i.putExtra("event", event);
+                                    mContext.startActivity(i);
+                                }, event.getOwnerId());
+                    }, eventIDs.get(position));
+        });
 
 
         return listItem;

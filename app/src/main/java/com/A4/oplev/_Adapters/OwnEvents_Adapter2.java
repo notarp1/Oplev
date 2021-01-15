@@ -2,6 +2,8 @@ package com.A4.oplev._Adapters;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,6 +15,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.cardview.widget.CardView;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.A4.oplev.Activity_Event;
@@ -36,10 +39,10 @@ public class OwnEvents_Adapter2 extends RecyclerView.Adapter<OwnEvents_Adapter2.
     private Context mContext;
     private ArrayList<Date> eventDate;
     private ArrayList<Integer> eventApplicantsSize;
-    private ArrayList<String> eventHeaders, eventEventPic, eventApplicantPic, eventOwnerPic, eventFirstApplicants,eventID ;
+    private ArrayList<String> eventHeaders, eventEventPic, eventApplicantPic, eventOwnerPic, eventFirstApplicants,eventID, eventParticipant;
 
 
-    public OwnEvents_Adapter2(@NonNull Context context, @NonNull ArrayList<String> eventEventPic, @NonNull ArrayList<String> eventHeaders, @NonNull ArrayList<String> eventOwnerPic, @NonNull ArrayList<String> eventFirstApplicants, @NonNull ArrayList<String> eventApplicantPic, @NonNull ArrayList<Integer> eventApplicantsSize, ArrayList<String> eventID, ArrayList<Date> eventDate) {
+    public OwnEvents_Adapter2(@NonNull Context context, @NonNull ArrayList<String> eventEventPic, @NonNull ArrayList<String> eventHeaders, @NonNull ArrayList<String> eventOwnerPic, @NonNull ArrayList<String> eventFirstApplicants, @NonNull ArrayList<String> eventApplicantPic, @NonNull ArrayList<Integer> eventApplicantsSize, ArrayList<String> eventID, ArrayList<Date> eventDate, ArrayList<String> eventParticipant) {
         this.mContext = context;
         this.eventHeaders = eventHeaders;
         this.eventApplicantsSize = eventApplicantsSize;
@@ -49,6 +52,7 @@ public class OwnEvents_Adapter2 extends RecyclerView.Adapter<OwnEvents_Adapter2.
         this.eventFirstApplicants = eventFirstApplicants;
         this.eventID = eventID;
         this.eventDate = eventDate;
+        this.eventParticipant = eventParticipant;
     }
 
 
@@ -74,6 +78,7 @@ public class OwnEvents_Adapter2 extends RecyclerView.Adapter<OwnEvents_Adapter2.
 
         ImageView eventPic = holder.eventPic;
         ImageView profilePic1 = holder.profilePic1;
+        ImageView box = holder.box_own_events;
         CardView profileHolder1 = holder.profileHolder1;
         TextView numberOfApplciants = holder.numberOfApplciants;
         ImageView profilePic2 = holder.profilePic2;
@@ -88,11 +93,18 @@ public class OwnEvents_Adapter2 extends RecyclerView.Adapter<OwnEvents_Adapter2.
                 .error(R.drawable.question)
                 .into(eventPic);
 
+
+
+
         if (eventFirstApplicants.get(position).equals("")){
             numberOfApplciants.setText("");
             profilePic1.setVisibility(View.GONE);
             profileHolder1.setVisibility(View.GONE);
         }
+        else if (eventParticipant.get(position)!=""){
+            box.setBackgroundDrawable(ContextCompat.getDrawable(mContext,R.drawable.own_events_occupied_background));
+        }
+
         else {
             profilePic1.setVisibility(View.VISIBLE);
             profileHolder1.setVisibility(View.VISIBLE);
@@ -126,7 +138,7 @@ public class OwnEvents_Adapter2 extends RecyclerView.Adapter<OwnEvents_Adapter2.
         // Sætter overskriften for eventet
         header.setText(eventHeaders.get(position));
 
-        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM");
+        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/YYYY");
         String strDate = formatter.format(eventDate.get(position));
         date.setText(strDate);
 

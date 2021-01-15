@@ -11,17 +11,22 @@ import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.PopupMenu;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.A4.oplev.Activity_Event;
+import com.A4.oplev.CreateEvent.Activity_Create_Event;
 import com.A4.oplev._Adapters.ChatList_Adapter;
 import com.A4.oplev.R;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -36,10 +41,16 @@ import java.util.Date;
 
 import Controller.PictureMaker;
 import DAL.Classes.ChatDAO;
+import DAL.Classes.EventDAO;
+import DAL.Classes.UserDAO;
+import DAL.Interfaces.CallbackEvent;
+import DAL.Interfaces.CallbackUser;
 import DTO.ChatDTO;
+import DTO.EventDTO;
+import DTO.UserDTO;
 
 
-public class Activity_Chat extends AppCompatActivity  implements View.OnClickListener {
+public class Activity_Chat extends AppCompatActivity  implements View.OnClickListener, PopupMenu.OnMenuItemClickListener {
     private ImageView settings, tilbage;
     private TextView navn;
     private ScrollView beskeder;
@@ -53,6 +64,7 @@ public class Activity_Chat extends AppCompatActivity  implements View.OnClickLis
     private String person1, person2, chatDocumentPath;
     private static final int REQUEST_CAMERARESULT=201;
     private PictureMaker pictureMaker;
+    private Intent intent;
 
 
     public void onCreate(Bundle saveInstanceState) {
@@ -64,7 +76,7 @@ public class Activity_Chat extends AppCompatActivity  implements View.OnClickLis
         ctx = this;
 
         // her får vi intentet med navnet på den man skriver med
-        Intent intent = getIntent();
+        intent = getIntent();
         chatDocumentPath = intent.getStringExtra("chatId");
         person1 = intent.getStringExtra("currentUser");
         person2 = intent.getStringExtra("otherUser");
@@ -234,7 +246,7 @@ public class Activity_Chat extends AppCompatActivity  implements View.OnClickLis
                 pictureMaker.uploadPic(this);
             }
         } else if (v == settings) {
-            // gør noget her
+            showPopup(settings);
         } else if (v == sendMessage){
             // Vi gider kun sende teksten hvis den ikke er tom
             if (!inputTekst.getText().toString().equals("")) {
@@ -355,6 +367,49 @@ public class Activity_Chat extends AppCompatActivity  implements View.OnClickLis
             }
         }else {
             Toast.makeText(Activity_Chat.this, "You haven't picked Image",Toast.LENGTH_LONG).show();
+        }
+    }
+
+
+
+    public void showPopup(View v) {
+        PopupMenu popup = new PopupMenu(this, v);
+        MenuInflater inflater = popup.getMenuInflater();
+        popup.setOnMenuItemClickListener(Activity_Chat.this);
+        inflater.inflate(R.menu.menu_chats_popup, popup.getMenu());
+        popup.show();
+    }
+
+    @Override
+    public boolean onMenuItemClick(MenuItem item) {
+        EventDAO eventDAO = new EventDAO();
+        switch (item.getItemId()) {
+            case R.id.chat_info:
+                eventDAO.getEvent(new CallbackEvent() {
+                    @Override
+                    public void onCallback(EventDTO event) {
+                        UserDAO userDAO = new UserDAO();
+                        userDAO.getUser(new CallbackUser() {
+                            @Override
+                            public void onCallback(UserDTO user) {
+                                Intent i = new Intent(ctx, Activity_Event.class);
+                                i.putExtra("event", event);
+                                i.putExtra("user", user);
+                                i.putExtra("load", 1);
+                                ctx.startActivity(i);
+                            }
+                        }, event.getOwnerId());
+                    }
+                }, intent.getStringExtra("eventID"));
+                return true;
+            case R.id.chat_report:
+                Toast.makeText(ctx,"Denne funktion er ikke blevet implementeret endnu :(", Toast.LENGTH_SHORT).show();
+                return true;
+            case R.id.chat_forlad:
+                Toast.makeText(ctx,"Denne funktion er ikke blevet implementeret endnu :(", Toast.LENGTH_SHORT).show();
+                return true;
+            default:
+                return false;
         }
     }
 }

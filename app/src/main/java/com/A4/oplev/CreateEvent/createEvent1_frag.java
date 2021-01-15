@@ -155,6 +155,7 @@ public class createEvent1_frag extends Fragment implements View.OnClickListener{
             title_in.setText(repostEvent.getTitle());
             desc_in.setText(repostEvent.getDescription());
             price_in.setText("" + repostEvent.getPrice());
+            ((Activity_Create_Event) getActivity()).setCoordinates(repostEvent.getCoordinates());
             //extract values from Date-obj and update ui
             Date repostDate = repostEvent.getDate();
             day = repostDate.getDate();
@@ -382,6 +383,7 @@ public class createEvent1_frag extends Fragment implements View.OnClickListener{
             //create intent for activity overlay
             //(context getActivity might be off)
             Intent intent = new Autocomplete.IntentBuilder(AutocompleteActivityMode.OVERLAY, fieldList)
+                    .setCountry("DK")
                     .build(getActivity());
             startActivityForResult(intent, 100);
             // ***OBS*** onActivityResult (result of intent) handled in activity! (create event activity)
