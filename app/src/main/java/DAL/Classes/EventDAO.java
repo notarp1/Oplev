@@ -162,7 +162,7 @@ public class EventDAO implements IEventDAO {
         userController = UserController.getInstance();
         // send new event to db
         Map<String, Object> eventObject = new HashMap<>();
-        ArrayList<String> apps = new ArrayList<>();
+
         eventObject.put("ownerId", event.getOwnerId());
         eventObject.put("ownerPic", event.getOwnerPic());
         eventObject.put("eventId", event.getEventId());
@@ -177,7 +177,7 @@ public class EventDAO implements IEventDAO {
         eventObject.put("femaleOn", event.isFemaleOn());
         eventObject.put("participant", "");
         eventObject.put("eventPic", event.getEventPic());
-        eventObject.put("applicants", apps);
+        eventObject.put("applicants", event.getApplicants());
         eventObject.put("type", event.getType());
         eventObject.put("coordinates", event.getCoordinates());
 
@@ -302,6 +302,7 @@ public class EventDAO implements IEventDAO {
         eventObject.put("type", event.getType());
         eventObject.put("coordinates", event.getCoordinates());
 
+
         db.collection("events").document(event.getEventId())
                 .set(eventObject)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -324,7 +325,20 @@ public class EventDAO implements IEventDAO {
     }
 
     @Override
-    public void deleteEvent(int eventId) {
-
+    public void deleteEvent(String eventId) {
+        db.collection("events").document(eventId)
+                .delete()
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d(TAG, "DocumentSnapshot successfully deleted!");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w(TAG, "Error deleting document", e);
+                    }
+                });
     }
 }

@@ -81,6 +81,7 @@ public class Hjerteside_Adapter extends ArrayAdapter<String> {
         TextView name = (TextView) listItem.findViewById(R.id.hjerteside_medhvem);
         name.setText("Med " + currentName + ", " + currentAge);
 
+        // vi indsætter profilbilledet med picasso
         ImageView profilBillede = (ImageView) listItem.findViewById(R.id.hjerteside_profilbillede);
         Picasso.get().load(profilePictures.get(position))
                 .resize(mContext.getDisplay().getWidth(), mContext.getDisplay().getHeight() / 2 + 200)
@@ -89,6 +90,7 @@ public class Hjerteside_Adapter extends ArrayAdapter<String> {
                 .error(R.drawable.question)
                 .into(profilBillede);
 
+        // vi sætter en click listener på profilbilledet som skal gå ind på brugerens profil gennem activity_profile
         profilBillede.setOnClickListener(v -> eventDAO.getEvent
                 (event -> userDAO.getUser
                         (user -> {
@@ -98,6 +100,7 @@ public class Hjerteside_Adapter extends ArrayAdapter<String> {
                             mContext.startActivity(i);
                         }, event.getOwnerId()), eventIDList.get(position)));
 
+        // vi indsætter eventbilledet med picasso
         ImageView eventBillede = (ImageView) listItem.findViewById(R.id.hjerteside_billede);
         Picasso.get().load(eventPictureList.get(position))
                 //.resize(mContext.getDisplay().getWidth(), mContext.getDisplay().getHeight() / 2 + 200)
@@ -106,6 +109,7 @@ public class Hjerteside_Adapter extends ArrayAdapter<String> {
                 .error(R.drawable.question)
                 .into(eventBillede);
 
+        // vi sætter en clicklistener på eventbilledet som skal gå ind på eventets side
         eventBillede.setOnClickListener(v -> eventDAO.getEvent
                 (event -> userDAO.getUser
                         (user -> {
@@ -116,6 +120,7 @@ public class Hjerteside_Adapter extends ArrayAdapter<String> {
                         }, event.getOwnerId()), eventIDList.get(position)));
 
         ImageView repost = (ImageView) listItem.findViewById(R.id.hjerteside_share);
+        // vi sætter en clicklistener på repost knappen som skal gå til create event siden
         repost.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -132,6 +137,7 @@ public class Hjerteside_Adapter extends ArrayAdapter<String> {
         });
 
         ImageView delete = (ImageView) listItem.findViewById(R.id.hjerteside_bin);
+        // vi sætter en clicklistener på slet knappen som skal fjerne eventet fra databasen og opdatere den nuværende bruger (dette vil også opdatere viewsne inde i hjerteside_frag)
         delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -140,12 +146,10 @@ public class Hjerteside_Adapter extends ArrayAdapter<String> {
                     @Override
                     public void onCallback(UserDTO user) {
                         ArrayList<String> likeEventsID = user.getLikedeEvents();
-                        for (int i = 0; i < likeEventsID.size(); i++) {
-                            likeEventsID.remove(eventIDList.get(position));
-                            user.setLikedeEvents(likeEventsID);
-                            userDAO.updateUser(user);
-                            UserController.getInstance().setCurrUser(user);
-                        }
+                        likeEventsID.remove(eventIDList.get(position));
+                        user.setLikedeEvents(likeEventsID);
+                        userDAO.updateUser(user);
+                        UserController.getInstance().setCurrUser(user);
                     }
                 }, UserController.getInstance().getCurrUser().getUserId());
             }
