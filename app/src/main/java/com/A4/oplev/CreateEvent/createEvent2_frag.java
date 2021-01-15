@@ -1,5 +1,6 @@
 package com.A4.oplev.CreateEvent;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -13,9 +14,13 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.A4.oplev.Like_Hjerte_Side.Activity_Likeside;
 import com.A4.oplev.R;
 
+import java.util.Date;
+
 import Controller.EventController;
+import DAL.Classes.EventDAO;
 import DTO.EventDTO;
 import io.apptik.widget.MultiSlider;
 
@@ -81,21 +86,52 @@ public class createEvent2_frag extends Fragment implements View.OnClickListener 
                  * Parse values to controller which will create an event object and add it to program/database
                  * get values from last frag using getArg as below:
                  */
-                EventController.getInstance().createEvent(
-                        getArguments().getString("title_in"),
-                        getArguments().getString("desc_in"),
-                        getArguments().getString("price_in"),
-                        getArguments().getString("date_in"),
-                        getArguments().getString("time_in"),
-                        getArguments().getString("city_in"),
-                        getArguments().getString("type_in"),
-                        currMinAge,
-                        currMaxAge,
-                        maleSwitch.isChecked(),
-                        femaleSwitch.isChecked(),
-                        ((Activity_Create_Event) getActivity()).getPickedImgUri(),
-                        ((Activity_Create_Event) getActivity()).getCoordinates()
-                );
+                if (((Activity_Create_Event) getActivity()).getEdit()) {
+                   EventDTO event = ((Activity_Create_Event) getActivity()).getRepostEvent();
+
+                   String[] dateS =  getArguments().getString("date_in").split("/");
+                   String[] timeS = getArguments().getString("time_in").split(":");
+
+                    Date newDate = new Date();
+                    newDate.setDate(Integer.parseInt(dateS[0]));
+                    newDate.setMonth(Integer.parseInt(dateS[1]));
+                    newDate.setYear(Integer.parseInt(dateS[2]));
+                    newDate.setHours(Integer.parseInt(timeS[0]));
+                    newDate.setMinutes(Integer.parseInt(timeS[1]));
+
+
+                   event.setTitle( getArguments().getString("title_in")).setDescription( getArguments().getString("desc_in"))
+                           .setPrice(Integer.parseInt(getArguments().getString("price_in")))
+                           .setDate(newDate)
+                           .setCity( getArguments().getString("city_in"))
+                           .setType( getArguments().getString("type_in"))
+                           .setMinAge(currMinAge)
+                           .setMaxAge(currMaxAge)
+                           .setMaleOn(maleSwitch.isChecked())
+                            .setFemaleOn(femaleSwitch.isChecked())
+                           .setEventPic(((Activity_Create_Event) getActivity()).getPickedImgUri().toString())
+                           .setCoordinates(((Activity_Create_Event) getActivity()).getCoordinates());
+                   EventDAO dao = new EventDAO();
+                   dao.updateEvent(event);
+                    Intent i = new Intent(getContext(), Activity_Likeside.class);
+                    startActivity(i);
+                }else{
+
+                    EventController.getInstance().createEvent(
+                            getArguments().getString("title_in"),
+                            getArguments().getString("desc_in"),
+                            getArguments().getString("price_in"),
+                            getArguments().getString("date_in"),
+                            getArguments().getString("time_in"),
+                            getArguments().getString("city_in"),
+                            getArguments().getString("type_in"),
+                            currMinAge,
+                            currMaxAge,
+                            maleSwitch.isChecked(),
+                            femaleSwitch.isChecked(),
+                            ((Activity_Create_Event) getActivity()).getPickedImgUri(),
+                            ((Activity_Create_Event) getActivity()).getCoordinates()
+                    );
 
 
                 //remove last frag from backstack
@@ -107,6 +143,7 @@ public class createEvent2_frag extends Fragment implements View.OnClickListener 
                         .replace(R.id.mainFragmentBox, new createEvent3_frag())
                         .addToBackStack(null)
                         .commit();
+            }
             }
             else{
                 //no gender chosen

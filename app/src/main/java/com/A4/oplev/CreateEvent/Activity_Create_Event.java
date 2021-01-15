@@ -40,17 +40,25 @@ public class Activity_Create_Event extends AppCompatActivity implements View.OnC
     private EventDTO repostEvent = null;
     Boolean edit = false;
     private String coordinates;
+
     public void onCreate(Bundle saveInstanceState) {
         super.onCreate(saveInstanceState);
         // uses the same topbar with empty frag below as u_settings...
         setContentView(R.layout.activity_u_settings);
+
+        edit = getIntent().getBooleanExtra("edit", false);
         // get elements from activity
         title = findViewById(R.id.topbar_text);
         back = findViewById(R.id.topbar_arrow);
         //set onlick listner
         back.setOnClickListener(this);
         //set value of title text in topbar
-        title.setText("Opret Event");
+        if(getIntent().getBooleanExtra("edit", false)){
+            title.setText("Edit event");
+        }else{
+            title.setText("Opret Event");
+        }
+
         //fill fragment holder with createvent 1
         getSupportFragmentManager().beginTransaction().replace(R.id.mainFragmentBox,  new createEvent1_frag(), "uSettingMainBox")
                 .commit();
@@ -97,7 +105,7 @@ public class Activity_Create_Event extends AppCompatActivity implements View.OnC
             Log.d(TAG, "onCreate: (jbe) inside if-repost");
             repostEvent = (EventDTO) getIntent().getSerializableExtra("event");
         }
-        edit = getIntent().getBooleanExtra("edit", false);
+
 
 
 
@@ -169,6 +177,6 @@ public class Activity_Create_Event extends AppCompatActivity implements View.OnC
     public EventDTO getRepostEvent() {
         return repostEvent;
     }
-
+    public boolean getEdit(){return edit;};
 
 }

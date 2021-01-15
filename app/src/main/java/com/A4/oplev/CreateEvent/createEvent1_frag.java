@@ -325,6 +325,7 @@ public class createEvent1_frag extends Fragment implements View.OnClickListener{
                 b.putString("time_in", time_in.getText().toString());
                 b.putString("city_in", city_in.getText().toString());
                 b.putString("type_in", currentType);
+
                 // *** EVENT PIC URI IS IN ACTIVITY, AVAIL FROM NEXT FRAG ALREADY
                 // WITH METHOD ((Activity_Create_Event) getActivity()).getPickedImgUri()
                 // *** EVENT coordinates string IS IN ACTIVITY, AVAIL FROM NEXT FRAG ALREADY
