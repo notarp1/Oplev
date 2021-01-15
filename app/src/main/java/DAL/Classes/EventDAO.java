@@ -124,8 +124,10 @@ public class EventDAO implements IEventDAO {
                                     }
                                 }
                             } else {
-                                // not logged in
-                                completeList.add(document.getId());
+                                if (dto.getParticipant().equals("")) {
+                                    // not logged in
+                                    completeList.add(document.getId());
+                                }
                             }
                         }
                         Collections.shuffle(completeList);
