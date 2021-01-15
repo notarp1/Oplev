@@ -67,6 +67,23 @@ public class EventDAO implements IEventDAO {
             }
         });
     }
+
+    public void getEvent2(CallbackEvent callbackEvent, String eventId) {
+
+        DocumentReference docRef = db.collection(collectionPath).document(eventId);
+        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+
+                DocumentSnapshot documentSnapshot = task.getResult();
+                if(documentSnapshot != null){
+                    System.out.println(documentSnapshot.getData());
+                    EventDTO event = documentSnapshot.toObject(EventDTO.class);
+                    callbackEvent.onCallback(event);
+                }
+            }
+        });
+    }
     public void getEvents(CallBackEventList callbackEventList, List<String> Ids) {
         List<EventDTO> res = new ArrayList<>();
         for(String id : Ids){
@@ -145,7 +162,7 @@ public class EventDAO implements IEventDAO {
         userController = UserController.getInstance();
         // send new event to db
         Map<String, Object> eventObject = new HashMap<>();
-
+        ArrayList<String> apps = new ArrayList<>();
         eventObject.put("ownerId", event.getOwnerId());
         eventObject.put("ownerPic", event.getOwnerPic());
         eventObject.put("eventId", event.getEventId());
@@ -160,7 +177,7 @@ public class EventDAO implements IEventDAO {
         eventObject.put("femaleOn", event.isFemaleOn());
         eventObject.put("participant", "");
         eventObject.put("eventPic", event.getEventPic());
-        eventObject.put("applicants", event.getApplicants());
+        eventObject.put("applicants", apps);
         eventObject.put("type", event.getType());
         eventObject.put("coordinates", event.getCoordinates());
 
@@ -283,7 +300,7 @@ public class EventDAO implements IEventDAO {
         eventObject.put("eventPic", event.getEventPic());
         eventObject.put("applicants", event.getApplicants());
         eventObject.put("type", event.getType());
-
+        eventObject.put("coordinates", event.getCoordinates());
 
         db.collection("events").document(event.getEventId())
                 .set(eventObject)

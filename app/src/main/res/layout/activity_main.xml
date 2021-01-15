@@ -35,19 +35,19 @@
 
         <ImageView
             android:id="@+id/options_btn"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
+            android:layout_width="38dp"
+            android:layout_height="38dp"
             android:layout_weight="1"
 
             app:srcCompat="@drawable/filter" />
 
         <ImageView
             android:id="@+id/match_btn"
-            android:layout_width="35dp"
-            android:layout_height="35dp"
+            android:layout_width="38dp"
+            android:layout_height="38dp"
             android:layout_weight="1"
 
-            app:srcCompat="@drawable/m" />
+            app:srcCompat="@drawable/homebut" />
 
         <ImageView
             android:id="@+id/user_btn"

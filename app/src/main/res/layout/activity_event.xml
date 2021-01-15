@@ -136,7 +136,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="5dp"
-                            android:text="Placering"
+                            android:text="placering"
                             android:textColor="#B5DEF6"
                             android:textSize="18sp" />
 
@@ -176,7 +176,6 @@
                             android:id="@+id/icon_date_event"
                             android:layout_width="20dp"
                             android:layout_height="20dp"
-                            android:layout_weight="1"
                             app:srcCompat="@drawable/time" />
 
                         <TextView
