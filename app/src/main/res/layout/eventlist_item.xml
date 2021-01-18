@@ -70,6 +70,7 @@
         android:layout_marginLeft="60dp"
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
+        android:layout_marginBottom="3dp"
         android:maxLines="1"
         android:minLines="1"
         android:text="med Dean Mohr"
@@ -78,8 +79,7 @@
         app:layout_constraintBottom_toBottomOf="@+id/boxyea"
         app:layout_constraintEnd_toStartOf="@+id/eventitem_distancetext"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/boxyea"
-        app:layout_constraintTop_toBottomOf="@+id/eventitem_Headline" />
+        app:layout_constraintStart_toStartOf="@+id/boxyea" />
 
     <TextView
         android:id="@+id/eventitem_distancetext"
@@ -106,19 +106,18 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="55dp"
-        android:inputType="textMultiLine"
         android:layout_marginLeft="55dp"
-        android:layout_marginTop="4dp"
+        android:layout_marginTop="5dp"
         android:autoSizeMaxTextSize="100sp"
         android:autoSizeMinTextSize="12sp"
         android:autoSizeTextType="uniform"
+        android:inputType="textMultiLine"
         android:maxLines="1"
         android:minLines="1"
         android:text="Leverposteg med mig"
         android:textColor="#A4E8E0"
         android:textSize="24sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/evntItem_withWho"
         app:layout_constraintEnd_toStartOf="@+id/eventitem_distancetext"
         app:layout_constraintStart_toStartOf="@+id/boxyea"
         app:layout_constraintTop_toTopOf="@+id/boxyea" />
@@ -129,7 +128,7 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
-        android:layout_marginBottom="1dp"
+        android:layout_marginBottom="3dp"
         android:autoSizeMaxTextSize="100sp"
         android:autoSizeMinTextSize="8sp"
         android:autoSizeTextType="uniform"
