@@ -68,22 +68,7 @@ public class EventDAO implements IEventDAO {
         });
     }
 
-    public void getEvent2(CallbackEvent callbackEvent, String eventId) {
 
-        DocumentReference docRef = db.collection(collectionPath).document(eventId);
-        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-
-                DocumentSnapshot documentSnapshot = task.getResult();
-                if(documentSnapshot != null){
-                    System.out.println(documentSnapshot.getData());
-                    EventDTO event = documentSnapshot.toObject(EventDTO.class);
-                    callbackEvent.onCallback(event);
-                }
-            }
-        });
-    }
     public void getEvents(CallBackEventList callbackEventList, List<String> Ids) {
         List<EventDTO> res = new ArrayList<>();
         for(String id : Ids){

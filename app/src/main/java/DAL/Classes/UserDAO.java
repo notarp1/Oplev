@@ -1,23 +1,15 @@
 package DAL.Classes;
 
 import android.content.Context;
-import android.content.Intent;
-import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
 
-import com.A4.oplev.Activity_Ini;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthCredential;
-import com.google.firebase.auth.EmailAuthProvider;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -43,7 +35,7 @@ public class UserDAO implements IUserDAO, CallbackUser, CallbackUserDelete {
     private boolean wait = false;
     private  ArrayList<String> requested = new ArrayList<>();
     String userIdremove;
-    private int counter, counter2;
+    private int counter, counter2, eventdelete, participantdel;
 
     public UserDAO(){
         this.db = FirebaseFirestore.getInstance();
@@ -144,14 +136,20 @@ public class UserDAO implements IUserDAO, CallbackUser, CallbackUserDelete {
         ArrayList<String> events = UserController.getInstance().getCurrUser().getEvents();
         ArrayList<String> chats = user.getChatId();
 
+
+
         ChatDAO chatDAO = new ChatDAO();
         UserController userController = UserController.getInstance();
         UserDTO userDTO = userController.getCurrUser();
         ArrayList<String> userRequests = userDTO.getRequestedEvents();
         setRequested(userRequests);
+        eventdelete = 0;
+        participantdel = 0;
         userIdremove = userDTO.getUserId();
 
 
+
+        /*
             deleteUserOnline(new CallbackUserDelete() {
                     @Override
                     public void onCallbackDelete() {
@@ -159,30 +157,27 @@ public class UserDAO implements IUserDAO, CallbackUser, CallbackUserDelete {
                             @Override
                             public void onCallbackDelete() {
 
+                              ;
 
-                                loopThing(new CallbackUserDelete() {
-                                    @Override
-                                    public void onCallbackDelete() {
-
-                                        removeLastApps(new CallbackUserDelete() {
-                                            @Override
-                                            public void onCallbackDelete() {
-                                                System.out.println("PRINT MIG");
-                                                deleteRefs(new CallbackUserDelete() {
-                                                    @Override
-                                                    public void onCallbackDelete() {
-
-                                                    }
-                                                }, events);
-
-                                            }
-                                        });
-                                    }
-                                }, chats, chatDAO, user);
                             }
                         }, user, db);
                     }
-                }, ctx);
+                }, ctx); */
+
+
+        loopThing(new CallbackUserDelete() {
+            @Override
+            public void onCallbackDelete() {
+
+                removeLastApps(new CallbackUserDelete() {
+                    @Override
+                    public void onCallbackDelete() {
+                        System.out.println("PRINT MIG");
+
+                    }
+                });
+            }
+        }, chats, chatDAO, user);
     }
 
     private void removeLastApps(CallbackUserDelete delete){
@@ -194,7 +189,7 @@ public class UserDAO implements IUserDAO, CallbackUser, CallbackUserDelete {
 
             for (int m = 0; m < requested.size(); m++) {
                 int finalM = m;
-                System.out.println("WHATISGOINGON");
+                System.out.println("WHATISGOINGON: " + requested.size());
                 eventDAO.getEvent(new CallbackEvent() {
                     @Override
                     public void onCallback(EventDTO event) {
@@ -239,25 +234,24 @@ public class UserDAO implements IUserDAO, CallbackUser, CallbackUserDelete {
             newChat.add(chats.get(i));
         }
 
-        for(int i = 0; i<newChat.size(); i++){
 
-        }
 
         if(chats.size() != 0) {
             for (int i = 0; i < chats.size(); i++) {
+                System.out.println(chats.get(i));
 
-                System.out.println("JEG VAR HER 1");
                 int finalI = i;
                 chatDAO.readChat(new ChatDAO.FirestoreCallback() {
                     @Override
                     public void onCallback(ChatDTO dto) {
+                        System.out.println("GEDGED");
+                        System.out.println(dto.getChatId() + "HAHA");
                         String userId;
                         if (dto.getUser1ID().equals(user.getUserId())) {
                             userId = dto.getUser2ID();
                         } else userId = dto.getUser1ID();
 
                         String eventId = dto.getEventId();
-                        System.out.println("JEG VAR HER 2");
                         deleteParticipants(new CallbackUserDelete() {
                             @Override
                             public void onCallbackDelete() {
@@ -344,7 +338,7 @@ public class UserDAO implements IUserDAO, CallbackUser, CallbackUserDelete {
 
 
         ArrayList<String> userRequests = getRequested();
-
+        System.out.println("DEBUG " + eventId);
         eventDAO.getEvent(new CallbackEvent() {
             @Override
             public void onCallback(EventDTO event) {
@@ -354,6 +348,7 @@ public class UserDAO implements IUserDAO, CallbackUser, CallbackUserDelete {
                 System.out.println(participant + "HAHA");
                 event.setParticipant("");
                 if(userRequests != null){
+                    System.out.println("LORTLORTLORT");
                 for(int i = 0; i<userRequests.size(); i++){
 
                     if(applicants.contains(userRequests.get(i))){
@@ -381,7 +376,7 @@ public class UserDAO implements IUserDAO, CallbackUser, CallbackUserDelete {
     }
     private void deleterUserLocal(CallbackUserDelete delete, UserDTO user, FirebaseFirestore db){
 
-
+        /*
         db.collection("users").document(user.getUserId())
                 .delete()
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -397,8 +392,8 @@ public class UserDAO implements IUserDAO, CallbackUser, CallbackUserDelete {
                         System.out.println("IkkeSlettetLokal");
 
                     }
-                });
-
+                }); */
+        delete.onCallbackDelete();
     }
 
     private void deleteUserOnline(CallbackUserDelete delete, Context ctx){
@@ -441,36 +436,37 @@ public class UserDAO implements IUserDAO, CallbackUser, CallbackUserDelete {
 
     private void deleteRefs(CallbackUserDelete delete, ArrayList<String> events){
 
+        if(eventdelete == 0) {
+            eventdelete++;
+            FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+            WriteBatch writeBatch = db.batch();
+
+            if (events != null) {
+                System.out.println("HITLER");
+                for (int i = 0; i < events.size(); i++) {
+                    DocumentReference documentReference = db.collection("events").document(events.get(i));
+                    writeBatch.delete(documentReference);
+                    System.out.println("EVENTS");
+                }
 
 
-      FirebaseFirestore db = FirebaseFirestore.getInstance();
-
-        WriteBatch writeBatch = db.batch();
-
-        if(events != null) {
-            System.out.println("HITLER");
-            for (int i = 0; i < events.size(); i++) {
-                DocumentReference documentReference = db.collection("events").document(events.get(i));
-                writeBatch.delete(documentReference);
-                System.out.println("EVENTS");
+                writeBatch.commit().addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        System.out.println("VIRKER");
+                        delete.onCallbackDelete();
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        System.out.println("WHHAW");
+                    }
+                });
+            } else {
+                System.out.println("NASUS");
+                onCallbackDelete();
             }
-
-
-            writeBatch.commit().addOnSuccessListener(new OnSuccessListener<Void>() {
-                @Override
-                public void onSuccess(Void aVoid) {
-                    System.out.println("VIRKER");
-                    delete.onCallbackDelete();
-                }
-            }).addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception e) {
-                    System.out.println("WHHAW");
-                }
-            });
-        } else {
-            System.out.println("NASUS");
-            onCallbackDelete();
         }
     }
 
