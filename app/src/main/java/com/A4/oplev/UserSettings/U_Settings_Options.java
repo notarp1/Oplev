@@ -68,7 +68,7 @@ public class U_Settings_Options extends Fragment implements View.OnClickListener
         } else if (view == back){
             getActivity().finish();
         } else if (view == deleteAccount){
-
+            /*
             AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
 
             builder.setTitle("Slet konto");
@@ -95,7 +95,7 @@ public class U_Settings_Options extends Fragment implements View.OnClickListener
 
             AlertDialog alert = builder.create();
             alert.show();
-
+            */
 
 
         }
