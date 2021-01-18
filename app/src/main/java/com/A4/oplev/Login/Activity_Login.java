@@ -20,6 +20,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.crashlytics.FirebaseCrashlytics;
 
 import Controller.UserController;
 import DAL.Interfaces.CallbackUser;
@@ -100,6 +101,7 @@ public class Activity_Login extends AppCompatActivity implements View.OnClickLis
                                 @Override
                                 public void onCallback(UserDTO user) {
                                     userController.setCurrUser(user);
+                                    FirebaseCrashlytics.getInstance().setUserId(user.getUserId());
                                     Intent i = new Intent(ctx, Activity_Ini.class);
                                     i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                                     startActivity(i);
