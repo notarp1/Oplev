@@ -14,6 +14,7 @@ import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
+import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.DisplayMetrics;
@@ -37,6 +38,8 @@ import java.util.List;
 import java.util.Locale;
 
 import com.A4.oplev._Adapters.Event_Adapter;
+import com.google.firebase.analytics.FirebaseAnalytics;
+import com.google.firebase.crashlytics.FirebaseCrashlytics;
 
 //import DAL.DBAccess;
 import Controller.UserController;
@@ -66,6 +69,12 @@ public class Activity_Main extends AppCompatActivity implements View.OnClickList
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         prefs = PreferenceManager.getDefaultSharedPreferences(this);
+
+        // sets up a crash listener but only if the app is not in a emulator
+        boolean EMULATOR = Build.PRODUCT.contains("sdk") || Build.MODEL.contains("Emulator");
+        Log.d("EMULATOR",EMULATOR+"");
+        FirebaseCrashlytics.getInstance().setCrashlyticsCollectionEnabled(!EMULATOR);
+        FirebaseAnalytics.getInstance(this).setAnalyticsCollectionEnabled(!EMULATOR);
 
         try {
             if (ContextCompat.checkSelfPermission(getApplicationContext(), android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {

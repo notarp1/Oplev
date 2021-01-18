@@ -18,6 +18,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.crashlytics.FirebaseCrashlytics;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -88,6 +89,7 @@ public class Activity_Ini extends AppCompatActivity implements Serializable {
 
                         Intent i = new Intent(ctx, Activity_Main.class);
                         userController.setCurrUser(user);
+                        FirebaseCrashlytics.getInstance().setUserId(user.getUserId());
                         i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
 
                         startActivity(i);
