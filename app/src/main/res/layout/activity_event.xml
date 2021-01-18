@@ -217,6 +217,7 @@
                         android:id="@+id/text_e_oplevelse"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
                         android:text="Oplevelsen"
                         android:textColor="#A4E8E0"
                         android:textSize="24sp" />
@@ -292,7 +293,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="10dp"
                 android:text="Om Pia"
                 android:textColor="#A4E8E0"
                 android:textSize="24sp" />
