@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.A4.oplev.Activity_Ini;
@@ -65,6 +66,7 @@ public class Activity_Login extends AppCompatActivity implements View.OnClickLis
     private LoginButton fb_loginButton;
     private FirebaseFirestore db;
     private CallbackManager callbackManager;
+    private View backButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,10 +82,12 @@ public class Activity_Login extends AppCompatActivity implements View.OnClickLis
         pass = findViewById(R.id.password);
         loginButton = findViewById(R.id.login);
         createButton = findViewById(R.id.create);
+        backButton = findViewById(R.id.login_backBtn);
 
         email.setText("johnjohn@gmail.com");
         pass.setText("johnjohn123");
 
+        backButton.setOnClickListener(this);
         loginButton.setOnClickListener(this);
         createButton.setOnClickListener(this);
 
@@ -153,6 +157,9 @@ public class Activity_Login extends AppCompatActivity implements View.OnClickLis
         } else if (v == createButton){
             Intent i = new Intent(this, Activity_CreateUser.class);
             startActivity(i);
+        }
+        else if(v == backButton){
+            finish();
         }
     }
 

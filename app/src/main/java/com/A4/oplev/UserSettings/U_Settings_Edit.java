@@ -30,10 +30,15 @@ import androidx.fragment.app.Fragment;
 
 import com.A4.oplev.Activity_Profile;
 import com.A4.oplev.R;
-
+import com.google.android.libraries.places.api.Places;
+import com.google.android.libraries.places.api.model.Place;
+import com.google.android.libraries.places.api.model.TypeFilter;
+import com.google.android.libraries.places.widget.Autocomplete;
+import com.google.android.libraries.places.widget.model.AutocompleteActivityMode;
 import java.lang.invoke.ConstantCallSite;
 import java.util.ArrayList;
-
+import java.util.Arrays;
+import java.util.List;
 import Controller.PictureMaker;
 import Controller.UserController;
 
@@ -85,6 +90,11 @@ public class U_Settings_Edit extends Fragment implements View.OnClickListener, V
         editPage = root.findViewById(R.id.edit_id);
         job = root.findViewById(R.id.editText_job);
         education = root.findViewById(R.id.editText_edu);
+        //setup choose city places google widget (jacob)
+        city.setFocusable(false);
+        city.setOnClickListener(this);
+        Places.initialize(getActivity().getApplicationContext(), getString(R.string.googlePlaces_api_key));
+
 
         about.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
@@ -162,6 +172,21 @@ public class U_Settings_Edit extends Fragment implements View.OnClickListener, V
                 pictureHandler.picBool(4, this, uris);
             } else if (v == p5) {
                 pictureHandler.picBool(5, this, uris);
+            }
+            else if(v == city){
+                // (jacob)
+                //open the places autocomplete api
+                List<Place.Field> fieldList = Arrays.asList(Place.Field.ADDRESS,
+                        Place.Field.NAME,
+                        Place.Field.LAT_LNG,
+                        Place.Field.TYPES);
+                //create intent for activity overlay
+                Intent intent = new Autocomplete.IntentBuilder(AutocompleteActivityMode.OVERLAY, fieldList)
+                        .setCountry("DK")
+                        .setTypeFilter(TypeFilter.CITIES)
+                        .build(getActivity());
+                startActivityForResult(intent, 100);
+                // ***OBS*** onActivityResult (result of intent) handled in activity! (activity_u_settings)
             }
         }
     }

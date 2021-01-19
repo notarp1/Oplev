@@ -12,9 +12,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.location.Address;
-import android.location.Geocoder;
-import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -24,21 +21,17 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.A4.oplev.Activity_Ini;
-import com.A4.oplev.Activity_NoInstance;
 import com.A4.oplev.Activity_Profile;
 import com.A4.oplev.GpsTracker;
 import com.A4.oplev.Like_Hjerte_Side.Activity_Likeside;
+import com.A4.oplev.Login.Activity_Login;
 import com.A4.oplev.R;
 import com.A4.oplev.SearchFilter.Activity_Search_Filter;
-import com.A4.oplev.UserSettings.Activity_U_Settings;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
 import com.A4.oplev._Adapters.Event_Adapter;
 import com.facebook.AccessToken;
@@ -47,13 +40,11 @@ import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
-import com.facebook.HttpMethod;
 import com.facebook.Profile;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -63,23 +54,15 @@ import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.crashlytics.FirebaseCrashlytics;
 
 //import DAL.DBAccess;
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import Controller.UserController;
 import DAL.Classes.EventDAO;
 import DAL.Classes.UserDAO;
-import DAL.Interfaces.CallBackEventList;
 import DAL.Interfaces.CallBackList;
-import DAL.Interfaces.CallbackEvent;
-import DAL.Interfaces.CallbackUser;
 import DTO.EventDTO;
 import DTO.UserDTO;
-import swipeable.com.layoutmanager.OnItemSwiped;
-import swipeable.com.layoutmanager.SwipeableLayoutManager;
-import swipeable.com.layoutmanager.SwipeableTouchHelperCallback;
-import swipeable.com.layoutmanager.touchelper.ItemTouchHelper;
 
 public class Activity_Main extends AppCompatActivity implements View.OnClickListener{
     private static final String TAG = "Activity_Main";
@@ -261,9 +244,8 @@ public class Activity_Main extends AppCompatActivity implements View.OnClickList
     @Override
     public void onClick(View v) {
         if(!onInstance){
-            Intent i = new Intent(this, Activity_NoInstance.class);
+            Intent i = new Intent(this, Activity_Login.class);
             startActivity(i);
-
 
         } else if(v == options){
             Intent i = new Intent(this, Activity_Search_Filter.class);
