@@ -19,8 +19,10 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.A4.oplev.Activity_Event;
+import com.A4.oplev.Activity_Profile;
 import com.A4.oplev.Edit_Event;
 import com.A4.oplev.R;
+import com.google.firebase.firestore.auth.User;
 import com.squareup.picasso.Picasso;
 
 import java.text.SimpleDateFormat;
@@ -29,12 +31,20 @@ import java.util.Date;
 
 import Controller.EventController;
 import Controller.UserController;
+import DAL.Classes.ChatDAO;
 import DAL.Classes.EventDAO;
+import DAL.Classes.UserDAO;
 import DAL.Interfaces.CallbackEvent;
+import DAL.Interfaces.CallbackUser;
+import DAL.Interfaces.IEventDAO;
+import DAL.Interfaces.IUserDAO;
+import DTO.ChatDTO;
 import DTO.EventDTO;
+import DTO.UserDTO;
 
 public class OwnEvents_Adapter2 extends RecyclerView.Adapter<OwnEvents_Adapter2.ViewHolder> implements View.OnClickListener {
-    private EventDAO eventDAO = new EventDAO();
+    private IEventDAO eventDAO = new EventDAO();
+    private IUserDAO userDAO = new UserDAO();
     private UserController userController = UserController.getInstance();
     private Context mContext;
     private ArrayList<Date> eventDate;
@@ -175,6 +185,8 @@ public class OwnEvents_Adapter2 extends RecyclerView.Adapter<OwnEvents_Adapter2.
             edit.setOnClickListener(this);
             delete.setOnClickListener(this);
             box_own_events.setOnClickListener(this);
+            profileHolder1.setOnClickListener(this);
+
         }
 
         @Override
@@ -190,6 +202,17 @@ public class OwnEvents_Adapter2 extends RecyclerView.Adapter<OwnEvents_Adapter2.
                         mContext.startActivity(intent);
                     }, event.getOwnerId());
 
+                },eventID.get(getPosition()));
+            }
+            if (v == profileHolder1){
+
+                eventDAO.getEvent(event -> {
+                    userController.getUser(user -> {
+                        Intent intent = new Intent(mContext, Activity_Profile.class);
+                        intent.putExtra("user", user);
+                        intent.putExtra("load", 1);
+                        mContext.startActivity(intent);
+                    }, event.getApplicants().get(0));
                 },eventID.get(getPosition()));
             }
 
