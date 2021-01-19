@@ -30,6 +30,7 @@ import java.util.Date;
 
 import Controller.UserController;
 import DAL.Classes.EventDAO;
+import DAL.Interfaces.CallbackUser;
 import DTO.UserDTO;
 
 public class OwnEvent_frag extends Fragment {
@@ -44,7 +45,7 @@ public class OwnEvent_frag extends Fragment {
     private ArrayList<String> eventHeaders = new ArrayList<>(), eventOwnerPic = new ArrayList<>(),  eventEventPic = new ArrayList<>(),
                               eventApplicantPic = new ArrayList<>(), eventFirstApplicants = new ArrayList<>(), eventEventID = new ArrayList<>(),
                               eventParticipant = new ArrayList<>(), tempEventID = new ArrayList<>(), tempFirstApplicant = new ArrayList<>(),
-                              names = new ArrayList<>();
+                              eventParticipantNames = new ArrayList<>();
     private Context mContext;
     View root2;
     boolean eventsReady = false;
@@ -86,7 +87,7 @@ public class OwnEvent_frag extends Fragment {
                 // hvis brugeren ikke har nogle events så skal vi sikre os at det ikke går i stå
                 if (userDTO.getEvents().size() == 0) {
                     eventsReady = true;
-                    setListView_events(eventEventPic, eventHeaders, eventOwnerPic, eventFirstApplicants, eventApplicantPic, eventApplicantsSize, eventEventID, dates, eventParticipant);
+                    setListView_events(eventEventPic, eventHeaders, eventOwnerPic, eventFirstApplicants, eventApplicantPic, eventApplicantsSize, eventEventID, dates, eventParticipant, eventParticipantNames);
                     // setChangeListener_tilmeldinger();
 
                 }
@@ -105,6 +106,7 @@ public class OwnEvent_frag extends Fragment {
                                 eventHeaders.add(event.getTitle());
                                 eventOwnerPic.add(event.getOwnerPic());
                                 eventEventPic.add(event.getEventPic());
+                                eventParticipantNames.add("");
                                 eventFirstApplicants.add(firstApplicant);
                                 Log.d("eventSize test1",  eventApplicantsSize.toString());
                                 eventEventID.add(event.getEventId());
@@ -114,7 +116,7 @@ public class OwnEvent_frag extends Fragment {
                                     // events er loadet færdigt
                                     eventsReady = true;
                                     // hvis chats er loadet færdigt så opsæt listviewet og listeners
-                                    setListView_events(eventEventPic, eventHeaders, eventOwnerPic, eventFirstApplicants, eventApplicantPic, eventApplicantsSize, eventEventID, dates, eventParticipant);
+                                    setListView_events(eventEventPic, eventHeaders, eventOwnerPic, eventFirstApplicants, eventApplicantPic, eventApplicantsSize, eventEventID, dates, eventParticipant, eventParticipantNames);
                                     // setChangeListener_tilmeldinger();
                                 }
                             } else {
@@ -125,6 +127,17 @@ public class OwnEvent_frag extends Fragment {
                                     eventApplicantPic.add(user.getUserPicture());
                                     eventApplicantsSize.add(event.getApplicants().size());
                                     Log.d("eventSize test2",  eventApplicantsSize.toString());
+                                    // Todo - skal gemme navne ned - HELP
+//                                    userController.getUser(new CallbackUser() {
+//                                        @Override
+//                                        public void onCallback(UserDTO user) {
+//                                            eventParticipantNames.add(user.getfName());
+//                                            Log.d("callbackN", eventParticipantNames.toString());
+//                                        }
+//                                    },event.getParticipant());
+                                    eventParticipantNames.add("");
+
+
                                     eventHeaders.add(event.getTitle());
                                     eventOwnerPic.add(event.getOwnerPic());
                                     eventEventPic.add(event.getEventPic());
@@ -138,7 +151,7 @@ public class OwnEvent_frag extends Fragment {
                                     if (eventApplicantPic.size() == userDTO.getEvents().size()) {
                                         eventsReady = true;
                                         // hvis chats er færdige så opsæt listview og listeners
-                                        setListView_events(eventEventPic, eventHeaders, eventOwnerPic, eventFirstApplicants, eventApplicantPic, eventApplicantsSize, eventEventID, dates, eventParticipant);
+                                        setListView_events(eventEventPic, eventHeaders, eventOwnerPic, eventFirstApplicants, eventApplicantPic, eventApplicantsSize, eventEventID, dates, eventParticipant, eventParticipantNames);
                                         //setChangeListener_tilmeldinger();
                                     }
                                 }, event.getApplicants().get(0));
@@ -169,10 +182,10 @@ public class OwnEvent_frag extends Fragment {
         return root;
     }
 // Todo - Listing virker ikke efter hensigten endnu.
-        public void setListView_events(@NonNull ArrayList < String > eventEventPic, @NonNull ArrayList < String > eventHeaders, @NonNull ArrayList < String > eventOwnerPic, @NonNull ArrayList < String > eventFirstApplicants, @NonNull ArrayList < String > eventApplicantPic, @NonNull ArrayList < Integer > eventApplicantsSize, @NonNull ArrayList < String > eventEventID, @NonNull ArrayList < Date > dates, @NonNull ArrayList < String > eventParticipant )
+        public void setListView_events(@NonNull ArrayList<String> eventEventPic, @NonNull ArrayList<String> eventHeaders, @NonNull ArrayList<String> eventOwnerPic, @NonNull ArrayList<String> eventFirstApplicants, @NonNull ArrayList<String> eventApplicantPic, @NonNull ArrayList<Integer> eventApplicantsSize, @NonNull ArrayList<String> eventEventID, @NonNull ArrayList<Date> dates, @NonNull ArrayList<String> eventParticipant, ArrayList<String> eventParticipantNames)
         {
             if (mContext != null) {
-                ArrayList<String> tempEventPic = new ArrayList<>(), tempEventHeaders = new ArrayList<>(), tempEventOwnerPic = new ArrayList<>(), tempEventFirstApplicants = new ArrayList<>(), tempEventApplicantPic = new ArrayList<>(), tempEventID = new ArrayList<>(), tempEventParticipant = new ArrayList<>();
+                ArrayList<String> tempEventPic = new ArrayList<>(), tempEventHeaders = new ArrayList<>(), tempEventOwnerPic = new ArrayList<>(), tempEventFirstApplicants = new ArrayList<>(), tempEventApplicantPic = new ArrayList<>(), tempEventID = new ArrayList<>(), tempEventParticipant = new ArrayList<>(), tempEventParticipantName= new ArrayList<>();
                 ArrayList<Integer> tempEventApplicantsSize = new ArrayList<>();
                 ArrayList<Date> tempDate = new ArrayList<>();
 
@@ -188,6 +201,7 @@ public class OwnEvent_frag extends Fragment {
                         tempEventID.add(eventEventID.get(i));
                         tempDate.add(dates.get(i));
                         tempEventParticipant.add(eventParticipant.get(i));
+                        tempEventParticipantName.add(eventParticipantNames.get(i));
                         Log.d("list1", String.valueOf(eventApplicantsSize.size()));
                     }
                     // hvis der findes en participant
@@ -218,6 +232,7 @@ public class OwnEvent_frag extends Fragment {
                                         tempEventID.add(tempEventID.get(i - 1));
                                         tempDate.add(tempDate.get(i - 1));
                                         tempEventParticipant.add(tempEventParticipant.get(i - 1));
+                                        tempEventParticipantName.add(tempEventParticipantName.get(i-1));
                                     }
                                     // fra alle pladser derefter så rykker vi pladsen 1 til højre
                                     else if (k != 0) {
@@ -230,7 +245,7 @@ public class OwnEvent_frag extends Fragment {
                                         tempEventID.set(k, tempEventID.get(k - 1));
                                         tempDate.set(k, tempDate.get((k - 1)));
                                         tempEventParticipant.set(k, tempEventParticipant.get(k - 1));
-
+                                        tempEventParticipantName.add(tempEventParticipantName.get(i-1));
                                     }
                                 }
                                 // når vi har rykket alle gamle datoer så indsætter vi den nye dato vi vil indsætte
@@ -243,6 +258,7 @@ public class OwnEvent_frag extends Fragment {
                                 tempEventID.set(placement, eventEventID.get(i));
                                 tempDate.set(placement, dates.get(i));
                                 tempEventParticipant.set(placement, eventParticipant.get(i));
+                                tempEventParticipantName.set(placement,eventParticipantNames.get(i));
                                 break;
                             }
                         }
@@ -265,6 +281,7 @@ public class OwnEvent_frag extends Fragment {
                                         tempEventID.add(tempEventID.get(i - 1));
                                         tempDate.add(tempDate.get(i - 1));
                                         tempEventParticipant.add(tempEventParticipant.get(i-1));
+                                        tempEventParticipantName.add(tempEventParticipantName.get(i-1));
                                     }
                                     // fra alle pladser derefter så rykker vi pladsen 1 til højre
                                     else if (k != 0) {
@@ -277,6 +294,7 @@ public class OwnEvent_frag extends Fragment {
                                         tempEventID.set(k, tempEventID.get(k - 1));
                                         tempDate.set(k, tempDate.get((k - 1)));
                                         tempEventParticipant.set(k, tempEventParticipant.get(k-1));
+                                        tempEventParticipantName.set(k, tempEventParticipantName.get(k-1));
 
                                     }
                                 }
@@ -290,6 +308,7 @@ public class OwnEvent_frag extends Fragment {
                                 tempEventID.set(j, eventEventID.get(i));
                                 tempDate.set(j, dates.get(i));
                                 tempEventParticipant.set(j,eventParticipant.get(i));
+                                tempEventParticipantName.set(j, eventParticipantNames.get(i));
                                 break;
                             }
                         }
@@ -305,6 +324,7 @@ public class OwnEvent_frag extends Fragment {
                         tempEventID.add(eventEventID.get(i));
                         tempDate.add(dates.get(i));
                         tempEventParticipant.add(eventParticipant.get(i));
+                        tempEventParticipantName.add(eventParticipantNames.get(i));
                     }
                 }
                 this.tempEventID = tempEventID;
@@ -317,9 +337,10 @@ public class OwnEvent_frag extends Fragment {
                 this.eventOwnerPic = tempEventOwnerPic;
                 this.eventEventPic = tempEventPic;
                 this.eventParticipant = tempEventParticipant;
+                this.eventParticipantNames = tempEventParticipantName;
 
                 LinearLayoutManager layoutManager = new LinearLayoutManager(root2.getContext(), LinearLayoutManager.VERTICAL, false);
-                OwnEvents_Adapter2 eventAdapter = new OwnEvents_Adapter2(root2.getContext(), tempEventPic, tempEventHeaders, tempEventOwnerPic, tempEventFirstApplicants, tempEventApplicantPic, tempEventApplicantsSize, tempEventID, tempDate, tempEventParticipant);
+                OwnEvents_Adapter2 eventAdapter = new OwnEvents_Adapter2(root2.getContext(), tempEventPic, tempEventHeaders, tempEventOwnerPic, tempEventFirstApplicants, tempEventApplicantPic, tempEventApplicantsSize, tempEventID, tempDate, tempEventParticipant, tempEventParticipantName);
                 recyclerView.setLayoutManager(layoutManager);
                 recyclerView.setAdapter(eventAdapter);
             }
