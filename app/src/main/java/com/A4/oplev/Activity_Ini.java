@@ -12,20 +12,40 @@ import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.A4.oplev.__Main.Activity_Main;
+import com.facebook.CallbackManager;
+import com.facebook.FacebookCallback;
+import com.facebook.FacebookException;
+import com.facebook.GraphRequest;
+import com.facebook.GraphResponse;
+import com.facebook.Profile;
+import com.facebook.login.LoginManager;
+import com.facebook.login.LoginResult;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QuerySnapshot;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+import com.google.firebase.crashlytics.FirebaseCrashlytics;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import Controller.EventController;
 import Controller.UserController;
 import DAL.Classes.ChatDAO;
 import DAL.Classes.EventDAO;
+import DAL.Classes.UserDAO;
 import DAL.Classes.UserDAO;
 import DAL.Interfaces.CallbackUser;
 import DTO.UserDTO;
@@ -39,6 +59,7 @@ public class Activity_Ini extends AppCompatActivity implements Serializable {
     ArrayList<String> pictures;
     PicassoFunc picasso;
     private FirebaseAuth mAuth;
+    private CallbackManager callbackManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,29 +103,69 @@ public class Activity_Ini extends AppCompatActivity implements Serializable {
             startActivity(i);
 
         }else {
-            prefs.edit().putBoolean("onInstance", true).apply();
+           if (prefs.getBoolean("facebook",false)){
+               LoginManager.getInstance().logInWithReadPermissions(this, Arrays.asList("public_profile", "email", "user_birthday"));
+               callbackManager = CallbackManager.Factory.create();
+               LoginManager.getInstance().registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
+                   @Override
+                   public void onSuccess(LoginResult loginResult) {
+                       Profile profile = Profile.getCurrentProfile();
+                       userController.getUser(new CallbackUser() {
+                           @Override
+                           public void onCallback(UserDTO user) {
+                               setUserDTO(user);
+                               try {
+                                   prefs.edit().putString("userId", user.getUserId()).apply();
+                               } catch (Exception e) {
+                                   FirebaseAuth.getInstance().signOut();
+                                   PreferenceManager.getDefaultSharedPreferences(ctx).edit().clear().apply();
+                               }
 
-                userController.getUser(new CallbackUser() {
-                    @Override
-                    public void onCallback(UserDTO user) {
-                        setUserDTO(user);
-                        try {
-                            prefs.edit().putString("userId",user.getUserId()).apply();
-                        }catch (Exception e){
-                            FirebaseAuth.getInstance().signOut();
-                            PreferenceManager.getDefaultSharedPreferences(ctx).edit().clear().apply();
-                        }
+                               Intent i = new Intent(ctx, Activity_Main.class);
+                               userController.setCurrUser(user);
+                               FirebaseCrashlytics.getInstance().setUserId(user.getUserId());
+                               i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+
+                               startActivity(i);
+                           }
+                       }, profile.getId());
+                   }
+
+                   @Override
+                   public void onCancel() {
+                       Toast.makeText(ctx,"Cancelled",Toast.LENGTH_SHORT).show();
+                   }
+
+                   @Override
+                   public void onError(FacebookException error) {
+                       Toast.makeText(ctx,error.toString(),Toast.LENGTH_SHORT).show();
+                   }
+               });
+           } else {
+               prefs.edit().putBoolean("onInstance", true).apply();
+
+               userController.getUser(new CallbackUser() {
+                   @Override
+                   public void onCallback(UserDTO user) {
+                       setUserDTO(user);
+                       try {
+                           prefs.edit().putString("userId", user.getUserId()).apply();
+                       } catch (Exception e) {
+                           FirebaseAuth.getInstance().signOut();
+                           PreferenceManager.getDefaultSharedPreferences(ctx).edit().clear().apply();
+                       }
 
                         Intent i = new Intent(ctx, Activity_Main.class);
                         userController.setCurrUser(user);
+                        FirebaseCrashlytics.getInstance().setUserId(user.getUserId());
                         i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
 
-                        startActivity(i);
-                    }
-                }, currentUser.getUid());
+                       startActivity(i);
+                   }
+               }, currentUser.getUid());
 
 
-
+           }
         }
 
     }

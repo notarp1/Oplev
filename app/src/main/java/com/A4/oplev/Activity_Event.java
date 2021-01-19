@@ -25,6 +25,7 @@ import Controller.UserController;
 import DAL.Classes.ChatDAO;
 import DAL.Classes.EventDAO;
 import DAL.Classes.UserDAO;
+import DAL.Interfaces.CallbackUser;
 import DTO.EventDTO;
 import DTO.UserDTO;
 
@@ -156,15 +157,22 @@ public class Activity_Event extends AppCompatActivity implements View.OnClickLis
                     dao.updateEvent(event);
 
 
-                    UserDTO sendMe = userController.getCurrUser();
-                    ArrayList<String> requested = sendMe.getRequestedEvents();
-                    if(requested == null){
-                        requested = new ArrayList<>();
-                    }
-                    requested.add(eventId);
+                    UserDAO userDAO = new UserDAO();
+                    userDAO.getUser(new CallbackUser() {
+                        @Override
+                        public void onCallback(UserDTO user) {
+                            ArrayList<String> requested = user.getRequestedEvents();
+                            if(requested == null){
+                                requested = new ArrayList<>();
+                            }
+                            requested.add(eventId);
 
-                    sendMe.setRequestedEvents(requested);
-                    userController.updateUserSimple(sendMe);
+                            userController.getCurrUser().setRequestedEvents(requested);
+                            userController.getCurrUser().setChatId(user.getChatId());
+                            userController.updateUserSimple(userController.getCurrUser());
+                        }
+                    }, userController.getCurrUser().getUserId());
+
                     finish();
                 } else {
                     Toast.makeText(this, "Du har allerede ansøgt om at deltage", Toast.LENGTH_SHORT).show();
