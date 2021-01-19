@@ -100,35 +100,37 @@ public class Activity_CreateUser extends AppCompatActivity implements View.OnCli
 
 
 
-    private void createAccount(){
+    private void createAccount() {
         String emailInput = String.valueOf(email.getText());
         String passInput = String.valueOf(password.getText());
 
-        mAuth.createUserWithEmailAndPassword(emailInput, passInput)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+        if (!(emailInput.equals("") || passInput.equals(""))) {
+            mAuth.createUserWithEmailAndPassword(emailInput, passInput)
+                    .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
 
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            // Sign in success, update UI with the signed-in user's information
-                            Log.d(TAG, "createUserWithEmail:success");
-                            FirebaseUser user = mAuth.getCurrentUser();
-                            userController.createUser(user.getUid(), (Activity_CreateUser) ctx);
-                            Intent i = new Intent(ctx, Activity_Ini.class);
-                            i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                            startActivity(i);
+                        @Override
+                        public void onComplete(@NonNull Task<AuthResult> task) {
+                            if (task.isSuccessful()) {
+                                // Sign in success, update UI with the signed-in user's information
+                                Log.d(TAG, "createUserWithEmail:success");
+                                FirebaseUser user = mAuth.getCurrentUser();
+                                userController.createUser(user.getUid(), (Activity_CreateUser) ctx);
+                                Intent i = new Intent(ctx, Activity_Ini.class);
+                                i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                startActivity(i);
 
 
-                        } else {
-                            // If sign in fails, display a message to the user.
-                            Log.w(TAG, "createUserWithEmail:failure", task.getException());
-                            Toast.makeText(Activity_CreateUser.this, "Authentication failed.",
-                                    Toast.LENGTH_SHORT).show();
+                            } else {
+                                // If sign in fails, display a message to the user.
+                                Log.w(TAG, "createUserWithEmail:failure", task.getException());
+                                Toast.makeText(Activity_CreateUser.this, "Authentication failed.",
+                                        Toast.LENGTH_SHORT).show();
+
+                            }
 
                         }
-
-                    }
-                });
+                    });
+        } else Toast.makeText(ctx,"Du skal skrive både en email og et kodeord",Toast.LENGTH_LONG).show();
     }
     //for google places autocomplete: (jacob)
     @Override
