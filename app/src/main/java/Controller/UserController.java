@@ -1,7 +1,9 @@
 package Controller;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -10,8 +12,8 @@ import androidx.annotation.NonNull;
 
 import com.A4.oplev.Login.Activity_CreateUser;
 import com.A4.oplev.Activity_Profile;
+import com.A4.oplev.R;
 import com.A4.oplev.UserSettings.U_Settings_Edit;
-import com.A4.oplev.UserSettings.U_Settings_Main;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
@@ -27,13 +29,21 @@ import DAL.Classes.ChatDAO;
 import DAL.Classes.EventDAO;
 import DAL.Classes.UserDAO;
 import DAL.Interfaces.CallbackUser;
+import DAL.Interfaces.IChatDAO;
+import DAL.Interfaces.IEventDAO;
+import DAL.Interfaces.IUserDAO;
+import DTO.ChatDTO;
 import DTO.UserDTO;
+/**
+ * @Author Christian Pone
+ */
 
 public class UserController {
+
     private static UserController instance = null;
-    static ChatDAO chatDAO;
-    static UserDAO userDAO;
-    static EventDAO eventDAO;
+    IChatDAO chatDAO;
+    IUserDAO userDAO;
+    IEventDAO eventDAO;
     private UserDTO user;
     private boolean isSafe;
     String userPic = "https://firebasestorage.googleapis.com/v0/b/opleva4.appspot.com/o/question.png?alt=media&token=9dea34be-a183-4b37-bfb7-afd7a9db81f2";
@@ -42,20 +52,19 @@ public class UserController {
     private FirebaseAuth mAuth;
     private FirebaseUser currentUser;
 
-    private int indexPlace, picNumber, indexNumbers, pictureCount;
+    public int indexPlace, picNumber, indexNumbers, pictureCount;
 
     private ArrayList<String> pictures;
 
 
     private UserController(){
 
-        chatDAO = new ChatDAO();
-        userDAO = new UserDAO();
-        eventDAO = new EventDAO();
+        this.chatDAO = new ChatDAO();
+        this.userDAO = new UserDAO();
+        this.eventDAO = new EventDAO();
         indexNumbers = 0;
         pictureCount = 0;
         setSafe(true);
-        //ny
         mStorageRef = FirebaseStorage.getInstance().getReference();
         mAuth = FirebaseAuth.getInstance();
         currentUser = mAuth.getCurrentUser();
@@ -146,11 +155,83 @@ public class UserController {
         return user.getPictures();
     }
 
-    public void deleteUser(UserDTO user, Context ctx){
-        userDAO.deleteUser(user, ctx);
+
+
+    public void onClickAccept(Activity_Profile ctx, String header, String eventId){
+
+        // vi laver et chatobjekt med de nødvendige informationer
+        ChatDTO chatDTO = new ChatDTO(null,null,null,null,null,null,header, getCurrUser().getfName(),user.getfName(), getCurrUser().getUserId(),user.getUserId(),eventId);
+
+        chatDAO.createChat(chatDTO, chatID -> {
+            // vi skal opdatere eventet til at have en participant
+
+            eventDAO.getEvent(event -> {
+                if (event != null) {
+                    //event.setApplicants(new ArrayList<>());
+                    event.setParticipant(user.getUserId());
+                    eventDAO.updateEvent(event);
+                }
+            }, eventId);
+
+            // vi skal indsætte chatid'et på begge brugeres lister
+            ArrayList<String> otherUserChatID;
+            if (user.getChatId() == null){
+                otherUserChatID = new ArrayList<>();
+            } else otherUserChatID = user.getChatId();
+            otherUserChatID.add(chatID);
+
+
+            ArrayList<String> thisUserChatID;
+            if (getCurrUser().getChatId() == null){
+                thisUserChatID = new ArrayList<>();
+            } else thisUserChatID = getCurrUser().getChatId();
+            thisUserChatID.add(chatID);
+
+            // vi opdaterer begge brugere i databasen
+
+            userDAO.updateUser(user);
+            userDAO.updateUser(getCurrUser());
+            ctx.finish();
+        });
     }
 
 
+    public void onClickReject(Activity_Profile ctx, ArrayList<String> otherApplicants, String eventId, String header){
+
+        // hvis der stadigvæk er nogle applicants tilbage i listen
+        if (otherApplicants.size() != 0) {
+            // vi henter eventet for at kunne opdatere det
+            eventDAO.getEvent(event -> {
+                if (event != null) {
+                    // vi fjerner den applicant man har afvist og opdaterer det i databasen
+                    ArrayList<String> newApplicants = event.getApplicants();
+                    newApplicants.remove(0);
+                    event.setApplicants(newApplicants);
+                    eventDAO.updateEvent(event);
+                }
+            }, eventId);
+
+            // vi fjerner den man har afvist i vores liste
+            otherApplicants.remove(0);
+            // hvis der er flere personer tilbage
+            if (otherApplicants.size() != 0) {
+                // vi indlæser den næste applicant
+                getUser(user -> {
+                    // start nyt intent med den næste applicant
+                    Intent i12 = new Intent(ctx, Activity_Profile.class);
+                    i12.putExtra("user", user);
+                    i12.putExtra("load", 2);
+                    i12.putExtra("numberOfApplicants", otherApplicants.size() - 1);
+                    i12.putExtra("applicantList", otherApplicants);
+                    i12.putExtra("header", header);
+                    i12.putExtra("eventID", eventId);
+                    ctx.startActivity(i12);
+                }, otherApplicants.get(0));
+            }
+        }
+        // afslut aktiviteten så man ikke kan gå tilbage
+        ctx.finish();
+    }
     public void iniProfile(Activity_Profile ctx){
         String aboutText = user.getfName() + ", " + user.getAge();
         String cityText =  user.getCity();
@@ -205,24 +286,26 @@ public class UserController {
 
     }
 
-
-
     public void iniEditProfile(U_Settings_Edit ctx){
         ctx.about.setText(user.getDescription());
         ctx.city.setText(user.getCity());
         ctx.job.setText(user.getJob());
         ctx.education.setText(user.getEducation());
-    }
-
-    public void iniUserMainSettings(U_Settings_Main ctx){
-        String aboutText = user.getfName() + ", " + user.getAge();
-        ctx.about.setText(aboutText);
-
+        ctx.textview.setText("Rediger Profil");
+        ctx.pictures = getUserPictures();
+        ctx.stockphotoBit = BitmapFactory.decodeResource(ctx.getContext().getResources(), R.drawable.uploadpic);
     }
 
 
-    /*KODE HÅNDTERE USER EDIT */
-   public void iniEdit(U_Settings_Edit ctx){
+
+
+    /*KODE HÅNDTERE U_Settings_Options */
+    public void deleteUser(UserDTO user, Context ctx){
+        userDAO.deleteUser(user, ctx);
+    }
+
+    /*KODE HÅNDTERE U_Settings_Edit */
+    public void iniEdit(U_Settings_Edit ctx){
        ImageView avatar;
        pictures = getUserPictures();
            for(int i = 0; i<6; i++){
@@ -254,39 +337,7 @@ public class UserController {
                     Uri filePic = uris[i];
                     picRefProfile = mStorageRef.child("users/" + currentUser.getUid() + "/" + i);
 
-                    //Dette skal være callback
-
-                    picRefProfile.putFile(filePic)
-                            .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                                @Override
-                                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                                    // Get a URL to the uploaded content
-
-                                    picRefProfile.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                                        @Override
-                                        public void onSuccess(Uri uri) {
-                                            Uri downloadUrl = uri;
-
-                                            indexNumbers += 1;
-                                            setPictures(indexPlace, downloadUrl, pictures);
-                                            setSafe(false);
-                                            updateUserAndGUI(ctx);
-
-                                        }
-
-                                    });
-
-
-                                }
-                            })
-                            .addOnFailureListener(new OnFailureListener() {
-                                @Override
-                                public void onFailure(@NonNull Exception exception) {
-                                    // Handle unsuccessful uploads
-                                    // ...
-                                }
-                            });
-
+                    userDAO.uploadFile(getInstance(), picRefProfile, filePic, indexPlace, pictures, ctx);
                 }
 
 
@@ -347,7 +398,7 @@ public class UserController {
         return  returnPic;
     }
 
-    private void setPictures(int index, Uri uri, ArrayList<String> pictures){
+    public void setPictures(int index, Uri uri, ArrayList<String> pictures){
 
         String address = String.valueOf(uri);
 

@@ -73,7 +73,7 @@
         android:layout_marginBottom="3dp"
         android:maxLines="1"
         android:minLines="1"
-        android:text="med Dean Mohr"
+        android:text="med Kenneth"
         android:textColor="#A4E8E0"
         android:textSize="12sp"
         app:layout_constraintBottom_toBottomOf="@+id/boxyea"
