@@ -108,7 +108,7 @@ public class OwnEvents_Adapter2 extends RecyclerView.Adapter<OwnEvents_Adapter2.
                     .into(profilePic1);
 
             edit.setVisibility(View.GONE);
-            numberOfApplciants.setText(" Med X");
+            numberOfApplciants.setText(" Med "+eventParticipantName.get(position));
 
         }
 

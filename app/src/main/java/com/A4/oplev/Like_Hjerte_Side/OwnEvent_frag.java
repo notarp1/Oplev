@@ -67,16 +67,6 @@ public class OwnEvent_frag extends Fragment {
         sletKnap = root.findViewById(R.id.own_event_delete_holder);
 
 
-
-
-        // *Todo - Skal vise side for eget event (Antager at der skal laves en nyt xml dokument - Men hvad skal vises?)
-        // *Todo - Organiser rækkefølge på events.
-        // Todo - Lav visuel forskel når en applicant er accepteret, og eventet dermed er faslagt. (Vis tilmeldt osv)
-        // Todo - Lav slet metode der fjerne det valgte element - og lav/ benyt slet metode fra backend.
-        // todo - Lav rediger metode der virker på det valgte element - og lav/ benyt slet metode fra backend.
-
-
-
         // Det her er til ens egne events som andre prøver på at ansøge om at joine
         // vi prøver på at hente brugeren ind hvis den af en eller anden grund ikke er
         if (userDTO == null) userDTO = userController.getCurrUser();
@@ -127,16 +117,8 @@ public class OwnEvent_frag extends Fragment {
                                     eventApplicantPic.add(user.getUserPicture());
                                     eventApplicantsSize.add(event.getApplicants().size());
                                     Log.d("eventSize test2",  eventApplicantsSize.toString());
-                                    // Todo - skal gemme navne ned - HELP
-//                                    userController.getUser(new CallbackUser() {
-//                                        @Override
-//                                        public void onCallback(UserDTO user) {
-//                                            eventParticipantNames.add(user.getfName());
-//                                            Log.d("callbackN", eventParticipantNames.toString());
-//                                        }
-//                                    },event.getParticipant());
-                                    eventParticipantNames.add("");
-
+                                    eventParticipantNames.add(user.getfName());
+                                    Log.d("name", "eventParticipantNames: ");
 
                                     eventHeaders.add(event.getTitle());
                                     eventOwnerPic.add(event.getOwnerPic());
@@ -182,8 +164,9 @@ public class OwnEvent_frag extends Fragment {
         return root;
     }
 // Todo - Listing virker ikke efter hensigten endnu.
-        public void setListView_events(@NonNull ArrayList<String> eventEventPic, @NonNull ArrayList<String> eventHeaders, @NonNull ArrayList<String> eventOwnerPic, @NonNull ArrayList<String> eventFirstApplicants, @NonNull ArrayList<String> eventApplicantPic, @NonNull ArrayList<Integer> eventApplicantsSize, @NonNull ArrayList<String> eventEventID, @NonNull ArrayList<Date> dates, @NonNull ArrayList<String> eventParticipant, ArrayList<String> eventParticipantNames)
+        public void setListView_events(@NonNull ArrayList<String> eventEventPic, @NonNull ArrayList<String> eventHeaders, @NonNull ArrayList<String> eventOwnerPic, @NonNull ArrayList<String> eventFirstApplicants, @NonNull ArrayList<String> eventApplicantPic, @NonNull ArrayList<Integer> eventApplicantsSize, @NonNull ArrayList<String> eventEventID, @NonNull ArrayList<Date> dates, @NonNull ArrayList<String> eventParticipant,@NonNull ArrayList<String> eventParticipantNames)
         {
+            Log.d("name2", eventParticipantNames.toString());
             if (mContext != null) {
                 ArrayList<String> tempEventPic = new ArrayList<>(), tempEventHeaders = new ArrayList<>(), tempEventOwnerPic = new ArrayList<>(), tempEventFirstApplicants = new ArrayList<>(), tempEventApplicantPic = new ArrayList<>(), tempEventID = new ArrayList<>(), tempEventParticipant = new ArrayList<>(), tempEventParticipantName= new ArrayList<>();
                 ArrayList<Integer> tempEventApplicantsSize = new ArrayList<>();
