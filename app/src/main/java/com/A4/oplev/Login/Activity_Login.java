@@ -82,7 +82,7 @@ public class Activity_Login extends AppCompatActivity implements View.OnClickLis
         createButton.setOnClickListener(this);
 
         fb_loginButton = findViewById(R.id.fb_login_button);
-        fb_loginButton.setReadPermissions(EMAIL);
+        fb_loginButton.setReadPermissions(Arrays.asList("public_profile", "email", "user_birthday"));
 
         callbackManager = CallbackManager.Factory.create();
         LoginManager.getInstance().logInWithReadPermissions(this, Arrays.asList("public_profile", "email", "user_birthday"));

@@ -79,34 +79,34 @@ public class createEvent3_frag extends Fragment implements View.OnClickListener 
         callbackManager = CallbackManager.Factory.create();
         shareDialog = new ShareDialog(getActivity());
 
-        target = new Target() {
-            @Override
-            public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
-                SharePhoto photo = new SharePhoto.Builder()
-                        .setBitmap(bitmap)
-                        .build();
-
-                ArrayList<SharePhoto> photos = new ArrayList<>();
-                photos.add(photo);
-
-                if (ShareDialog.canShow(SharePhotoContent.class)) {
-                    SharePhotoContent content = new SharePhotoContent.Builder()
-                            .setPhotos(photos)
-                            .build();
-                    shareDialog.show(content);
-                }
-            }
-
-            @Override
-            public void onBitmapFailed(Exception e, Drawable errorDrawable) {
-
-            }
-
-            @Override
-            public void onPrepareLoad(Drawable placeHolderDrawable) {
-
-            }
-        };
+//        target = new Target() {
+//            @Override
+//            public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+//                SharePhoto photo = new SharePhoto.Builder()
+//                        .setBitmap(bitmap)
+//                        .build();
+//
+//                ArrayList<SharePhoto> photos = new ArrayList<>();
+//                photos.add(photo);
+//
+//                if (ShareDialog.canShow(SharePhotoContent.class)) {
+//                    SharePhotoContent content = new SharePhotoContent.Builder()
+//                            .setPhotos(photos)
+//                            .build();
+//                    shareDialog.show(content);
+//                }
+//            }
+//
+//            @Override
+//            public void onBitmapFailed(Exception e, Drawable errorDrawable) {
+//
+//            }
+//
+//            @Override
+//            public void onPrepareLoad(Drawable placeHolderDrawable) {
+//
+//            }
+//        };
 
         return root;
     }
@@ -117,60 +117,60 @@ public class createEvent3_frag extends Fragment implements View.OnClickListener 
             // go back to main fragment
             getActivity().finish();
         }
-        else if(v == fb_img){
+        else if(v == fb_img) {
             shareDialog.registerCallback(callbackManager, new FacebookCallback<Sharer.Result>() {
                 @Override
                 public void onSuccess(Sharer.Result result) {
-                    Toast.makeText(getActivity(),"SHARE SUCCESS",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), "SHARE SUCCESS", Toast.LENGTH_SHORT).show();
                 }
 
                 @Override
                 public void onCancel() {
-                    Toast.makeText(getActivity(),"SHARE CANCEL",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), "SHARE CANCEL", Toast.LENGTH_SHORT).show();
                 }
 
                 @Override
                 public void onError(FacebookException error) {
-                    Toast.makeText(getActivity(),"SHARE ERROR",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), "SHARE ERROR", Toast.LENGTH_SHORT).show();
                 }
             });
             EventDAO eventDAO = new EventDAO();
 
-            //eventDAO.getEvent(new CallbackEvent() {
-            //    @Override
-            //    public void onCallback(EventDTO event) {
-            ShareLinkContent linkContent = new ShareLinkContent.Builder()
-                    .setQuote(UserController.getInstance().getCurrUser().getfName() + " har lige oprettet et opslag på oplev.\nHvis du vil være med til at deltage i " + "blabla" + " så gå ind på oplev og ansøg nu!")
-                    .setImageUrl(Uri.parse("https://firebasestorage.googleapis.com/v0/b/opleva4.appspot.com/o/events%2FsD7wyGW1mzPFqeZIKC2w%2F1?alt=media&token=9263b677-144c-48b9-af28-10e5914daacf"))
-                    .setContentUrl(Uri.parse("https://firebasestorage.googleapis.com/v0/b/opleva4.appspot.com/o/events%2FsD7wyGW1mzPFqeZIKC2w%2F1?alt=media&token=9263b677-144c-48b9-af28-10e5914daacf"))
-                    .setContentTitle("blabla")
-                    .setShareHashtag(new ShareHashtag.Builder().setHashtag("#Oplev").build())
-                    .setContentDescription("test")
-                    .build();
-            if (ShareDialog.canShow(ShareLinkContent.class)){
-                shareDialog.show(linkContent, ShareDialog.Mode.FEED);
-            }
-            //     }
-            // }, UserController.getInstance().getCurrUser().getEvents().get(UserController.getInstance().getCurrUser().getEvents().size() - 1));
+            eventDAO.getEvent(new CallbackEvent() {
+                @Override
+                public void onCallback(EventDTO event) {
+                    ShareLinkContent linkContent = new ShareLinkContent.Builder()
+                            .setQuote(UserController.getInstance().getCurrUser().getfName() + " har lige oprettet et opslag på oplev.\nHvis du vil være med til at deltage i " + event.getTitle() + " så gå ind på oplev og ansøg nu!")
+                            .setImageUrl(Uri.parse(event.getEventPic()))
+                            .setContentUrl(Uri.parse(event.getEventPic()))
+                            .setContentTitle(event.getTitle())
+                            .setShareHashtag(new ShareHashtag.Builder().setHashtag("#Oplev").build())
+                            .setContentDescription("test")
+                            .build();
+                    if (ShareDialog.canShow(ShareLinkContent.class)) {
+                        shareDialog.show(linkContent, ShareDialog.Mode.FEED);
+                    }
+                }
+            }, UserController.getInstance().getCurrUser().getEvents().get(UserController.getInstance().getCurrUser().getEvents().size() - 1));
         }
         else if(v==fbmsg_img){
-            shareDialog.registerCallback(callbackManager, new FacebookCallback<Sharer.Result>() {
-                @Override
-                public void onSuccess(Sharer.Result result) {
-                    Toast.makeText(getActivity(),"SHARE SUCCESS",Toast.LENGTH_SHORT).show();
-                }
-
-                @Override
-                public void onCancel() {
-                    Toast.makeText(getActivity(),"SHARE CANCEL",Toast.LENGTH_SHORT).show();
-                }
-
-                @Override
-                public void onError(FacebookException error) {
-                    Toast.makeText(getActivity(),"SHARE ERROR",Toast.LENGTH_SHORT).show();
-                }
-            });
-            Picasso.get().load(UserController.getInstance().getCurrUser().getUserPicture()).placeholder(R.drawable.load2).error(R.drawable.question).into(target);
+//            shareDialog.registerCallback(callbackManager, new FacebookCallback<Sharer.Result>() {
+//                @Override
+//                public void onSuccess(Sharer.Result result) {
+//                    Toast.makeText(getActivity(),"SHARE SUCCESS",Toast.LENGTH_SHORT).show();
+//                }
+//
+//                @Override
+//                public void onCancel() {
+//                    Toast.makeText(getActivity(),"SHARE CANCEL",Toast.LENGTH_SHORT).show();
+//                }
+//
+//                @Override
+//                public void onError(FacebookException error) {
+//                    Toast.makeText(getActivity(),"SHARE ERROR",Toast.LENGTH_SHORT).show();
+//                }
+//            });
+//            Picasso.get().load(UserController.getInstance().getCurrUser().getUserPicture()).placeholder(R.drawable.load2).error(R.drawable.question).into(target);
         }
         else if(v == sms_img){
             //start sharing by sms
