@@ -1,0 +1,481 @@
+Index: app/src/main/java/com/A4/oplev/Edit_Event.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.A4.oplev;\r\n\r\nimport androidx.appcompat.app.AppCompatActivity;\r\nimport androidx.fragment.app.Fragment;\r\n\r\nimport android.annotation.SuppressLint;\r\nimport android.app.DatePickerDialog;\r\nimport android.app.TimePickerDialog;\r\nimport android.content.Context;\r\nimport android.content.ContextWrapper;\r\nimport android.content.Intent;\r\nimport android.graphics.Bitmap;\r\nimport android.graphics.Color;\r\nimport android.graphics.drawable.ColorDrawable;\r\nimport android.graphics.drawable.Drawable;\r\nimport android.net.Uri;\r\nimport android.os.Bundle;\r\nimport android.text.format.DateUtils;\r\nimport android.util.Log;\r\nimport android.view.LayoutInflater;\r\nimport android.view.View;\r\nimport android.view.ViewGroup;\r\nimport android.widget.AdapterView;\r\nimport android.widget.ArrayAdapter;\r\nimport android.widget.Button;\r\nimport android.widget.DatePicker;\r\nimport android.widget.ImageView;\r\nimport android.widget.Spinner;\r\nimport android.widget.TextView;\r\nimport android.widget.TimePicker;\r\nimport android.widget.Toast;\r\n\r\nimport com.A4.oplev.CreateEvent.Activity_Create_Event;\r\nimport com.A4.oplev.CreateEvent.createEvent2_frag;\r\nimport com.google.android.libraries.places.api.Places;\r\nimport com.google.android.libraries.places.api.model.Place;\r\nimport com.google.android.libraries.places.widget.Autocomplete;\r\nimport com.google.android.libraries.places.widget.model.AutocompleteActivityMode;\r\nimport com.google.android.material.textfield.TextInputEditText;\r\nimport com.squareup.picasso.Picasso;\r\nimport com.squareup.picasso.Target;\r\n\r\nimport java.io.File;\r\nimport java.io.FileOutputStream;\r\nimport java.io.IOException;\r\nimport java.util.Arrays;\r\nimport java.util.Calendar;\r\nimport java.util.Date;\r\nimport java.util.List;\r\n\r\nimport Controller.PictureMaker;\r\nimport DAL.Classes.EventDAO;\r\nimport DTO.EventDTO;\r\n\r\nimport static android.content.ContentValues.TAG;\r\n\r\npublic class Edit_Event extends AppCompatActivity implements View.OnClickListener {\r\n    TextView date, time, desc, titel, city, price;\r\n    Spinner dropDown;\r\n    ImageView pic;\r\n    Button btn_save;\r\n    EventDTO eventDTO;\r\n    String currentType = \"--Vælg type--\";\r\n    int year, month, day, hour, min;\r\n    private Uri pickedImgUri;\r\n    Boolean inputIsValid;\r\n    //dialog changelisteners\r\n    DatePickerDialog.OnDateSetListener onDateSetListener;\r\n    TimePickerDialog.OnTimeSetListener onTimeSetListener;\r\n\r\n\r\n    @SuppressLint(\"SetTextI18n\")\r\n    @Override\r\n    protected void onCreate(Bundle savedInstanceState) {\r\n        super.onCreate(savedInstanceState);\r\n        setContentView(R.layout.activity_edit__event);\r\n\r\n        date = findViewById(R.id.edit_event_date_input);\r\n        time = findViewById(R.id.edit_event_time_input);\r\n        desc = findViewById(R.id.edit_event_desc_input);\r\n        titel = findViewById(R.id.edit_event_title_input);\r\n        city = findViewById(R.id.edit_event_city_input);\r\n        price = findViewById(R.id.edit_event_price_input);\r\n        dropDown = findViewById(R.id.edit_event_dropDown);\r\n        eventDTO = (EventDTO)getIntent().getSerializableExtra(\"EventDTO\");\r\n        btn_save = findViewById(R.id.edit_event_next_btn);\r\n        pic = findViewById(R.id.edit_event_pic);\r\n        //set city to non focusable (will open the google places API instead with onclick\r\n        city.setFocusable(false);\r\n        city.setOnClickListener(this);\r\n        //initialize places (API key saved in string resources\r\n        Places.initialize(getApplicationContext(), getString(R.string.googlePlaces_api_key));\r\n\r\n\r\n        //set current date and time\r\n        Calendar cal = Calendar.getInstance();\r\n        day = cal.get(Calendar.DAY_OF_MONTH);\r\n        month = cal.get(Calendar.MONTH);\r\n        year = cal.get(Calendar.YEAR);\r\n        hour = cal.get(Calendar.HOUR_OF_DAY);\r\n        min = cal.get(Calendar.MINUTE);\r\n\r\n\r\n        try {\r\n            price.setText(eventDTO.getPrice());\r\n        }catch (Exception e){\r\n            Log.d(TAG, \"onCreate: \");\r\n        }\r\n            desc.setText(eventDTO.getDescription());\r\n            titel.setText(eventDTO.getTitle());\r\n            city.setText(eventDTO.getTitle());\r\n            year = eventDTO.getDate().getYear();\r\n            day = eventDTO.getDate().getDate();\r\n            month = eventDTO.getDate().getMonth();\r\n            hour = eventDTO.getDate().getHours();\r\n            min = eventDTO.getDate().getMinutes();\r\n\r\n            updateDateUI();\r\n            updateTimeUI();\r\n\r\n\r\n        ArrayAdapter<CharSequence> dropDownAdapter = ArrayAdapter.createFromResource(this,R.array.createDropDown, R.layout.support_simple_spinner_dropdown_item);\r\n        dropDownAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);\r\n        //set onclick listeners\r\n        pic.setOnClickListener(this);\r\n        date.setOnClickListener(this);\r\n        time.setOnClickListener(this);\r\n        btn_save.setOnClickListener(this);\r\n        currentType = eventDTO.getType();\r\n        //set the dropdown to the position of repostevent's type\r\n        dropDown.setSelection(getTypeIndex(eventDTO.getType()));\r\n\r\n        dropDown.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {\r\n            @Override\r\n            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {\r\n                // An item was selected. You can retrieve the selected item using\r\n                System.out.println(parent.getItemAtPosition(position));\r\n                //set the newly selected type to local string\r\n                currentType = parent.getItemAtPosition(position).toString();\r\n            }\r\n\r\n            @Override\r\n            public void onNothingSelected(AdapterView<?> parent) {\r\n                // Another interface callback\r\n            }\r\n        });\r\n        //When date is changed update current values and UI to show new date\r\n        onDateSetListener = new DatePickerDialog.OnDateSetListener() {\r\n            @Override\r\n            public void onDateSet(DatePicker view, int yearNew, int monthNew, int dayNew) {\r\n                //setting values (not to parse, but for next time datepicker is opened)\r\n                day = dayNew;\r\n                month = monthNew;\r\n                year = yearNew;\r\n                updateDateUI();\r\n            }\r\n        };\r\n        //when time is changed update current values and show new time in UI\r\n        onTimeSetListener = new TimePickerDialog.OnTimeSetListener() {\r\n            @Override\r\n            public void onTimeSet(TimePicker view, int hourNew, int minuteNew) {\r\n                //setting values\r\n                hour = hourNew;\r\n                min = minuteNew;\r\n                updateTimeUI();\r\n            }\r\n        };\r\n    }\r\n\r\n    private int getTypeIndex(String typeToFind){\r\n        //takes a string with a type, returns the position it lies on in the spinner(dropdown)\r\n        int index = 0;\r\n        for (int i=0;i<dropDown.getCount();i++){\r\n            if (dropDown.getItemAtPosition(i).equals(typeToFind)){\r\n                index = i;\r\n            }\r\n        }\r\n        return index;\r\n    }\r\n    private void updateDateUI(){\r\n        //update UI\r\n        // increment month since monthNew is zero indexed (jan = 0)\r\n        String dateString = day + \"/\" + (month+1) + \"/\" + year;\r\n        date.setText(dateString);\r\n        //remove error of missing date input\r\n        date.setError(null);\r\n    }\r\n    private void updateTimeUI(){\r\n        //update UI\r\n        //handle setting zeroes if one ciffer on time\r\n        String hourString = \"\" + hour;\r\n        String minuteString = \"\" + min;\r\n        if(hour < 10){\r\n            hourString = \"0\" + hour;\r\n        }\r\n        if(min < 10){\r\n            minuteString = \"0\" + min;\r\n        }\r\n        String timeString = hourString + \":\" + minuteString;\r\n        time.setText(timeString);\r\n        //remove error of missing time input\r\n        time.setError(null);\r\n    }\r\n\r\n    ImageView targetHolder;\r\n    //save image from repost locally\r\n    private void imageDownload(String url){\r\n        Log.d(TAG, \"imageDownload: (jbe) trying to save img\");\r\n        targetHolder = new ImageView(this);\r\n        targetHolder.setTag((Target) getTarget(url));\r\n        Picasso.get()\r\n                .load(url)\r\n                .into((Target) targetHolder.getTag());\r\n    }\r\n    //target to save\r\n    private Target getTarget(final String url){\r\n        Log.d(TAG, \"getTarget: (jbe) trying to find target\");\r\n        Target target = new Target(){\r\n            @Override\r\n            public void onBitmapLoaded(final Bitmap bitmap, Picasso.LoadedFrom from) {\r\n                Log.d(TAG, \"onBitmapLoaded: (jbe) bitmaploaded\");\r\n                new Thread(new Runnable() {\r\n                    @Override\r\n                    public void run() {\r\n                        Log.d(TAG, \"run: (jbe)\");\r\n                        ContextWrapper cw = new ContextWrapper(getApplicationContext());\r\n                        File directory = cw.getDir(\"imageDir\", Context.MODE_PRIVATE);\r\n\r\n                        File file = new File(directory,\"OplevRepostTemp.jpg\");\r\n                        try {\r\n                            FileOutputStream ostream = new FileOutputStream(file, false);\r\n                            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, ostream);\r\n                            ostream.flush();\r\n                            ostream.close();\r\n                            Log.d(TAG, \"run: (jbe) file saved to \" + file.getPath());\r\n                            //setting picked img URI\r\n                            pickedImgUri = Uri.fromFile(file);\r\n                            Log.d(TAG, \"run: (jbe) file absoulute path \" + file.getAbsolutePath());\r\n                            Log.d(TAG, \"run: (jbe) uri set to \" + Uri.fromFile(file).toString());\r\n                        } catch (IOException e) {\r\n                            Log.e(\"IOException\", e.getLocalizedMessage());\r\n                            Log.d(TAG, \"run: (jbe) file save exception\" + e.getLocalizedMessage()+ \"\\n\"+\r\n                                    e.getStackTrace().toString());\r\n                        }\r\n                    }\r\n                }).start();\r\n            }\r\n            @Override\r\n            public void onBitmapFailed(Exception e, Drawable errorDrawable) {\r\n                Log.d(TAG, \"onBitmapFailed: (jbe)\" + e.getLocalizedMessage());\r\n            }\r\n            @Override\r\n            public void onPrepareLoad(Drawable placeHolderDrawable) {\r\n                Log.d(TAG, \"onPrepareLoad: (jbe)\");\r\n            }\r\n        };\r\n        return target;\r\n    }\r\n\r\n    @Override\r\n    public void onClick(View v) {\r\n        if(v == btn_save){\r\n            eventDTO.setPrice(Integer.parseInt(price.getText().toString()));\r\n            eventDTO.setDescription(desc.getText().toString());\r\n            eventDTO.setTitle(titel.getText().toString());\r\n            eventDTO.setCity(city.getText().toString());\r\n\r\n            Date date_ = new Date();\r\n            String[] sHM = time.getText().toString().split(\":\");\r\n            String[] sDate = date.getText().toString().split(\"/\");\r\n            date_.setDate(Integer.parseInt(sDate[0]));\r\n            date_.setMonth(Integer.parseInt(sDate[1]));\r\n            date_.setYear(Integer.parseInt(sDate[2]));\r\n            date_.setHours(Integer.parseInt(sHM[0]));\r\n            date_.setMinutes(Integer.parseInt(sHM[1]));\r\n            eventDTO.setDate(date_);\r\n           // eventDTO.setType((String) type.getText());\r\n            EventDAO eventDAO = new EventDAO();\r\n            eventDAO.updateEvent(eventDTO);\r\n        } if(v == pic){\r\n            System.out.println(\"BILLED PRESSED\");\r\n            //Is mainly handled from actitity\r\n            //triggers onActivityResult in activity_create_event.java when picture is picked\r\n            PictureMaker.getInstance().uploadPic(this);\r\n        }\r\n        else if(v == btn_save){\r\n            //validate that inputs are entered (shows \"errors\" if not)\r\n\r\n        }\r\n        else if(v == date){\r\n            //show date picker dialog\r\n            //triggers \"OnDateSetListener\" when date is changed\r\n            DatePickerDialog dialog = new DatePickerDialog(\r\n                    this,\r\n                    android.R.style.Theme_Holo_Light_Dialog_MinWidth,\r\n                    onDateSetListener,\r\n                    year, month, day);\r\n            dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));\r\n            //set min and max date mindate=today, maxdate=one year from now\r\n            // (the minus 1000 avoids crash...\"min date doesnt precede date, error\")\r\n            dialog.getDatePicker().setMinDate(Calendar.getInstance().getTimeInMillis()-1000);\r\n            dialog.getDatePicker().setMaxDate(Calendar.getInstance().getTimeInMillis() +\r\n                    DateUtils.YEAR_IN_MILLIS);\r\n\r\n            dialog.show();\r\n        }\r\n        else if(v == time){\r\n            //show time picker dialog\r\n            //triggers \"OnTimeSetListener\" when time is changed\r\n            TimePickerDialog dialog = new TimePickerDialog(\r\n                    this,\r\n                    onTimeSetListener,\r\n                    hour, day, true);\r\n            dialog.show();\r\n        }\r\n        else if(v == city){\r\n            /*\r\n            https://youtu.be/t8nGh4gN1Q0\r\n            https://developers.google.com/places/android-sdk/autocomplete#add_an_autocomplete_widget\r\n\r\n             */\r\n\r\n            //open the places autocomplete api\r\n            List<Place.Field> fieldList = Arrays.asList(Place.Field.ADDRESS,\r\n                    Place.Field.NAME,\r\n                    Place.Field.LAT_LNG);\r\n            //create intent for activity overlay\r\n            //(context getActivity might be off)\r\n            Intent intent = new Autocomplete.IntentBuilder(AutocompleteActivityMode.OVERLAY, fieldList)\r\n                    .build(this);\r\n            startActivityForResult(intent, 100);\r\n            // ***OBS*** onActivityResult (result of intent) handled in activity! (create event activity)\r\n        }\r\n    }\r\n    private boolean isInputValid() {\r\n        Log.d(TAG, \"isInputValid: (jbe) start\");\r\n        inputIsValid = true;\r\n        if(titel.getText().toString().equals(\"\")){\r\n            inputIsValid = false;\r\n            titel.setError(\"Indsæt titel\");\r\n        }\r\n        if(desc.getText().toString().equals(\"\")){\r\n            inputIsValid = false;\r\n            desc.setError(\"Indsæt beskrivelse\");\r\n        }\r\n        if(date.getText().toString().equals(\"DD/MM/YYYY\")){\r\n            inputIsValid = false;\r\n            date.setError(\"Indsæt dato\");\r\n        }\r\n        if(time.getText().toString().equals(\"HH:MM\")){\r\n            inputIsValid = false;\r\n            time.setError(\"Indsæt dato\");\r\n        }\r\n        if(city.getText().toString().equals(\"\")){\r\n            inputIsValid = false;\r\n            city.setError(\"Indsæt by\");\r\n        }\r\n        if(currentType.equals(\"--Vælg type--\")){\r\n            inputIsValid = false;\r\n            Toast.makeText(this, \"Vælg en event type\", Toast.LENGTH_SHORT).show();\r\n        }\r\n\r\n        if(inputIsValid == false){\r\n            Toast.makeText(this, \"Mangler event-information\", Toast.LENGTH_SHORT).show();\r\n        }\r\n        Log.d(TAG, \"isInputValid: (jbe) end. valid status:\" + inputIsValid);\r\n        return inputIsValid;\r\n    }\r\n\r\n}\r\n\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/A4/oplev/Edit_Event.java	(revision 65d921ce3cfa320892a880ccefe849686f5a8886)
++++ app/src/main/java/com/A4/oplev/Edit_Event.java	(date 1610630239980)
+@@ -24,6 +24,7 @@
+ import android.widget.ArrayAdapter;
+ import android.widget.Button;
+ import android.widget.DatePicker;
++import android.widget.EditText;
+ import android.widget.ImageView;
+ import android.widget.Spinner;
+ import android.widget.TextView;
+@@ -32,65 +33,89 @@
+ 
+ import com.A4.oplev.CreateEvent.Activity_Create_Event;
+ import com.A4.oplev.CreateEvent.createEvent2_frag;
++import com.google.android.gms.tasks.OnSuccessListener;
+ import com.google.android.libraries.places.api.Places;
+ import com.google.android.libraries.places.api.model.Place;
+ import com.google.android.libraries.places.widget.Autocomplete;
+ import com.google.android.libraries.places.widget.model.AutocompleteActivityMode;
+ import com.google.android.material.textfield.TextInputEditText;
++import com.google.firebase.storage.FirebaseStorage;
++import com.google.firebase.storage.StorageReference;
++import com.google.firebase.storage.UploadTask;
+ import com.squareup.picasso.Picasso;
+ import com.squareup.picasso.Target;
+ 
+ import java.io.File;
+ import java.io.FileOutputStream;
+ import java.io.IOException;
++import java.net.MalformedURLException;
++import java.net.URI;
+ import java.util.Arrays;
+ import java.util.Calendar;
+ import java.util.Date;
+ import java.util.List;
+ 
+ import Controller.PictureMaker;
++import Controller.pictureGet;
+ import DAL.Classes.EventDAO;
++import DAL.Interfaces.CallBackURL;
+ import DTO.EventDTO;
+ 
+ import static android.content.ContentValues.TAG;
+ 
+ public class Edit_Event extends AppCompatActivity implements View.OnClickListener {
+-    TextView date, time, desc, titel, city, price;
++    //topbar text
++    TextView topbar_txt;
++    //fragment elements
++    ImageView pic;
++    Uri pickedImgUri;
++    EditText title_in, desc_in, price_in, city_in;
++    TextView price_txt, date_txt, city_txt, date_in, time_in;
++    Button next_btn;
+     Spinner dropDown;
+-    ImageView pic;
+-    Button btn_save;
+-    EventDTO eventDTO;
+-    String currentType = "--Vælg type--";
+-    int year, month, day, hour, min;
+-    private Uri pickedImgUri;
+-    Boolean inputIsValid;
++    AdapterView.OnItemSelectedListener onItemSelectedListener;
++    String currentType = "--Vælg type--";
++    EventDTO eventDTO; 
+     //dialog changelisteners
+     DatePickerDialog.OnDateSetListener onDateSetListener;
+     TimePickerDialog.OnTimeSetListener onTimeSetListener;
+ 
++    //date time values
++    int day, month, year, hour, minute;
+ 
+-    @SuppressLint("SetTextI18n")
++    // for input validation
++    boolean inputIsValid;
+     @Override
+     protected void onCreate(Bundle savedInstanceState) {
+         super.onCreate(savedInstanceState);
+         setContentView(R.layout.activity_edit__event);
+-
+-        date = findViewById(R.id.edit_event_date_input);
+-        time = findViewById(R.id.edit_event_time_input);
+-        desc = findViewById(R.id.edit_event_desc_input);
+-        titel = findViewById(R.id.edit_event_title_input);
+-        city = findViewById(R.id.edit_event_city_input);
+-        price = findViewById(R.id.edit_event_price_input);
+-        dropDown = findViewById(R.id.edit_event_dropDown);
+-        eventDTO = (EventDTO)getIntent().getSerializableExtra("EventDTO");
+-        btn_save = findViewById(R.id.edit_event_next_btn);
++        //get elements from fragment
+         pic = findViewById(R.id.edit_event_pic);
++        title_in = findViewById(R.id.edit_event_title_input);
++        desc_in = findViewById(R.id.edit_event_desc_input);
++        price_in = findViewById(R.id.edit_event_price_input);
++        date_in = findViewById(R.id.edit_event_date_input);
++        city_in = findViewById(R.id.edit_event_city_input);
++        next_btn = findViewById(R.id.edit_event_next_btn);
++        time_in = findViewById(R.id.edit_event_time_input);
++        dropDown = findViewById(R.id.edit_event_dropDown);
++
++        ArrayAdapter<CharSequence> dropDownAdapter = ArrayAdapter.createFromResource(this,R.array.createDropDown, R.layout.support_simple_spinner_dropdown_item);
++        dropDownAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
++        dropDown.setAdapter(dropDownAdapter);
++        dropDown.setPrompt("Vælg type af oplevelse");
++
+         //set city to non focusable (will open the google places API instead with onclick
+-        city.setFocusable(false);
+-        city.setOnClickListener(this);
++        city_in.setFocusable(false);
++        city_in.setOnClickListener(this);
+         //initialize places (API key saved in string resources
+         Places.initialize(getApplicationContext(), getString(R.string.googlePlaces_api_key));
+ 
++        //set onclick listeners
++        pic.setOnClickListener(this);
++        next_btn.setOnClickListener(this);
++        date_in.setOnClickListener(this);
++        time_in.setOnClickListener(this);
+ 
+         //set current date and time
+         Calendar cal = Calendar.getInstance();
+@@ -98,37 +123,51 @@
+         month = cal.get(Calendar.MONTH);
+         year = cal.get(Calendar.YEAR);
+         hour = cal.get(Calendar.HOUR_OF_DAY);
+-        min = cal.get(Calendar.MINUTE);
++        minute = cal.get(Calendar.MINUTE);
+ 
+-
+-        try {
+-            price.setText(eventDTO.getPrice());
+-        }catch (Exception e){
+-            Log.d(TAG, "onCreate: ");
+-        }
+-            desc.setText(eventDTO.getDescription());
+-            titel.setText(eventDTO.getTitle());
+-            city.setText(eventDTO.getTitle());
+-            year = eventDTO.getDate().getYear();
+-            day = eventDTO.getDate().getDate();
+-            month = eventDTO.getDate().getMonth();
+-            hour = eventDTO.getDate().getHours();
+-            min = eventDTO.getDate().getMinutes();
++        eventDTO = (EventDTO) getIntent().getSerializableExtra("EventDTO");
++        Log.d(TAG, "onCreateView: (jbe) outside repost spottet");
++        //if createevent startet from repost then fill out info
++        if(eventDTO != null){
++            Log.d(TAG, "onCreateView: (jbe) repost spottet!");
++            Log.d(TAG, "onCreateView: (jbe) repost date = " + eventDTO.getDate().toString());
++            Picasso.get().load(eventDTO.getEventPic()).into(pic);
++            //check if repost pic is default pic (no reupload)
++            FirebaseStorage.getInstance().getReference().child(getString(R.string.defaultpic_db_path)).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
++                @Override
++                public void onSuccess(Uri uri) {
++                    //download and set image URI
++                    Log.d(TAG, "onSuccess: defaultpic download uri: " + uri.toString() + "\n repostpic: " + eventDTO.getEventPic());
++                    if(eventDTO.getEventPic().equals(uri.toString())) {
++                        Log.d(TAG, "onSuccess: eventpic is defaultpic");
++                         pickedImgUri = null;
++                        Log.d(TAG, "onSuccess: eventpicUri: " + pickedImgUri);
++                    }
++                    else{
++                        Log.d(TAG, "onSuccess: eventpic is not deafaultpic");
++                        imageDownload(eventDTO.getEventPic());
++                    }
++                }
++            });
+ 
++            //set values from repost event
++            title_in.setText(eventDTO.getTitle());
++            desc_in.setText(eventDTO.getDescription());
++            price_in.setText("" + eventDTO.getPrice());
++            //extract values from Date-obj and update ui
++            Date repostDate = eventDTO.getDate();
++            day = repostDate.getDate();
++            month = repostDate.getMonth();
++            year = repostDate.getYear() + 1900;
++            minute = repostDate.getMinutes();
++            hour = repostDate.getHours();
+             updateDateUI();
+             updateTimeUI();
+-
+-
+-        ArrayAdapter<CharSequence> dropDownAdapter = ArrayAdapter.createFromResource(this,R.array.createDropDown, R.layout.support_simple_spinner_dropdown_item);
+-        dropDownAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+-        //set onclick listeners
+-        pic.setOnClickListener(this);
+-        date.setOnClickListener(this);
+-        time.setOnClickListener(this);
+-        btn_save.setOnClickListener(this);
+-        currentType = eventDTO.getType();
+-        //set the dropdown to the position of repostevent's type
+-        dropDown.setSelection(getTypeIndex(eventDTO.getType()));
++            city_in.setText(eventDTO.getCity());
++            currentType = eventDTO.getType();
++            //set the dropdown to the position of eventDTO's type
++            dropDown.setSelection(getTypeIndex(eventDTO.getType()));
++        }
+ 
+         dropDown.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+             @Override
+@@ -144,6 +183,8 @@
+                 // Another interface callback
+             }
+         });
++
++
+         //When date is changed update current values and UI to show new date
+         onDateSetListener = new DatePickerDialog.OnDateSetListener() {
+             @Override
+@@ -161,12 +202,12 @@
+             public void onTimeSet(TimePicker view, int hourNew, int minuteNew) {
+                 //setting values
+                 hour = hourNew;
+-                min = minuteNew;
++                minute = minuteNew;
+                 updateTimeUI();
+             }
+         };
+-    }
+-
++        
++    }
+     private int getTypeIndex(String typeToFind){
+         //takes a string with a type, returns the position it lies on in the spinner(dropdown)
+         int index = 0;
+@@ -181,25 +222,25 @@
+         //update UI
+         // increment month since monthNew is zero indexed (jan = 0)
+         String dateString = day + "/" + (month+1) + "/" + year;
+-        date.setText(dateString);
++        date_in.setText(dateString);
+         //remove error of missing date input
+-        date.setError(null);
++        date_in.setError(null);
+     }
+     private void updateTimeUI(){
+         //update UI
+         //handle setting zeroes if one ciffer on time
+         String hourString = "" + hour;
+-        String minuteString = "" + min;
++        String minuteString = "" + minute;
+         if(hour < 10){
+             hourString = "0" + hour;
+         }
+-        if(min < 10){
+-            minuteString = "0" + min;
++        if(minute < 10){
++            minuteString = "0" + minute;
+         }
+         String timeString = hourString + ":" + minuteString;
+-        time.setText(timeString);
++        time_in.setText(timeString);
+         //remove error of missing time input
+-        time.setError(null);
++        time_in.setError(null);
+     }
+ 
+     ImageView targetHolder;
+@@ -234,7 +275,7 @@
+                             ostream.close();
+                             Log.d(TAG, "run: (jbe) file saved to " + file.getPath());
+                             //setting picked img URI
+-                            pickedImgUri = Uri.fromFile(file);
++                            setPickedImgUri(Uri.fromFile(file));
+                             Log.d(TAG, "run: (jbe) file absoulute path " + file.getAbsolutePath());
+                             Log.d(TAG, "run: (jbe) uri set to " + Uri.fromFile(file).toString());
+                         } catch (IOException e) {
+@@ -259,35 +300,44 @@
+ 
+     @Override
+     public void onClick(View v) {
+-        if(v == btn_save){
+-            eventDTO.setPrice(Integer.parseInt(price.getText().toString()));
+-            eventDTO.setDescription(desc.getText().toString());
+-            eventDTO.setTitle(titel.getText().toString());
+-            eventDTO.setCity(city.getText().toString());
+-
+-            Date date_ = new Date();
+-            String[] sHM = time.getText().toString().split(":");
+-            String[] sDate = date.getText().toString().split("/");
+-            date_.setDate(Integer.parseInt(sDate[0]));
+-            date_.setMonth(Integer.parseInt(sDate[1]));
+-            date_.setYear(Integer.parseInt(sDate[2]));
+-            date_.setHours(Integer.parseInt(sHM[0]));
+-            date_.setMinutes(Integer.parseInt(sHM[1]));
+-            eventDTO.setDate(date_);
+-           // eventDTO.setType((String) type.getText());
+-            EventDAO eventDAO = new EventDAO();
+-            eventDAO.updateEvent(eventDTO);
+-        } if(v == pic){
++        if(v == pic){
+             System.out.println("BILLED PRESSED");
+             //Is mainly handled from actitity
+             //triggers onActivityResult in activity_create_event.java when picture is picked
+             PictureMaker.getInstance().uploadPic(this);
+         }
+-        else if(v == btn_save){
++        else if(v == next_btn){
+             //validate that inputs are entered (shows "errors" if not)
++           if(inputIsValid){
++               eventDTO.setType(currentType);
++               Date newDate = new Date();
++               newDate.setDate(day);
++               newDate.setMonth(month);
++               newDate.setYear(year);
++               newDate.setHours(hour);
++               newDate.setMinutes(minute);
++               eventDTO.setCity(city_in.getText().toString());
++               eventDTO.setTitle(title_in.getText().toString());
++               eventDTO.setDescription(desc_in.getText().toString());
++               eventDTO.setPrice(Integer.parseInt(price_in.getText().toString()));
++
++               pictureGet picG = new pictureGet();
++               picG.getUrl(new CallBackURL() {
++                   @Override
++                   public void onCallBack(String url) {
++                       eventDTO.setEventPic(url);
++                       EventDAO dataA = new EventDAO();
++                       dataA.updateEvent(eventDTO);
++
++                       finish();
++
++                   }
++               }, eventDTO.getEventId(), pickedImgUri);
++
+ 
++           }
+         }
+-        else if(v == date){
++        else if(v == date_in){
+             //show date picker dialog
+             //triggers "OnDateSetListener" when date is changed
+             DatePickerDialog dialog = new DatePickerDialog(
+@@ -304,7 +354,7 @@
+ 
+             dialog.show();
+         }
+-        else if(v == time){
++        else if(v == time_in){
+             //show time picker dialog
+             //triggers "OnTimeSetListener" when time is changed
+             TimePickerDialog dialog = new TimePickerDialog(
+@@ -313,7 +363,7 @@
+                     hour, day, true);
+             dialog.show();
+         }
+-        else if(v == city){
++        else if(v == city_in){
+             /*
+             https://youtu.be/t8nGh4gN1Q0
+             https://developers.google.com/places/android-sdk/autocomplete#add_an_autocomplete_widget
+@@ -325,35 +375,38 @@
+                     Place.Field.NAME,
+                     Place.Field.LAT_LNG);
+             //create intent for activity overlay
+-            //(context getActivity might be off)
++            //(context this might be off)
+             Intent intent = new Autocomplete.IntentBuilder(AutocompleteActivityMode.OVERLAY, fieldList)
+                     .build(this);
+             startActivityForResult(intent, 100);
+             // ***OBS*** onActivityResult (result of intent) handled in activity! (create event activity)
+         }
+     }
++
++    // Method for checking if all inputs have data. If not, prompt users with "setErrors"
++    // return true if all have inputs, return false if not.
+     private boolean isInputValid() {
+         Log.d(TAG, "isInputValid: (jbe) start");
+         inputIsValid = true;
+-        if(titel.getText().toString().equals("")){
++        if(title_in.getText().toString().equals("")){
+             inputIsValid = false;
+-            titel.setError("Indsæt titel");
++            title_in.setError("Indsæt titel");
+         }
+-        if(desc.getText().toString().equals("")){
++        if(desc_in.getText().toString().equals("")){
+             inputIsValid = false;
+-            desc.setError("Indsæt beskrivelse");
++            desc_in.setError("Indsæt beskrivelse");
+         }
+-        if(date.getText().toString().equals("DD/MM/YYYY")){
++        if(date_in.getText().toString().equals("DD/MM/YYYY")){
+             inputIsValid = false;
+-            date.setError("Indsæt dato");
++            date_in.setError("Indsæt dato");
+         }
+-        if(time.getText().toString().equals("HH:MM")){
++        if(time_in.getText().toString().equals("HH:MM")){
+             inputIsValid = false;
+-            time.setError("Indsæt dato");
++            time_in.setError("Indsæt dato");
+         }
+-        if(city.getText().toString().equals("")){
++        if(city_in.getText().toString().equals("")){
+             inputIsValid = false;
+-            city.setError("Indsæt by");
++            city_in.setError("Indsæt by");
+         }
+         if(currentType.equals("--Vælg type--")){
+             inputIsValid = false;
+@@ -366,6 +419,14 @@
+         Log.d(TAG, "isInputValid: (jbe) end. valid status:" + inputIsValid);
+         return inputIsValid;
+     }
+-
++    public Uri getPickedImgUri() {
++        Log.d(TAG, "getPickedImgUri: (jbe) get picked imgUri");
++        return pickedImgUri;
++    }
++    public void setPickedImgUri(Uri uri) {
++        Log.d(TAG, "setPickedImgUri: (jbe) set picked imgUri");
++        pickedImgUri = uri;
++    }
++   
+ }
+ 
+Index: app/src/main/java/DAL/Interfaces/CallBackURL.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/DAL/Interfaces/CallBackURL.java	(date 1610630222391)
++++ app/src/main/java/DAL/Interfaces/CallBackURL.java	(date 1610630222391)
+@@ -0,0 +1,7 @@
++package DAL.Interfaces;
++
++import java.net.URL;
++
++public interface CallBackURL {
++    void onCallBack(String url);
++}
+Index: app/src/main/java/Controller/pictureGet.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/Controller/pictureGet.java	(date 1610630222344)
++++ app/src/main/java/Controller/pictureGet.java	(date 1610630222344)
+@@ -0,0 +1,34 @@
++package Controller;
++
++import android.net.Uri;
++
++import com.google.android.gms.tasks.OnSuccessListener;
++import com.google.firebase.storage.FirebaseStorage;
++import com.google.firebase.storage.StorageReference;
++import com.google.firebase.storage.UploadTask;
++
++import java.net.URL;
++
++import DAL.Interfaces.CallBackURL;
++
++public class pictureGet {
++    public void getUrl(CallBackURL callBackURL, String id, Uri uri){
++        StorageReference mStorageRef  = FirebaseStorage.getInstance().getReference();
++        StorageReference picRef = mStorageRef.child("events/" + id + "/1");
++        picRef.putFile(uri)
++                .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
++                    @Override
++                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
++                        // Get a URL to the uploaded content picture
++                        picRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
++                            @Override
++                            public void onSuccess(Uri uri) {
++                                //set URL of eventpic in eventObject map
++                                callBackURL.onCallBack(uri.toString());
++                            }
++                        });
++                    }
++                });
++    }
++
++}
