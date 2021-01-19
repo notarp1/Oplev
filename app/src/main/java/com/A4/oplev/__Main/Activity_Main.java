@@ -139,7 +139,7 @@ public class Activity_Main extends AppCompatActivity implements View.OnClickList
         boolean isLoggedIn = accessToken != null && !accessToken.isExpired();
 
 
-        if (isLoggedIn){
+        if (!isLoggedIn && facebook){
             LoginManager.getInstance().logInWithReadPermissions(this, Arrays.asList("public_profile", "email", "user_birthday"));
             callbackManager = CallbackManager.Factory.create();
             LoginManager.getInstance().registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
@@ -152,15 +152,15 @@ public class Activity_Main extends AppCompatActivity implements View.OnClickList
                     query.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                         @Override
                         public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                            if(task.isSuccessful()){
-                                for(DocumentSnapshot documentSnapshot : task.getResult()){
+                            if (task.isSuccessful()) {
+                                for (DocumentSnapshot documentSnapshot : task.getResult()) {
                                     String user = documentSnapshot.getString("userId");
 
-                                    if(user.equals(profile.getId())){
-                                        Log.d(TAG+"123", "User Exists");
+                                    if (user.equals(profile.getId())) {
+                                        Log.d(TAG + "123", "User Exists");
                                         UserController.getInstance().setCurrUser((UserDTO) documentSnapshot.toObject(UserDTO.class));
                                         prefs.edit().putBoolean("onInstance", true).apply();
-                                        prefs.edit().putBoolean("facebook",true).apply();
+                                        prefs.edit().putBoolean("facebook", true).apply();
                                         onInstance = true;
                                         facebook = true;
                                         FirebaseCrashlytics.getInstance().setUserId(UserController.getInstance().getCurrUser().getUserId());
@@ -169,71 +169,11 @@ public class Activity_Main extends AppCompatActivity implements View.OnClickList
                                             public void onCallback(List<String> list) {
                                                 eventIni(list);
                                             }
-                                        },prefs);
+                                        }, prefs);
                                     }
                                 }
                             }
 
-                            if(task.getResult().size() == 0 ){
-                                Log.d(TAG+"123", "User not Exists");
-                                // Facebook Email address
-                                GraphRequest request = GraphRequest.newMeRequest(
-                                        loginResult.getAccessToken(),
-                                        new GraphRequest.GraphJSONObjectCallback() {
-                                            @Override
-                                            public void onCompleted(
-                                                    JSONObject object,
-                                                    GraphResponse response) {
-                                                Log.v("LoginActivity Response ", response.toString());
-
-                                                try {
-                                                    UserDTO userdto = new UserDTO();
-                                                    String name = object.getString("name");
-                                                    String fEmail = object.getString("email");
-                                                    String birthday = object.getString("birthday");
-                                                    Toast.makeText(ctx,"Birthday: " + birthday, Toast.LENGTH_SHORT).show();
-                                                    Toast.makeText(ctx,"email: " + fEmail, Toast.LENGTH_SHORT).show();
-                                                    Toast.makeText(ctx, "Name " + name, Toast.LENGTH_LONG).show();
-
-                                                    userdto.setEmail(fEmail);
-                                                    userdto.setfName(profile.getFirstName());
-                                                    userdto.setlName(profile.getLastName());
-                                                    userdto.setUserPicture(profile.getProfilePictureUri(200,200)+"");
-                                                    ArrayList<String> billeder = new ArrayList<>();
-                                                    billeder.add(profile.getProfilePictureUri(200,200)+"");
-                                                    for (int i = 0; i < 5; i++) {
-                                                        billeder.add(null);
-                                                    }
-                                                    userdto.setPictures(billeder);
-                                                    int age = getAge(birthday);
-                                                    userdto.setAge(age);
-                                                    Toast.makeText(ctx,age+"",Toast.LENGTH_SHORT).show();
-                                                    userdto.setUserId(profile.getId());
-                                                    UserDAO userDAO = new UserDAO();
-                                                    userDAO.createUser(userdto);
-                                                    UserController.getInstance().setCurrUser(userdto);
-                                                    prefs.edit().putBoolean("onInstance", true).apply();
-                                                    prefs.edit().putBoolean("facebook",true).apply();
-                                                    onInstance = true;
-                                                    facebook = true;
-                                                    FirebaseCrashlytics.getInstance().setUserId(UserController.getInstance().getCurrUser().getUserId());
-                                                    dataA.getEventIDs(new CallBackList() {
-                                                        @Override
-                                                        public void onCallback(List<String> list) {
-                                                            eventIni(list);
-                                                        }
-                                                    },prefs);
-
-                                                } catch (JSONException e) {
-                                                    e.printStackTrace();
-                                                }
-                                            }
-                                        });
-                                Bundle parameters = new Bundle();
-                                parameters.putString("fields", "id,name,email,birthday");
-                                request.setParameters(parameters);
-                                request.executeAsync();
-                            }
                         }
                     });
                 }
