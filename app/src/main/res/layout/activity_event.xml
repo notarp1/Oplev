@@ -136,11 +136,12 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="5dp"
-                            android:text="Placering"
+                            android:text="placering"
                             android:textColor="#B5DEF6"
                             android:textSize="18sp" />
 
                     </LinearLayout>
+
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
@@ -164,6 +165,7 @@
                             android:textSize="18sp" />
 
                     </LinearLayout>
+
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -174,7 +176,6 @@
                             android:id="@+id/icon_date_event"
                             android:layout_width="20dp"
                             android:layout_height="20dp"
-                            android:layout_weight="1"
                             app:srcCompat="@drawable/time" />
 
                         <TextView
@@ -211,6 +212,15 @@
                             android:textSize="18sp" />
 
                     </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/text_e_oplevelse"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:text="Oplevelsen"
+                        android:textColor="#A4E8E0"
+                        android:textSize="24sp" />
 
                 </LinearLayout>
 
@@ -268,15 +278,7 @@
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
             </LinearLayout>
-            <TextView
-                android:id="@+id/text_e_oplevelse"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
-                android:layout_marginLeft="10dp"
-                android:text="Oplevelsen"
-                android:textColor="#A4E8E0"
-                android:textSize="24sp" />
+
             <TextView
                 android:id="@+id/text_e_about"
                 android:layout_width="match_parent"
@@ -291,7 +293,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="10dp"
                 android:text="Om Pia"
                 android:textColor="#A4E8E0"
                 android:textSize="24sp" />

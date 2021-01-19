@@ -210,7 +210,7 @@ public class LikesideList_frag extends Fragment{
                             i1.putExtra("currentUser",currentUser);
                             i1.putExtra("otherUser",names.get(position-tempEventID.size()));
                             i1.putExtra("chatId", userDTO.getChatId().get(position-tempEventID.size()));
-                            i1.putExtra("eventID",dto.getEventID());
+                            i1.putExtra("eventID",dto.getEventId());
                             startActivity(i1);
                         }
                     },userDTO.getChatId().get(position-tempEventID.size()));
