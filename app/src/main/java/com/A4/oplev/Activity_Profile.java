@@ -52,9 +52,10 @@ public class Activity_Profile extends AppCompatActivity implements View.OnClickL
         setContentView(R.layout.activity_profile);
         Intent myIntent = getIntent();
 
-        userController =  userController.getInstance();
-        pictures = userController.getUserPictures();
+        j = myIntent.getIntExtra("load", 0);
 
+        userController =  userController.getInstance();
+        if(j==0) pictures = userController.getUserPictures();
 
         about = findViewById(R.id.text_information);
         city = findViewById(R.id.text_city);
@@ -101,7 +102,7 @@ public class Activity_Profile extends AppCompatActivity implements View.OnClickL
         right.setMinimumWidth(width/2);
         left.setMinimumWidth(width/2);
 
-        j = myIntent.getIntExtra("load", 0);
+
         System.out.println(j);
 
         currentSelection = selection1;
