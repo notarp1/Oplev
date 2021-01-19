@@ -20,6 +20,8 @@ import DAL.Classes.EventDAO;
 import DAL.Classes.UserDAO;
 import DAL.Interfaces.CallbackEvent;
 import DAL.Interfaces.CallbackUser;
+import DAL.Interfaces.IEventDAO;
+import DAL.Interfaces.IUserDAO;
 import DTO.EventDTO;
 import DTO.UserDTO;
 
@@ -29,23 +31,28 @@ public class EventController {
     private static final String TAG = "EventController";
     private static EventController instance = null;
     private ArrayList<String> uPictures, ePictures;
-    static UserDAO userDAO;
-    static EventDAO eventDAO;
+    static IUserDAO userDAO;
+    static IEventDAO eventDAO;
     private EventDTO eventDTO;
     private UserController userController;
 
 
-    private EventController(){
-        userDAO = new UserDAO();
-        eventDAO = new EventDAO();
+    private EventController(IUserDAO userDAO, IEventDAO eventDAO){
+        this.userDAO = userDAO;
+        this.eventDAO = eventDAO;
         userController = userController.getInstance();
         this.instance = this;
     }
 
-    public static EventController getInstance(){
-        if (instance == null) instance = new EventController();
+    public static EventController getInstance(IUserDAO userDAO, IEventDAO eventDAO){
+        if (instance == null) instance = new EventController(userDAO, eventDAO);
         return instance;
     }
+    public static EventController getInstance(){
+        return instance;
+    }
+
+
 
 
     public void createEvent(String name, String desc, String price, String date, String time, String city, String type,

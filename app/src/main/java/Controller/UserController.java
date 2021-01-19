@@ -27,13 +27,16 @@ import DAL.Classes.ChatDAO;
 import DAL.Classes.EventDAO;
 import DAL.Classes.UserDAO;
 import DAL.Interfaces.CallbackUser;
+import DAL.Interfaces.IChatDAO;
+import DAL.Interfaces.IEventDAO;
+import DAL.Interfaces.IUserDAO;
 import DTO.UserDTO;
 
 public class UserController {
     private static UserController instance = null;
-    static ChatDAO chatDAO;
-    static UserDAO userDAO;
-    static EventDAO eventDAO;
+    static IChatDAO chatDAO;
+    static IUserDAO userDAO;
+    static IEventDAO eventDAO;
     private UserDTO user;
     private boolean isSafe;
     String userPic = "https://firebasestorage.googleapis.com/v0/b/opleva4.appspot.com/o/question.png?alt=media&token=9dea34be-a183-4b37-bfb7-afd7a9db81f2";
@@ -47,11 +50,12 @@ public class UserController {
     private ArrayList<String> pictures;
 
 
-    private UserController(){
 
-        chatDAO = new ChatDAO();
-        userDAO = new UserDAO();
-        eventDAO = new EventDAO();
+    private UserController(IUserDAO userDAO, IChatDAO chatDAO, IEventDAO eventDAO){
+
+        this.chatDAO = chatDAO;
+        this.userDAO = userDAO;
+        this.eventDAO = eventDAO;
         indexNumbers = 0;
         pictureCount = 0;
         setSafe(true);
@@ -61,13 +65,15 @@ public class UserController {
         currentUser = mAuth.getCurrentUser();
 
         this.instance = this;
-
     }
-
-    public static UserController getInstance(){
-        if (instance == null) instance = new UserController();
+    public static UserController getInstance(IUserDAO userDAO, IChatDAO chatDAO, IEventDAO eventDAO){
+        if (instance == null) instance = new UserController( userDAO, chatDAO, eventDAO);
         return instance;
     }
+    public static UserController getInstance(){
+        return instance;
+    }
+
 
     public void setCurrUser(UserDTO user){
         this.user = user;

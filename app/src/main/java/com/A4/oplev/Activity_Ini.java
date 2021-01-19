@@ -22,7 +22,11 @@ import com.google.firebase.auth.FirebaseUser;
 import java.io.Serializable;
 import java.util.ArrayList;
 
+import Controller.EventController;
 import Controller.UserController;
+import DAL.Classes.ChatDAO;
+import DAL.Classes.EventDAO;
+import DAL.Classes.UserDAO;
 import DAL.Interfaces.CallbackUser;
 import DTO.UserDTO;
 
@@ -64,6 +68,11 @@ public class Activity_Ini extends AppCompatActivity implements Serializable {
         ctx = this;
         prefs = PreferenceManager.getDefaultSharedPreferences(this);
         onInstance = prefs.getBoolean("onInstance", false);
+
+        //Laver controllerne med implemetationerene af DAO, da de er singeltons skal der alle andre steder bare kaldes getInstance()
+
+        UserController.getInstance(new UserDAO(), new ChatDAO(), new EventDAO());
+        EventController.getInstance(new UserDAO(), new EventDAO());
 
 
        if(currentUser == null){

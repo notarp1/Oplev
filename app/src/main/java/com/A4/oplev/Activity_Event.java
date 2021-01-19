@@ -22,6 +22,7 @@ import java.util.ArrayList;
 
 import Controller.EventController;
 import Controller.UserController;
+import DAL.Classes.ChatDAO;
 import DAL.Classes.EventDAO;
 import DAL.Classes.UserDAO;
 import DTO.EventDTO;
