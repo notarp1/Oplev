@@ -105,6 +105,7 @@ public class Activity_Login extends AppCompatActivity implements View.OnClickLis
                                     UserController.getInstance().setCurrUser((UserDTO) documentSnapshot.toObject(UserDTO.class));
                                     prefs.edit().putBoolean("onInstance", true).apply();
                                     prefs.edit().putBoolean("facebook",true).apply();
+                                    FirebaseCrashlytics.getInstance().setUserId(UserController.getInstance().getCurrUser().getUserId());
                                     Intent i = new Intent(ctx,Activity_Ini.class);
                                     startActivity(i);
 
@@ -152,6 +153,7 @@ public class Activity_Login extends AppCompatActivity implements View.OnClickLis
                                                 UserController.getInstance().setCurrUser(userdto);
                                                 prefs.edit().putBoolean("onInstance", true).apply();
                                                 prefs.edit().putBoolean("facebook",true).apply();
+                                                FirebaseCrashlytics.getInstance().setUserId(UserController.getInstance().getCurrUser().getUserId());
                                                 Intent i = new Intent(ctx,Activity_Ini.class);
                                                 startActivity(i);
                                             } catch (JSONException e) {

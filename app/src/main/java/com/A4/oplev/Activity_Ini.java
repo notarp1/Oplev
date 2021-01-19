@@ -113,6 +113,7 @@ public class Activity_Ini extends AppCompatActivity implements Serializable {
 
                                Intent i = new Intent(ctx, Activity_Main.class);
                                userController.setCurrUser(user);
+                               FirebaseCrashlytics.getInstance().setUserId(user.getUserId());
                                i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
 
                                startActivity(i);

@@ -163,6 +163,7 @@ public class Activity_Main extends AppCompatActivity implements View.OnClickList
                                         prefs.edit().putBoolean("facebook",true).apply();
                                         onInstance = true;
                                         facebook = true;
+                                        FirebaseCrashlytics.getInstance().setUserId(UserController.getInstance().getCurrUser().getUserId());
                                         dataA.getEventIDs(new CallBackList() {
                                             @Override
                                             public void onCallback(List<String> list) {
@@ -215,6 +216,7 @@ public class Activity_Main extends AppCompatActivity implements View.OnClickList
                                                     prefs.edit().putBoolean("facebook",true).apply();
                                                     onInstance = true;
                                                     facebook = true;
+                                                    FirebaseCrashlytics.getInstance().setUserId(UserController.getInstance().getCurrUser().getUserId());
                                                     dataA.getEventIDs(new CallBackList() {
                                                         @Override
                                                         public void onCallback(List<String> list) {
