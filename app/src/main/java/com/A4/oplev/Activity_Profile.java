@@ -326,7 +326,7 @@ public class Activity_Profile extends AppCompatActivity implements View.OnClickL
             UserDTO user = (UserDTO) i.getSerializableExtra("user");
             String header = i.getStringExtra("header");
             String eventId = i.getStringExtra("eventID");
-            userController.onClickAccept(this, header, eventId);
+            userController.onClickAccept(this, header, eventId, user);
 
 
         }
@@ -337,7 +337,6 @@ public class Activity_Profile extends AppCompatActivity implements View.OnClickL
             String eventId = i.getStringExtra("eventID");
             String header = i.getStringExtra("header");
             userController.onClickReject(this, otherApplicants, eventId, header);
-
         }
         if(!noPic) {
             if(v == right){

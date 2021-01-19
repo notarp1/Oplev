@@ -157,10 +157,10 @@ public class UserController {
 
 
 
-    public void onClickAccept(Activity_Profile ctx, String header, String eventId){
+    public void onClickAccept(Activity_Profile ctx, String header, String eventId, UserDTO otheruser){
 
         // vi laver et chatobjekt med de nødvendige informationer
-        ChatDTO chatDTO = new ChatDTO(null,null,null,null,null,null,header, getCurrUser().getfName(),user.getfName(), getCurrUser().getUserId(),user.getUserId(),eventId);
+        ChatDTO chatDTO = new ChatDTO(null,null,null,null,null,null,header, getCurrUser().getfName(),otheruser.getfName(), getCurrUser().getUserId(),otheruser.getUserId(),eventId);
 
         chatDAO.createChat(chatDTO, chatID -> {
             // vi skal opdatere eventet til at have en participant
@@ -168,16 +168,16 @@ public class UserController {
             eventDAO.getEvent(event -> {
                 if (event != null) {
                     //event.setApplicants(new ArrayList<>());
-                    event.setParticipant(user.getUserId());
+                    event.setParticipant(otheruser.getUserId());
                     eventDAO.updateEvent(event);
                 }
             }, eventId);
 
             // vi skal indsætte chatid'et på begge brugeres lister
             ArrayList<String> otherUserChatID;
-            if (user.getChatId() == null){
+            if (otheruser.getChatId() == null){
                 otherUserChatID = new ArrayList<>();
-            } else otherUserChatID = user.getChatId();
+            } else otherUserChatID = otheruser.getChatId();
             otherUserChatID.add(chatID);
 
 
@@ -189,7 +189,7 @@ public class UserController {
 
             // vi opdaterer begge brugere i databasen
 
-            userDAO.updateUser(user);
+            userDAO.updateUser(otheruser);
             userDAO.updateUser(getCurrUser());
             ctx.finish();
         });
