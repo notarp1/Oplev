@@ -269,7 +269,6 @@ public class EventDAO implements IEventDAO {
 
     @Override
     public void updateEvent(EventDTO event) {
-
         Map<String, Object> eventObject = new HashMap<>();
         eventObject.put("ownerId", event.getOwnerId());
         eventObject.put("ownerPic", event.getOwnerPic());
@@ -288,6 +287,7 @@ public class EventDAO implements IEventDAO {
         eventObject.put("applicants", event.getApplicants());
         eventObject.put("type", event.getType());
         eventObject.put("coordinates", event.getCoordinates());
+
 
 
         db.collection("events").document(event.getEventId())

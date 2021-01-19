@@ -15,6 +15,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.A4.oplev.CreateEvent.Activity_Create_Event;
+import com.A4.oplev.Login.Activity_Login;
 import com.google.firebase.firestore.auth.User;
 import com.squareup.picasso.Picasso;
 
@@ -139,7 +140,7 @@ public class Activity_Event extends AppCompatActivity implements View.OnClickLis
                 i.putExtra("event", event);
                 startActivity(i);
             } else {
-                Intent i = new Intent(this, Activity_NoInstance.class);
+                Intent i = new Intent(this, Activity_Login.class);
                 startActivity(i);
             }
         }
@@ -177,7 +178,7 @@ public class Activity_Event extends AppCompatActivity implements View.OnClickLis
                     Toast.makeText(this, "Du har allerede ansøgt om at deltage", Toast.LENGTH_SHORT).show();
                 }
             } else {
-                Intent i = new Intent(this, Activity_NoInstance.class);
+                Intent i = new Intent(this, Activity_Login.class);
                 startActivity(i);
             }
         }

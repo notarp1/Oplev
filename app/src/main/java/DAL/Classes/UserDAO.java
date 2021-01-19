@@ -49,7 +49,7 @@ public class UserDAO implements IUserDAO, CallbackUser, CallbackUserDelete {
     @Override
     public void getUser(CallbackUser callbackUser, String userId) {
         System.out.println("userId = " + userId);
-        DocumentReference docRef = db.collection("users").document(userId);
+         DocumentReference docRef = db.collection("users").document(userId);
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {

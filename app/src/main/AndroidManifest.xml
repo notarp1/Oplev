@@ -36,7 +36,6 @@
         </activity>
 
         <activity android:name=".Edit_Event"></activity>
-        <activity android:name=".Activity_NoInstance" />
         <activity android:name=".Login.Activity_CreateUser" />
         <activity android:name=".Login.Activity_Login" />
         <activity android:name=".__Main.Activity_Main" />

@@ -2,6 +2,8 @@ package com.A4.oplev._Adapters;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,11 +15,14 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.cardview.widget.CardView;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.A4.oplev.Activity_Event;
+import com.A4.oplev.Activity_Profile;
 import com.A4.oplev.Edit_Event;
 import com.A4.oplev.R;
+import com.google.firebase.firestore.auth.User;
 import com.squareup.picasso.Picasso;
 
 import java.text.SimpleDateFormat;
@@ -26,20 +31,28 @@ import java.util.Date;
 
 import Controller.EventController;
 import Controller.UserController;
+import DAL.Classes.ChatDAO;
 import DAL.Classes.EventDAO;
+import DAL.Classes.UserDAO;
 import DAL.Interfaces.CallbackEvent;
+import DAL.Interfaces.CallbackUser;
+import DAL.Interfaces.IEventDAO;
+import DAL.Interfaces.IUserDAO;
+import DTO.ChatDTO;
 import DTO.EventDTO;
+import DTO.UserDTO;
 
 public class OwnEvents_Adapter2 extends RecyclerView.Adapter<OwnEvents_Adapter2.ViewHolder> implements View.OnClickListener {
-    private EventDAO eventDAO = new EventDAO();
+    private IEventDAO eventDAO = new EventDAO();
+    private IUserDAO userDAO = new UserDAO();
     private UserController userController = UserController.getInstance();
     private Context mContext;
     private ArrayList<Date> eventDate;
     private ArrayList<Integer> eventApplicantsSize;
-    private ArrayList<String> eventHeaders, eventEventPic, eventApplicantPic, eventOwnerPic, eventFirstApplicants,eventID ;
+    private ArrayList<String> eventHeaders, eventEventPic, eventApplicantPic, eventOwnerPic, eventFirstApplicants,eventID, eventParticipant, eventParticipantName;
 
 
-    public OwnEvents_Adapter2(@NonNull Context context, @NonNull ArrayList<String> eventEventPic, @NonNull ArrayList<String> eventHeaders, @NonNull ArrayList<String> eventOwnerPic, @NonNull ArrayList<String> eventFirstApplicants, @NonNull ArrayList<String> eventApplicantPic, @NonNull ArrayList<Integer> eventApplicantsSize, ArrayList<String> eventID, ArrayList<Date> eventDate) {
+    public OwnEvents_Adapter2(@NonNull Context context, @NonNull ArrayList<String> eventEventPic, @NonNull ArrayList<String> eventHeaders, @NonNull ArrayList<String> eventOwnerPic, @NonNull ArrayList<String> eventFirstApplicants, @NonNull ArrayList<String> eventApplicantPic, @NonNull ArrayList<Integer> eventApplicantsSize, ArrayList<String> eventID, ArrayList<Date> eventDate, ArrayList<String> eventParticipant, ArrayList<String> eventParticipantName ) {
         this.mContext = context;
         this.eventHeaders = eventHeaders;
         this.eventApplicantsSize = eventApplicantsSize;
@@ -49,6 +62,8 @@ public class OwnEvents_Adapter2 extends RecyclerView.Adapter<OwnEvents_Adapter2.
         this.eventFirstApplicants = eventFirstApplicants;
         this.eventID = eventID;
         this.eventDate = eventDate;
+        this.eventParticipant = eventParticipant;
+        this.eventParticipantName = eventParticipantName;
     }
 
 
@@ -74,12 +89,14 @@ public class OwnEvents_Adapter2 extends RecyclerView.Adapter<OwnEvents_Adapter2.
 
         ImageView eventPic = holder.eventPic;
         ImageView profilePic1 = holder.profilePic1;
+        ImageView box = holder.box_own_events;
         CardView profileHolder1 = holder.profileHolder1;
         TextView numberOfApplciants = holder.numberOfApplciants;
         ImageView profilePic2 = holder.profilePic2;
         CardView profilePic2Holder = holder.profilePic2Holder;
         TextView header = holder.header;
         TextView date  = holder.date;
+        CardView edit = holder.edit;
 
         Picasso.get().load(eventEventPic.get(position))
                 .resize(mContext.getDisplay().getWidth(), mContext.getDisplay().getHeight() / 2 + 200)
@@ -88,11 +105,30 @@ public class OwnEvents_Adapter2 extends RecyclerView.Adapter<OwnEvents_Adapter2.
                 .error(R.drawable.question)
                 .into(eventPic);
 
-        if (eventFirstApplicants.get(position).equals("")){
-            numberOfApplciants.setText("");
-            profilePic1.setVisibility(View.GONE);
-            profileHolder1.setVisibility(View.GONE);
+
+        if (eventParticipant.get(position)!="") {
+            box.setBackgroundDrawable(ContextCompat.getDrawable(mContext, R.drawable.own_events_occupied_background));
+            profilePic2Holder.setVisibility(View.GONE);
+
+            Picasso.get().load(eventApplicantPic.get(position))
+                    .resize(mContext.getDisplay().getWidth(), mContext.getDisplay().getHeight() / 2 + 200)
+                    .centerCrop()
+                    .placeholder(R.drawable.load2)
+                    .error(R.drawable.question)
+                    .into(profilePic1);
+
+            edit.setVisibility(View.GONE);
+            numberOfApplciants.setText(" Med "+eventParticipantName.get(position));
+
         }
+
+         else if (eventFirstApplicants.get(position).equals("")){
+            numberOfApplciants.setText("");
+            profileHolder1.setVisibility(View.GONE);
+            profilePic2Holder.setVisibility(View.GONE);
+
+        }
+
         else {
             profilePic1.setVisibility(View.VISIBLE);
             profileHolder1.setVisibility(View.VISIBLE);
@@ -102,31 +138,25 @@ public class OwnEvents_Adapter2 extends RecyclerView.Adapter<OwnEvents_Adapter2.
                     .placeholder(R.drawable.load2)
                     .error(R.drawable.question)
                     .into(profilePic1);
-        }
 
-        if (eventApplicantsSize.get(position)==1){
-            numberOfApplciants.setText(" 1 anmodning");
-            profilePic2.setVisibility(View.GONE);
-            profilePic2Holder.setVisibility(View.GONE);
-        }
+            if (eventApplicantsSize.get(position) == 1) {
+                numberOfApplciants.setText(" 1 anmodning");
+                profilePic2.setVisibility(View.GONE);
+                profilePic2Holder.setVisibility(View.GONE);
+            }
 
-        if (eventApplicantsSize.get(position)<1){
-            profilePic2.setVisibility(View.GONE);
-            profilePic2Holder.setVisibility(View.GONE);
-        }
+            else if (eventApplicantsSize.get(position) >= 2) {
+                numberOfApplciants.setText(" " + eventApplicantsSize.get(position) + " anmodninger");
+                profilePic2.setVisibility(View.VISIBLE);
+                profilePic2Holder.setVisibility(View.VISIBLE);
 
-
-        else if (eventApplicantsSize.get(position)>= 2) {
-            numberOfApplciants.setText(" " + eventApplicantsSize.get(position) + " anmodninger");
-            profilePic2.setVisibility(View.VISIBLE);
-            profilePic2Holder.setVisibility(View.VISIBLE);
-
+            }
         }
 
         // Sætter overskriften for eventet
         header.setText(eventHeaders.get(position));
 
-        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM");
+        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/YYYY");
         String strDate = formatter.format(eventDate.get(position));
         date.setText(strDate);
 
@@ -136,7 +166,7 @@ public class OwnEvents_Adapter2 extends RecyclerView.Adapter<OwnEvents_Adapter2.
         public ImageView eventPic,profilePic1, profilePic2, box_own_events;
         public CardView profileHolder1, profilePic2Holder;
         public TextView numberOfApplciants, header, date;
-        public View edit, delete;
+        public CardView edit, delete;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -149,12 +179,14 @@ public class OwnEvents_Adapter2 extends RecyclerView.Adapter<OwnEvents_Adapter2.
             numberOfApplciants = (TextView)itemView.findViewById(R.id.own_event_antal_anmodning);
             header = (TextView)itemView.findViewById(R.id.own_event_headline);
             date = (TextView)itemView.findViewById(R.id.own_event_beskeder_events_dato);
-            edit = itemView.findViewById(R.id.own_event_edit_picture);
-            delete = itemView.findViewById(R.id.own_event_delete_picture);
+            edit = (CardView)itemView.findViewById(R.id.own_event_edit_holder);
+            delete = (CardView)itemView.findViewById(R.id.own_event_delete_holder);
 
             edit.setOnClickListener(this);
             delete.setOnClickListener(this);
             box_own_events.setOnClickListener(this);
+            profileHolder1.setOnClickListener(this);
+
         }
 
         @Override
@@ -170,6 +202,17 @@ public class OwnEvents_Adapter2 extends RecyclerView.Adapter<OwnEvents_Adapter2.
                         mContext.startActivity(intent);
                     }, event.getOwnerId());
 
+                },eventID.get(getPosition()));
+            }
+            if (v == profileHolder1){
+
+                eventDAO.getEvent(event -> {
+                    userController.getUser(user -> {
+                        Intent intent = new Intent(mContext, Activity_Profile.class);
+                        intent.putExtra("user", user);
+                        intent.putExtra("load", 1);
+                        mContext.startActivity(intent);
+                    }, event.getApplicants().get(0));
                 },eventID.get(getPosition()));
             }
 

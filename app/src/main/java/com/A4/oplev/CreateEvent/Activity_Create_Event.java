@@ -33,7 +33,7 @@ import static com.google.android.libraries.places.widget.AutocompleteActivity.RE
 public class Activity_Create_Event extends AppCompatActivity implements View.OnClickListener {
     private static final String TAG = "Activity_Create_Event";
     ImageView back;
-    static TextView title;
+    TextView title;
     private Uri pickedImgUri;
     private ConstraintLayout constraintLayout;
     private Button create1_next_btn;
@@ -53,7 +53,7 @@ public class Activity_Create_Event extends AppCompatActivity implements View.OnC
         title.setText("Opret Event");
         //fill fragment holder with createvent 1
         getSupportFragmentManager().beginTransaction().replace(R.id.mainFragmentBox,  new createEvent1_frag(), "uSettingMainBox")
-                .commit();
+                . commit();
         //initiate picked image to null
         pickedImgUri = null;
 

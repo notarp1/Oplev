@@ -15,21 +15,32 @@ import android.widget.Toast;
 
 import com.A4.oplev.Activity_Ini;
 import com.A4.oplev.R;
+import com.google.android.gms.common.api.Status;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.libraries.places.api.Places;
+import com.google.android.libraries.places.api.model.Place;
+import com.google.android.libraries.places.api.model.TypeFilter;
+import com.google.android.libraries.places.widget.Autocomplete;
+import com.google.android.libraries.places.widget.model.AutocompleteActivityMode;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+import java.util.Arrays;
+import java.util.List;
+
 import Controller.UserController;
+
+import static com.google.android.libraries.places.widget.AutocompleteActivity.RESULT_ERROR;
 
 public class Activity_CreateUser extends AppCompatActivity implements View.OnClickListener {
 
     private FirebaseAuth mAuth;
-    private static final String TAG = "login";
+    private static final String TAG = "Activity_CreateUser";
     public EditText fName, lName, city, email, password, age;
     Button createUser;
-    ImageView back;
+    View back;
     Context ctx;
     UserController userController;
 
@@ -50,11 +61,15 @@ public class Activity_CreateUser extends AppCompatActivity implements View.OnCli
         email = findViewById(R.id.editEmail);
         password = findViewById(R.id.editPassword);
         createUser = findViewById(R.id.buttonCreate);
-        back = findViewById(R.id.imgView_back);
+        back = findViewById(R.id.createUser_backBtn);
 
         back.setOnClickListener(this);
         createUser.setOnClickListener(this);
 
+        //setup choose city places google widget (jacob)
+        city.setFocusable(false);
+        city.setOnClickListener(this);
+        Places.initialize(getApplicationContext(), getString(R.string.googlePlaces_api_key));
     }
 
     @Override
@@ -64,6 +79,21 @@ public class Activity_CreateUser extends AppCompatActivity implements View.OnCli
             finish();
         } else if (v == createUser) {
             createAccount();
+        }
+        else if(v==city){
+            // (jacob)
+            //open the places autocomplete api
+            List<Place.Field> fieldList = Arrays.asList(Place.Field.ADDRESS,
+                    Place.Field.NAME,
+                    Place.Field.LAT_LNG,
+                    Place.Field.TYPES);
+            //create intent for activity overlay
+            Intent intent = new Autocomplete.IntentBuilder(AutocompleteActivityMode.OVERLAY, fieldList)
+                    .setCountry("DK")
+                    .setTypeFilter(TypeFilter.CITIES)
+                    .build(this);
+            startActivityForResult(intent, 100);
+            // result handled in this activity onActivityResult method
         }
 
     }
@@ -99,5 +129,32 @@ public class Activity_CreateUser extends AppCompatActivity implements View.OnCli
 
                     }
                 });
+    }
+    //for google places autocomplete: (jacob)
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        Log.d(TAG, "onActivityResult: request code=" + requestCode + ", result code=" + resultCode);
+        if(resultCode == RESULT_OK){
+            // if city chosen with Places widget (request code is variable for some reason)
+            Log.d(TAG, "onActivityResult: jbe, req=100, result=ok");
+            //if google places intent (for location autocomplete)
+            // and if success
+            //get data into place object
+            Place place = Autocomplete.getPlaceFromIntent(data);
+            //set the text in the edittext view
+            city.setText(place.getName());
+            Log.d(TAG, "onActivityResult: (jbe) place name: " + place.getName());
+            Log.d(TAG, "onActivityResult: (jbe) place address: " + place.getAddress());
+            Log.d(TAG, "onActivityResult: (jbe) place type: " + place.getTypes().toString());
+        }
+        else if(resultCode== RESULT_ERROR){
+            Log.d(TAG, "onActivityResult: jbe, req=100, result=error");
+            Status status = Autocomplete.getStatusFromIntent(data);
+            Log.d(TAG, "onActivityResult: jbe"+ status.getStatusMessage());
+            Toast.makeText(getApplicationContext(),
+                    status.getStatusMessage(),
+                    Toast.LENGTH_SHORT).show();
+        }
     }
 }
