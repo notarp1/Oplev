@@ -50,7 +50,7 @@ public class Activity_Likeside extends AppCompatActivity implements View.OnClick
             public void onSwipeLeft() {
                 // Swiper til venstre fra ownevent siden skifter til likesiden
                 if (position==0) {
-                    Log.d("pos2", position+"");
+                    Log.d("pos", position+"");
                     getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.enter_from_right,
                             R.anim.exit_to_left).replace(R.id.likeside_frameLayout, new LikesideList_frag())
                             .commit();
@@ -85,7 +85,7 @@ public class Activity_Likeside extends AppCompatActivity implements View.OnClick
                 }
                 // Swiper til højre fra hjertesiden siden skifter til likesiden
                 if (position==2) {
-                    Log.d("pos2", position+"");
+                    Log.d("pos", position+"");
                     getSupportFragmentManager().beginTransaction().setCustomAnimations(android.R.anim.slide_in_left,
                             android.R.anim.slide_out_right).replace(R.id.likeside_frameLayout, new LikesideList_frag())
                             .commit();
