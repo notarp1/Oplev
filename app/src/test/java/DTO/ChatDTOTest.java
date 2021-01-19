@@ -63,8 +63,8 @@ public class ChatDTOTest extends TestCase {
     public void testSetEventID() {
         for (int i = 0; i < antal; i++) {
             String random = UUID.randomUUID().toString();
-            chatDTO.setEventID(random);
-            assertEquals(random,chatDTO.getEventID());
+            chatDTO.setEventId(random);
+            assertEquals(random,chatDTO.getEventId());
         }
     }
 
