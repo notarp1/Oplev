@@ -61,33 +61,4 @@ public class Activity_U_Settings extends AppCompatActivity implements View.OnCli
 
 
     }
-
-    //for google places autocomplete: (jacob)
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        Log.d(TAG, "onActivityResult: request code=" + requestCode + ", result code=" + resultCode);
-        if(resultCode == RESULT_OK){
-            // if city chosen with Places widget (request code is variable for some reason)
-            Log.d(TAG, "onActivityResult: jbe, req=100, result=ok");
-            //if google places intent (for location autocomplete)
-            // and if success
-            //get data into place object
-            Place place = Autocomplete.getPlaceFromIntent(data);
-            //set the text in the edittext view
-            EditText city_in = findViewById(R.id.editText_city);
-            city_in.setText(place.getName());
-            Log.d(TAG, "onActivityResult: (jbe) place name: " + place.getName());
-            Log.d(TAG, "onActivityResult: (jbe) place address: " + place.getAddress());
-            Log.d(TAG, "onActivityResult: (jbe) place type: " + place.getTypes().toString());
-        }
-        else if(resultCode== RESULT_ERROR){
-            Log.d(TAG, "onActivityResult: jbe, req=100, result=error");
-            Status status = Autocomplete.getStatusFromIntent(data);
-            Log.d(TAG, "onActivityResult: jbe"+ status.getStatusMessage());
-            Toast.makeText(getApplicationContext(),
-                    status.getStatusMessage(),
-                    Toast.LENGTH_SHORT).show();
-        }
-    }
 }

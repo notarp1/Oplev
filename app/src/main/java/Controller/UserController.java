@@ -83,7 +83,7 @@ public class UserController {
     }
 
     public UserDTO getCurrUser(){
-        return user;
+        return this.user;
     }
 
 
@@ -335,7 +335,7 @@ public class UserController {
                     indexPlace = i;
 
                     Uri filePic = uris[i];
-                    picRefProfile = mStorageRef.child("users/" + currentUser.getUid() + "/" + i);
+                    picRefProfile = mStorageRef.child("users/" + user.getUserId() + "/" + i);
 
                     userDAO.uploadFile(getInstance(), picRefProfile, filePic, indexPlace, pictures, ctx);
                 }
@@ -346,8 +346,7 @@ public class UserController {
     }
 
     public void deletePicture(int number, ArrayList<String> pictures, U_Settings_Edit ctx, Bitmap stockphotoBit) {
-
-       if(pictures.get(number) != null){
+       if(pictures.get(number) != null && pictures.get(number).substring(0,23).equals("https://firebasestorage")){
 
            //put i DAL
            StorageReference storageReference = FirebaseStorage.getInstance().getReferenceFromUrl(pictures.get(number));

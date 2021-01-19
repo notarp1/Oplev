@@ -54,7 +54,7 @@ public class Activity_Profile extends AppCompatActivity implements View.OnClickL
 
         j = myIntent.getIntExtra("load", 0);
 
-        userController =  userController.getInstance();
+        userController =  UserController.getInstance();
         if(j==0) pictures = userController.getUserPictures();
 
         about = findViewById(R.id.text_information);
