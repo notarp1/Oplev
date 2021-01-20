@@ -3,9 +3,11 @@ package com.A4.oplev;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.AlertDialog;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
@@ -93,53 +95,94 @@ public class Activity_Ini extends AppCompatActivity implements Serializable {
         prefs = PreferenceManager.getDefaultSharedPreferences(this);
         onInstance = prefs.getBoolean("onInstance", false);
 
-       if(currentUser == null && !prefs.getBoolean("facebook",false)){
-            prefs.edit().putBoolean("onInstance", false).apply();
-            Intent i = new Intent(this, Activity_Main.class);
-            i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            startActivity(i);
+        if (currentUser == null && !prefs.getBoolean("facebook", false)) {
+            new AlertDialog.Builder(ctx)
+                    .setTitle("Gruppe A4")
+                    .setMessage("Denne app er lavet af:\nSimon Lindhard Fridolf (s195479)\nJacob Berg Eriksen (s195471)\nAlexander Lambrecht (s195482)\nChristian Francesco Notarmaso Pone (s195465)\nWilliam Mortensen (s195490)")
 
+                    // Specifying a listener allows you to take an action before dismissing the dialog.
+                    // The dialog is automatically dismissed when a dialog button is clicked.
+                    .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            prefs.edit().putBoolean("onInstance", false).apply();
+                            Intent i = new Intent(ctx, Activity_Main.class);
+                            i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                            startActivity(i);
+                        }
+                    })
+
+                    // A null listener allows the button to dismiss the dialog and take no further action.
+                    .setIcon(android.R.drawable.ic_dialog_alert)
+                    .show();
         } else {
-           if (prefs.getBoolean("facebook",false)) {
-               prefs.edit().putBoolean("onInstance", true).apply();
+            if (prefs.getBoolean("facebook", false)) {
+                new AlertDialog.Builder(ctx)
+                        .setTitle("Gruppe A4")
+                        .setMessage("Denne app er lavet af:\nSimon Lindhard Fridolf (s195479)\nJacob Berg Eriksen (s195471)\nAlexander Lambrecht (s195482)\nChristian Francesco Notarmaso Pone (s195465)\nWilliam Mortensen (s195490)")
 
-               userController.getUser(new CallbackUser() {
-                   @Override
-                   public void onCallback(UserDTO user) {
-                       setUserDTO(user);
+                        // Specifying a listener allows you to take an action before dismissing the dialog.
+                        // The dialog is automatically dismissed when a dialog button is clicked.
+                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                prefs.edit().putBoolean("onInstance", true).apply();
 
-                       Intent i = new Intent(ctx, Activity_Main.class);
-                       userController.setCurrUser(user);
-                       FirebaseCrashlytics.getInstance().setUserId(user.getUserId());
-                       i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                userController.getUser(new CallbackUser() {
+                                    @Override
+                                    public void onCallback(UserDTO user) {
+                                        setUserDTO(user);
 
-                       startActivity(i);
-                   }
-               }, prefs.getString("userId",""));
-           } else {
-               prefs.edit().putBoolean("onInstance", true).apply();
+                                        Intent i = new Intent(ctx, Activity_Main.class);
+                                        userController.setCurrUser(user);
+                                        FirebaseCrashlytics.getInstance().setUserId(user.getUserId());
+                                        i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
 
-               userController.getUser(new CallbackUser() {
-                   @Override
-                   public void onCallback(UserDTO user) {
-                       setUserDTO(user);
-                       try {
-                           prefs.edit().putString("userId", user.getUserId()).apply();
-                       } catch (Exception e) {
-                           FirebaseAuth.getInstance().signOut();
-                           PreferenceManager.getDefaultSharedPreferences(ctx).edit().clear().apply();
-                       }
+                                        startActivity(i);
+                                    }
+                                }, prefs.getString("userId", ""));
+                            }
+                        })
 
-                       Intent i = new Intent(ctx, Activity_Main.class);
-                       userController.setCurrUser(user);
-                       FirebaseCrashlytics.getInstance().setUserId(user.getUserId());
-                       i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        // A null listener allows the button to dismiss the dialog and take no further action.
+                        .setIcon(android.R.drawable.ic_dialog_alert)
+                        .show();
+            } else {
+                new AlertDialog.Builder(ctx)
+                        .setTitle("Gruppe A4")
+                        .setMessage("Denne app er lavet af:\nSimon Lindhard Fridolf (s195479)\nJacob Berg Eriksen (s195471)\nAlexander Lambrecht (s195482)\nChristian Francesco Notarmaso Pone (s195465)\nWilliam Mortensen (s195490)")
 
-                       startActivity(i);
-                   }
-               }, currentUser.getUid());
-           }
-       }
+                        // Specifying a listener allows you to take an action before dismissing the dialog.
+                        // The dialog is automatically dismissed when a dialog button is clicked.
+                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                prefs.edit().putBoolean("onInstance", true).apply();
+
+                                userController.getUser(new CallbackUser() {
+                                    @Override
+                                    public void onCallback(UserDTO user) {
+                                        setUserDTO(user);
+                                        try {
+                                            prefs.edit().putString("userId", user.getUserId()).apply();
+                                        } catch (Exception e) {
+                                            FirebaseAuth.getInstance().signOut();
+                                            PreferenceManager.getDefaultSharedPreferences(ctx).edit().clear().apply();
+                                        }
+
+                                        Intent i = new Intent(ctx, Activity_Main.class);
+                                        userController.setCurrUser(user);
+                                        FirebaseCrashlytics.getInstance().setUserId(user.getUserId());
+                                        i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+
+                                        startActivity(i);
+                                    }
+                                }, currentUser.getUid());
+                            }
+                        })
+
+                        // A null listener allows the button to dismiss the dialog and take no further action.
+                        .setIcon(android.R.drawable.ic_dialog_alert)
+                        .show();
+            }
+        }
     }
 /*
     private void getUserPictures() {
