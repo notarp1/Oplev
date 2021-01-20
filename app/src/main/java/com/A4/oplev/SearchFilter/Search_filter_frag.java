@@ -111,7 +111,6 @@ public class Search_filter_frag extends Fragment{
                     kulturSwitch.setChecked(true);
                     musikNattelivSwitch.setChecked(true);
                     blivKlogereSwitch.setChecked(true);
-                    gratisSwitch.setChecked(true);
 
                     prefs.edit().putBoolean("motionSwitch", motionSwitch.isChecked()).apply();
                     prefs.edit().putBoolean("underholdningSwitch", underholdningSwitch.isChecked()).apply();
@@ -119,7 +118,6 @@ public class Search_filter_frag extends Fragment{
                     prefs.edit().putBoolean("kulturSwitch", kulturSwitch.isChecked()).apply();
                     prefs.edit().putBoolean("musikNattelivSwitch", musikNattelivSwitch.isChecked()).apply();
                     prefs.edit().putBoolean("blivKlogereSwitch", blivKlogereSwitch.isChecked()).apply();
-                    prefs.edit().putBoolean("gratisSwitch", gratisSwitch.isChecked()).apply();
                     onUpdate(prefs);
                 }
 
@@ -130,7 +128,6 @@ public class Search_filter_frag extends Fragment{
                     kulturSwitch.setChecked(false);
                     musikNattelivSwitch.setChecked(false);
                     blivKlogereSwitch.setChecked(false);
-                    gratisSwitch.setChecked(false);
 
                     prefs.edit().putBoolean("motionSwitch", motionSwitch.isChecked()).apply();
                     prefs.edit().putBoolean("underholdningSwitch", underholdningSwitch.isChecked()).apply();
@@ -138,7 +135,6 @@ public class Search_filter_frag extends Fragment{
                     prefs.edit().putBoolean("kulturSwitch", kulturSwitch.isChecked()).apply();
                     prefs.edit().putBoolean("musikNattelivSwitch", musikNattelivSwitch.isChecked()).apply();
                     prefs.edit().putBoolean("blivKlogereSwitch", blivKlogereSwitch.isChecked()).apply();
-                    prefs.edit().putBoolean("gratisSwitch", gratisSwitch.isChecked()).apply();
                     onUpdate(prefs);
                 }
             }
