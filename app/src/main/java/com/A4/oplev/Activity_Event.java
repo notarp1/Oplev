@@ -209,12 +209,14 @@ public class Activity_Event extends AppCompatActivity implements View.OnClickLis
                 if (!likedeEvents.contains(event.getEventId())) {
                     like.setImageResource(R.drawable.hearthfill);
                     likedeEvents.add(event.getEventId());
+                    user.setLikedeEvents(likedeEvents);
                     UserDAO dao = new UserDAO();
                     dao.updateUser(user);
                     Toast.makeText(this,"Event liket",Toast.LENGTH_SHORT).show();
                 } else {
                     like.setImageResource(R.drawable.heart);
                     likedeEvents.remove(event.getEventId());
+                    user.setLikedeEvents(likedeEvents);
                     UserDAO dao = new UserDAO();
                     dao.updateUser(user);
                     Toast.makeText(this,"Event fjernet fra likes",Toast.LENGTH_SHORT).show();
