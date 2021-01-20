@@ -20,7 +20,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.A4.oplev.Activity_Event;
 import com.A4.oplev.Activity_Profile;
-import com.A4.oplev.Edit_Event;
+import com.A4.oplev.CreateEvent.Activity_Create_Event;
 import com.A4.oplev.R;
 import com.google.firebase.firestore.auth.User;
 import com.squareup.picasso.Picasso;
@@ -223,7 +223,7 @@ public class OwnEvents_Adapter2 extends RecyclerView.Adapter<OwnEvents_Adapter2.
                     @Override
                     public void onCallback(EventDTO event) {
                         if(event.getParticipant() == null && event.getApplicants().isEmpty()) {
-                            Intent i = new Intent(v.getContext(), Edit_Event.class);
+                            Intent i = new Intent(v.getContext(), Activity_Create_Event.class);
                             i.putExtra("EventDTO", event);
                             i.putExtra("edit", true);
                             mContext.startActivity(i);
