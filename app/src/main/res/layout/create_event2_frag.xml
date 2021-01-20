@@ -114,6 +114,7 @@
         android:layout_marginEnd="20dp"
         android:layout_marginRight="20dp"
         android:theme="@style/switchTheme"
+        android:checked="true"
         app:layout_constraintBottom_toBottomOf="@+id/create2_female_txt"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/create2_female_txt" />
@@ -125,6 +126,7 @@
         android:layout_marginEnd="20dp"
         android:layout_marginRight="20dp"
         android:theme="@style/switchTheme"
+        android:checked="true"
         app:layout_constraintBottom_toBottomOf="@+id/create2_male_txt"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/create2_male_txt" />
