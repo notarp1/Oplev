@@ -104,7 +104,7 @@ public class Activity_CreateUser extends AppCompatActivity implements View.OnCli
         String emailInput = String.valueOf(email.getText());
         String passInput = String.valueOf(password.getText());
 
-        if (!(emailInput.equals("") || passInput.equals(""))) {
+        if (!(emailInput.equals("") || passInput.equals("") || String.valueOf(fName.getText()).equals("") || String.valueOf(lName.getText()).equals("") || String.valueOf(city.getText()).equals("") || String.valueOf(age.getText()).equals(""))) {
             mAuth.createUserWithEmailAndPassword(emailInput, passInput)
                     .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
 
@@ -130,7 +130,9 @@ public class Activity_CreateUser extends AppCompatActivity implements View.OnCli
 
                         }
                     });
-        } else Toast.makeText(ctx,"Du skal skrive både en email og et kodeord",Toast.LENGTH_LONG).show();
+        } else {
+            Toast.makeText(ctx,"Du skal indtaste alle dine informationer",Toast.LENGTH_LONG).show();
+        }
     }
     //for google places autocomplete: (jacob)
     @Override
