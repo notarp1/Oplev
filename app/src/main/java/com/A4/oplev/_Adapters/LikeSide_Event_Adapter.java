@@ -56,19 +56,6 @@ public class LikeSide_Event_Adapter extends ArrayAdapter<String> {
                 .into(eventPic);
 
 
-        ImageView profilePic1 = listItem.findViewById(R.id.beskeder_event_lilleprofilbillede1);
-        if (eventOwnerPic.get(position).equals("")){
-            profilePic1.setImageResource(R.drawable.question);
-        }
-        else {
-            Picasso.get().load(eventOwnerPic.get(position))
-                    .resize(mContext.getDisplay().getWidth(), mContext.getDisplay().getHeight() / 2 + 200)
-                    .centerCrop()
-                    .placeholder(R.drawable.load2)
-                    .error(R.drawable.question)
-                    .into(profilePic1);
-        }
-
         ImageView profilePic2 = listItem.findViewById(R.id.beskeder_event_lilleprofilbillede2);
         if (eventApplicantPic.get(position).equals("")){
 

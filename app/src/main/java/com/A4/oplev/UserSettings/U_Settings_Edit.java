@@ -195,8 +195,10 @@ public class U_Settings_Edit extends Fragment implements View.OnClickListener, V
 
     @Override
     public boolean onLongClick(View v) {
+        pictures = userController.getCurrUser().getPictures();
         if(userController.isSafe()) {
             if (v == p0) {
+                System.out.println("FEOAKGOPEAPS" + pictures.toString());
                 userController.deletePicture(0, pictures, this, stockphotoBit);
                 return true;
             } else if (v == p1) {

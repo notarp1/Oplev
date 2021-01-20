@@ -90,32 +90,13 @@
         android:textStyle="bold" />
 
     <androidx.cardview.widget.CardView
-        android:id="@+id/beskeder_anmodning1_holder"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_alignParentTop="true"
-        android:layout_gravity="center"
-        android:layout_toRightOf="@+id/event_picture_holder"
-        android:layout_marginLeft="12dp"
-        android:layout_marginTop="70dp"
-        app:cardCornerRadius="100dp">
-
-        <ImageView
-            android:id="@+id/beskeder_event_lilleprofilbillede1"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:scaleType="centerCrop"
-            app:srcCompat="@drawable/_profiltest" />
-    </androidx.cardview.widget.CardView>
-
-    <androidx.cardview.widget.CardView
         android:id="@+id/beskeder_anmodning2_holder"
         android:layout_width="30dp"
         android:layout_height="30dp"
         android:layout_alignParentTop="true"
         android:layout_gravity="center"
         android:layout_toRightOf="@+id/event_picture_holder"
-        android:layout_marginLeft="35dp"
+        android:layout_marginLeft="12dp"
         android:layout_marginTop="70dp"
         app:cardCornerRadius="100dp">
 

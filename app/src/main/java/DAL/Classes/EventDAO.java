@@ -48,7 +48,7 @@ public class EventDAO implements IEventDAO {
     private StorageReference mStorageRef;
     private StorageReference picRef;
 
-    public EventDAO(){
+    public EventDAO() {
         this.db = FirebaseFirestore.getInstance();
     }
 
@@ -61,7 +61,7 @@ public class EventDAO implements IEventDAO {
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
 
                 DocumentSnapshot documentSnapshot = task.getResult();
-                if(documentSnapshot != null){
+                if (documentSnapshot != null) {
                     System.out.println(documentSnapshot.getData());
                     EventDTO event = documentSnapshot.toObject(EventDTO.class);
                     callbackEvent.onCallback(event);
@@ -73,77 +73,91 @@ public class EventDAO implements IEventDAO {
 
     public void getEvents(CallBackEventList callbackEventList, List<String> Ids) {
         List<EventDTO> res = new ArrayList<>();
-        for(String id : Ids){
+        for (String id : Ids) {
             getEvent(new CallbackEvent() {
                 @Override
                 public void onCallback(EventDTO event) {
                     res.add(event);
 
-                    if(res.size() == Ids.size()){
+                    if (res.size() == Ids.size()) {
                         callbackEventList.onCallback(res);
                     }
                 }
-            } ,id);
+            }, id);
         }
 
     }
 
-    public void getEventIDs(CallBackList callBackList,SharedPreferences prefs) {
+    public void getEventIDs(CallBackList callBackList, SharedPreferences prefs) {
         CollectionReference docRef = db.collection(collectionPath);
         List<String> completeList = new ArrayList<>();
         List<String> types = new ArrayList<>();
 
-        if (prefs.getBoolean("motionSwitch", true)) { types.add("Motion"); }
-        if (prefs.getBoolean("kulturSwitch", true)) { types.add("Kultur"); }
-        if (prefs.getBoolean("underholdningSwitch", true)) { types.add("Underholdning"); }
-        if (prefs.getBoolean("madDrikkeSwitch", true)) { types.add("Mad og Drikke"); }
-        if (prefs.getBoolean("musikNattelivSwitch", true)) { types.add("Musik og Natteliv"); }
-        if (prefs.getBoolean("gratisSwitch", true)) { types.add("Gratis"); }
-        if (prefs.getBoolean("blivKlogereSwitch", true)) { types.add("Bliv klogere"); }
+        if (prefs.getBoolean("motionSwitch", true)) {
+            types.add("Motion");
+        }
+        if (prefs.getBoolean("kulturSwitch", true)) {
+            types.add("Kultur");
+        }
+        if (prefs.getBoolean("underholdningSwitch", true)) {
+            types.add("Underholdning");
+        }
+        if (prefs.getBoolean("madDrikkeSwitch", true)) {
+            types.add("Mad og Drikke");
+        }
+        if (prefs.getBoolean("musikNattelivSwitch", true)) {
+            types.add("Musik og Natteliv");
+        }
+        if (prefs.getBoolean("gratisSwitch", true)) {
+            types.add("Gratis");
+        }
+        if (prefs.getBoolean("blivKlogereSwitch", true)) {
+            types.add("Bliv klogere");
+        }
 
-        docRef.whereIn("type", types).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>(){
-                @Override
-                public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                    if (task.isSuccessful()) {
-                        //setup location of phone/user
-                        Location phoneLocation = new Location("LocationA");
-                        phoneLocation.setLatitude(Double.parseDouble(prefs.getString("gpsLat","0")));
-                        phoneLocation.setLongitude(Double.parseDouble(prefs.getString("gpsLong","0")));
-                        Log.d(TAG, "onComplete: phonelocation: " + phoneLocation.toString());
-                        int maxDistance = prefs.getInt("distance",150);
-                        Log.d(TAG, "onComplete: maxDistance (filter): " + maxDistance);
-                        for (QueryDocumentSnapshot document : task.getResult()) {
-                            //for each event
-                            EventDTO dto = document.toObject(EventDTO.class);
-                            if (UserController.getInstance().getCurrUser() != null) {
-                                // if youre logged in
-                                if (!dto.getOwnerId().equals(UserController.getInstance().getCurrUser().getUserId())
-                                        && dto.getParticipant().equals("")
-                                        && !dto.getApplicants().contains(UserController.getInstance().getCurrUser().getUserId())) {
-                                    //if youre not owner, no participant on event, and you havent applied to event
-                                    //setup distance check
-                                    int distance = EventController.getInstance().calculateDistance(dto, prefs);
-                                    if(distance <= maxDistance){
-                                        //if within distancelimit
-                                        completeList.add(document.getId());
-                                    }
-                                }
-                            } else {
-                                if (dto.getParticipant().equals("")) {
-                                    // not logged in
+        docRef.whereIn("type", types).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    //setup location of phone/user
+                    Location phoneLocation = new Location("LocationA");
+                    phoneLocation.setLatitude(Double.parseDouble(prefs.getString("gpsLat", "0")));
+                    phoneLocation.setLongitude(Double.parseDouble(prefs.getString("gpsLong", "0")));
+                    Log.d(TAG, "onComplete: phonelocation: " + phoneLocation.toString());
+                    int maxDistance = prefs.getInt("distance", 150);
+                    Log.d(TAG, "onComplete: maxDistance (filter): " + maxDistance);
+                    for (QueryDocumentSnapshot document : task.getResult()) {
+                        //for each event
+                        EventDTO dto = document.toObject(EventDTO.class);
+                        if (UserController.getInstance().getCurrUser() != null) {
+                            // if youre logged in
+                            if (!dto.getOwnerId().equals(UserController.getInstance().getCurrUser().getUserId())
+                                    && dto.getParticipant().equals("")
+                                    && !dto.getApplicants().contains(UserController.getInstance().getCurrUser().getUserId())) {
+                                //if youre not owner, no participant on event, and you havent applied to event
+                                //setup distance check
+                                int distance = EventController.getInstance().calculateDistance(dto, prefs);
+                                if (distance <= maxDistance) {
+                                    //if within distancelimit
                                     completeList.add(document.getId());
                                 }
                             }
+                        } else {
+                            if (dto.getParticipant().equals("")) {
+                                // not logged in
+                                completeList.add(document.getId());
+                            }
                         }
-                        Collections.shuffle(completeList);
-                        callBackList.onCallback(completeList);
-                    } else {
-                        Log.d("switchFail", "Error getting motionswitch: ", task.getException());
                     }
-
+                    Collections.shuffle(completeList);
+                    callBackList.onCallback(completeList);
+                } else {
+                    Log.d("switchFail", "Error getting motionswitch: ", task.getException());
                 }
-            });
-        }
+
+            }
+        });
+    }
 
 
     @Override
@@ -185,10 +199,10 @@ public class EventDAO implements IEventDAO {
                         eventObject.put("eventId", documentReference.getId());
 
                         //get storage reference
-                        mStorageRef  = FirebaseStorage.getInstance().getReference();
+                        mStorageRef = FirebaseStorage.getInstance().getReference();
 
                         //if a picture to upload was chosen then upload pic else skip that part
-                        if(picUri!=null) {
+                        if (picUri != null) {
                             //set picture reference (path where pic will be saved in db
                             picRef = mStorageRef.child("events/" + documentReference.getId() + "/1");
                             picRef.putFile(picUri)
@@ -229,8 +243,7 @@ public class EventDAO implements IEventDAO {
                                             // ...
                                         }
                                     });
-                        }
-                        else{
+                        } else {
                             //set picture reference  (path of pic, here hardcoded cuz default pic)
                             picRef = mStorageRef.child("events/default/2.jpg");
                             //get pic url from db
@@ -290,10 +303,8 @@ public class EventDAO implements IEventDAO {
         eventObject.put("type", event.getType());
         eventObject.put("coordinates", event.getCoordinates());
 
-        eventObject.put("coordinates", event.getCoordinates());
 
-
-     /*   db.collection("events").document(event.getEventId())
+        db.collection("events").document(event.getEventId())
                 .set(eventObject)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
@@ -310,54 +321,50 @@ public class EventDAO implements IEventDAO {
                         userController.setSafe(true);
                         Log.w(TAG, "Error writing document", e);
                     }
-                });*/
+                });
 
-        if(event.getEventPic() !=null) {
-            //set picture reference (path where pic will be saved in db
-            picRef = mStorageRef.child("events/" + event.getEventId() + "/1");
-            picRef.putFile(Uri.parse(event.getEventPic()))
-                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                        @Override
-                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                            // Get a URL to the uploaded content picture
-                            picRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                                @Override
-                                public void onSuccess(Uri uri) {
-                                    //set URL of eventpic in eventObject map
-                                    eventObject.put("eventPic", String.valueOf(uri));
-                                    Log.d(TAG, "onSuccess: event url " );
-                                    //eventObject is now updated with eventId and eventPic URL
-                                    //update the event in db
-                                    //overwrite database document with new eventId and link to pic
-                                    db.collection("events").document(event.getEventId())
-                                            .set(eventObject)
-                                            .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                                @Override
-                                                public void onSuccess(Void aVoid) {
-                                                    Log.d(TAG, "DocumentSnapshot successfully written!");
-                                                }
-                                            })
-                                            .addOnFailureListener(new OnFailureListener() {
-                                                @Override
-                                                public void onFailure(@NonNull Exception e) {
-                                                    Log.w(TAG, "Error writing document", e);
-                                                }
-                                            });
-                                }
-                            });
-                        }
-                    })
-                    .addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception exception) {
-                            // Handle unsuccessful uploads
-                            // ...
-                        }
-                    });
-        }
-
-
-
+//        if(event.getEventPic() !=null) {
+//            //set picture reference (path where pic will be saved in db
+//            picRef = mStorageRef.child("events/" + event.getEventId() + "/1");
+//            picRef.putFile(Uri.parse(event.getEventPic()))
+//                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+//                        @Override
+//                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+//                            // Get a URL to the uploaded content picture
+//                            picRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+//                                @Override
+//                                public void onSuccess(Uri uri) {
+//                                    //set URL of eventpic in eventObject map
+//                                    eventObject.put("eventPic", String.valueOf(uri));
+//                                    Log.d(TAG, "onSuccess: event url " );
+//                                    //eventObject is now updated with eventId and eventPic URL
+//                                    //update the event in db
+//                                    //overwrite database document with new eventId and link to pic
+//                                    db.collection("events").document(event.getEventId())
+//                                            .set(eventObject)
+//                                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+//                                                @Override
+//                                                public void onSuccess(Void aVoid) {
+//                                                    Log.d(TAG, "DocumentSnapshot successfully written!");
+//                                                }
+//                                            })
+//                                            .addOnFailureListener(new OnFailureListener() {
+//                                                @Override
+//                                                public void onFailure(@NonNull Exception e) {
+//                                                    Log.w(TAG, "Error writing document", e);
+//                                                }
+//                                            });
+//                                }
+//                            });
+//                        }
+//                    })
+//                    .addOnFailureListener(new OnFailureListener() {
+//                        @Override
+//                        public void onFailure(@NonNull Exception exception) {
+//                            // Handle unsuccessful uploads
+//                            // ...
+//                        }
+//                    });
 
     }
 

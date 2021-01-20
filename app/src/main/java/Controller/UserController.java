@@ -374,7 +374,16 @@ public class UserController {
            updateUserAndGUI(ctx);
             ImageView pic = getPictureNumber(number, ctx);
             pic.setImageBitmap(stockphotoBit);
-        }
+        } else if (pictures.get(number) != null){
+           UserDTO dto = getCurrUser();
+           dto.getPictures().set(number,null);
+           dto.setPictures(dto.getPictures());
+           setSafe(false);
+           updateUserSimple(dto);
+           updateUserAndGUI(ctx);
+           ImageView pic = getPictureNumber(number, ctx);
+           pic.setImageBitmap(stockphotoBit);
+       }
     }
 
     private ImageView getPictureNumber(int picNumber, U_Settings_Edit ctx){
