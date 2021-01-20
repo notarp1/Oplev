@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Rect;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
@@ -16,6 +17,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -28,8 +30,12 @@ import com.A4.oplev.R;
 
 import java.io.IOException;
 import java.net.URL;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 
 import DTO.ChatDTO;
 
@@ -45,10 +51,10 @@ public class ChatList_Adapter extends ArrayAdapter<String> {
     private ChatDTO dto;
     private String thisUser;
 
-    public ChatList_Adapter(@NonNull Context context, @NonNull ArrayList<String> list, ChatDTO dto, String thisUser) {
-        super(context, 0 , list);
+    public ChatList_Adapter(@NonNull Context context, @NonNull ArrayList<String> beskederList, ChatDTO dto, String thisUser) {
+        super(context, 0 , beskederList);
         this.mContext = context;
-        this.beskederList = list;
+        this.beskederList = beskederList;
         this.dto = dto;
         this.thisUser = thisUser;
     }
@@ -58,7 +64,6 @@ public class ChatList_Adapter extends ArrayAdapter<String> {
     @NonNull
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-        System.out.println("Position: " + position + "\tSize: " + beskederList.size());
         View listItem = convertView;
         boolean isPic = false;
         if(listItem == null)
@@ -67,7 +72,10 @@ public class ChatList_Adapter extends ArrayAdapter<String> {
 
         // Vi finder vores textview og finder ud af hvad chatbeskeden er
         String currentBesked = beskederList.get(position);
+        DateFormat format1 = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+        format1.setTimeZone(TimeZone.getTimeZone("GMT+1"));
         TextView besked = (TextView) listItem.findViewById(R.id.chat_besked_element_tekst);
+        TextView date = listItem.findViewById(R.id.chat_besked_dato);
 
         // hvis chatbeskeden er et billede (igen meget ustabilt lavet og skal ændres)
         if (currentBesked.equals("pictureBlaBlaBla!:")) {
@@ -90,9 +98,9 @@ public class ChatList_Adapter extends ArrayAdapter<String> {
                         ImageSpan span = new ImageSpan(drawable);
                         ssb.setSpan(span, ssb.length() - 1, ssb.length(), 0);
                         // Nu sætter vi vores billede ind i tekstfeltet
+
                         besked.setText(ssb);
-                        // Sætter baggrunden til den default vi har inde i aktiviteten
-                        besked.setBackgroundColor(mContext.getResources().getColor(R.color.backgroundColor));
+
                     } else {
                         // Hvis bitmappet er tomt så bare send en fejlbesked
                         Toast.makeText(mContext,"Error whilst loading picture", Toast.LENGTH_LONG).show();
@@ -107,35 +115,50 @@ public class ChatList_Adapter extends ArrayAdapter<String> {
 
 
         // Vi tjekker om brugeren der har sendt beskeden er den anden person
-        if (!dto.getSender().get(position).equals(thisUser)){
+        if (dto.getSender().get(position).equals("Oplev")){
+            // Helt det samme gøres for hvis beskeden er sendt fra en selv bare med andre farver og en anden margine på textviewet
+            int width = mContext.getResources().getDisplayMetrics().widthPixels;
+            RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+            lp.setMargins(width/50, 0, width/4, width/20);
+            listItem.findViewById(R.id.chat_background_pic).setBackgroundResource(R.drawable.beskedbackground6);
+        }
+        else if (!dto.getSender().get(position).equals(thisUser)){
             // Vi finder skærmstørrelsen af telefonen så vi kan sætte layoutet ens for alle telefoner
             int width = mContext.getResources().getDisplayMetrics().widthPixels;
             RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
             // Sætter nogle marginer alt efter bredden af skærmen
-            lp.setMargins(width/4, 0, width/50, width/50);
+            lp.setMargins(width/4, 0, width/50, width/20);
             // Kun SDK 19 eller efter kan gøre dette her derfor checker vi om det er sandt
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
                 besked.setLayoutParams(new RelativeLayout.LayoutParams(lp));
                 // Hvis beskeden ikke var et billede skal vi sætte baggrundens farve og tekstens farve til noget nyt
                 if (!isPic) {
-                    besked.setBackgroundColor(mContext.getResources().getColor(R.color.chatColorGrey));
-                    besked.setTextColor(mContext.getResources().getColor(R.color.black));
+                    listItem.findViewById(R.id.chat_background_pic).setBackgroundResource(R.drawable.beskedbackground5);
                 }
-                else besked.setGravity(Gravity.RIGHT);
+                else {
+                    listItem.findViewById(R.id.chat_background_pic).setVisibility(View.INVISIBLE);
+                    besked.setGravity(Gravity.RIGHT);
+                }
             }
         } else{
             // Helt det samme gøres for hvis beskeden er sendt fra en selv bare med andre farver og en anden margine på textviewet
             int width = mContext.getResources().getDisplayMetrics().widthPixels;
             RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
-            lp.setMargins(width/50, 0, width/4, width/50);
+            lp.setMargins(width/50, 0, width/4, width/20);
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
                 besked.setLayoutParams(new RelativeLayout.LayoutParams(lp));
                 if (!isPic) {
-                    besked.setBackgroundColor(mContext.getResources().getColor(R.color.chatColorBlue));
-                    besked.setTextColor(mContext.getResources().getColor(R.color.white));
+                    //besked.setBackgroundColor(mContext.getResources().getColor(R.color.chatColorBlue));
+                    //besked.setTextColor(mContext.getResources().getColor(R.color.white));
+                }
+                else {
+                    date.setX((float) (besked.getX()-mContext.getResources().getDisplayMetrics().widthPixels/4.5));
+                    listItem.findViewById(R.id.chat_checkmark).setX(date.getX()+10);
+                    listItem.findViewById(R.id.chat_background_pic).setVisibility(View.INVISIBLE);
                 }
             }
         }
+        date.setText(format1.format(dto.getDates().get(position))+"");
         return listItem;
     }
 

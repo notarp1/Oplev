@@ -6,89 +6,372 @@
     android:layout_height="match_parent"
     tools:context=".Activity_Profile">
 
-    <ImageView
-        android:id="@+id/imageView_pb"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:adjustViewBounds="true"
-        android:scaleType="fitXY"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/question" />
 
     <ScrollView
         android:id="@+id/scrollView2"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:background="#0B124E"
+        android:background="#23295f"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView_pb">
+        app:layout_constraintTop_toTopOf="parent">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/text_city"
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="5sp"
-                android:layout_marginLeft="5sp"
-                android:text="📍 København NV"
-                android:textColor="#FFFFFF" />
+                android:layout_height="wrap_content">
 
-            <TextView
-                android:id="@+id/text_job"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="5sp"
-                android:layout_marginLeft="5sp"
-                android:text="📍 København NV"
-                android:textColor="#FFFFFF" />
+                <ImageView
+                    android:id="@+id/imageView_pb"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:adjustViewBounds="true"
+                    android:scaleType="fitXY"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="1.0"
+                    app:layout_constraintStart_toStartOf="@+id/left_but"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:srcCompat="@drawable/question" />
 
-            <TextView
-                android:id="@+id/text_edu"
+                <View
+                    android:id="@+id/view"
+                    android:layout_width="match_parent"
+                    android:layout_height="55dp"
+                    android:background="@drawable/gradient"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toStartOf="parent" />
+
+                <TextView
+                    android:id="@+id/text_information"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginBottom="4dp"
+                    android:text="Søndags-is med Pia, 22"
+                    android:textColor="#A4E8E0"
+                    android:textSize="28dp"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="@+id/view" />
+
+                <TextView
+                    android:id="@+id/text_curPic"
+                    android:layout_width="40dp"
+                    android:layout_height="20dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginRight="16dp"
+                    android:layout_marginBottom="14dp"
+                    android:background="@drawable/selection"
+                    android:gravity="center"
+                    android:text="1/4"
+                    android:textColor="#A4E8E0"
+                    android:visibility="invisible"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="@+id/view" />
+
+                <View
+                    android:id="@+id/left_but"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/right_but"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="1.0" />
+
+                <View
+                    android:id="@+id/right_but"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/left_but"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0.0" />
+
+                <View
+                    android:id="@+id/btn_back_profile"
+                    android:layout_width="45dp"
+                    android:layout_height="35dp"
+                    android:layout_marginStart="7dp"
+                    android:layout_marginLeft="7dp"
+                    android:layout_marginTop="16dp"
+                    android:background="@drawable/topbar3"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <ImageView
+                    android:id="@+id/imageView5"
+                    android:layout_width="20dp"
+                    android:layout_height="25dp"
+                    android:layout_marginEnd="3dp"
+                    android:layout_marginRight="3dp"
+                    app:layout_constraintBottom_toBottomOf="@+id/btn_back_profile"
+                    app:layout_constraintEnd_toEndOf="@+id/btn_back_profile"
+                    app:layout_constraintStart_toStartOf="@+id/btn_back_profile"
+                    app:layout_constraintTop_toTopOf="@+id/btn_back_profile"
+                    app:srcCompat="@drawable/arrowleftblue" />
+
+                <ImageView
+                    android:id="@+id/settings_btn_pro"
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginRight="16dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:srcCompat="@drawable/settings" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="5dp"
+                    android:orientation="horizontal"
+                    app:layout_constraintBottom_toBottomOf="@+id/imageView_pb"
+                    app:layout_constraintTop_toBottomOf="@+id/text_information"
+                    tools:layout_editor_absoluteX="-15dp">
+
+                    <View
+                        android:id="@+id/view28"
+                        android:layout_width="10dp"
+                        android:layout_height="wrap_content" />
+
+                    <View
+                        android:id="@+id/selection1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:background="@drawable/picselection"
+                        android:visibility="invisible" />
+
+                    <View
+                        android:id="@+id/view23"
+                        android:layout_width="10dp"
+                        android:layout_height="wrap_content" />
+
+                    <View
+                        android:id="@+id/selection2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:background="@drawable/picselection"
+                        android:visibility="invisible" />
+
+                    <View
+                        android:id="@+id/view24"
+                        android:layout_width="10dp"
+                        android:layout_height="wrap_content" />
+
+                    <View
+                        android:id="@+id/selection3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:background="@drawable/picselection"
+                        android:visibility="invisible" />
+
+                    <View
+                        android:id="@+id/view25"
+                        android:layout_width="10dp"
+                        android:layout_height="wrap_content" />
+
+                    <View
+                        android:id="@+id/selection4"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:background="@drawable/picselection"
+                        android:visibility="invisible" />
+
+                    <View
+                        android:id="@+id/view26"
+                        android:layout_width="10dp"
+                        android:layout_height="wrap_content" />
+
+                    <View
+                        android:id="@+id/selection5"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:background="@drawable/picselection"
+                        android:visibility="invisible" />
+
+                    <View
+                        android:id="@+id/view27"
+                        android:layout_width="10dp"
+                        android:layout_height="wrap_content" />
+
+                    <View
+                        android:id="@+id/selection6"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:background="@drawable/picselection"
+                        android:visibility="invisible" />
+
+                    <View
+                        android:id="@+id/view29"
+                        android:layout_width="10dp"
+                        android:layout_height="wrap_content" />
+                </LinearLayout>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="5sp"
-                android:layout_marginLeft="5sp"
-                android:text="📍 København NV"
-                android:textColor="#FFFFFF" />
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="7dp"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:id="@+id/imageView"
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            app:srcCompat="@drawable/location" />
+
+                        <TextView
+                            android:id="@+id/text_city"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="5sp"
+                            android:layout_marginLeft="5sp"
+                            android:text="placering"
+                            android:textColor="#B5DEF6"
+                            android:textSize="18sp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="7dp"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:id="@+id/imageView2"
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            app:srcCompat="@drawable/job" />
+
+                        <TextView
+                            android:id="@+id/text_job"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="5sp"
+                            android:layout_marginLeft="5sp"
+                            android:text="Job"
+                            android:textColor="#B5DEF6"
+                            android:textSize="18sp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="7dp"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:id="@+id/imageView3"
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            app:srcCompat="@drawable/education" />
+
+                        <TextView
+                            android:id="@+id/text_edu"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="5sp"
+                            android:layout_marginLeft="5sp"
+                            android:text="Uddanelse"
+                            android:textColor="#B5DEF6"
+                            android:textSize="18sp" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/constrain_edit"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+
+                    <ImageView
+                        android:id="@+id/imageView4"
+                        android:layout_width="64dp"
+                        android:layout_height="65dp"
+                        android:layout_marginTop="25dp"
+                        android:layout_marginEnd="30dp"
+                        android:layout_marginRight="30dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:srcCompat="@drawable/edit2" />
+
+                    <View
+                        android:id="@+id/on_edit"
+                        android:layout_width="66dp"
+                        android:layout_height="66dp"
+                        android:layout_marginTop="25dp"
+                        android:layout_marginEnd="29dp"
+                        android:layout_marginRight="29dp"
+                        android:background="@drawable/circle2"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </LinearLayout>
 
             <TextView
                 android:id="@+id/text_about_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="5sp"
-                android:layout_marginTop="20dp"
+                android:layout_marginStart="9dp"
+                android:layout_marginLeft="9dp"
+                android:layout_marginTop="10dp"
                 android:text="Om Pia"
-                android:textColor="#59C3FF"
-                android:textSize="16sp"
-                android:textStyle="bold" />
+                android:textColor="#A4E8E0"
+                android:textSize="24sp" />
 
             <TextView
                 android:id="@+id/text_description"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="5sp"
+                android:layout_marginStart="10dp"
+                android:layout_marginLeft="10dp"
                 android:text="Typen der altid løber efter bussen, og altid ender med at komme i alt for god tid"
-                android:textColor="#59C3FF" />
+                android:textColor="#B5DEF6"
+                android:textSize="16dp" />
 
             <TextView
                 android:id="@+id/text_mutual"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="5sp"
-                android:layout_marginLeft="5sp"
+                android:layout_marginStart="9dp"
+                android:layout_marginLeft="9dp"
                 android:layout_marginTop="20sp"
                 android:text="Fælles venners"
-                android:textColor="#59C3FF"
+                android:textColor="#A4E8E0"
                 android:textSize="16sp"
                 android:textStyle="bold" />
 
@@ -111,7 +394,7 @@
                         android:layout_marginStart="20dp"
                         android:layout_marginLeft="20dp"
                         android:layout_weight="1"
-                        android:background="@drawable/ellipse4" />
+                        android:background="@drawable/beskedbackgroundlike" />
 
                     <View
                         android:id="@+id/ellipse_6"
@@ -122,7 +405,7 @@
                         android:layout_marginStart="20dp"
                         android:layout_marginLeft="20dp"
                         android:layout_weight="1"
-                        android:background="@drawable/ellipse5" />
+                        android:background="@drawable/beskedbackgroundlike" />
 
                     <View
                         android:id="@+id/ellipse_5"
@@ -133,7 +416,7 @@
                         android:layout_marginStart="20dp"
                         android:layout_marginLeft="20dp"
                         android:layout_weight="1"
-                        android:background="@drawable/ellipse" />
+                        android:background="@drawable/beskedbackgroundlike" />
 
                     <View
                         android:id="@+id/ellipse_4"
@@ -145,7 +428,7 @@
                         android:layout_marginStart="15dp"
                         android:layout_marginLeft="15dp"
                         android:layout_weight="1"
-                        android:background="@drawable/ellipse2" />
+                        android:background="@drawable/beskedbackgroundlike" />
 
                     <View
                         android:id="@+id/ellipse_8"
@@ -154,7 +437,7 @@
                         android:layout_marginStart="20dp"
                         android:layout_marginLeft="20dp"
                         android:layout_weight="1"
-                        android:background="@drawable/ellipse3" />
+                        android:background="@drawable/beskedbackgroundlike" />
 
                 </LinearLayout>
             </HorizontalScrollView>
@@ -163,10 +446,11 @@
                 android:id="@+id/text_instagram"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="5sp"
+                android:layout_marginStart="9dp"
+                android:layout_marginLeft="9dp"
                 android:layout_marginTop="20sp"
                 android:text="Instagram(492)"
-                android:textColor="#59C3FF"
+                android:textColor="#A4E8E0"
                 android:textSize="16sp"
                 android:textStyle="bold" />
 
@@ -174,7 +458,8 @@
                 android:id="@+id/tableLayout2"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginTop="16dp">
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="20dp">
 
                 <TableRow
                     android:layout_width="match_parent"
@@ -188,7 +473,7 @@
                         android:layout_marginStart="16dp"
                         android:layout_marginLeft="0dp"
                         android:layout_weight="1"
-                        android:background="#DC923C" />
+                        android:background="@drawable/beskedbackgroundlike" />
 
                     <View
                         android:id="@+id/rectangle_5"
@@ -198,7 +483,7 @@
                         android:layout_marginStart="16dp"
                         android:layout_marginLeft="0dp"
                         android:layout_weight="1"
-                        android:background="#2055A5" />
+                        android:background="@drawable/beskedbackgroundlike" />
 
                     <View
                         android:id="@+id/rectangle_6"
@@ -208,7 +493,7 @@
                         android:layout_marginStart="16dp"
                         android:layout_marginLeft="0dp"
                         android:layout_weight="1"
-                        android:background="#DEE137" />
+                        android:background="@drawable/beskedbackgroundlike" />
 
                 </TableRow>
 
@@ -225,7 +510,7 @@
                         android:layout_marginStart="16dp"
                         android:layout_marginLeft="0dp"
                         android:layout_weight="1"
-                        android:background="#2C7D3E" />
+                        android:background="@drawable/beskedbackgroundlike" />
 
                     <View
                         android:id="@+id/rectangle_3"
@@ -235,7 +520,7 @@
                         android:layout_marginStart="16dp"
                         android:layout_marginLeft="0dp"
                         android:layout_weight="1"
-                        android:background="#B813BB" />
+                        android:background="@drawable/beskedbackgroundlike" />
 
                     <View
                         android:id="@+id/rectangle_4"
@@ -245,49 +530,51 @@
                         android:layout_marginStart="16dp"
                         android:layout_marginLeft="0dp"
                         android:layout_weight="1"
-                        android:background="#BD2727" />
+                        android:background="@drawable/beskedbackgroundlike" />
 
                 </TableRow>
 
             </TableLayout>
+
+            <LinearLayout
+                android:id="@+id/confirmationBox"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="16dp"
+                android:orientation="horizontal"
+                android:visibility="gone">
+
+                <ImageView
+                    android:id="@+id/btn_reject"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_weight="1"
+                    android:maxWidth="50dp"
+                    android:maxHeight="50dp"
+                    app:srcCompat="@drawable/reject" />
+
+                <TextView
+                    android:id="@+id/text_confirmation"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="TextView"
+                    android:textColor="#FFFFFF"
+                    android:textStyle="bold" />
+
+                <ImageView
+                    android:id="@+id/btn_accept"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_weight="1"
+                    android:maxWidth="50dp"
+                    android:maxHeight="50dp"
+                    app:srcCompat="@drawable/acceptperson" />
+            </LinearLayout>
+
         </LinearLayout>
     </ScrollView>
-
-    <View
-        android:id="@+id/view"
-        android:layout_width="match_parent"
-        android:layout_height="57dp"
-        android:background="@drawable/gradient"
-        app:layout_constraintBottom_toTopOf="@+id/scrollView2"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <TextView
-        android:id="@+id/text_information"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginTop="14dp"
-        android:text="Søndags-is med Pia, 22"
-        android:textColor="#FFFFFF"
-        android:textSize="24sp"
-        app:layout_constraintBottom_toBottomOf="@+id/view"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/view"
-        app:layout_constraintVertical_bias="0.48" />
-
-    <TextView
-        android:id="@+id/text_curPic"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
-        android:layout_marginRight="16dp"
-        android:text="1/4"
-        android:textColor="#FFFFFF"
-        app:layout_constraintBottom_toBottomOf="@+id/imageView_pb"
-        app:layout_constraintEnd_toEndOf="@+id/view"
-        app:layout_constraintTop_toTopOf="@+id/view" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

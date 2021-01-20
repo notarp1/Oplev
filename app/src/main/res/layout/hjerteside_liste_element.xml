@@ -8,72 +8,108 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="317dp"
+        android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:layout_marginTop="0dp">
+        android:layout_marginTop="0dp"
+        android:layout_marginBottom="10dp"
+        android:background="@drawable/beskedbackgroundlike">
 
         <TextView
             android:id="@+id/hjerteside_medhvem"
-            android:layout_width="206dp"
-            android:layout_height="21dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
             android:layout_marginTop="4dp"
             android:text="Med mig :)"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.008"
-            app:layout_constraintStart_toEndOf="@+id/hjerteside_profilbillede"
+            android:textColor="#4C5270"
+            android:textStyle="bold"
+            app:layout_constraintStart_toEndOf="@+id/hjerteside_profilbillede1"
             app:layout_constraintTop_toBottomOf="@+id/hjertside_overskrift" />
 
-        <ImageView
-            android:id="@+id/hjerteside_profilbillede"
-            android:layout_width="69dp"
-            android:layout_height="68dp"
-            android:layout_marginStart="20dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginTop="24dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/user_icon" />
 
         <TextView
             android:id="@+id/hjertside_overskrift"
-            android:layout_width="206dp"
-            android:layout_height="36dp"
-            android:layout_marginTop="24dp"
-            android:text="Party Hard"
+            android:layout_width="0dp"
+            android:layout_height="31dp"
+            android:layout_marginStart="4dp"
+            android:layout_marginLeft="4dp"
+            android:layout_marginTop="12dp"
+            android:autoSizeMaxTextSize="100sp"
+            android:autoSizeMinTextSize="12sp"
+            android:autoSizeTextType="uniform"
+            android:text="Party HardParty Hard"
+            android:textColor="#4C5270"
             android:textSize="24sp"
-            app:layout_constraintEnd_toStartOf="@+id/hjerteside_bin"
-            app:layout_constraintHorizontal_bias="0.166"
-            app:layout_constraintStart_toEndOf="@+id/hjerteside_profilbillede"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toStartOf="@+id/hjerteside_billede"
+            app:layout_constraintStart_toEndOf="@+id/hjerteside_profilbillede1"
             app:layout_constraintTop_toTopOf="parent" />
 
         <ImageView
             android:id="@+id/hjerteside_billede"
-            android:layout_width="413dp"
-            android:layout_height="227dp"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginBottom="8dp"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/hjertside_overskrift"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/avatar" />
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/hjerteside_profilbillede1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center|top"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="12dp"
+            app:cardCornerRadius="100dp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/hjerteside_medhvem"
-            app:srcCompat="@drawable/user_icon" />
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:id="@+id/hjerteside_profilbillede"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:scaleType="centerCrop"
+
+                app:srcCompat="@drawable/_profiltest" />
+        </androidx.cardview.widget.CardView>
 
         <ImageView
             android:id="@+id/hjerteside_bin"
-            android:layout_width="46dp"
-            android:layout_height="55dp"
-            android:layout_marginTop="15dp"
-            app:layout_constraintEnd_toStartOf="@+id/hjerteside_share"
-            app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/trashbin" />
+            android:layout_width="30dp"
+            android:layout_height="40dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="8dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/hjerteside_share"
+            app:layout_constraintTop_toBottomOf="@+id/hjerteside_medhvem"
+            app:layout_constraintVertical_bias="1.0"
+            app:srcCompat="@drawable/trash_can" />
 
         <ImageView
             android:id="@+id/hjerteside_share"
-            android:layout_width="46dp"
-            android:layout_height="55dp"
-            android:layout_marginTop="15dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginRight="16dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/share" />
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="8dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/hjerteside_profilbillede1"
+            app:layout_constraintTop_toBottomOf="@+id/hjerteside_medhvem"
+            app:layout_constraintVertical_bias="0.0"
+            app:srcCompat="@drawable/repost2" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </RelativeLayout>

@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".__Main.Activity_Main"
-    android:background="#EEEEEE">
+    android:background="@drawable/baggrund"
+    tools:context=".__Main.Activity_Main">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/eventRecycleView"
@@ -18,11 +18,15 @@
 
     <LinearLayout
         android:id="@+id/linearLayout4"
-        android:layout_width="409dp"
-        android:layout_height="30dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:layout_marginBottom="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginStart="30dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginEnd="30dp"
+        android:layout_marginRight="30dp"
+        android:layout_marginBottom="16dp"
+        android:background="@drawable/beskedbackground3"
+        android:gravity="center_vertical"
         android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -31,24 +35,27 @@
 
         <ImageView
             android:id="@+id/options_btn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="38dp"
+            android:layout_height="38dp"
             android:layout_weight="1"
-            android:src="@drawable/options" />
+
+            app:srcCompat="@drawable/filter" />
 
         <ImageView
             android:id="@+id/match_btn"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+            android:layout_width="38dp"
+            android:layout_height="38dp"
             android:layout_weight="1"
-            android:src="@drawable/match" />
+
+            app:srcCompat="@drawable/homebut" />
 
         <ImageView
             android:id="@+id/user_btn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="38dp"
+            android:layout_height="38dp"
             android:layout_weight="1"
-            android:src="@drawable/user_icon" />
+
+            app:srcCompat="@drawable/avatar" />
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

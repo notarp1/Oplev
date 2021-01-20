@@ -13,7 +13,12 @@ import android.widget.TextView;
 import androidx.fragment.app.Fragment;
 
 import com.A4.oplev.R;
+import com.A4.oplev._Adapters.Event_Adapter;
 
+import java.util.List;
+
+import DAL.Classes.EventDAO;
+import DAL.Interfaces.CallBackList;
 import io.apptik.widget.MultiSlider;
 
 public class Search_filter_frag extends Fragment{
@@ -67,11 +72,14 @@ public class Search_filter_frag extends Fragment{
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
                 prefs.edit().putInt("distance",currDistance).apply();
+                onUpdate(prefs);
             }
         });
 
-        ageText.setText(currMinAge + " - " + currMaxAge + "år");
-        // todo Find ud af hvordan man sætter thumbs til specifikke punkter?
+        ageText.setText(currMinAge + " - " + currMaxAge + " år");
+        //update ageBar UI thumbs
+        ageBar.getThumb(0).setValue(currMinAge);
+        ageBar.getThumb(1).setValue(currMaxAge);
         ageBar.setOnThumbValueChangeListener(new MultiSlider.OnThumbValueChangeListener() {
             @Override
             public void onValueChanged(MultiSlider multiSlider,
@@ -86,7 +94,8 @@ public class Search_filter_frag extends Fragment{
                     currMaxAge = (value);
                     prefs.edit().putInt("maxAge",currMaxAge).apply();
                 }
-                ageText.setText(currMinAge + " - " + currMaxAge);
+                ageText.setText(currMinAge + " - " + currMaxAge + " år");
+                onUpdate(prefs);
             }
         });
 
@@ -102,34 +111,53 @@ public class Search_filter_frag extends Fragment{
                     kulturSwitch.setChecked(true);
                     musikNattelivSwitch.setChecked(true);
                     blivKlogereSwitch.setChecked(true);
-                    gratisSwitch.setChecked(true);
 
-                    prefs.edit().putBoolean("Motionswitch", motionSwitch.isChecked()).apply();
+                    prefs.edit().putBoolean("motionSwitch", motionSwitch.isChecked()).apply();
                     prefs.edit().putBoolean("underholdningSwitch", underholdningSwitch.isChecked()).apply();
                     prefs.edit().putBoolean("madDrikkeSwitch", madDrikkeSwitch.isChecked()).apply();
                     prefs.edit().putBoolean("kulturSwitch", kulturSwitch.isChecked()).apply();
                     prefs.edit().putBoolean("musikNattelivSwitch", musikNattelivSwitch.isChecked()).apply();
                     prefs.edit().putBoolean("blivKlogereSwitch", blivKlogereSwitch.isChecked()).apply();
-                    prefs.edit().putBoolean("gratisSwitch", gratisSwitch.isChecked()).apply();
+                    onUpdate(prefs);
+                }
+
+                else {
+                    motionSwitch.setChecked(false);
+                    underholdningSwitch.setChecked(false);
+                    madDrikkeSwitch.setChecked(false);
+                    kulturSwitch.setChecked(false);
+                    musikNattelivSwitch.setChecked(false);
+                    blivKlogereSwitch.setChecked(false);
+
+                    prefs.edit().putBoolean("motionSwitch", motionSwitch.isChecked()).apply();
+                    prefs.edit().putBoolean("underholdningSwitch", underholdningSwitch.isChecked()).apply();
+                    prefs.edit().putBoolean("madDrikkeSwitch", madDrikkeSwitch.isChecked()).apply();
+                    prefs.edit().putBoolean("kulturSwitch", kulturSwitch.isChecked()).apply();
+                    prefs.edit().putBoolean("musikNattelivSwitch", musikNattelivSwitch.isChecked()).apply();
+                    prefs.edit().putBoolean("blivKlogereSwitch", blivKlogereSwitch.isChecked()).apply();
+                    onUpdate(prefs);
                 }
             }
         });
 
         motionSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked){
-                prefs.edit().putBoolean("motionswitch", motionSwitch.isChecked()).apply();
+                prefs.edit().putBoolean("motionSwitch", motionSwitch.isChecked()).apply();
+                onUpdate(prefs);
             }
         });
 
         underholdningSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked){
                 prefs.edit().putBoolean("underholdningSwitch", underholdningSwitch.isChecked()).apply();
+                onUpdate(prefs);
             }
         });
 
         madDrikkeSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked){
                 prefs.edit().putBoolean("madDrikkeSwitch", madDrikkeSwitch.isChecked()).apply();
+                onUpdate(prefs);
             }
         });
 
@@ -137,12 +165,14 @@ public class Search_filter_frag extends Fragment{
         kulturSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked){
                 prefs.edit().putBoolean("kulturSwitch", kulturSwitch.isChecked()).apply();
+                onUpdate(prefs);
             }
         });
 
         musikNattelivSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked){
                 prefs.edit().putBoolean("musikNattelivSwitch", musikNattelivSwitch.isChecked()).apply();
+                onUpdate(prefs);
             }
         });
 
@@ -150,29 +180,41 @@ public class Search_filter_frag extends Fragment{
         blivKlogereSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked){
                 prefs.edit().putBoolean("blivKlogereSwitch", blivKlogereSwitch.isChecked()).apply();
+                onUpdate(prefs);
             }
         });
 
         gratisSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked){
                 prefs.edit().putBoolean("gratisSwitch", gratisSwitch.isChecked()).apply();
+                onUpdate(prefs);
             }
         });
 
             return root;
     }
 
+    private void onUpdate(SharedPreferences prefs){
+        EventDAO dataA = new EventDAO();
+        dataA.getEventIDs(new CallBackList() {
+            @Override
+            public void onCallback(List<String> list) {
+                Event_Adapter event_adapter = Event_Adapter.getInstance();
+                event_adapter.refreshData(list);
+            }
+        },prefs);
+    }
 
     public void loadData(){
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        currDistance = prefs.getInt("distance",45);
+        currDistance = prefs.getInt("distance",150);
         currMinAge = prefs.getInt("minAge", 18);
         currMaxAge = prefs.getInt("maxAge", 99);
     }
 
     public void updateSwitches(){
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        motionSwitch.setChecked(prefs.getBoolean("motionswitch",true));
+        motionSwitch.setChecked(prefs.getBoolean("motionSwitch",true));
         underholdningSwitch.setChecked(prefs.getBoolean("underholdningSwitch",true));
         madDrikkeSwitch.setChecked(prefs.getBoolean("madDrikkeSwitch",true));
         kulturSwitch.setChecked(prefs.getBoolean("kulturSwitch",true));

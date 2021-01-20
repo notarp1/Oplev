@@ -1,25 +1,40 @@
 package com.A4.oplev._Adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+
+import com.A4.oplev.Activity_Profile;
 import com.A4.oplev.R;
+import com.squareup.picasso.Picasso;
+
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
+
+import DAL.Classes.ChatDAO;
+import DAL.Classes.UserDAO;
+import DAL.Interfaces.CallbackUser;
+import DTO.ChatDTO;
+import DTO.UserDTO;
 
 
 public class  LikeSide_Adapter extends ArrayAdapter<String> {
     private Context mContext;
-    private List<String> nameList = new ArrayList<>(), lastMessage = new ArrayList<>(), headerList = new ArrayList<>(), lastMessageSender = new ArrayList<>(), isInitialized = new ArrayList<>();
+    private List<String> nameList = new ArrayList<>(), lastMessage = new ArrayList<>(), headerList = new ArrayList<>(), lastMessageSender = new ArrayList<>(), isInitialized = new ArrayList<>(), otherPersonPic = new ArrayList<>(), chatIDs = new ArrayList<>();
     private List<Date> dateList = new ArrayList<>();
 
-    public LikeSide_Adapter(@NonNull Context context, @NonNull ArrayList<String> names, @NonNull ArrayList<Date> dates, @NonNull ArrayList<String> lastMessage, @NonNull ArrayList<String> headerList, @NonNull ArrayList<String> lastMessageSender, ArrayList<String> isInitialized) {
+    public LikeSide_Adapter(@NonNull Context context, @NonNull ArrayList<String> names, @NonNull ArrayList<Date> dates, @NonNull ArrayList<String> lastMessage, @NonNull ArrayList<String> headerList, @NonNull ArrayList<String> lastMessageSender, ArrayList<String> isInitialized, ArrayList<String> otherPersonPic, ArrayList<String> chatIDs) {
         super(context, 0 , names);
         this.mContext = context;
         this.nameList = names;
@@ -28,6 +43,8 @@ public class  LikeSide_Adapter extends ArrayAdapter<String> {
         this.headerList = headerList;
         this.lastMessageSender = lastMessageSender;
         this.isInitialized = isInitialized;
+        this.otherPersonPic = otherPersonPic;
+        this.chatIDs = chatIDs;
     }
 
     @NonNull
@@ -43,21 +60,54 @@ public class  LikeSide_Adapter extends ArrayAdapter<String> {
         String currentDate;
         // Vi tjekker om chatten indeholder nogle beskeder hvis ikke så indsæt tomme strenge
         if (isInitialized.get(position).equals("false")) currentDate = "";
-        else currentDate = dateList.get(position).toString().substring(0,3);
-        String currentLastMessage;
+        else {
+            Date now = new Date();
+            long days = Math.max(now.getDay(),dateList.get(position).getDay()) - Math.min(now.getDay(),dateList.get(position).getDay());
+            long months = Math.max(now.getMonth(),dateList.get(position).getMonth()) - Math.min(now.getMonth(),dateList.get(position).getMonth());
+            long years = Math.max(now.getYear(),dateList.get(position).getYear()) - Math.min(now.getYear(),dateList.get(position).getYear());
+            if (years > 0 || months > 0 || days > 7){
+                DateFormat format1 = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+                format1.setTimeZone(TimeZone.getTimeZone("GMT+1"));
+                currentDate = format1.format(dateList.get(position));
+            } else if (years == 0 && months == 0 && days == 0) currentDate = "I dag";
+            else currentDate = dateList.get(position).toString().substring(0,3);
+        }
 
+
+        String currentLastMessage;
         if (isInitialized.get(position).equals("true")) {
             // Vi checker om den besked der sidst blev sendt er fra den man chatter med
             if (lastMessageSender.get(position).equals(currentName)) {
                 if (lastMessage.get(position).equals("pictureBlaBlaBla!:"))
                     currentLastMessage = currentName + ": " + "[Picture]";
                     // Sæt stringen til dette hvis sidste besked er fra anden person
-                else currentLastMessage = currentName + ": " + lastMessage.get(position);
+                else {
+                    if (lastMessage.get(position).length() > 30){
+                        currentLastMessage = currentName + ": " + lastMessage.get(position).substring(0,30-currentName.length()) + "...";
+                    } else {
+                        currentLastMessage = currentName + ": " + lastMessage.get(position);
+                    }
+                    currentLastMessage = currentLastMessage.replaceAll("\n"," ");
+                }
+            } else if (lastMessageSender.get(position).equals("Oplev")){
+                if (lastMessage.get(position).length() > 30){
+                    currentLastMessage = "Oplev: " + lastMessage.get(position).substring(0,30-5) + "...";
+                } else {
+                    currentLastMessage = "Oplev: " + lastMessage.get(position);
+                }
+                currentLastMessage = currentLastMessage.replaceAll("\n"," ");
             } else {
                 if (lastMessage.get(position).equals("pictureBlaBlaBla!:"))
                     currentLastMessage = "Dig: " + "[Picture]";
                     // Sæt stringen til dette hvis sidste besked er fra en selv
-                else currentLastMessage = "Dig: " + lastMessage.get(position);
+                else {
+                    if (lastMessage.get(position).length() > 30){
+                        currentLastMessage = "Dig: " + lastMessage.get(position).substring(0,30) + "...";
+                    } else {
+                        currentLastMessage = "Dig: " + lastMessage.get(position);
+                    }
+                    currentLastMessage = currentLastMessage.replaceAll("\n"," ");
+                }
             }
         }
         else currentLastMessage = "";
@@ -69,6 +119,9 @@ public class  LikeSide_Adapter extends ArrayAdapter<String> {
         lastMessage.setText(currentLastMessage);
 
         TextView header = (TextView) listItem.findViewById(R.id.beskeder_overskrift);
+        if (currentHeader.length() > 15) {
+            header.setTextSize(13);
+        }
         header.setText(currentHeader);
 
         TextView date = (TextView) listItem.findViewById(R.id.beskeder_dato);
@@ -76,6 +129,37 @@ public class  LikeSide_Adapter extends ArrayAdapter<String> {
 
         TextView name = (TextView) listItem.findViewById(R.id.beskeder_name);
         name.setText("Med " + currentName);
+
+        ImageView profilBillede = listItem.findViewById(R.id.likeside_chats_profilbillede);
+        Picasso.get().load(otherPersonPic.get(position))
+                .resize(mContext.getDisplay().getWidth(), mContext.getDisplay().getHeight() / 2 + 200)
+                .centerCrop()
+                .placeholder(R.drawable.load2)
+                .error(R.drawable.question)
+                .into(profilBillede);
+
+        profilBillede.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ChatDAO chatDAO = new ChatDAO();
+                chatDAO.readChat(new ChatDAO.FirestoreCallback() {
+                    @Override
+                    public void onCallback(ChatDTO dto) {
+                        String otherUser = dto.getUser1().equals(nameList.get(position)) ? dto.getUser1ID() : dto.getUser2ID();
+                        UserDAO userDAO = new UserDAO();
+                        userDAO.getUser(new CallbackUser() {
+                            @Override
+                            public void onCallback(UserDTO user) {
+                                Intent i = new Intent(mContext, Activity_Profile.class);
+                                i.putExtra("user", user);
+                                i.putExtra("load", 1);
+                                mContext.startActivity(i);
+                            }
+                        }, otherUser);
+                    }
+                },chatIDs.get(position));
+            }
+        });
 
         return listItem;
     }

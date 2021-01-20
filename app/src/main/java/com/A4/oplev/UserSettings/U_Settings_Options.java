@@ -1,5 +1,7 @@
 package com.A4.oplev.UserSettings;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -15,25 +17,35 @@ import androidx.fragment.app.FragmentManager;
 
 import com.A4.oplev.Activity_Ini;
 import com.A4.oplev.R;
+import com.facebook.AccessToken;
+import com.facebook.login.LoginManager;
 import com.google.firebase.auth.FirebaseAuth;
+
+import Controller.UserController;
 
 public class U_Settings_Options extends Fragment implements View.OnClickListener {
 
-    TextView logud;
+    TextView logud, deleteAccount;
     SharedPreferences prefs;
     ImageView back;
+    UserController userController;
 
     public View onCreateView(LayoutInflater i, ViewGroup container, Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         View root = i.inflate(R.layout.u_setting_opt_frag, container, false);
 
+        userController = UserController.getInstance();
+
         TextView textview = (TextView)getActivity().findViewById(R.id.topbar_text);
         textview.setText("Indstillinger");
         logud = root.findViewById(R.id.logud_txt);
-        logud.setOnClickListener(this);
-
+        deleteAccount = root.findViewById(R.id.deleteAcc_txt);
         back = (ImageView) getActivity().findViewById(R.id.topbar_arrow);
+
+        deleteAccount.setOnClickListener(this);
+        logud.setOnClickListener(this);
         back.setOnClickListener(this);
+
 
         return root;
 
@@ -45,8 +57,11 @@ public class U_Settings_Options extends Fragment implements View.OnClickListener
     public void onClick(View view) {
 
         if(view == logud){
+            LoginManager.getInstance().logOut();
+            AccessToken.setCurrentAccessToken(null);
             FirebaseAuth.getInstance().signOut();
             PreferenceManager.getDefaultSharedPreferences(getActivity()).edit().clear().apply();
+            UserController.getInstance().setCurrUser(null);
             FragmentManager fm = getActivity().getSupportFragmentManager();
             for(int i = 0; i < fm.getBackStackEntryCount(); ++i) {
                 fm.popBackStack();
@@ -55,7 +70,38 @@ public class U_Settings_Options extends Fragment implements View.OnClickListener
             startActivity(i);
 
         } else if (view == back){
-            getActivity().getSupportFragmentManager().popBackStack();
+            getActivity().finish();
+        } else if (view == deleteAccount){
+            /*
+            AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+
+            builder.setTitle("Slet konto");
+            builder.setMessage("Er du sikker på du vil slette din konto? Alle indstillinger, events samt din brugerprofil vil blive slettet. ");
+
+            builder.setPositiveButton("JA, SLET KONTO.", new DialogInterface.OnClickListener() {
+
+                public void onClick(DialogInterface dialog, int which) {
+                    // Do nothing but close the dialog
+                    userController.deleteUser(userController.getCurrUser(), getActivity());
+                    dialog.dismiss();
+                }
+            });
+
+            builder.setNegativeButton("NEJ, BEHOLD KONTO.", new DialogInterface.OnClickListener() {
+
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+
+
+                    dialog.dismiss();
+                }
+            });
+
+            AlertDialog alert = builder.create();
+            alert.show();
+            */
+
+
         }
     }
 }

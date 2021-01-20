@@ -1,14 +1,27 @@
 package com.A4.oplev.CreateEvent;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+import android.content.Context;
+import android.content.ContextWrapper;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
 
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import android.os.Environment;
+import android.text.format.DateUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,29 +34,58 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import com.A4.oplev.R;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.libraries.places.api.Places;
+import com.google.android.libraries.places.api.model.Place;
+import com.google.android.libraries.places.api.model.TypeFilter;
+import com.google.android.libraries.places.widget.Autocomplete;
+import com.google.android.libraries.places.widget.model.AutocompleteActivityMode;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Target;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
+
+import Controller.EventController;
+import Controller.PictureMaker;
+import DTO.EventDTO;
+
+import static android.app.Activity.RESULT_OK;
+import static android.content.ContentValues.TAG;
 
 public class createEvent1_frag extends Fragment implements View.OnClickListener{
     //topbar text
     TextView topbar_txt;
     //fragment elements
-    ImageView pic;
-    EditText title_in, desc_in, price_in, city_in;
-    TextView price_txt, date_txt, city_txt, date_in, time_in;
+    public ImageView pic;
+    public EditText title_in, desc_in, price_in, city_in;
+    public TextView price_txt, date_txt, city_txt, date_in, time_in;
     Button next_btn;
-    Spinner dropDown;
+    public Spinner dropDown;
     AdapterView.OnItemSelectedListener onItemSelectedListener;
-
+    public String currentType = "--Vælg type--";
 
     //dialog changelisteners
     DatePickerDialog.OnDateSetListener onDateSetListener;
     TimePickerDialog.OnTimeSetListener onTimeSetListener;
 
     //date time values
-    int day, month, year, hour, minute;
+    public int day, month, year, hour, minute;
+
+    // for input validation
+    boolean inputIsValid;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -65,7 +107,11 @@ public class createEvent1_frag extends Fragment implements View.OnClickListener{
         dropDown.setAdapter(dropDownAdapter);
         dropDown.setPrompt("Vælg type af oplevelse");
 
-
+        //set city to non focusable (will open the google places API instead with onclick
+        city_in.setFocusable(false);
+        city_in.setOnClickListener(this);
+        //initialize places (API key saved in string resources
+        Places.initialize(getActivity().getApplicationContext(), getString(R.string.googlePlaces_api_key));
 
         //set onclick listeners
         pic.setOnClickListener(this);
@@ -81,13 +127,19 @@ public class createEvent1_frag extends Fragment implements View.OnClickListener{
         hour = cal.get(Calendar.HOUR_OF_DAY);
         minute = cal.get(Calendar.MINUTE);
 
+        Log.d(TAG, "onCreateView: (jbe) outside repost spottet");
+        //if createevent startet from repost then fill out info
+        if(((Activity_Create_Event) getActivity()).getRepostEvent() != null){
+            EventController.getInstance().iniRepost(this);
+        }
 
         dropDown.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            // todo: sæt start text, således at motion ikke er valgt fra starten.
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 // An item was selected. You can retrieve the selected item using
                 System.out.println(parent.getItemAtPosition(position));
+                //set the newly selected type to local string
+                currentType = parent.getItemAtPosition(position).toString();
             }
 
             @Override
@@ -97,18 +149,15 @@ public class createEvent1_frag extends Fragment implements View.OnClickListener{
         });
 
 
-
         //When date is changed update current values and UI to show new date
         onDateSetListener = new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int yearNew, int monthNew, int dayNew) {
-                //setting values
+                //setting values (not to parse, but for next time datepicker is opened)
                 day = dayNew;
-                month = monthNew + 1; //increment since monthNew is zero indexed (jan = 0)
+                month = monthNew;
                 year = yearNew;
-                //update UI
-                String dateString = day + "/" + month + "/" + year;
-                date_in.setText(dateString);
+                updateDateUI();
             }
         };
         //when time is changed update current values and show new time in UI
@@ -118,19 +167,45 @@ public class createEvent1_frag extends Fragment implements View.OnClickListener{
                 //setting values
                 hour = hourNew;
                 minute = minuteNew;
-                //update UI
-                String timeString = hour + ":" + minute;
-                time_in.setText(timeString);
+                updateTimeUI();
             }
         };
 
         return root;
     }
 
+    public void updateDateUI(){
+        //update UI
+        // increment month since monthNew is zero indexed (jan = 0)
+        String dateString = day + "/" + (month+1) + "/" + year;
+        date_in.setText(dateString);
+        //remove error of missing date input
+        date_in.setError(null);
+    }
+    public void updateTimeUI(){
+        //update UI
+        //handle setting zeroes if one ciffer on time
+        String hourString = "" + hour;
+        String minuteString = "" + minute;
+        if(hour < 10){
+            hourString = "0" + hour;
+        }
+        if(minute < 10){
+            minuteString = "0" + minute;
+        }
+        String timeString = hourString + ":" + minuteString;
+        time_in.setText(timeString);
+        //remove error of missing time input
+        time_in.setError(null);
+    }
+
     @Override
     public void onClick(View v) {
         if(v == pic){
-            //TODO: make possible for user to change source of "pic", when pressing it
+            System.out.println("BILLED PRESSED");
+            //Is mainly handled from actitity
+            //triggers onActivityResult in activity_create_event.java when picture is picked
+            PictureMaker.getInstance().uploadPic(getActivity());
         }
         else if(v == next_btn){
             //validate that inputs are entered (shows "errors" if not)
@@ -140,11 +215,21 @@ public class createEvent1_frag extends Fragment implements View.OnClickListener{
                 //set strings
                 b.putString("title_in", title_in.getText().toString());
                 b.putString("desc_in", desc_in.getText().toString());
+                if(price_in.getText().toString().equals("")){
+                    //if no input price the hint showing is "0", so setting text "0"
+                    price_in.setText("0");
+                }
                 b.putString("price_in", price_in.getText().toString());
                 b.putString("date_in", date_in.getText().toString());
                 b.putString("time_in", time_in.getText().toString());
                 b.putString("city_in", city_in.getText().toString());
+                b.putString("type_in", currentType);
 
+                // *** EVENT PIC URI IS IN ACTIVITY, AVAIL FROM NEXT FRAG ALREADY
+                // WITH METHOD ((Activity_Create_Event) getActivity()).getPickedImgUri()
+                // *** EVENT coordinates string IS IN ACTIVITY, AVAIL FROM NEXT FRAG ALREADY
+                // WITH METHOD ((Activity_Create_Event) getActivity()).getCoordinates()
+                Log.d(TAG, "onClick: (jbe) price = " + price_in.getText());
                 //create fragment and add bundle to arguments
                 Fragment create2_frag = new createEvent2_frag();
                 create2_frag.setArguments(b);
@@ -165,6 +250,12 @@ public class createEvent1_frag extends Fragment implements View.OnClickListener{
                     onDateSetListener,
                     year, month, day);
             dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+            //set min and max date mindate=today, maxdate=one year from now
+            // (the minus 1000 avoids crash..."min date doesnt precede date, error")
+            dialog.getDatePicker().setMinDate(Calendar.getInstance().getTimeInMillis()-1000);
+            dialog.getDatePicker().setMaxDate(Calendar.getInstance().getTimeInMillis() +
+                    DateUtils.YEAR_IN_MILLIS);
+
             dialog.show();
         }
         else if(v == time_in){
@@ -176,13 +267,33 @@ public class createEvent1_frag extends Fragment implements View.OnClickListener{
                     hour, day, true);
             dialog.show();
         }
+        else if(v == city_in){
+            /*
+            https://youtu.be/t8nGh4gN1Q0
+            https://developers.google.com/places/android-sdk/autocomplete#add_an_autocomplete_widget
+
+             */
+
+            //open the places autocomplete api
+            List<Place.Field> fieldList = Arrays.asList(Place.Field.ADDRESS,
+                    Place.Field.NAME,
+                    Place.Field.LAT_LNG,
+                    Place.Field.TYPES);
+            //create intent for activity overlay
+            //(context getActivity might be off)
+            Intent intent = new Autocomplete.IntentBuilder(AutocompleteActivityMode.OVERLAY, fieldList)
+                    .setCountry("DK")
+                    .build(getActivity());
+            startActivityForResult(intent, 100);
+            // ***OBS*** onActivityResult (result of intent) handled in activity! (create event activity)
+        }
     }
 
     // Method for checking if all inputs have data. If not, prompt users with "setErrors"
     // return true if all have inputs, return false if not.
     private boolean isInputValid() {
-        String invalidInputToast = "Manglende input: \r\n";
-        boolean inputIsValid = true;
+        Log.d(TAG, "isInputValid: (jbe) start");
+        inputIsValid = true;
         if(title_in.getText().toString().equals("")){
             inputIsValid = false;
             title_in.setError("Indsæt titel");
@@ -190,10 +301,6 @@ public class createEvent1_frag extends Fragment implements View.OnClickListener{
         if(desc_in.getText().toString().equals("")){
             inputIsValid = false;
             desc_in.setError("Indsæt beskrivelse");
-        }
-        if(price_in.getText().toString().equals("")){
-            inputIsValid = false;
-            price_in.setError("Indsæt pris");
         }
         if(date_in.getText().toString().equals("DD/MM/YYYY")){
             inputIsValid = false;
@@ -207,7 +314,15 @@ public class createEvent1_frag extends Fragment implements View.OnClickListener{
             inputIsValid = false;
             city_in.setError("Indsæt by");
         }
+        if(currentType.equals("--Vælg type--")){
+            inputIsValid = false;
+            Toast.makeText(getActivity(), "Vælg en event type", Toast.LENGTH_SHORT).show();
+        }
 
+        if(inputIsValid == false){
+            Toast.makeText(getActivity(), "Mangler event-information", Toast.LENGTH_SHORT).show();
+        }
+        Log.d(TAG, "isInputValid: (jbe) end. valid status:" + inputIsValid);
         return inputIsValid;
     }
 }

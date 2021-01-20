@@ -35,22 +35,37 @@ public class ChatDAO implements IChatDAO {
 
     // Hvis man skal oprette en ny chat som skal være i firestore
     @Override
-    public void createChat(ChatDTO chat) {
+    public void createChat(ChatDTO chat, CreateChatCallback callback) {
         // Først skal vi opbygge et chat objekt med de attributter der skal være i firestore
         Map<String, Object> chatObject = new HashMap<>();
         ArrayList<String> tempPics = new ArrayList<>();
-        for (int i = 0; i < chat.getPictures().size(); i++) {
-            tempPics.add(i,chat.getPictures().get(i).toString());
+        if (chat.getPictures() != null) {
+            for (int i = 0; i < chat.getPictures().size(); i++) {
+                tempPics.add(i, chat.getPictures().get(i).toString());
+            }
         }
 
-        chatObject.put("sender", chat.getSender());
-        chatObject.put("receiver", chat.getReceiver());
-        chatObject.put("messages", chat.getMessages());
-        chatObject.put("dates", chat.getDates());
+        ArrayList<String> senders = new ArrayList<>(), receivers = new ArrayList<>(), messages = new ArrayList<>();
+        ArrayList<Date> dates = new ArrayList<>();
+        senders.add("Oplev");
+        receivers.add("Oplev");
+        dates.add(new Date());
+
+        String autoMessage = "Hej " + chat.getUser1() + " og " + chat.getUser2() + "\nCool, at I ønsker at tage på " + chat.getHeader() + " sammen.\n\nGod fornøjelse\nTeam SIMPLY";
+        messages.add(autoMessage);
+
+        chatObject.put("sender", senders);
+        chatObject.put("receiver", receivers);
+        chatObject.put("messages", messages);
+        chatObject.put("dates", dates);
         chatObject.put("chatId",null);
         chatObject.put("pictures",tempPics);
         chatObject.put("header",chat.getHeader());
-
+        chatObject.put("user1",chat.getUser1());
+        chatObject.put("user2",chat.getUser2());
+        chatObject.put("user1ID", chat.getUser1ID());
+        chatObject.put("user2ID",chat.getUser2ID());
+        chatObject.put("eventId", chat.getEventId());
 
         // Dernæst vil vi adde objektet i vores chats collection
         db.collection("chats")
@@ -63,6 +78,7 @@ public class ChatDAO implements IChatDAO {
                         // Hvis vi har succesfuldt lavet en ny chat så sætter vi dets chatid til det id dokumentet har givet det
                         Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId());
                         db.collection("chats").document(documentReference.getId()).update("chatId", documentReference.getId());
+                        callback.onCallback(documentReference.getId());
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -98,7 +114,9 @@ public class ChatDAO implements IChatDAO {
         chatObject.put("user1", chat.getUser1());
         chatObject.put("user2",chat.getUser2());
         chatObject.put("header", chat.getHeader());
-
+        chatObject.put("user1ID", chat.getUser1ID());
+        chatObject.put("user2ID",chat.getUser2ID());
+        chatObject.put("eventId", chat.getEventId());
 
         // Vi opdaterer en chat der eksisterer i forvejen og derfor bruger vi documentreference ved chatid'et hvor vi indsætter det chatobjekt vii har lavet
         db.collection("chats").document(chat.getChatId())
@@ -113,7 +131,7 @@ public class ChatDAO implements IChatDAO {
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        firestoreCallback.onCallback(new ChatDTO(null,null,null,null,null, null, null, null,null));
+                        firestoreCallback.onCallback(new ChatDTO(null,null,null,null,null, null, null, null,null, null,null, null));
                         Log.d("Update","Not updated chat");
                     }
                 });
@@ -127,12 +145,12 @@ public class ChatDAO implements IChatDAO {
         docRef.delete().addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
-                firestoreCallback.onCallback(new ChatDTO(null,null,chatId,null,null, null, null, null,null));
+                firestoreCallback.onCallback(new ChatDTO(null,null,chatId,null,null, null, null, null,null,null,null, null));
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                firestoreCallback.onCallback(new ChatDTO(null,null,null,null,null, null, null, null,null));
+                firestoreCallback.onCallback(new ChatDTO(null,null,null,null,null, null, null, null,null,null,null, null));
             }
         });
     }
@@ -158,7 +176,7 @@ public class ChatDAO implements IChatDAO {
                         ChatDTO dto = document.toObject(ChatDTO.class);
                         if (dto.getChatId() == null){
                             // Det her bliver redundant senere men ikke lige nu hvis man prøver at indlæse et helt tomt dokument
-                            dto = new ChatDTO(new ArrayList<>(), new ArrayList<>(), chatId, new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), dto.getHeader(), dto.getUser1(), dto.getUser2());
+                            dto = new ChatDTO(new ArrayList<>(), new ArrayList<>(), chatId, new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), dto.getHeader(), dto.getUser1(), dto.getUser2(), dto.getUser1ID(), dto.getUser2ID(), dto.getEventId());
                             firestoreCallback.onCallback(dto);
                         }
                         else {
@@ -176,11 +194,11 @@ public class ChatDAO implements IChatDAO {
     }
 
     // Den her funktion bruges lige foreløbigt til at uploade billeder til firebase storage
-    public void uploadFile(Bitmap bitmap, FirestoreCallbackPic firestoreCallbackPic, String chat_id) {
+    public void uploadFile(Bitmap bitmap, FirestoreCallbackPic firestoreCallbackPic, String chat_id, String user_id) {
         // Først instantierer vi nogle objekter der skal bruges
         FirebaseStorage storage = FirebaseStorage.getInstance();
         StorageReference storageRef = storage.getReference();
-        StorageReference mountainImagesRef = storageRef.child("images/" + chat_id + new Date() + ".jpg");
+        StorageReference mountainImagesRef = storageRef.child("chats/" + chat_id + "/" + user_id + " " + new Date() + ".jpg");
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.JPEG, 20, baos);
         byte[] data = baos.toByteArray();
@@ -200,8 +218,6 @@ public class ChatDAO implements IChatDAO {
                     @Override
                     public void onSuccess(Uri uri) {
                         // Når vi kan hente URL'en så kalder vi callbackpic i den klasse der ville uploade et billede og giver den URI'en
-                        System.out.println(uri);
-                        Log.d("downloadUrl-->", "" + uri);
                         firestoreCallbackPic.onCallBackPic(uri);
                     }
                 });
@@ -220,4 +236,7 @@ public class ChatDAO implements IChatDAO {
     }
 
 
+    public interface CreateChatCallback {
+        void onCallback(String chatID);
+    }
 }

@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/beskedListElement"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -36,7 +35,7 @@
         android:layout_marginTop="26dp">
 
         <ImageView
-
+            android:id="@+id/likeside_chats_profilbillede"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scaleType="centerCrop"
@@ -77,23 +76,24 @@
         android:gravity="left"
         android:text="Antal anmodninger"
         android:textColor="#51555B"
-        android:textSize="14sp" />
+        android:textSize="12sp"
+        android:textStyle="italic" />
 
     <TextView
         android:id="@+id/beskeder_dato"
-        android:layout_width="45dp"
-        android:layout_height="26dp"
+        android:layout_width="74dp"
+        android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
         android:layout_marginTop="23dp"
-        android:layout_marginEnd="30dp"
-        android:layout_marginRight="30dp"
+        android:layout_marginEnd="15dp"
+        android:layout_marginRight="15dp"
 
 
         android:text="Dato"
         android:textColor="#4C5270"
-        android:textSize="16sp"
+        android:textSize="13sp"
         android:textStyle="bold" />
 
     <TextView
@@ -103,7 +103,7 @@
         android:layout_below="@+id/beskeder_overskrift"
         android:layout_marginStart="14dp"
         android:layout_marginLeft="14dp"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="21dp"
         android:layout_toEndOf="@+id/beskeder_profilbillede1"
         android:layout_toRightOf="@+id/beskeder_profilbillede1"
         android:text="TextView"

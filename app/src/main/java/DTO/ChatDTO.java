@@ -7,7 +7,7 @@ import java.util.Date;
 
 public class ChatDTO {
 
-    private String chatId, header, user1, user2;
+    private String chatId, header, user1, user2, user1ID, user2ID, eventId;
     private ArrayList<Date> dates;
     private ArrayList<String> messages, sender, receiver;
     private ArrayList<Uri> pictures;
@@ -17,7 +17,7 @@ public class ChatDTO {
 
     }
 
-    public ChatDTO(ArrayList<String> sender, ArrayList<String> messages , String chatId, ArrayList<Date> dates, ArrayList<String> receiver, ArrayList<Uri> pictures, String header, String user1, String user2) {
+    public ChatDTO(ArrayList<String> sender, ArrayList<String> messages , String chatId, ArrayList<Date> dates, ArrayList<String> receiver, ArrayList<Uri> pictures, String header, String user1, String user2, String user1ID, String user2ID, String eventId) {
         this.chatId = chatId;
         this.dates = dates;
         this.messages = messages;
@@ -27,6 +27,9 @@ public class ChatDTO {
         this.header = header;
         this.user1 = user1;
         this.user2 = user2;
+        this.user1ID = user1ID;
+        this.user2ID = user2ID;
+        this.eventId = eventId;
     }
 
     public String getChatId() {
@@ -69,6 +72,13 @@ public class ChatDTO {
         this.receiver = receiver;
     }
 
+    public String getEventId() {
+        return eventId;
+    }
+
+    public void setEventId(String eventId) {
+        this.eventId = eventId;
+    }
 
     // Den her bruges kun når man henter ind fra firestore af fordi at man skal gemme URI'sne som strings i databasen
     public void setPictures(ArrayList<String> pics){
@@ -109,6 +119,22 @@ public class ChatDTO {
 
     public void setUser2(String user2) {
         this.user2 = user2;
+    }
+
+    public String getUser1ID() {
+        return user1ID;
+    }
+
+    public void setUser1ID(String user1ID) {
+        this.user1ID = user1ID;
+    }
+
+    public String getUser2ID() {
+        return user2ID;
+    }
+
+    public void setUser2ID(String user2ID) {
+        this.user2ID = user2ID;
     }
 
     @Override

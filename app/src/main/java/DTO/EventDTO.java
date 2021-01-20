@@ -2,16 +2,37 @@ package DTO;
 
 import android.util.EventLog;
 
+import com.google.android.gms.maps.model.LatLng;
+
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 
-public class EventDTO {
+public class EventDTO implements Serializable {
 
     private int price, minAge, maxAge;
     private String ownerId, ownerPic, eventId, eventPic,  participant, title, city, description, type;
     private Date date;
     private boolean maleOn, femaleOn;
     private ArrayList<String>  applicants;
+    private String coordinates, chatId;
+
+    public String getCoordinates() {
+        return coordinates;
+    }
+
+    public EventDTO setCoordinates(String coordinates) {
+        this.coordinates = coordinates;
+        return this;
+    }
+
+    public String getChatId() {
+        return chatId;
+    }
+
+    public void setChatId(String chatId) {
+        this.chatId = chatId;
+    }
 
     public String getEventId() {
         return eventId;
