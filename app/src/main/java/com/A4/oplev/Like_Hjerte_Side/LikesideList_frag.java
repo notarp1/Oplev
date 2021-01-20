@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -63,6 +64,7 @@ public class LikesideList_frag extends Fragment{
     private static ArrayList<View> footerViews = new ArrayList<>();
     private int listviewPosition = 0;
     boolean chatsReady = false, eventsReady = false;
+    private TextView nomessages;
 
     // Den her klasse bruges til at få lave chatlisten ude fra likesiden af (hvor man kan vælge den chat man vil ind i)
     @SuppressLint("ClickableViewAccessibility")
@@ -78,6 +80,7 @@ public class LikesideList_frag extends Fragment{
 
         //chat_listView = root.findViewById(R.id.beskedListView_chats);
         tilmeldinger_listView = root.findViewById(R.id.beskedListView_tilmeldinger);
+        nomessages = root.findViewById(R.id.nomessages_chats);
 
         // Denne linje er til test
         /*
@@ -451,6 +454,12 @@ public class LikesideList_frag extends Fragment{
                 }
                 // Vi sætter selectionen til det vi har fået fra vores overrided scrolllistener
                 tilmeldinger_listView.setSelection(listviewPosition);
+
+                if (tilmeldinger_listView.getFooterViewsCount() + tilmeldinger_listView.getHeaderViewsCount() == 0){
+                    nomessages.setVisibility(View.VISIBLE);
+                } else nomessages.setVisibility(View.GONE);
+
+
             }
             // vi overskriver de lister vi har med den rigtige rækkefølge
             this.dates = tempDates;
