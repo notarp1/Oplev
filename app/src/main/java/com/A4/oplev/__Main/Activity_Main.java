@@ -12,6 +12,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.location.Address;
+import android.location.Geocoder;
+import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -21,17 +24,21 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.A4.oplev.Activity_Ini;
+import com.A4.oplev.Activity_NoInstance;
 import com.A4.oplev.Activity_Profile;
 import com.A4.oplev.GpsTracker;
 import com.A4.oplev.Like_Hjerte_Side.Activity_Likeside;
-import com.A4.oplev.Login.Activity_Login;
 import com.A4.oplev.R;
 import com.A4.oplev.SearchFilter.Activity_Search_Filter;
+import com.A4.oplev.UserSettings.Activity_U_Settings;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import com.A4.oplev._Adapters.Event_Adapter;
 import com.facebook.AccessToken;
@@ -40,11 +47,13 @@ import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
+import com.facebook.HttpMethod;
 import com.facebook.Profile;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -54,15 +63,23 @@ import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.crashlytics.FirebaseCrashlytics;
 
 //import DAL.DBAccess;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import Controller.UserController;
 import DAL.Classes.EventDAO;
 import DAL.Classes.UserDAO;
+import DAL.Interfaces.CallBackEventList;
 import DAL.Interfaces.CallBackList;
+import DAL.Interfaces.CallbackEvent;
+import DAL.Interfaces.CallbackUser;
 import DTO.EventDTO;
 import DTO.UserDTO;
+import swipeable.com.layoutmanager.OnItemSwiped;
+import swipeable.com.layoutmanager.SwipeableLayoutManager;
+import swipeable.com.layoutmanager.SwipeableTouchHelperCallback;
+import swipeable.com.layoutmanager.touchelper.ItemTouchHelper;
 
 public class Activity_Main extends AppCompatActivity implements View.OnClickListener{
     private static final String TAG = "Activity_Main";
@@ -122,7 +139,7 @@ public class Activity_Main extends AppCompatActivity implements View.OnClickList
         boolean isLoggedIn = accessToken != null && !accessToken.isExpired();
 
 
-        if (!isLoggedIn && facebook){
+        if (isLoggedIn){
             LoginManager.getInstance().logInWithReadPermissions(this, Arrays.asList("public_profile", "email", "user_birthday"));
             callbackManager = CallbackManager.Factory.create();
             LoginManager.getInstance().registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
@@ -135,15 +152,15 @@ public class Activity_Main extends AppCompatActivity implements View.OnClickList
                     query.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                         @Override
                         public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                            if (task.isSuccessful()) {
-                                for (DocumentSnapshot documentSnapshot : task.getResult()) {
+                            if(task.isSuccessful()){
+                                for(DocumentSnapshot documentSnapshot : task.getResult()){
                                     String user = documentSnapshot.getString("userId");
 
-                                    if (user.equals(profile.getId())) {
-                                        Log.d(TAG + "123", "User Exists");
+                                    if(user.equals(profile.getId())){
+                                        Log.d(TAG+"123", "User Exists");
                                         UserController.getInstance().setCurrUser((UserDTO) documentSnapshot.toObject(UserDTO.class));
                                         prefs.edit().putBoolean("onInstance", true).apply();
-                                        prefs.edit().putBoolean("facebook", true).apply();
+                                        prefs.edit().putBoolean("facebook",true).apply();
                                         onInstance = true;
                                         facebook = true;
                                         FirebaseCrashlytics.getInstance().setUserId(UserController.getInstance().getCurrUser().getUserId());
@@ -152,11 +169,71 @@ public class Activity_Main extends AppCompatActivity implements View.OnClickList
                                             public void onCallback(List<String> list) {
                                                 eventIni(list);
                                             }
-                                        }, prefs);
+                                        },prefs);
                                     }
                                 }
                             }
 
+                            if(task.getResult().size() == 0 ){
+                                Log.d(TAG+"123", "User not Exists");
+                                // Facebook Email address
+                                GraphRequest request = GraphRequest.newMeRequest(
+                                        loginResult.getAccessToken(),
+                                        new GraphRequest.GraphJSONObjectCallback() {
+                                            @Override
+                                            public void onCompleted(
+                                                    JSONObject object,
+                                                    GraphResponse response) {
+                                                Log.v("LoginActivity Response ", response.toString());
+
+                                                try {
+                                                    UserDTO userdto = new UserDTO();
+                                                    String name = object.getString("name");
+                                                    String fEmail = object.getString("email");
+                                                    String birthday = object.getString("birthday");
+                                                    Toast.makeText(ctx,"Birthday: " + birthday, Toast.LENGTH_SHORT).show();
+                                                    Toast.makeText(ctx,"email: " + fEmail, Toast.LENGTH_SHORT).show();
+                                                    Toast.makeText(ctx, "Name " + name, Toast.LENGTH_LONG).show();
+
+                                                    userdto.setEmail(fEmail);
+                                                    userdto.setfName(profile.getFirstName());
+                                                    userdto.setlName(profile.getLastName());
+                                                    userdto.setUserPicture(profile.getProfilePictureUri(200,200)+"");
+                                                    ArrayList<String> billeder = new ArrayList<>();
+                                                    billeder.add(profile.getProfilePictureUri(200,200)+"");
+                                                    for (int i = 0; i < 5; i++) {
+                                                        billeder.add(null);
+                                                    }
+                                                    userdto.setPictures(billeder);
+                                                    int age = getAge(birthday);
+                                                    userdto.setAge(age);
+                                                    Toast.makeText(ctx,age+"",Toast.LENGTH_SHORT).show();
+                                                    userdto.setUserId(profile.getId());
+                                                    UserDAO userDAO = new UserDAO();
+                                                    userDAO.createUser(userdto);
+                                                    UserController.getInstance().setCurrUser(userdto);
+                                                    prefs.edit().putBoolean("onInstance", true).apply();
+                                                    prefs.edit().putBoolean("facebook",true).apply();
+                                                    onInstance = true;
+                                                    facebook = true;
+                                                    FirebaseCrashlytics.getInstance().setUserId(UserController.getInstance().getCurrUser().getUserId());
+                                                    dataA.getEventIDs(new CallBackList() {
+                                                        @Override
+                                                        public void onCallback(List<String> list) {
+                                                            eventIni(list);
+                                                        }
+                                                    },prefs);
+
+                                                } catch (JSONException e) {
+                                                    e.printStackTrace();
+                                                }
+                                            }
+                                        });
+                                Bundle parameters = new Bundle();
+                                parameters.putString("fields", "id,name,email,birthday");
+                                request.setParameters(parameters);
+                                request.executeAsync();
+                            }
                         }
                     });
                 }
@@ -244,8 +321,9 @@ public class Activity_Main extends AppCompatActivity implements View.OnClickList
     @Override
     public void onClick(View v) {
         if(!onInstance){
-            Intent i = new Intent(this, Activity_Login.class);
+            Intent i = new Intent(this, Activity_NoInstance.class);
             startActivity(i);
+
 
         } else if(v == options){
             Intent i = new Intent(this, Activity_Search_Filter.class);

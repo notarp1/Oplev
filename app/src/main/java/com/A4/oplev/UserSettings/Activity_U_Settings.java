@@ -1,28 +1,21 @@
 package com.A4.oplev.UserSettings;
 
 import android.content.Intent;
+import android.graphics.PixelFormat;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
 import com.A4.oplev.R;
-import com.google.android.gms.common.api.Status;
-import com.google.android.libraries.places.api.model.Place;
-import com.google.android.libraries.places.widget.Autocomplete;
-
-import static com.google.android.libraries.places.widget.AutocompleteActivity.RESULT_ERROR;
+import com.A4.oplev.UserSettings.U_Settings_Main;
 
 public class Activity_U_Settings extends AppCompatActivity implements View.OnClickListener{
-    private static final String TAG = "Activity_U_Settings";
     ImageView back, accept;
     static TextView title;
     Fragment fragment;

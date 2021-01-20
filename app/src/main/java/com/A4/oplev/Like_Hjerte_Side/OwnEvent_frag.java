@@ -9,7 +9,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -29,7 +28,6 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.Date;
 
-import Controller.Listeners.OnSwipeTouchListener;
 import Controller.UserController;
 import DAL.Classes.EventDAO;
 import DAL.Interfaces.CallbackUser;
@@ -67,9 +65,16 @@ public class OwnEvent_frag extends Fragment {
         recyclerView = root.findViewById(R.id.ownEvents_Recycler);
         redigerKnap = root.findViewById(R.id.own_event_edit_picture);
         sletKnap = root.findViewById(R.id.own_event_delete_holder);
-        FrameLayout frameLayoutOwnEvent;
 
-        frameLayoutOwnEvent = root.findViewById(R.id.frameLayoutOwnEvent);
+
+
+
+        // *Todo - Skal vise side for eget event (Antager at der skal laves en nyt xml dokument - Men hvad skal vises?)
+        // *Todo - Organiser rækkefølge på events.
+        // Todo - Lav visuel forskel når en applicant er accepteret, og eventet dermed er faslagt. (Vis tilmeldt osv)
+        // Todo - Lav slet metode der fjerne det valgte element - og lav/ benyt slet metode fra backend.
+        // todo - Lav rediger metode der virker på det valgte element - og lav/ benyt slet metode fra backend.
+
 
 
         // Det her er til ens egne events som andre prøver på at ansøge om at joine
@@ -122,8 +127,16 @@ public class OwnEvent_frag extends Fragment {
                                     eventApplicantPic.add(user.getUserPicture());
                                     eventApplicantsSize.add(event.getApplicants().size());
                                     Log.d("eventSize test2",  eventApplicantsSize.toString());
-                                    eventParticipantNames.add(user.getfName());
-                                    Log.d("name", "eventParticipantNames: ");
+                                    // Todo - skal gemme navne ned - HELP
+//                                    userController.getUser(new CallbackUser() {
+//                                        @Override
+//                                        public void onCallback(UserDTO user) {
+//                                            eventParticipantNames.add(user.getfName());
+//                                            Log.d("callbackN", eventParticipantNames.toString());
+//                                        }
+//                                    },event.getParticipant());
+                                    eventParticipantNames.add("");
+
 
                                     eventHeaders.add(event.getTitle());
                                     eventOwnerPic.add(event.getOwnerPic());
@@ -149,30 +162,28 @@ public class OwnEvent_frag extends Fragment {
             }
         };
 
-
-        // Todo Få onSwipe til at virke på recylerView
-      recyclerView.setOnTouchListener(new OnSwipeTouchListener(getContext()){
+        // Todo - OnSwipe virker ikke på recylerviewet - HELP
+      /*  recyclerView.setOnTouchListener(new OnSwipeTouchListener(mContext){
             @Override
             public void onSwipeLeft() {
                 // Sæt farven på billederne i toppen af skærmen
-                getActivity().findViewById(R.id.besked_back).setVisibility(View.VISIBLE);
-                getActivity().findViewById(R.id.event_back).setVisibility(View.INVISIBLE);
+                getActivity().findViewById(R.id.besked_back).setVisibility(View.INVISIBLE);
+                getActivity().findViewById(R.id.event_back).setVisibility(View.VISIBLE);
                 getActivity().findViewById(R.id.hjerte_back).setVisibility(View.INVISIBLE);
 
+                // Kreer fragmentet over til hjertesiden
                 getFragmentManager().beginTransaction().setCustomAnimations(R.anim.enter_from_right,
                         R.anim.exit_to_left).replace(R.id.likeside_frameLayout,new LikesideList_frag())
                         .commit();
             }
-        });
+        });*/
+
 
         return root;
     }
-
-
 // Todo - Listing virker ikke efter hensigten endnu.
-        public void setListView_events(@NonNull ArrayList<String> eventEventPic, @NonNull ArrayList<String> eventHeaders, @NonNull ArrayList<String> eventOwnerPic, @NonNull ArrayList<String> eventFirstApplicants, @NonNull ArrayList<String> eventApplicantPic, @NonNull ArrayList<Integer> eventApplicantsSize, @NonNull ArrayList<String> eventEventID, @NonNull ArrayList<Date> dates, @NonNull ArrayList<String> eventParticipant,@NonNull ArrayList<String> eventParticipantNames)
+        public void setListView_events(@NonNull ArrayList<String> eventEventPic, @NonNull ArrayList<String> eventHeaders, @NonNull ArrayList<String> eventOwnerPic, @NonNull ArrayList<String> eventFirstApplicants, @NonNull ArrayList<String> eventApplicantPic, @NonNull ArrayList<Integer> eventApplicantsSize, @NonNull ArrayList<String> eventEventID, @NonNull ArrayList<Date> dates, @NonNull ArrayList<String> eventParticipant, ArrayList<String> eventParticipantNames)
         {
-            Log.d("name2", eventParticipantNames.toString());
             if (mContext != null) {
                 ArrayList<String> tempEventPic = new ArrayList<>(), tempEventHeaders = new ArrayList<>(), tempEventOwnerPic = new ArrayList<>(), tempEventFirstApplicants = new ArrayList<>(), tempEventApplicantPic = new ArrayList<>(), tempEventID = new ArrayList<>(), tempEventParticipant = new ArrayList<>(), tempEventParticipantName= new ArrayList<>();
                 ArrayList<Integer> tempEventApplicantsSize = new ArrayList<>();

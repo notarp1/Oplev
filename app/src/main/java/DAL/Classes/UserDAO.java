@@ -1,12 +1,10 @@
 package DAL.Classes;
 
 import android.content.Context;
-import android.net.Uri;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
 
-import com.A4.oplev.UserSettings.U_Settings_Edit;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -16,8 +14,6 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.WriteBatch;
-import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -125,40 +121,6 @@ public class UserDAO implements IUserDAO, CallbackUser, CallbackUserDelete {
                 });
 
     }
-    @Override
-    public void uploadFile(UserController userController, StorageReference picRefProfile, Uri filePic, int indexPlace, ArrayList<String> pictures, U_Settings_Edit ctx){
-
-        picRefProfile.putFile(filePic)
-                .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                    @Override
-                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                        // Get a URL to the uploaded content
-
-                        picRefProfile.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                            @Override
-                            public void onSuccess(Uri uri) {
-                                Uri downloadUrl = uri;
-
-                                userController.indexNumbers += 1;
-                                userController.setPictures(indexPlace, downloadUrl, pictures);
-                                userController.setSafe(false);
-                                userController.updateUserAndGUI(ctx);
-
-                            }
-
-                        });
-
-
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception exception) {
-                        // Handle unsuccessful uploads
-                        // ...
-                    }
-                });
-    }
 
 
     public void setRequested(ArrayList<String> requested) {
@@ -169,8 +131,6 @@ public class UserDAO implements IUserDAO, CallbackUser, CallbackUserDelete {
         return requested;
     }
 
-
-    //Nedeståendene IKKE implementeret
     @Override
     public void deleteUser(UserDTO user, Context ctx) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();

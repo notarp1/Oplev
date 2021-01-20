@@ -19,11 +19,8 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.A4.oplev.Activity_Event;
-import com.A4.oplev.Activity_Profile;
-
 import com.A4.oplev.CreateEvent.Activity_Create_Event;
 import com.A4.oplev.R;
-import com.google.firebase.firestore.auth.User;
 import com.squareup.picasso.Picasso;
 
 import java.text.SimpleDateFormat;
@@ -32,20 +29,12 @@ import java.util.Date;
 
 import Controller.EventController;
 import Controller.UserController;
-import DAL.Classes.ChatDAO;
 import DAL.Classes.EventDAO;
-import DAL.Classes.UserDAO;
 import DAL.Interfaces.CallbackEvent;
-import DAL.Interfaces.CallbackUser;
-import DAL.Interfaces.IEventDAO;
-import DAL.Interfaces.IUserDAO;
-import DTO.ChatDTO;
 import DTO.EventDTO;
-import DTO.UserDTO;
 
 public class OwnEvents_Adapter2 extends RecyclerView.Adapter<OwnEvents_Adapter2.ViewHolder> implements View.OnClickListener {
-    private IEventDAO eventDAO = new EventDAO();
-    private IUserDAO userDAO = new UserDAO();
+    private EventDAO eventDAO = new EventDAO();
     private UserController userController = UserController.getInstance();
     private Context mContext;
     private ArrayList<Date> eventDate;
@@ -119,7 +108,7 @@ public class OwnEvents_Adapter2 extends RecyclerView.Adapter<OwnEvents_Adapter2.
                     .into(profilePic1);
 
             edit.setVisibility(View.GONE);
-            numberOfApplciants.setText(" Med "+eventParticipantName.get(position));
+            numberOfApplciants.setText(" Med X");
 
         }
 
@@ -186,8 +175,6 @@ public class OwnEvents_Adapter2 extends RecyclerView.Adapter<OwnEvents_Adapter2.
             edit.setOnClickListener(this);
             delete.setOnClickListener(this);
             box_own_events.setOnClickListener(this);
-            profileHolder1.setOnClickListener(this);
-
         }
 
         @Override
@@ -205,17 +192,6 @@ public class OwnEvents_Adapter2 extends RecyclerView.Adapter<OwnEvents_Adapter2.
 
                 },eventID.get(getPosition()));
             }
-            if (v == profileHolder1){
-
-                eventDAO.getEvent(event -> {
-                    userController.getUser(user -> {
-                        Intent intent = new Intent(mContext, Activity_Profile.class);
-                        intent.putExtra("user", user);
-                        intent.putExtra("load", 1);
-                        mContext.startActivity(intent);
-                    }, event.getApplicants().get(0));
-                },eventID.get(getPosition()));
-            }
 
 
             if(v == edit){
@@ -223,9 +199,9 @@ public class OwnEvents_Adapter2 extends RecyclerView.Adapter<OwnEvents_Adapter2.
                 eventDAO.getEvent(new CallbackEvent() {
                     @Override
                     public void onCallback(EventDTO event) {
-                        if(event.getParticipant() == null && event.getApplicants().isEmpty()) {
+                        if((event.getParticipant() == null|| event.getParticipant() == "" ) && event.getApplicants().isEmpty()) {
                             Intent i = new Intent(v.getContext(), Activity_Create_Event.class);
-                            i.putExtra("EventDTO", event);
+                            i.putExtra("event", event);
                             i.putExtra("edit", true);
                             mContext.startActivity(i);
                         }else{

@@ -272,7 +272,6 @@ public class EventDAO implements IEventDAO {
     @Override
     public void updateEvent(EventDTO event) {
         mStorageRef  = FirebaseStorage.getInstance().getReference();
-
         Map<String, Object> eventObject = new HashMap<>();
         eventObject.put("ownerId", event.getOwnerId());
         eventObject.put("ownerPic", event.getOwnerPic());
@@ -356,6 +355,34 @@ public class EventDAO implements IEventDAO {
                             // ...
                         }
                     });
+        }else{
+            //set picture reference  (path of pic, here hardcoded cuz default pic)
+            picRef = mStorageRef.child("events/default/2.jpg");
+            //get pic url from db
+            picRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                @Override
+                public void onSuccess(Uri uri) {
+                    //set URL of eventpic in eventObject map
+                    eventObject.put("eventPic", String.valueOf(uri));
+                    //eventObject is now updated with eventId and eventPic URL
+                    //update the event in db
+                    //overwrite database document with new eventId and eventPic
+                    db.collection("events").document(event.getEventId())
+                            .set(eventObject)
+                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void aVoid) {
+                                    Log.d(TAG, "DocumentSnapshot successfully written!");
+                                }
+                            })
+                            .addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    Log.w(TAG, "Error writing document", e);
+                                }
+                            });
+                }
+            });
         }
 
 

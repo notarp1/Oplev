@@ -239,7 +239,21 @@
                 android:layout_marginStart="20dp"
                 android:layout_marginLeft="20dp"
                 android:gravity="left|center_vertical"
-                android:text="Lokation:"
+                android:text="By:"
+                android:textColor="#000000"
+                android:textSize="18sp"
+                app:layout_constraintBottom_toBottomOf="@+id/create__city_input"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/create__city_input" />
+
+            <TextView
+                android:id="@+id/type_txt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginLeft="20dp"
+                android:gravity="left|center_vertical"
+                android:text="By:"
                 android:textColor="#A4E8E0"
                 android:textSize="18sp"
                 app:layout_constraintBottom_toBottomOf="@+id/create__city_input"

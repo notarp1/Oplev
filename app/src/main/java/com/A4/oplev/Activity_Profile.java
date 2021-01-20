@@ -52,10 +52,9 @@ public class Activity_Profile extends AppCompatActivity implements View.OnClickL
         setContentView(R.layout.activity_profile);
         Intent myIntent = getIntent();
 
-        j = myIntent.getIntExtra("load", 0);
+        userController =  userController.getInstance();
+        pictures = userController.getUserPictures();
 
-        userController =  UserController.getInstance();
-        if(j==0) pictures = userController.getUserPictures();
 
         about = findViewById(R.id.text_information);
         city = findViewById(R.id.text_city);
@@ -102,7 +101,7 @@ public class Activity_Profile extends AppCompatActivity implements View.OnClickL
         right.setMinimumWidth(width/2);
         left.setMinimumWidth(width/2);
 
-
+        j = myIntent.getIntExtra("load", 0);
         System.out.println(j);
 
         currentSelection = selection1;
@@ -322,22 +321,86 @@ public class Activity_Profile extends AppCompatActivity implements View.OnClickL
         } else if(v == accept){
             // hvis man accepterer en person til et event
             Intent i = getIntent();
-
             // hent brugeren
+
             UserDTO user = (UserDTO) i.getSerializableExtra("user");
             String header = i.getStringExtra("header");
             String eventId = i.getStringExtra("eventID");
-            userController.onClickAccept(this, header, eventId, user);
+
+            ChatDAO chatDAO = new ChatDAO();
+            // vi laver et chatobjekt med de nødvendige informationer
+            ChatDTO chatDTO = new ChatDTO(null,null,null,null,null,null,header,userController.getCurrUser().getfName(),user.getfName(),userController.getCurrUser().getUserId(),user.getUserId(),eventId);
+            chatDAO.createChat(chatDTO, chatID -> {
+                // vi skal opdatere eventet til at have en participant
+                EventDAO eventDAO = new EventDAO();
+                eventDAO.getEvent(event -> {
+                    if (event != null) {
+                        //event.setApplicants(new ArrayList<>());
+                        event.setParticipant(user.getUserId());
+                        eventDAO.updateEvent(event);
+                    }
+                }, eventId);
+
+                // vi skal indsætte chatid'et på begge brugeres lister
+                ArrayList<String> otherUserChatID;
+                if (user.getChatId() == null){
+                    otherUserChatID = new ArrayList<>();
+                } else otherUserChatID = user.getChatId();
+                otherUserChatID.add(chatID);
 
 
+                ArrayList<String> thisUserChatID;
+                if (userController.getCurrUser().getChatId() == null){
+                    thisUserChatID = new ArrayList<>();
+                } else thisUserChatID = userController.getCurrUser().getChatId();
+                thisUserChatID.add(chatID);
+
+                // vi opdaterer begge brugere i databasen
+                UserDAO userDAO = new UserDAO();
+
+                userDAO.updateUser(user);
+                userDAO.updateUser(userController.getCurrUser());
+                finish();
+            });
         }
         if(v == reject){
             // hvis brugeren afviser en applicant
             Intent i = getIntent();
             ArrayList<String> otherApplicants = i.getStringArrayListExtra("applicantList");
-            String eventId = i.getStringExtra("eventID");
-            String header = i.getStringExtra("header");
-            userController.onClickReject(this, otherApplicants, eventId, header);
+            // hvis der stadigvæk er nogle applicants tilbage i listen
+            if (otherApplicants.size() != 0) {
+                EventDAO eventDAO = new EventDAO();
+                // vi henter eventet for at kunne opdatere det
+                eventDAO.getEvent(event -> {
+                    if (event != null) {
+                        // vi fjerner den applicant man har afvist og opdaterer det i databasen
+                        ArrayList<String> newApplicants = event.getApplicants();
+                        newApplicants.remove(0);
+                        event.setApplicants(newApplicants);
+                        eventDAO.updateEvent(event);
+                    }
+                }, i.getStringExtra("eventID"));
+
+                // vi fjerner den man har afvist i vores liste
+                otherApplicants.remove(0);
+                // hvis der er flere personer tilbage
+                if (otherApplicants.size() != 0) {
+                    // vi indlæser den næste applicant
+                    userController.getUser(user -> {
+                        // start nyt intent med den næste applicant
+                        Intent i12 = new Intent(this, Activity_Profile.class);
+                        i12.putExtra("user", user);
+                        i12.putExtra("load", 2);
+                        i12.putExtra("numberOfApplicants", otherApplicants.size() - 1);
+                        i12.putExtra("applicantList", otherApplicants);
+                        i12.putExtra("header", i.getStringExtra("header"));
+                        i12.putExtra("eventID", i.getStringExtra("eventID"));
+                        this.startActivity(i12);
+                    }, otherApplicants.get(0));
+                }
+            }
+            // afslut aktiviteten så man ikke kan gå tilbage
+            finish();
         }
         if(!noPic) {
             if(v == right){
