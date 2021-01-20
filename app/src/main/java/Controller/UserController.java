@@ -177,6 +177,7 @@ public class UserController {
                 if (event != null) {
                     //event.setApplicants(new ArrayList<>());
                     event.setParticipant(otheruser.getUserId());
+                    event.setChatId(chatID);
                     eventDAO.updateEvent(event);
                 }
             }, eventId);

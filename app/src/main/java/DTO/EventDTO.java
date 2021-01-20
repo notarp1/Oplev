@@ -15,7 +15,7 @@ public class EventDTO implements Serializable {
     private Date date;
     private boolean maleOn, femaleOn;
     private ArrayList<String>  applicants;
-    private String coordinates;
+    private String coordinates, chatId;
 
     public String getCoordinates() {
         return coordinates;
@@ -24,6 +24,14 @@ public class EventDTO implements Serializable {
     public EventDTO setCoordinates(String coordinates) {
         this.coordinates = coordinates;
         return this;
+    }
+
+    public String getChatId() {
+        return chatId;
+    }
+
+    public void setChatId(String chatId) {
+        this.chatId = chatId;
     }
 
     public String getEventId() {
