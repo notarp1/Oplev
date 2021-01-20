@@ -455,7 +455,7 @@ public class LikesideList_frag extends Fragment{
                 // Vi sætter selectionen til det vi har fået fra vores overrided scrolllistener
                 tilmeldinger_listView.setSelection(listviewPosition);
 
-                if (tilmeldinger_listView.getFooterViewsCount() + tilmeldinger_listView.getHeaderViewsCount() == 0){
+                if (tilmeldinger_listView.getAdapter().getCount() + adapter.getCount() == 0){
                     nomessages.setVisibility(View.VISIBLE);
                 } else nomessages.setVisibility(View.GONE);
 
