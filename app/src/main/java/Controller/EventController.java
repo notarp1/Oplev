@@ -1,14 +1,29 @@
 package Controller;
 
+import android.content.Context;
+import android.content.ContextWrapper;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.net.Uri;
 import android.util.Log;
+import android.widget.ImageView;
 
 import com.A4.oplev.Activity_Event;
+import com.A4.oplev.CreateEvent.Activity_Create_Event;
+import com.A4.oplev.CreateEvent.createEvent1_frag;
+import com.A4.oplev.R;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.auth.User;
+import com.google.firebase.storage.FirebaseStorage;
+import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Target;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -24,6 +39,8 @@ import DAL.Interfaces.IEventDAO;
 import DAL.Interfaces.IUserDAO;
 import DTO.EventDTO;
 import DTO.UserDTO;
+
+import static android.content.ContentValues.TAG;
 
 public class EventController {
 
@@ -173,5 +190,109 @@ public class EventController {
 
         eventDAO.deleteEvent(eventId);
     }
+    public void iniRepost(createEvent1_frag ctx){
+        Log.d(TAG, "onCreateView: (jbe) repost spottet!");
+        EventDTO repostEvent = ((Activity_Create_Event) ctx.getActivity()).getRepostEvent();
+        Log.d(TAG, "onCreateView: (jbe) repost date = " + repostEvent.getDate().toString());
+        Picasso.get().load(repostEvent.getEventPic()).into(ctx.pic);
+        //check if repost pic is default pic (no reupload)
+        FirebaseStorage.getInstance().getReference().child(ctx.getString(R.string.defaultpic_db_path)).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+            @Override
+            public void onSuccess(Uri uri) {
+                //download and set image URI
+                Log.d(TAG, "onSuccess: defaultpic download uri: " + uri.toString() + "\n repostpic: " + repostEvent.getEventPic());
+                if(repostEvent.getEventPic().equals(uri.toString())) {
+                    Log.d(TAG, "onSuccess: eventpic is defaultpic");
+                    ((Activity_Create_Event) ctx.getActivity()).setPickedImgUri(null);
+                    Log.d(TAG, "onSuccess: eventpicUri: " + ((Activity_Create_Event) ctx.getActivity()).getPickedImgUri());
+                }
+                else{
+                    Log.d(TAG, "onSuccess: eventpic is not deafaultpic");
+                    imageDownload(repostEvent.getEventPic(), ctx);
+                }
+            }
+        });
+        //set values from repost event
+        ctx.title_in.setText(repostEvent.getTitle());
+        ctx.desc_in.setText(repostEvent.getDescription());
+        ctx.price_in.setText("" + repostEvent.getPrice());
+        ((Activity_Create_Event) ctx.getActivity()).setCoordinates(repostEvent.getCoordinates());
+        //extract values from Date-obj and update ui
+        Date repostDate = repostEvent.getDate();
+        ctx.day = repostDate.getDate();
+        ctx.month = repostDate.getMonth();
+        ctx.year = repostDate.getYear() + 1900;
+        ctx.minute = repostDate.getMinutes();
+        ctx.hour = repostDate.getHours();
+        ctx.updateDateUI();
+        ctx.updateTimeUI();
+        ctx.city_in.setText(repostEvent.getCity());
+        ctx.currentType = repostEvent.getType();
+        //set the dropdown to the position of repostevent's type
+        ctx.dropDown.setSelection(getTypeIndex(repostEvent.getType(), ctx));
+    }
+    private int getTypeIndex(String typeToFind, createEvent1_frag ctx){
+        //takes a string with a type, returns the position it lies on in the spinner(dropdown)
+        int index = 0;
+        for (int i=0;i<ctx.dropDown.getCount();i++){
+            if (ctx.dropDown.getItemAtPosition(i).equals(typeToFind)){
+                index = i;
+            }
+        }
+        return index;
+    }
+    ImageView targetHolder;
+    //save image from repost locally
+    private void imageDownload(String url, createEvent1_frag ctx){
+        Log.d(TAG, "imageDownload: (jbe) trying to save img");
+        targetHolder = new ImageView(ctx.getContext());
+        targetHolder.setTag((Target) getTarget(url, ctx));
+        Picasso.get()
+                .load(url)
+                .into((Target) targetHolder.getTag());
+    }
+    //target to save
+    private Target getTarget(final String url, createEvent1_frag ctx){
+        Log.d(TAG, "getTarget: (jbe) trying to find target");
+        Target target = new Target(){
+            @Override
+            public void onBitmapLoaded(final Bitmap bitmap, Picasso.LoadedFrom from) {
+                Log.d(TAG, "onBitmapLoaded: (jbe) bitmaploaded");
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Log.d(TAG, "run: (jbe)");
+                        ContextWrapper cw = new ContextWrapper(ctx.getActivity().getApplicationContext());
+                        File directory = cw.getDir("imageDir", Context.MODE_PRIVATE);
 
+                        File file = new File(directory,"OplevRepostTemp.jpg");
+                        try {
+                            FileOutputStream ostream = new FileOutputStream(file, false);
+                            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, ostream);
+                            ostream.flush();
+                            ostream.close();
+                            Log.d(TAG, "run: (jbe) file saved to " + file.getPath());
+                            //setting picked img URI
+                            ((Activity_Create_Event) ctx.getActivity()).setPickedImgUri(Uri.fromFile(file));
+                            Log.d(TAG, "run: (jbe) file absoulute path " + file.getAbsolutePath());
+                            Log.d(TAG, "run: (jbe) uri set to " + Uri.fromFile(file).toString());
+                        } catch (IOException e) {
+                            Log.e("IOException", e.getLocalizedMessage());
+                            Log.d(TAG, "run: (jbe) file save exception" + e.getLocalizedMessage()+ "\n"+
+                                    e.getStackTrace().toString());
+                        }
+                    }
+                }).start();
+            }
+            @Override
+            public void onBitmapFailed(Exception e, Drawable errorDrawable) {
+                Log.d(TAG, "onBitmapFailed: (jbe)" + e.getLocalizedMessage());
+            }
+            @Override
+            public void onPrepareLoad(Drawable placeHolderDrawable) {
+                Log.d(TAG, "onPrepareLoad: (jbe)");
+            }
+        };
+        return target;
+    }
 }

@@ -15,6 +15,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.A4.oplev.CreateEvent.Activity_Create_Event;
+import com.A4.oplev.Login.Activity_Login;
 import com.google.firebase.firestore.auth.User;
 import com.squareup.picasso.Picasso;
 
@@ -25,6 +26,7 @@ import Controller.UserController;
 import DAL.Classes.ChatDAO;
 import DAL.Classes.EventDAO;
 import DAL.Classes.UserDAO;
+import DAL.Interfaces.CallbackUser;
 import DTO.EventDTO;
 import DTO.UserDTO;
 
@@ -139,7 +141,7 @@ public class Activity_Event extends AppCompatActivity implements View.OnClickLis
                 i.putExtra("event", event);
                 startActivity(i);
             } else {
-                Intent i = new Intent(this, Activity_NoInstance.class);
+                Intent i = new Intent(this, Activity_Login.class);
                 startActivity(i);
             }
         }
@@ -156,21 +158,28 @@ public class Activity_Event extends AppCompatActivity implements View.OnClickLis
                     dao.updateEvent(event);
 
 
-                    UserDTO sendMe = userController.getCurrUser();
-                    ArrayList<String> requested = sendMe.getRequestedEvents();
-                    if(requested == null){
-                        requested = new ArrayList<>();
-                    }
-                    requested.add(eventId);
+                    UserDAO userDAO = new UserDAO();
+                    userDAO.getUser(new CallbackUser() {
+                        @Override
+                        public void onCallback(UserDTO user) {
+                            ArrayList<String> requested = user.getRequestedEvents();
+                            if(requested == null){
+                                requested = new ArrayList<>();
+                            }
+                            requested.add(eventId);
 
-                    sendMe.setRequestedEvents(requested);
-                    userController.updateUserSimple(sendMe);
+                            userController.getCurrUser().setRequestedEvents(requested);
+                            userController.getCurrUser().setChatId(user.getChatId());
+                            userController.updateUserSimple(userController.getCurrUser());
+                        }
+                    }, userController.getCurrUser().getUserId());
+
                     finish();
                 } else {
                     Toast.makeText(this, "Du har allerede ansøgt om at deltage", Toast.LENGTH_SHORT).show();
                 }
             } else {
-                Intent i = new Intent(this, Activity_NoInstance.class);
+                Intent i = new Intent(this, Activity_Login.class);
                 startActivity(i);
             }
         }

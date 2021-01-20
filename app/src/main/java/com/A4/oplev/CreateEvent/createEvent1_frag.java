@@ -58,6 +58,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import Controller.EventController;
 import Controller.PictureMaker;
 import DTO.EventDTO;
 
@@ -68,20 +69,20 @@ public class createEvent1_frag extends Fragment implements View.OnClickListener{
     //topbar text
     TextView topbar_txt;
     //fragment elements
-    ImageView pic;
-    EditText title_in, desc_in, price_in, city_in;
-    TextView price_txt, date_txt, city_txt, date_in, time_in;
+    public ImageView pic;
+    public EditText title_in, desc_in, price_in, city_in;
+    public TextView price_txt, date_txt, city_txt, date_in, time_in;
     Button next_btn;
-    Spinner dropDown;
+    public Spinner dropDown;
     AdapterView.OnItemSelectedListener onItemSelectedListener;
-    String currentType = "--Vælg type--";
+    public String currentType = "--Vælg type--";
 
     //dialog changelisteners
     DatePickerDialog.OnDateSetListener onDateSetListener;
     TimePickerDialog.OnTimeSetListener onTimeSetListener;
 
     //date time values
-    int day, month, year, hour, minute;
+    public int day, month, year, hour, minute;
 
     // for input validation
     boolean inputIsValid;
@@ -129,46 +130,7 @@ public class createEvent1_frag extends Fragment implements View.OnClickListener{
         Log.d(TAG, "onCreateView: (jbe) outside repost spottet");
         //if createevent startet from repost then fill out info
         if(((Activity_Create_Event) getActivity()).getRepostEvent() != null){
-            Log.d(TAG, "onCreateView: (jbe) repost spottet!");
-            EventDTO repostEvent = ((Activity_Create_Event) getActivity()).getRepostEvent();
-            Log.d(TAG, "onCreateView: (jbe) repost date = " + repostEvent.getDate().toString());
-            Picasso.get().load(repostEvent.getEventPic()).into(pic);
-            //check if repost pic is default pic (no reupload)
-            FirebaseStorage.getInstance().getReference().child(getString(R.string.defaultpic_db_path)).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                @Override
-                public void onSuccess(Uri uri) {
-                    //download and set image URI
-                    Log.d(TAG, "onSuccess: defaultpic download uri: " + uri.toString() + "\n repostpic: " + repostEvent.getEventPic());
-                    if(repostEvent.getEventPic().equals(uri.toString())) {
-                        Log.d(TAG, "onSuccess: eventpic is defaultpic");
-                        ((Activity_Create_Event) getActivity()).setPickedImgUri(null);
-                        Log.d(TAG, "onSuccess: eventpicUri: " + ((Activity_Create_Event) getActivity()).getPickedImgUri());
-                    }
-                    else{
-                        Log.d(TAG, "onSuccess: eventpic is not deafaultpic");
-                        imageDownload(repostEvent.getEventPic());
-                    }
-                }
-            });
-
-            //set values from repost event
-            title_in.setText(repostEvent.getTitle());
-            desc_in.setText(repostEvent.getDescription());
-            price_in.setText("" + repostEvent.getPrice());
-            ((Activity_Create_Event) getActivity()).setCoordinates(repostEvent.getCoordinates());
-            //extract values from Date-obj and update ui
-            Date repostDate = repostEvent.getDate();
-            day = repostDate.getDate();
-            month = repostDate.getMonth();
-            year = repostDate.getYear() + 1900;
-            minute = repostDate.getMinutes();
-            hour = repostDate.getHours();
-            updateDateUI();
-            updateTimeUI();
-            city_in.setText(repostEvent.getCity());
-            currentType = repostEvent.getType();
-            //set the dropdown to the position of repostevent's type
-            dropDown.setSelection(getTypeIndex(repostEvent.getType()));
+            EventController.getInstance().iniRepost(this);
         }
 
         dropDown.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -211,17 +173,8 @@ public class createEvent1_frag extends Fragment implements View.OnClickListener{
 
         return root;
     }
-    private int getTypeIndex(String typeToFind){
-        //takes a string with a type, returns the position it lies on in the spinner(dropdown)
-        int index = 0;
-        for (int i=0;i<dropDown.getCount();i++){
-            if (dropDown.getItemAtPosition(i).equals(typeToFind)){
-                index = i;
-            }
-        }
-        return index;
-    }
-    private void updateDateUI(){
+
+    public void updateDateUI(){
         //update UI
         // increment month since monthNew is zero indexed (jan = 0)
         String dateString = day + "/" + (month+1) + "/" + year;
@@ -229,7 +182,7 @@ public class createEvent1_frag extends Fragment implements View.OnClickListener{
         //remove error of missing date input
         date_in.setError(null);
     }
-    private void updateTimeUI(){
+    public void updateTimeUI(){
         //update UI
         //handle setting zeroes if one ciffer on time
         String hourString = "" + hour;
@@ -244,61 +197,6 @@ public class createEvent1_frag extends Fragment implements View.OnClickListener{
         time_in.setText(timeString);
         //remove error of missing time input
         time_in.setError(null);
-    }
-
-    ImageView targetHolder;
-    //save image from repost locally
-    private void imageDownload(String url){
-        Log.d(TAG, "imageDownload: (jbe) trying to save img");
-        targetHolder = new ImageView(this.getContext());
-        targetHolder.setTag((Target) getTarget(url));
-        Picasso.get()
-                .load(url)
-                .into((Target) targetHolder.getTag());
-    }
-    //target to save
-    private Target getTarget(final String url){
-        Log.d(TAG, "getTarget: (jbe) trying to find target");
-        Target target = new Target(){
-            @Override
-            public void onBitmapLoaded(final Bitmap bitmap, Picasso.LoadedFrom from) {
-                Log.d(TAG, "onBitmapLoaded: (jbe) bitmaploaded");
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        Log.d(TAG, "run: (jbe)");
-                        ContextWrapper cw = new ContextWrapper(getActivity().getApplicationContext());
-                        File directory = cw.getDir("imageDir", Context.MODE_PRIVATE);
-
-                        File file = new File(directory,"OplevRepostTemp.jpg");
-                        try {
-                            FileOutputStream ostream = new FileOutputStream(file, false);
-                            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, ostream);
-                            ostream.flush();
-                            ostream.close();
-                            Log.d(TAG, "run: (jbe) file saved to " + file.getPath());
-                            //setting picked img URI
-                            ((Activity_Create_Event) getActivity()).setPickedImgUri(Uri.fromFile(file));
-                            Log.d(TAG, "run: (jbe) file absoulute path " + file.getAbsolutePath());
-                            Log.d(TAG, "run: (jbe) uri set to " + Uri.fromFile(file).toString());
-                        } catch (IOException e) {
-                            Log.e("IOException", e.getLocalizedMessage());
-                            Log.d(TAG, "run: (jbe) file save exception" + e.getLocalizedMessage()+ "\n"+
-                            e.getStackTrace().toString());
-                        }
-                    }
-                }).start();
-            }
-            @Override
-            public void onBitmapFailed(Exception e, Drawable errorDrawable) {
-                Log.d(TAG, "onBitmapFailed: (jbe)" + e.getLocalizedMessage());
-            }
-            @Override
-            public void onPrepareLoad(Drawable placeHolderDrawable) {
-                Log.d(TAG, "onPrepareLoad: (jbe)");
-            }
-        };
-        return target;
     }
 
     @Override

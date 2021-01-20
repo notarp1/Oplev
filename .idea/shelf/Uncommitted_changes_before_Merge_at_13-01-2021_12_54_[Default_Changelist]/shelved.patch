@@ -1,0 +1,181 @@
+Index: app/src/main/java/com/A4/oplev/CreateEvent/Activity_Create_Event.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.A4.oplev.CreateEvent;\r\n\r\nimport android.content.Intent;\r\nimport android.graphics.Rect;\r\nimport android.net.Uri;\r\nimport android.os.Bundle;\r\nimport android.util.Log;\r\nimport android.view.View;\r\nimport android.view.ViewTreeObserver;\r\nimport android.widget.Button;\r\nimport android.widget.EditText;\r\nimport android.widget.ImageView;\r\nimport android.widget.TextView;\r\nimport android.widget.Toast;\r\n\r\nimport androidx.appcompat.app.AppCompatActivity;\r\nimport androidx.constraintlayout.widget.ConstraintLayout;\r\n\r\nimport com.A4.oplev.R;\r\nimport com.google.android.gms.common.api.Status;\r\nimport com.google.android.libraries.places.api.model.Place;\r\nimport com.google.android.libraries.places.widget.Autocomplete;\r\nimport com.google.android.libraries.places.widget.AutocompleteActivity;\r\n\r\nimport java.util.Date;\r\n\r\nimport DTO.EventDTO;\r\n\r\nimport static com.google.android.libraries.places.widget.AutocompleteActivity.RESULT_ERROR;\r\n\r\npublic class Activity_Create_Event extends AppCompatActivity implements View.OnClickListener {\r\n    private static final String TAG = \"Activity_Create_Event\";\r\n    ImageView back;\r\n    static TextView title;\r\n    private Uri pickedImgUri;\r\n    private ConstraintLayout constraintLayout;\r\n    private Button create1_next_btn;\r\n    private EventDTO repostEvent = null;\r\n    public void onCreate(Bundle saveInstanceState) {\r\n        super.onCreate(saveInstanceState);\r\n        // uses the same topbar with empty frag below as u_settings...\r\n        setContentView(R.layout.activity_u_settings);\r\n        // get elements from activity\r\n        title = findViewById(R.id.topbar_text);\r\n        back = findViewById(R.id.topbar_arrow);\r\n        //set onlick listner\r\n        back.setOnClickListener(this);\r\n\r\n        //set value of title text in topbar\r\n        title.setText(\"Opret Event\");\r\n\r\n        //fill fragment holder with createvent 1\r\n        getSupportFragmentManager().beginTransaction().replace(R.id.mainFragmentBox,  new createEvent1_frag(), \"uSettingMainBox\")\r\n                .commit();\r\n        //initiate picked image to null\r\n        pickedImgUri = null;\r\n\r\n        //stuff to check if keyboard is up, removing next_button when up, showning next_button when down\r\n        constraintLayout = findViewById(R.id.top_bar_rootView);\r\n        constraintLayout.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {\r\n            @Override\r\n            public void onGlobalLayout() {\r\n                //get values to see if layout changes\r\n                Rect r = new Rect();\r\n                constraintLayout.getWindowVisibleDisplayFrame(r);\r\n                int screenHeight = constraintLayout.getRootView().getHeight();\r\n                int keypadHeight = screenHeight - r.bottom;\r\n                //if true then keyboard is showing\r\n                if (keypadHeight > screenHeight * 0.15) {\r\n                    Log.d(TAG, \"onGlobalLayout: keyboard showing\");\r\n                    create1_next_btn = findViewById(R.id.create_next_btn);\r\n                    if(create1_next_btn != null) {\r\n                        create1_next_btn.setVisibility(View.GONE);\r\n                    }\r\n                } else { //keyboard not showing\r\n                    Log.d(TAG, \"onGlobalLayout: keyboard not showing\");\r\n                    create1_next_btn = findViewById(R.id.create_next_btn);\r\n                    if(create1_next_btn != null) {\r\n                        create1_next_btn.setVisibility(View.VISIBLE);\r\n                    }\r\n                }\r\n            }\r\n        });\r\n\r\n        Log.d(TAG, \"onCreate: (jbe) outside if-repost\");\r\n        // *** TESTING\r\n       /* Date date = new Date();\r\n        repostEvent = new EventDTO();\r\n        repostEvent.setTitle(\"RepostTitle\").setDescription(\"RepostDesc\").setPrice(420)\r\n                .setCity(\"RepostCity\").setType(\"Kultur\").setDate(date).setFemaleOn(true).setMaleOn(true)\r\n                .setMinAge(42).setMaxAge(69);*/\r\n        // ***\r\n        //if coming from repost save the event object here to access it from fragment\r\n        if(((EventDTO) getIntent().getSerializableExtra(\"event\")) != null){\r\n            Log.d(TAG, \"onCreate: (jbe) inside if-repost\");\r\n            repostEvent = (EventDTO) getIntent().getSerializableExtra(\"event\");\r\n        }\r\n\r\n    }\r\n    @Override\r\n    public void onClick(View v) {\r\n        if (v == back) {\r\n           finish();\r\n        }\r\n    }\r\n    @Override\r\n    public void onActivityResult(int requestCode, int resultCode, Intent data) {\r\n        super.onActivityResult(requestCode, resultCode, data);\r\n        Log.d(TAG, \"onActivityResult: jbe in method \\n\" +\r\n                \"req code = \" + requestCode + \"\\n\" +\r\n                \"res code = \" + resultCode);\r\n\r\n\r\n        if (requestCode == 1 && resultCode == RESULT_OK) {\r\n            //if its an image change\r\n            Log.d(TAG, \"onActivityResult: jbe, result=ok, no req code\");\r\n            //change picture source URI\r\n            ImageView pic = findViewById(R.id.create_pic);\r\n            pickedImgUri = data.getData();\r\n            pic.setImageURI(pickedImgUri);\r\n            //remove the \"change pic\" text\r\n            TextView changePicTxt = findViewById(R.id.create_changepic_txt);\r\n            changePicTxt.setVisibility(View.GONE);\r\n        }\r\n        else if(resultCode== RESULT_OK){\r\n            // if city chosen with Places widget (request code is variable for some reason)\r\n            Log.d(TAG, \"onActivityResult: jbe, req=100, result=ok\");\r\n            //if google places intent (for location autocomplete)\r\n            // and if success\r\n            //get data into place object\r\n            Place place = Autocomplete.getPlaceFromIntent(data);\r\n            //set the text in the edittext view\r\n            EditText city_in = findViewById(R.id.create__city_input);\r\n            city_in.setText(place.getAddress());\r\n            Log.d(TAG, \"onActivityResult: jbe, adress: \" + place.getAddress());\r\n            city_in.setError(null);\r\n        }\r\n        else if(resultCode== RESULT_ERROR){\r\n            Log.d(TAG, \"onActivityResult: jbe, req=100, result=error\");\r\n            Status status = Autocomplete.getStatusFromIntent(data);\r\n            Log.d(TAG, \"onActivityResult: jbe\"+ status.getStatusMessage());\r\n            Toast.makeText(getApplicationContext(),\r\n                    status.getStatusMessage(),\r\n                    Toast.LENGTH_SHORT).show();\r\n        }\r\n    }\r\n\r\n    public Uri getPickedImgUri() {\r\n        Log.d(TAG, \"getPickedImgUri: (jbe) get picked imgUri\");\r\n        return pickedImgUri;\r\n    }\r\n    public void setPickedImgUri(Uri uri) {\r\n        Log.d(TAG, \"setPickedImgUri: (jbe) set picked imgUri\");\r\n        pickedImgUri = uri;\r\n    }\r\n\r\n    public EventDTO getRepostEvent() {\r\n        return repostEvent;\r\n    }\r\n\r\n\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/A4/oplev/CreateEvent/Activity_Create_Event.java	(revision cdb4ed3ceb0b247590708738b39b2dc5f9aba6c0)
++++ app/src/main/java/com/A4/oplev/CreateEvent/Activity_Create_Event.java	(date 1610537867548)
+@@ -36,6 +36,7 @@
+     private ConstraintLayout constraintLayout;
+     private Button create1_next_btn;
+     private EventDTO repostEvent = null;
++    public boolean edit = false;
+     public void onCreate(Bundle saveInstanceState) {
+         super.onCreate(saveInstanceState);
+         // uses the same topbar with empty frag below as u_settings...
+@@ -45,10 +46,8 @@
+         back = findViewById(R.id.topbar_arrow);
+         //set onlick listner
+         back.setOnClickListener(this);
+-
+         //set value of title text in topbar
+         title.setText("Opret Event");
+-
+         //fill fragment holder with createvent 1
+         getSupportFragmentManager().beginTransaction().replace(R.id.mainFragmentBox,  new createEvent1_frag(), "uSettingMainBox")
+                 .commit();
+@@ -95,6 +94,9 @@
+             Log.d(TAG, "onCreate: (jbe) inside if-repost");
+             repostEvent = (EventDTO) getIntent().getSerializableExtra("event");
+         }
++        edit = getIntent().getBooleanExtra("edit", false);
++
++
+ 
+     }
+     @Override
+Index: app/src/main/java/com/A4/oplev/_Adapters/OwnEvents_Adapter2.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.A4.oplev._Adapters;\r\n\r\nimport android.content.Context;\r\nimport android.content.Intent;\r\nimport android.os.Build;\r\nimport android.os.Bundle;\r\nimport android.view.LayoutInflater;\r\nimport android.view.View;\r\nimport android.view.ViewGroup;\r\nimport android.widget.ImageView;\r\nimport android.widget.TextView;\r\n\r\nimport androidx.annotation.NonNull;\r\nimport androidx.annotation.RequiresApi;\r\nimport androidx.cardview.widget.CardView;\r\nimport androidx.recyclerview.widget.RecyclerView;\r\n\r\nimport com.A4.oplev.Activity_Event;\r\nimport com.A4.oplev.CreateEvent.Activity_Create_Event;\r\nimport com.A4.oplev.Like_Hjerte_Side.Activity_Likeside;\r\nimport com.A4.oplev.R;\r\nimport com.squareup.picasso.Picasso;\r\n\r\nimport java.util.ArrayList;\r\n\r\nimport Controller.UserController;\r\nimport DAL.Classes.EventDAO;\r\n\r\npublic class OwnEvents_Adapter2 extends RecyclerView.Adapter<OwnEvents_Adapter2.ViewHolder> implements View.OnClickListener {\r\n    private EventDAO eventDAO = new EventDAO();\r\n    private UserController userController = UserController.getInstance();\r\n    private Context mContext;\r\n    private ArrayList<Integer> eventApplicantsSize;\r\n    private ArrayList<String> eventHeaders, eventEventPic, eventApplicantPic, eventOwnerPic, eventFirstApplicants,eventID ;\r\n\r\n\r\n    public OwnEvents_Adapter2(@NonNull Context context, @NonNull ArrayList<String> eventEventPic, @NonNull ArrayList<String> eventHeaders, @NonNull ArrayList<String> eventOwnerPic, @NonNull ArrayList<String> eventFirstApplicants, @NonNull ArrayList<String> eventApplicantPic, @NonNull ArrayList<Integer> eventApplicantsSize, ArrayList<String> eventID) {\r\n        this.mContext = context;\r\n        this.eventHeaders = eventHeaders;\r\n        this.eventApplicantsSize = eventApplicantsSize;\r\n        this.eventApplicantPic = eventApplicantPic;\r\n        this.eventEventPic = eventEventPic;\r\n        this.eventOwnerPic = eventOwnerPic;\r\n        this.eventFirstApplicants = eventFirstApplicants;\r\n        this.eventID = eventID;\r\n    }\r\n\r\n\r\n    @Override\r\n    public void onClick(View v) {\r\n\r\n    }\r\n\r\n    @NonNull\r\n    @Override\r\n    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {\r\n        Context context = parent.getContext();\r\n        LayoutInflater inflater = LayoutInflater.from(context);\r\n        // Inflate the custom layout\r\n        View contactView = inflater.inflate(R.layout.u_settings_event_element, parent, false);\r\n        // Return a new holder instance\r\n        return new OwnEvents_Adapter2.ViewHolder(contactView);\r\n    }\r\n\r\n    @RequiresApi(api = Build.VERSION_CODES.R)\r\n    @Override\r\n    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {\r\n\r\n        ImageView eventPic = holder.eventPic;\r\n        ImageView profilePic1 = holder.profilePic1;\r\n        CardView profileHolder1 = holder.profileHolder1;\r\n        TextView numberOfApplciants = holder.numberOfApplciants;\r\n        ImageView profilePic2 = holder.profilePic2;\r\n        CardView profilePic2Holder = holder.profilePic2Holder;\r\n        TextView header = holder.header;\r\n        TextView date  = holder.date;\r\n\r\n        Picasso.get().load(eventEventPic.get(position))\r\n                .resize(mContext.getDisplay().getWidth(), mContext.getDisplay().getHeight() / 2 + 200)\r\n                .centerCrop()\r\n                .placeholder(R.drawable.load2)\r\n                .error(R.drawable.question)\r\n                .into(eventPic);\r\n\r\n        if (eventFirstApplicants.get(position).equals(\"\")){\r\n            numberOfApplciants.setText(\"\");\r\n            profilePic1.setVisibility(View.GONE);\r\n            profileHolder1.setVisibility(View.GONE);\r\n        }\r\n        else {\r\n            profilePic1.setVisibility(View.VISIBLE);\r\n            profileHolder1.setVisibility(View.VISIBLE);\r\n            Picasso.get().load(eventApplicantPic.get(position))\r\n                    .resize(mContext.getDisplay().getWidth(), mContext.getDisplay().getHeight() / 2 + 200)\r\n                    .centerCrop()\r\n                    .placeholder(R.drawable.load2)\r\n                    .error(R.drawable.question)\r\n                    .into(profilePic1);\r\n        }\r\n\r\n        if (eventApplicantsSize.get(position)==1){\r\n            numberOfApplciants.setText(\" 1 anmodning\");\r\n            profilePic2.setVisibility(View.GONE);\r\n            profilePic2Holder.setVisibility(View.GONE);\r\n        }\r\n\r\n        if (eventApplicantsSize.get(position)<1){\r\n            profilePic2.setVisibility(View.GONE);\r\n            profilePic2Holder.setVisibility(View.GONE);\r\n        }\r\n\r\n\r\n        else if (eventApplicantsSize.get(position)>= 2) {\r\n            numberOfApplciants.setText(\" \" + eventApplicantsSize.get(position) + \" anmodninger\");\r\n            profilePic2.setVisibility(View.VISIBLE);\r\n            profilePic2Holder.setVisibility(View.VISIBLE);\r\n\r\n        }\r\n\r\n        // Sætter overskriften for eventet\r\n        header.setText(eventHeaders.get(position));\r\n        // Todo - Dato for event skal findes.\r\n        date.setText(\"12/12-2021\");\r\n\r\n    }\r\n\r\n    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {\r\n        public ImageView eventPic,profilePic1, profilePic2, box_own_events;\r\n        public CardView profileHolder1, profilePic2Holder;\r\n        public TextView numberOfApplciants, header, date;\r\n        public View edit, delete;\r\n\r\n        public ViewHolder(@NonNull View itemView) {\r\n            super(itemView);\r\n            box_own_events = (ImageView)itemView.findViewById(R.id.box_own_events);\r\n            eventPic = (ImageView)itemView.findViewById(R.id.own_event_picture);\r\n            profilePic1 = (ImageView)itemView.findViewById(R.id.own_event_anmodning1_pic);\r\n            profileHolder1 =  (CardView)itemView.findViewById(R.id.own_event_anmodning1_holder);\r\n            profilePic2 = (ImageView)itemView.findViewById(R.id.own_event_anmodning2_pic);\r\n            profilePic2Holder = (CardView) itemView.findViewById(R.id.own_event_anmodning2_holder);\r\n            numberOfApplciants = (TextView)itemView.findViewById(R.id.own_event_antal_anmodning);\r\n            header = (TextView)itemView.findViewById(R.id.own_event_headline);\r\n            date = (TextView)itemView.findViewById(R.id.own_event_beskeder_events_dato);\r\n            edit = itemView.findViewById(R.id.own_event_edit_picture);\r\n            delete = itemView.findViewById(R.id.own_event_delete_picture);\r\n\r\n            edit.setOnClickListener(this);\r\n            delete.setOnClickListener(this);\r\n            box_own_events.setOnClickListener(this);\r\n        }\r\n\r\n        @Override\r\n        public void onClick(View v) {\r\n            if (v == box_own_events){\r\n\r\n                eventDAO.getEvent(event -> {\r\n                    userController.getUser(user -> {\r\n                        Intent intent = new Intent(mContext, Activity_Event.class);\r\n                        intent.putExtra(\"user\", user);\r\n                        intent.putExtra(\"load\", 1);\r\n                        intent.putExtra(\"event\", event);\r\n                        mContext.startActivity(intent);\r\n                    }, event.getOwnerId());\r\n\r\n                },eventID.get(getPosition()));\r\n            }\r\n\r\n\r\n            if(v == edit){\r\n                //Edit post\r\n                Intent i = new Intent(v.getContext(), Activity_Create_Event.class);\r\n                Bundle bundle = new Bundle();\r\n\r\n            }else if(v == delete){\r\n                //Delete\r\n\r\n            }\r\n        }\r\n    }\r\n\r\n    @Override\r\n    public int getItemCount() {\r\n        return this.eventOwnerPic.size();\r\n    }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/A4/oplev/_Adapters/OwnEvents_Adapter2.java	(revision cdb4ed3ceb0b247590708738b39b2dc5f9aba6c0)
++++ app/src/main/java/com/A4/oplev/_Adapters/OwnEvents_Adapter2.java	(date 1610537867515)
+@@ -2,6 +2,7 @@
+ 
+ import android.content.Context;
+ import android.content.Intent;
++import android.icu.text.Transliterator;
+ import android.os.Build;
+ import android.os.Bundle;
+ import android.view.LayoutInflater;
+@@ -17,6 +18,7 @@
+ 
+ import com.A4.oplev.Activity_Event;
+ import com.A4.oplev.CreateEvent.Activity_Create_Event;
++import com.A4.oplev.CreateEvent.Activity_Edit_Event;
+ import com.A4.oplev.Like_Hjerte_Side.Activity_Likeside;
+ import com.A4.oplev.R;
+ import com.squareup.picasso.Picasso;
+@@ -25,6 +27,8 @@
+ 
+ import Controller.UserController;
+ import DAL.Classes.EventDAO;
++import DAL.Interfaces.CallbackEvent;
++import DTO.EventDTO;
+ 
+ public class OwnEvents_Adapter2 extends RecyclerView.Adapter<OwnEvents_Adapter2.ViewHolder> implements View.OnClickListener {
+     private EventDAO eventDAO = new EventDAO();
+@@ -168,8 +172,19 @@
+ 
+             if(v == edit){
+                 //Edit post
+-                Intent i = new Intent(v.getContext(), Activity_Create_Event.class);
+-                Bundle bundle = new Bundle();
++
++                eventDAO.getEvent(new CallbackEvent() {
++                    @Override
++                    public void onCallback(EventDTO event) {
++                        Intent i = new Intent(v.getContext(), Activity_Create_Event.class);
++                        i.putExtra("EventDTO", event);
++                        i.putExtra("edit", true);
++                        mContext.startActivity(i);
++                    }
++                }, eventID.get(getPosition()));
++
++
++
+ 
+             }else if(v == delete){
+                 //Delete
+Index: app/src/main/java/com/A4/oplev/CreateEvent/Activity_Edit_Event.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/A4/oplev/CreateEvent/Activity_Edit_Event.java	(date 1610536673651)
++++ app/src/main/java/com/A4/oplev/CreateEvent/Activity_Edit_Event.java	(date 1610536673651)
+@@ -0,0 +1,79 @@
++package com.A4.oplev.CreateEvent;
++
++import android.net.Uri;
++import android.os.Bundle;
++import android.view.View;
++import android.widget.Button;
++import android.widget.ImageView;
++import android.widget.TextView;
++
++import androidx.appcompat.app.AppCompatActivity;
++import androidx.constraintlayout.widget.ConstraintLayout;
++
++import com.A4.oplev.R;
++
++import DTO.EventDTO;
++
++
++public class Activity_Edit_Event extends AppCompatActivity implements View.OnClickListener {
++    ImageView back;
++    static TextView title;
++    private Uri pickedImgUri;
++    private ConstraintLayout constraintLayout;
++    private Button create1_next_btn;
++    private EventDTO eventDTO;
++    public void onCreate(Bundle saveInstanceState) {
++        super.onCreate(saveInstanceState);
++        // uses the same topbar with empty frag below as u_settings...
++        setContentView(R.layout.activity_u_settings);
++        // get elements from activity
++        title = findViewById(R.id.topbar_text);
++        back = findViewById(R.id.topbar_arrow);
++        //set onlick listner
++        back.setOnClickListener(this);
++
++        //set value of title text in topbar
++        title.setText("Edit Event");
++
++        //fill fragment holder with createvent 1
++        getSupportFragmentManager().beginTransaction().replace(R.id.mainFragmentBox, new createEvent1_frag(), "uSettingMainBox")
++                .commit();
++        //initiate picked image to null
++        pickedImgUri = null;
++
++        //stuff to check if keyboard is up, removing next_button when up, showning next_button when down
++        constraintLayout = findViewById(R.id.top_bar_rootView);
++
++        eventDTO = (EventDTO)getIntent().getSerializableExtra("event");
++
++
++
++    }
++
++
++
++
++    public void setData(EventDTO event){
++        TextView title, desc, price, date, time, city;
++
++        title = findViewById(R.id.create_title_input);
++        desc = findViewById(R.id.create_desc_input);
++        price = findViewById(R.id.create_price_input);
++        time = findViewById(R.id.create_time_input);
++        date = findViewById(R.id.create_date_input);
++        city = findViewById(R.id.create__city_input);
++
++        title.setText(event.getTitle());
++        desc.setText(event.getDescription());
++        price.setText(event.getPrice());
++        price.setText(event.getPrice());
++        price.setText(event.getPrice());
++        city.setText(event.getCity());
++    }
++
++
++    @Override
++    public void onClick(View view) {
++
++    }
++}

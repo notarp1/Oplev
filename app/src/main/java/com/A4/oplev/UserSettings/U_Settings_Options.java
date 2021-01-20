@@ -17,6 +17,8 @@ import androidx.fragment.app.FragmentManager;
 
 import com.A4.oplev.Activity_Ini;
 import com.A4.oplev.R;
+import com.facebook.AccessToken;
+import com.facebook.login.LoginManager;
 import com.google.firebase.auth.FirebaseAuth;
 
 import Controller.UserController;
@@ -55,6 +57,8 @@ public class U_Settings_Options extends Fragment implements View.OnClickListener
     public void onClick(View view) {
 
         if(view == logud){
+            LoginManager.getInstance().logOut();
+            AccessToken.setCurrentAccessToken(null);
             FirebaseAuth.getInstance().signOut();
             PreferenceManager.getDefaultSharedPreferences(getActivity()).edit().clear().apply();
             UserController.getInstance().setCurrUser(null);
@@ -68,7 +72,7 @@ public class U_Settings_Options extends Fragment implements View.OnClickListener
         } else if (view == back){
             getActivity().finish();
         } else if (view == deleteAccount){
-
+            /*
             AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
 
             builder.setTitle("Slet konto");
@@ -95,7 +99,7 @@ public class U_Settings_Options extends Fragment implements View.OnClickListener
 
             AlertDialog alert = builder.create();
             alert.show();
-
+            */
 
 
         }

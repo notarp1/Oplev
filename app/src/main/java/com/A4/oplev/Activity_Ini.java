@@ -12,15 +12,34 @@ import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.A4.oplev.__Main.Activity_Main;
+import com.facebook.CallbackManager;
+import com.facebook.FacebookCallback;
+import com.facebook.FacebookException;
+import com.facebook.GraphRequest;
+import com.facebook.GraphResponse;
+import com.facebook.Profile;
+import com.facebook.login.LoginManager;
+import com.facebook.login.LoginResult;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QuerySnapshot;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+import com.google.firebase.crashlytics.FirebaseCrashlytics;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import Controller.EventController;
 import Controller.UserController;
@@ -39,12 +58,16 @@ public class Activity_Ini extends AppCompatActivity implements Serializable {
     ArrayList<String> pictures;
     PicassoFunc picasso;
     private FirebaseAuth mAuth;
+    private CallbackManager callbackManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity__ini);
         mAuth = FirebaseAuth.getInstance();
+
+
+        //Laver controllerne med implemetationerene af DAO, da de er singeltons skal der alle andre steder bare kaldes getInstance()
 
         UserController.getInstance(new UserDAO(), new ChatDAO(), new EventDAO());
         EventController.getInstance(new UserDAO(), new EventDAO());
@@ -70,43 +93,53 @@ public class Activity_Ini extends AppCompatActivity implements Serializable {
         prefs = PreferenceManager.getDefaultSharedPreferences(this);
         onInstance = prefs.getBoolean("onInstance", false);
 
-        //Laver controllerne med implemetationerene af DAO, da de er singeltons skal der alle andre steder bare kaldes getInstance()
-
-
-
-
-       if(currentUser == null){
+       if(currentUser == null && !prefs.getBoolean("facebook",false)){
             prefs.edit().putBoolean("onInstance", false).apply();
             Intent i = new Intent(this, Activity_Main.class);
             i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(i);
 
-        }else {
-            prefs.edit().putBoolean("onInstance", true).apply();
+        } else {
+           if (prefs.getBoolean("facebook",false)) {
+               prefs.edit().putBoolean("onInstance", true).apply();
 
-                userController.getUser(new CallbackUser() {
-                    @Override
-                    public void onCallback(UserDTO user) {
-                        setUserDTO(user);
-                        try {
-                            prefs.edit().putString("userId",user.getUserId()).apply();
-                        }catch (Exception e){
-                            FirebaseAuth.getInstance().signOut();
-                            PreferenceManager.getDefaultSharedPreferences(ctx).edit().clear().apply();
-                        }
+               userController.getUser(new CallbackUser() {
+                   @Override
+                   public void onCallback(UserDTO user) {
+                       setUserDTO(user);
 
-                        Intent i = new Intent(ctx, Activity_Main.class);
-                        userController.setCurrUser(user);
-                        i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                       Intent i = new Intent(ctx, Activity_Main.class);
+                       userController.setCurrUser(user);
+                       FirebaseCrashlytics.getInstance().setUserId(user.getUserId());
+                       i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
 
-                        startActivity(i);
-                    }
-                }, currentUser.getUid());
+                       startActivity(i);
+                   }
+               }, prefs.getString("userId",""));
+           } else {
+               prefs.edit().putBoolean("onInstance", true).apply();
 
+               userController.getUser(new CallbackUser() {
+                   @Override
+                   public void onCallback(UserDTO user) {
+                       setUserDTO(user);
+                       try {
+                           prefs.edit().putString("userId", user.getUserId()).apply();
+                       } catch (Exception e) {
+                           FirebaseAuth.getInstance().signOut();
+                           PreferenceManager.getDefaultSharedPreferences(ctx).edit().clear().apply();
+                       }
 
+                       Intent i = new Intent(ctx, Activity_Main.class);
+                       userController.setCurrUser(user);
+                       FirebaseCrashlytics.getInstance().setUserId(user.getUserId());
+                       i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
 
-        }
-
+                       startActivity(i);
+                   }
+               }, currentUser.getUid());
+           }
+       }
     }
 /*
     private void getUserPictures() {
