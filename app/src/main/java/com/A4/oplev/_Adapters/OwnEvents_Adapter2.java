@@ -247,10 +247,9 @@ public class OwnEvents_Adapter2 extends RecyclerView.Adapter<OwnEvents_Adapter2.
                 builder.setMessage("Er du sikker på du vil slette dit event? ");
 
                 builder.setPositiveButton("JA, SLET EVENT.", new DialogInterface.OnClickListener() {
-
                     public void onClick(DialogInterface dialog, int which) {
                         // Do nothing but close the dialog
-                        eventDAO.getEvent(new CallbackEvent() {
+                     /*   eventDAO.getEvent(new CallbackEvent() {
                             @Override
                             public void onCallback(EventDTO event) {
                                 EventController eventController = EventController.getInstance();
@@ -260,8 +259,8 @@ public class OwnEvents_Adapter2 extends RecyclerView.Adapter<OwnEvents_Adapter2.
 
 
                             }
-                        }, eventID.get(getPosition()));
-
+                        }, eventID.get(getPosition()));*/
+                        Toast.makeText(mContext.getApplicationContext(), "Slet event er ikke færdig-implementeret.", Toast.LENGTH_SHORT).show();
                         dialog.dismiss();
                     }
                 });

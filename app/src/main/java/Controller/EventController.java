@@ -161,7 +161,7 @@ public class EventController {
         Location userLocation = new Location("locationA");
         userLocation.setLatitude(Double.parseDouble(prefs.getString("gpsLat", "0")));
         userLocation.setLongitude(Double.parseDouble(prefs.getString("gpsLong", "0")));
-        /*userLocation.setLatitude(55.426769);
+       /* userLocation.setLatitude(55.426769);
         userLocation.setLongitude(11.883462);*/
         int maxDistance = prefs.getInt("distance", 150);
         //setup distance check
