@@ -95,6 +95,7 @@ public class Search_filter_frag extends Fragment{
                     prefs.edit().putInt("maxAge",currMaxAge).apply();
                 }
                 ageText.setText(currMinAge + " - " + currMaxAge + " år");
+                onUpdate(prefs);
             }
         });
 

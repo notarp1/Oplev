@@ -37,8 +37,10 @@ import Controller.UserController;
 import DAL.Interfaces.CallBackEventList;
 import DAL.Interfaces.CallBackList;
 import DAL.Interfaces.CallbackEvent;
+import DAL.Interfaces.CallbackUser;
 import DAL.Interfaces.IEventDAO;
 import DTO.EventDTO;
+import DTO.UserDTO;
 
 public class EventDAO implements IEventDAO {
     FirebaseFirestore db;
@@ -126,20 +128,41 @@ public class EventDAO implements IEventDAO {
                     Log.d(TAG, "onComplete: phonelocation: " + phoneLocation.toString());
                     int maxDistance = prefs.getInt("distance", 150);
                     Log.d(TAG, "onComplete: maxDistance (filter): " + maxDistance);
+                    //setup age filter values
+                    int filterMinAge = prefs.getInt("minAge", 18);
+                    int filterMaxAge = prefs.getInt("maxAge", 99);
                     for (QueryDocumentSnapshot document : task.getResult()) {
                         //for each event
                         EventDTO dto = document.toObject(EventDTO.class);
                         if (UserController.getInstance().getCurrUser() != null) {
                             // if youre logged in
-                            if (!dto.getOwnerId().equals(UserController.getInstance().getCurrUser().getUserId())
+                            //setup needed current user values
+                            String currentUserId = UserController.getInstance().getCurrUser().getUserId();
+                            int currentUserAge = UserController.getInstance().getCurrUser().getAge();
+                            if (!dto.getOwnerId().equals(currentUserId)
                                     && dto.getParticipant().equals("")
-                                    && !dto.getApplicants().contains(UserController.getInstance().getCurrUser().getUserId())) {
-                                //if youre not owner, no participant on event, and you havent applied to event
+                                    && !dto.getApplicants().contains(currentUserId)
+                                    && dto.getMinAge() <= currentUserAge
+                                    && dto.getMaxAge() >= currentUserAge) {
+                                //if youre not owner, no participant on event, you havent applied to event, you are within event age limits
                                 //setup distance check
                                 int distance = EventController.getInstance().calculateDistance(dto, prefs);
                                 if (distance <= maxDistance) {
                                     //if within distancelimit
-                                    completeList.add(document.getId());
+                                    //get owner of event and check his age is in between filters
+                                    UserController.getInstance().getUser(new CallbackUser() {
+                                        @Override
+                                        public void onCallback(UserDTO user) {
+                                            Log.d(TAG, "onCallback: (jbe) event filter, user recieved");
+                                            if(filterMinAge <= user.getAge() && filterMaxAge >=user.getAge()){
+                                                //if owner's age is in between age filters
+                                                completeList.add(document.getId());
+                                            }
+                                            else{
+                                                Log.d(TAG, "onCallback: (jbe) event filter: user age not good");
+                                            }
+                                        }
+                                    }, dto.getOwnerId());
                                 }
                             }
                         } else {
