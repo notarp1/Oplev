@@ -178,31 +178,59 @@ public class EventController {
         return distanceRounded;
     }
 
-    public void deleteEvent(String eventId, int bool){
+    public void deleteEvent(String eventId, int bool, String chatId, String participant){
 
 
         eventDAO.deleteEvent(eventId);
         UserDTO userDTO = userController.getCurrUser();
         ArrayList<String> events = userDTO.getEvents();
+        ArrayList<String> chats = userDTO.getChatId();
 
         for(int i = 0; i<events.size(); i++){
             if(events.get(i).equals(eventId)){
                 events.remove(i);
             }
         }
+
+        for(int i = 0; i<chats.size(); i++){
+            if(chats.get(i).equals(chatId)){
+                chats.remove(i);
+            }
+        }
         userController.getCurrUser().setEvents(events);
+        userController.getCurrUser().setChatId(chats);
 
         userDAO.updateUser(userController.getCurrUser());
 
-       /* if(bool  == 1){
+
+        if(bool  == 1){
             chatDAO.deleteChat(new ChatDAO.FirestoreCallback() {
                 @Override
                 public void onCallback(ChatDTO dto) {
 
                 }
             }, chatId);
-
-        } */
+            userDAO.getUser(new CallbackUser() {
+                @Override
+                public void onCallback(UserDTO user) {
+                    ArrayList<String> events = user.getEvents();
+                    ArrayList<String> chats = user.getChatId();
+                    for(int i = 0; i<events.size(); i++){
+                        if(events.get(i).equals(eventId)){
+                            events.remove(i);
+                        }
+                    }
+                    for(int i = 0; i<chats.size(); i++){
+                        if(chats.get(i).equals(chatId)){
+                            chats.remove(i);
+                        }
+                    }
+                    user.setEvents(events);
+                    user.setChatId(chats);
+                    userDAO.updateUser(user);
+                }
+            }, participant);
+        }
 
 
     }

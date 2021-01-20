@@ -255,8 +255,8 @@ public class OwnEvents_Adapter2 extends RecyclerView.Adapter<OwnEvents_Adapter2.
                             public void onCallback(EventDTO event) {
                                 EventController eventController = EventController.getInstance();
 
-                                if(event.getParticipant().equals(""))eventController.deleteEvent(event.getEventId(), 0);
-                                else eventController.deleteEvent(event.getEventId(), 1);
+                                if(event.getParticipant().equals(""))eventController.deleteEvent(event.getEventId(), 0, event.getChatId(), event.getOwnerId());
+                                else eventController.deleteEvent(event.getEventId(), 1, event.getChatId(), event.getParticipant());
 
 
                             }
