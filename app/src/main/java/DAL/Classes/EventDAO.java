@@ -115,7 +115,10 @@ public class EventDAO implements IEventDAO {
             types.add("Bliv klogere");
         }
 
+
+        if(!types.isEmpty()){
         docRef.whereIn("type", types).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if (task.isSuccessful()) {
@@ -156,7 +159,8 @@ public class EventDAO implements IEventDAO {
                 }
 
             }
-        });
+        }); }
+        else{ callBackList.onCallback(completeList); }
     }
 
 
