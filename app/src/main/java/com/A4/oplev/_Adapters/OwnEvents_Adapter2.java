@@ -222,9 +222,9 @@ public class OwnEvents_Adapter2 extends RecyclerView.Adapter<OwnEvents_Adapter2.
                 eventDAO.getEvent(new CallbackEvent() {
                     @Override
                     public void onCallback(EventDTO event) {
-                        if(event.getParticipant() == null && event.getApplicants().isEmpty()) {
+                        if((event.getParticipant() == null || event.getParticipant().equals("")) && event.getApplicants().isEmpty()) {
                             Intent i = new Intent(v.getContext(), Activity_Create_Event.class);
-                            i.putExtra("EventDTO", event);
+                            i.putExtra("event", event);
                             i.putExtra("edit", true);
                             mContext.startActivity(i);
                         }else{
