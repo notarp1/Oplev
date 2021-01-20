@@ -73,7 +73,16 @@ public class createEvent2_frag extends Fragment implements View.OnClickListener 
             }
         });
 
-
+        if(((Activity_Create_Event) getActivity()).getEdit()){
+            EventDTO event = ((Activity_Create_Event) getActivity()).getRepostEvent();
+            age_bar.getThumb(0).setValue(event.getMinAge());
+            currMinAge = event.getMinAge();
+            currMaxAge = event.getMaxAge();
+            age_bar.getThumb(1).setValue(event.getMaxAge());
+            femaleSwitch.setChecked(event.isFemaleOn());
+            maleSwitch.setChecked(event.isMaleOn());
+            ageVal_txt.setText(currMinAge + " - " + currMaxAge +" år");
+        }
 
         return root;
     }
@@ -115,6 +124,7 @@ public class createEvent2_frag extends Fragment implements View.OnClickListener 
                    dao.updateEvent(event);
                     Intent i = new Intent(getContext(), Activity_Likeside.class);
                     startActivity(i);
+                    getActivity().finish();
                 }else{
 
                     EventController.getInstance().createEvent(

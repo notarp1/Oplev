@@ -13,6 +13,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ScrollView;
+import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -48,6 +49,7 @@ public class HjerteSide_frag extends Fragment{
     private ArrayList<String> headerList = new ArrayList<>(), names = new ArrayList<>(), profilePictures = new ArrayList<>(), placementList = new ArrayList<>(), eventPictureList = new ArrayList<>(), ageList = new ArrayList<>(), eventIDList = new ArrayList<>();
     private ArrayList<Date> timeList = new ArrayList<>();
     private ArrayList<Integer> priceList = new ArrayList<>();
+    private TextView nomessages;
 
     @SuppressLint("ClickableViewAccessibility")
     public View onCreateView(LayoutInflater i, ViewGroup container, Bundle savedInstanceState) {
@@ -57,7 +59,12 @@ public class HjerteSide_frag extends Fragment{
         Activity_Likeside.setPosition(2);
 
         listView = root.findViewById(R.id.hjerteside_listview);
+        nomessages = root.findViewById(R.id.nomessages_hjerte);
         currentUser = UserController.getInstance().getCurrUser();
+
+        if (currentUser.getLikedeEvents().size() == 0){
+            nomessages.setVisibility(View.VISIBLE);
+        } else nomessages.setVisibility(View.GONE);
 
         // find alle likede events
         for (int j = 0; j < currentUser.getLikedeEvents().size(); j++) {
@@ -152,6 +159,11 @@ public class HjerteSide_frag extends Fragment{
                                             // genlav viewsne
                                             Hjerteside_Adapter adapter = new Hjerteside_Adapter(mContext, headerList, names, profilePictures, placementList, timeList, priceList, eventPictureList, ageList, eventIDList);
                                             listView.setAdapter(adapter);
+                                            UserController.getInstance().setCurrUser(temp);
+                                            currentUser = temp;
+                                            if (currentUser.getLikedeEvents().size() == 0){
+                                                nomessages.setVisibility(View.VISIBLE);
+                                            } else nomessages.setVisibility(View.GONE);
                                             // stop loopsne
                                             break;
                                         }

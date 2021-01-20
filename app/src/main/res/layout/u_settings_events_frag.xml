@@ -27,6 +27,16 @@
 
         </androidx.recyclerview.widget.RecyclerView>
 
+        <TextView
+            android:id="@+id/nomessages_egneevents"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="Du har ikke oprettet nogle events!"
+            android:textColor="@color/white"
+            android:textSize="18sp"
+            android:visibility="gone" />
+
     </FrameLayout>
 
 

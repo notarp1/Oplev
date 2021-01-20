@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -51,6 +52,7 @@ public class OwnEvent_frag extends Fragment {
     private Context mContext;
     View root2;
     boolean eventsReady = false;
+    private TextView nomessages;
 
     @SuppressLint("ClickableViewAccessibility")
     @Nullable
@@ -67,6 +69,7 @@ public class OwnEvent_frag extends Fragment {
         recyclerView = root.findViewById(R.id.ownEvents_Recycler);
         redigerKnap = root.findViewById(R.id.own_event_edit_picture);
         sletKnap = root.findViewById(R.id.own_event_delete_holder);
+        nomessages = root.findViewById(R.id.nomessages_egneevents);
         FrameLayout frameLayoutOwnEvent;
 
         frameLayoutOwnEvent = root.findViewById(R.id.frameLayoutOwnEvent);
@@ -332,7 +335,9 @@ public class OwnEvent_frag extends Fragment {
                 OwnEvents_Adapter2 eventAdapter = new OwnEvents_Adapter2(root2.getContext(), tempEventPic, tempEventHeaders, tempEventOwnerPic, tempEventFirstApplicants, tempEventApplicantPic, tempEventApplicantsSize, tempEventID, tempDate, tempEventParticipant, tempEventParticipantName);
                 recyclerView.setLayoutManager(layoutManager);
                 recyclerView.setAdapter(eventAdapter);
-
+                if (recyclerView.getAdapter().getItemCount() == 0){
+                    nomessages.setVisibility(View.VISIBLE);
+                } else nomessages.setVisibility(View.GONE);
             }
         }
 

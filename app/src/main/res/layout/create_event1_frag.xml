@@ -66,7 +66,6 @@
                 app:layout_constraintTop_toTopOf="@+id/create_pic" />
 
             <EditText
-                android:inputType="textCapSentences"
                 android:id="@+id/create_title_input"
                 android:layout_width="352dp"
                 android:layout_height="59dp"
@@ -76,9 +75,9 @@
                 android:layout_marginRight="20dp"
                 android:layout_marginBottom="5dp"
                 android:ems="10"
-                android:maxLength="19"
                 android:gravity="center"
                 android:hint="Overskrift"
+                android:inputType="textCapSentences"
                 android:textColor="#A4E8E0"
                 android:textColorHint="#A4E8E0"
                 android:textSize="24sp"

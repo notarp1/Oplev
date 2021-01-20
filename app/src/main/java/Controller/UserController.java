@@ -69,17 +69,20 @@ public class UserController {
         mAuth = FirebaseAuth.getInstance();
         currentUser = mAuth.getCurrentUser();
 
-        this.instance = this;
+        //this.instance = this;
 
     }
 
-    public static UserController getInstance(UserDAO userDAO, IChatDAO chatDAO, IEventDAO eventDAO){
+    public static UserController getInstance(IUserDAO userDAO, IChatDAO chatDAO, IEventDAO eventDAO){
         if (instance == null) {
             instance = new UserController(userDAO, chatDAO, eventDAO);
         }
         return instance;
     }
     public static UserController getInstance(){
+        if (instance == null){
+            instance = new UserController(new UserDAO(), new ChatDAO(), new EventDAO());
+        }
         return instance;
     }
 
