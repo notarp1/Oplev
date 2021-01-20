@@ -394,7 +394,7 @@
                         android:layout_marginStart="20dp"
                         android:layout_marginLeft="20dp"
                         android:layout_weight="1"
-                        android:background="@drawable/ellipse4" />
+                        android:background="@drawable/beskedbackgroundlike" />
 
                     <View
                         android:id="@+id/ellipse_6"
@@ -405,7 +405,7 @@
                         android:layout_marginStart="20dp"
                         android:layout_marginLeft="20dp"
                         android:layout_weight="1"
-                        android:background="@drawable/ellipse5" />
+                        android:background="@drawable/beskedbackgroundlike" />
 
                     <View
                         android:id="@+id/ellipse_5"
@@ -416,7 +416,7 @@
                         android:layout_marginStart="20dp"
                         android:layout_marginLeft="20dp"
                         android:layout_weight="1"
-                        android:background="@drawable/ellipse" />
+                        android:background="@drawable/beskedbackgroundlike" />
 
                     <View
                         android:id="@+id/ellipse_4"
@@ -428,7 +428,7 @@
                         android:layout_marginStart="15dp"
                         android:layout_marginLeft="15dp"
                         android:layout_weight="1"
-                        android:background="@drawable/ellipse2" />
+                        android:background="@drawable/beskedbackgroundlike" />
 
                     <View
                         android:id="@+id/ellipse_8"
@@ -437,7 +437,7 @@
                         android:layout_marginStart="20dp"
                         android:layout_marginLeft="20dp"
                         android:layout_weight="1"
-                        android:background="@drawable/ellipse3" />
+                        android:background="@drawable/beskedbackgroundlike" />
 
                 </LinearLayout>
             </HorizontalScrollView>
@@ -473,7 +473,7 @@
                         android:layout_marginStart="16dp"
                         android:layout_marginLeft="0dp"
                         android:layout_weight="1"
-                        android:background="#DC923C" />
+                        android:background="@drawable/beskedbackgroundlike" />
 
                     <View
                         android:id="@+id/rectangle_5"
@@ -483,7 +483,7 @@
                         android:layout_marginStart="16dp"
                         android:layout_marginLeft="0dp"
                         android:layout_weight="1"
-                        android:background="#2055A5" />
+                        android:background="@drawable/beskedbackgroundlike" />
 
                     <View
                         android:id="@+id/rectangle_6"
@@ -493,7 +493,7 @@
                         android:layout_marginStart="16dp"
                         android:layout_marginLeft="0dp"
                         android:layout_weight="1"
-                        android:background="#DEE137" />
+                        android:background="@drawable/beskedbackgroundlike" />
 
                 </TableRow>
 
@@ -510,7 +510,7 @@
                         android:layout_marginStart="16dp"
                         android:layout_marginLeft="0dp"
                         android:layout_weight="1"
-                        android:background="#2C7D3E" />
+                        android:background="@drawable/beskedbackgroundlike" />
 
                     <View
                         android:id="@+id/rectangle_3"
@@ -520,7 +520,7 @@
                         android:layout_marginStart="16dp"
                         android:layout_marginLeft="0dp"
                         android:layout_weight="1"
-                        android:background="#B813BB" />
+                        android:background="@drawable/beskedbackgroundlike" />
 
                     <View
                         android:id="@+id/rectangle_4"
@@ -530,7 +530,7 @@
                         android:layout_marginStart="16dp"
                         android:layout_marginLeft="0dp"
                         android:layout_weight="1"
-                        android:background="#BD2727" />
+                        android:background="@drawable/beskedbackgroundlike" />
 
                 </TableRow>
 
