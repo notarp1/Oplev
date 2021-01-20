@@ -46,7 +46,8 @@ public class Activity_Ini extends AppCompatActivity implements Serializable {
         setContentView(R.layout.activity__ini);
         mAuth = FirebaseAuth.getInstance();
 
-
+        UserController.getInstance(new UserDAO(), new ChatDAO(), new EventDAO());
+        EventController.getInstance(new UserDAO(), new EventDAO());
 
 
         //KØR NEDENSTÅENDE FOR AT RESETTE OG UDKOMMENTER EFTER
@@ -71,8 +72,7 @@ public class Activity_Ini extends AppCompatActivity implements Serializable {
 
         //Laver controllerne med implemetationerene af DAO, da de er singeltons skal der alle andre steder bare kaldes getInstance()
 
-        UserController.getInstance(new UserDAO(), new ChatDAO(), new EventDAO());
-        EventController.getInstance(new UserDAO(), new EventDAO());
+
 
 
        if(currentUser == null){

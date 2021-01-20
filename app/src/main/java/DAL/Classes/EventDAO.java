@@ -266,6 +266,8 @@ public class EventDAO implements IEventDAO {
 
     @Override
     public void updateEvent(EventDTO event) {
+        mStorageRef  = FirebaseStorage.getInstance().getReference();
+
         Map<String, Object> eventObject = new HashMap<>();
         eventObject.put("ownerId", event.getOwnerId());
         eventObject.put("ownerPic", event.getOwnerPic());
