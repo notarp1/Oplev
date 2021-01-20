@@ -74,6 +74,7 @@ public class createEvent2_frag extends Fragment implements View.OnClickListener 
         });
 
         if(((Activity_Create_Event) getActivity()).getEdit()){
+            //if edit event flow then setup
             EventDTO event = ((Activity_Create_Event) getActivity()).getRepostEvent();
             age_bar.getThumb(0).setValue(event.getMinAge());
             currMinAge = event.getMinAge();
@@ -96,6 +97,7 @@ public class createEvent2_frag extends Fragment implements View.OnClickListener 
                  * get values from last frag using getArg as below:
                  */
                 if (((Activity_Create_Event) getActivity()).getEdit()) {
+                    // if this is edit event flow
                    EventDTO event = ((Activity_Create_Event) getActivity()).getRepostEvent();
 
                    String[] dateS =  getArguments().getString("date_in").split("/");
@@ -103,8 +105,8 @@ public class createEvent2_frag extends Fragment implements View.OnClickListener 
 
                     Date newDate = new Date();
                     newDate.setDate(Integer.parseInt(dateS[0]));
-                    newDate.setMonth(Integer.parseInt(dateS[1]));
-                    newDate.setYear(Integer.parseInt(dateS[2]));
+                    newDate.setMonth(Integer.parseInt(dateS[1])-1);
+                    newDate.setYear(Integer.parseInt(dateS[2])-1900);
                     newDate.setHours(Integer.parseInt(timeS[0]));
                     newDate.setMinutes(Integer.parseInt(timeS[1]));
 
@@ -117,11 +119,12 @@ public class createEvent2_frag extends Fragment implements View.OnClickListener 
                            .setMinAge(currMinAge)
                            .setMaxAge(currMaxAge)
                            .setMaleOn(maleSwitch.isChecked())
-                            .setFemaleOn(femaleSwitch.isChecked())
-                           .setEventPic(((Activity_Create_Event) getActivity()).getPickedImgUri().toString())
+                           .setFemaleOn(femaleSwitch.isChecked())
+                          // .setEventPic(((Activity_Create_Event) getActivity()).getPickedImgUri().toString())
                            .setCoordinates(((Activity_Create_Event) getActivity()).getCoordinates());
-                   EventDAO dao = new EventDAO();
-                   dao.updateEvent(event);
+                   //EventDAO dao = new EventDAO();
+                   //dao.updateEvent(event);
+                    EventController.getInstance().editEvent(event,((Activity_Create_Event) getActivity()).getPickedImgUri());
                     Intent i = new Intent(getContext(), Activity_Likeside.class);
                     startActivity(i);
                     getActivity().finish();

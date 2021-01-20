@@ -134,7 +134,10 @@ public class EventDAO implements IEventDAO {
                     //setup age filter values
                     int filterMinAge = prefs.getInt("minAge", 18);
                     int filterMaxAge = prefs.getInt("maxAge", 99);
-                    for (QueryDocumentSnapshot document : task.getResult()) {
+                    ArrayList<String> otherList = new ArrayList<>();
+                    //for (QueryDocumentSnapshot document : task.getResult()) {
+                    for(int i = 0; i < task.getResult().getDocuments().size(); i++){
+                        DocumentSnapshot document = task.getResult().getDocuments().get(i);
                         //for each event
                         EventDTO dto = document.toObject(EventDTO.class);
                         if (UserController.getInstance().getCurrUser() != null) {
@@ -163,21 +166,46 @@ public class EventDAO implements IEventDAO {
                                             }
                                             else{
                                                 Log.d(TAG, "onCallback: (jbe) event filter: user age not good");
+                                                otherList.add(document.getId());
+                                            }
+                                            Log.d(TAG, "onCallback:  (jbe) OLsize: " + otherList.size() +"cSize: " + completeList.size() + "taskSize " + task.getResult().getDocuments().size());
+                                            if((otherList.size() + completeList.size()) == task.getResult().getDocuments().size()){
+                                                Log.d(TAG, "onComplete: (jbe) eventlist complete");
+                                                Collections.shuffle(completeList);
+                                                callBackList.onCallback(completeList);
                                             }
                                         }
                                     }, dto.getOwnerId());
                                 }
+                                else{
+                                    otherList.add(document.getId());
+                                }
                             }
-                        } else {
+                            else{
+                                otherList.add(document.getId());
+                            }
+                        }
+                        else {
                             if (dto.getParticipant().equals("")) {
                                 // not logged in
                                 completeList.add(document.getId());
                             }
+                            else{
+                                otherList.add(document.getId());
+                            }
                         }
+
                     }
-                    Collections.shuffle(completeList);
-                    callBackList.onCallback(completeList);
-                } else {
+                    if((otherList.size() + completeList.size()) == task.getResult().getDocuments().size()){
+                        Log.d(TAG, "onComplete: (jbe) eventlist complete");
+                        Collections.shuffle(completeList);
+                        callBackList.onCallback(completeList);
+                    }
+                    else{
+                        Log.d(TAG, "onComplete: (jbe) the count is off or waiting for callback");
+                    }
+                }
+                else {
                     Log.d("switchFail", "Error getting motionswitch: ", task.getException());
                 }
 
@@ -331,8 +359,7 @@ public class EventDAO implements IEventDAO {
         eventObject.put("coordinates", event.getCoordinates());
         eventObject.put("chatId", event.getChatId());
 
-
-        /*db.collection("events").document(event.getEventId())
+        db.collection("events").document(event.getEventId())
                 .set(eventObject)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
@@ -349,13 +376,36 @@ public class EventDAO implements IEventDAO {
                         userController.setSafe(true);
                         Log.w(TAG, "Error writing document", e);
                     }
-                });*/
+                });
+    }
 
-        if(event.getEventPic() !=null) {
+    public void editEvent(EventDTO event, Uri newImageUri) {
+        Map<String, Object> eventObject = new HashMap<>();
+        eventObject.put("ownerId", event.getOwnerId());
+        eventObject.put("ownerPic", event.getOwnerPic());
+        eventObject.put("eventId", event.getEventId());
+        eventObject.put("title", event.getTitle());
+        eventObject.put("description", event.getDescription());
+        eventObject.put("price", event.getPrice());
+        eventObject.put("date", event.getDate());
+        eventObject.put("city", event.getCity());
+        eventObject.put("minAge", event.getMinAge());
+        eventObject.put("maxAge", event.getMaxAge());
+        eventObject.put("maleOn", event.isMaleOn());
+        eventObject.put("femaleOn", event.isFemaleOn());
+        eventObject.put("participant", event.getParticipant());
+        eventObject.put("eventPic", event.getEventPic());
+        eventObject.put("applicants", event.getApplicants());
+        eventObject.put("type", event.getType());
+        eventObject.put("coordinates", event.getCoordinates());
+
+        if (newImageUri != null) {
+            //if a new picture was chosen upon edit
             //set picture reference (path where pic will be saved in db
-            mStorageRef  = FirebaseStorage.getInstance().getReference();
+            mStorageRef = FirebaseStorage.getInstance().getReference();
             picRef = mStorageRef.child("events/" + event.getEventId() + "/1");
-            picRef.putFile(Uri.parse(event.getEventPic()))
+            //upload pic
+            picRef.putFile(newImageUri)
                     .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                         @Override
                         public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
@@ -365,7 +415,7 @@ public class EventDAO implements IEventDAO {
                                 public void onSuccess(Uri uri) {
                                     //set URL of eventpic in eventObject map
                                     eventObject.put("eventPic", String.valueOf(uri));
-                                    Log.d(TAG, "onSuccess: event url " );
+                                    Log.d(TAG, "onSuccess: event url ");
                                     //eventObject is now updated with eventId and eventPic URL
                                     //update the event in db
                                     //overwrite database document with new eventId and link to pic
@@ -395,12 +445,24 @@ public class EventDAO implements IEventDAO {
                         }
                     });
         }
-
-
-
-
+        else {
+            //no new picture chosen
+            db.collection("events").document(event.getEventId())
+                    .set(eventObject)
+                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+                            Log.d(TAG, "DocumentSnapshot successfully written!");
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Log.w(TAG, "Error writing document", e);
+                        }
+                    });
+        }
     }
-
     @Override
     public void deleteEvent(String eventId) {
         db.collection("events").document(eventId)

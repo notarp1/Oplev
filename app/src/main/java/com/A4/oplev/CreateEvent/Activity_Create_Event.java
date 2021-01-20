@@ -102,7 +102,7 @@ public class Activity_Create_Event extends AppCompatActivity implements View.OnC
         // ***
         //if coming from repost save the event object here to access it from fragment
         if(((EventDTO) getIntent().getSerializableExtra("event")) != null){
-            Log.d(TAG, "onCreate: (jbe) inside if-repost");
+            Log.d(TAG, "onCreate: (jbe) inside if-repost or editevent");
             repostEvent = (EventDTO) getIntent().getSerializableExtra("event");
         }
 
