@@ -111,6 +111,7 @@ public class UserDAO implements IUserDAO, CallbackUser, CallbackUserDelete {
                     @Override
                     public void onSuccess(Void aVoid) {
                         UserController userController = UserController.getInstance();
+                        userController.setCurrUser(user);
                         userController.setSafe(true);
                         Log.d(TAG, "DocumentSnapshot successfully written!");
                     }

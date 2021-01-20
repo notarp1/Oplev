@@ -39,6 +39,19 @@
                     app:layout_constraintTop_toTopOf="parent"
                     app:srcCompat="@drawable/question" />
 
+                <ImageView
+                    android:id="@+id/btn_like"
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginRight="16dp"
+                    android:layout_weight="0.5"
+                    android:src="@drawable/heart"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:srcCompat="@drawable/heart" />
+
                 <View
                     android:id="@+id/view_e"
                     android:layout_width="match_parent"
@@ -304,6 +317,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
                 android:layout_marginLeft="10dp"
+                android:layout_marginBottom="10dp"
+                android:layout_marginRight="10dp"
                 android:text="Typen der altid løber efter bussen, og altid ender med at komme i alt for god tid"
                 android:textColor="#B5DEF6"
                 android:textSize="16sp" />
@@ -336,28 +351,6 @@
                         android:layout_height="wrap_content"
                         android:text="Repost"
                         android:textColor="#59C3FF" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:orientation="vertical"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="center">
-
-                    <ImageView
-                        android:id="@+id/btn_like"
-                        android:src="@drawable/heart"
-                        android:layout_width="45dp"
-                        android:layout_height="45dp"
-                        android:layout_weight="0.5" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Like opslag"
-                        android:textColor="#59C3FF"/>
-
                 </LinearLayout>
 
 

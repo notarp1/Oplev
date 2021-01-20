@@ -3,6 +3,7 @@ package com.A4.oplev;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.DisplayMetrics;
@@ -86,6 +87,7 @@ public class Activity_Event extends AppCompatActivity implements View.OnClickLis
 
 
 
+
         DisplayMetrics displayMetrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
         height = displayMetrics.heightPixels;
@@ -115,6 +117,20 @@ public class Activity_Event extends AppCompatActivity implements View.OnClickLis
         } else   box.setVisibility(View.VISIBLE);
         eventController.iniEvents(this, event, user, j);
 
+        if (UserController.getInstance().getCurrUser() != null) {
+            UserDTO user = UserController.getInstance().getCurrUser();
+            ArrayList<String> likedeEvents;
+            if (user.getLikedeEvents() == null) {
+                likedeEvents = new ArrayList<>();
+            } else likedeEvents = user.getLikedeEvents();
+            if (!likedeEvents.contains(event.getEventId())) {
+                like.setImageResource(R.drawable.heart);
+
+            } else {
+                like.setImageResource(R.drawable.hearthfill);
+
+            }
+        }
     }
 
 
@@ -191,12 +207,16 @@ public class Activity_Event extends AppCompatActivity implements View.OnClickLis
                     likedeEvents = new ArrayList<>();
                 } else likedeEvents = user.getLikedeEvents();
                 if (!likedeEvents.contains(event.getEventId())) {
+                    like.setImageResource(R.drawable.hearthfill);
                     likedeEvents.add(event.getEventId());
+                    user.setLikedeEvents(likedeEvents);
                     UserDAO dao = new UserDAO();
                     dao.updateUser(user);
                     Toast.makeText(this,"Event liket",Toast.LENGTH_SHORT).show();
                 } else {
+                    like.setImageResource(R.drawable.heart);
                     likedeEvents.remove(event.getEventId());
+                    user.setLikedeEvents(likedeEvents);
                     UserDAO dao = new UserDAO();
                     dao.updateUser(user);
                     Toast.makeText(this,"Event fjernet fra likes",Toast.LENGTH_SHORT).show();

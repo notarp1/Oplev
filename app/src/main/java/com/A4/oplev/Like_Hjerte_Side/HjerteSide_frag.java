@@ -62,34 +62,37 @@ public class HjerteSide_frag extends Fragment{
         nomessages = root.findViewById(R.id.nomessages_hjerte);
         currentUser = UserController.getInstance().getCurrUser();
 
-        if (currentUser.getLikedeEvents().size() == 0){
-            nomessages.setVisibility(View.VISIBLE);
-        } else nomessages.setVisibility(View.GONE);
+        if(currentUser.getLikedeEvents() != null) {
+            if (currentUser.getLikedeEvents().size() == 0) {
+                nomessages.setVisibility(View.VISIBLE);
+            } else nomessages.setVisibility(View.GONE);
 
-        // find alle likede events
-        for (int j = 0; j < currentUser.getLikedeEvents().size(); j++) {
-            // hent eventet
-            eventDAO.getEvent(event ->
-                    // hent ejerens bruger
-                    dao.getUser(user ->
-                    {
-                        // tilføj nødvendige informationer som skal bruges i adapteren
-                        headerList.add(event.getTitle());
-                        names.add(user.getfName());
-                        profilePictures.add(user.getUserPicture());
-                        placementList.add(event.getCity());
-                        eventPictureList.add(event.getEventPic());
-                        timeList.add(event.getDate());
-                        priceList.add(event.getPrice());
-                        eventIDList.add(event.getEventId());
-                        ageList.add(user.getAge() + "");
-                        // hvis det er den sidste tilføjede event så opsæt views og sæt change listener på brugeren
-                        if (headerList.size() == currentUser.getLikedeEvents().size()) {
-                            Hjerteside_Adapter adapter = new Hjerteside_Adapter(mContext, headerList, names, profilePictures, placementList, timeList, priceList, eventPictureList, ageList, eventIDList);
-                            listView.setAdapter(adapter);
-                            setUserChangeListener();
-                        }
-                    }, event.getOwnerId()), currentUser.getLikedeEvents().get(j));
+
+            // find alle likede events
+            for (int j = 0; j < currentUser.getLikedeEvents().size(); j++) {
+                // hent eventet
+                eventDAO.getEvent(event ->
+                        // hent ejerens bruger
+                        dao.getUser(user ->
+                        {
+                            // tilføj nødvendige informationer som skal bruges i adapteren
+                            headerList.add(event.getTitle());
+                            names.add(user.getfName());
+                            profilePictures.add(user.getUserPicture());
+                            placementList.add(event.getCity());
+                            eventPictureList.add(event.getEventPic());
+                            timeList.add(event.getDate());
+                            priceList.add(event.getPrice());
+                            eventIDList.add(event.getEventId());
+                            ageList.add(user.getAge() + "");
+                            // hvis det er den sidste tilføjede event så opsæt views og sæt change listener på brugeren
+                            if (headerList.size() == currentUser.getLikedeEvents().size()) {
+                                Hjerteside_Adapter adapter = new Hjerteside_Adapter(mContext, headerList, names, profilePictures, placementList, timeList, priceList, eventPictureList, ageList, eventIDList);
+                                listView.setAdapter(adapter);
+                                setUserChangeListener();
+                            }
+                        }, event.getOwnerId()), currentUser.getLikedeEvents().get(j));
+            }
         }
 
 
