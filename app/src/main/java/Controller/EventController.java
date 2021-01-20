@@ -31,12 +31,15 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.TimeZone;
 
+import DAL.Classes.ChatDAO;
 import DAL.Classes.EventDAO;
 import DAL.Classes.UserDAO;
 import DAL.Interfaces.CallbackEvent;
 import DAL.Interfaces.CallbackUser;
+import DAL.Interfaces.IChatDAO;
 import DAL.Interfaces.IEventDAO;
 import DAL.Interfaces.IUserDAO;
+import DTO.ChatDTO;
 import DTO.EventDTO;
 import DTO.UserDTO;
 
@@ -48,8 +51,9 @@ public class EventController {
     private static final String TAG = "EventController";
     private static EventController instance = null;
     private ArrayList<String> uPictures, ePictures;
-    static IUserDAO userDAO;
-    static IEventDAO eventDAO;
+    IUserDAO userDAO;
+    IEventDAO eventDAO;
+    IChatDAO chatDAO;
     private EventDTO eventDTO;
     private UserController userController;
 
@@ -57,6 +61,7 @@ public class EventController {
     private EventController(IUserDAO userDAO, IEventDAO eventDAO){
         this.userDAO = userDAO;
         this.eventDAO = eventDAO;
+        this.chatDAO = new ChatDAO();
         userController = userController.getInstance();
         this.instance = this;
     }
@@ -173,24 +178,33 @@ public class EventController {
         return distanceRounded;
     }
 
-    public void deleteEvent(String eventId){
-        eventDAO.getEvent(new CallbackEvent(){
-            @Override
-            public void onCallback(EventDTO event) {
-                for(String userID : event.getApplicants()){
-                    userDAO.getUser(new CallbackUser() {
-                        @Override
-                        public void onCallback(UserDTO user) {
-                            user.getRequestedEvents().remove(eventId);
-                            userDAO.updateUser(user);
-                        }
-                    }, userID);
-                }
+    public void deleteEvent(String eventId, int bool){
 
-            }
-        }, eventId);
 
         eventDAO.deleteEvent(eventId);
+        UserDTO userDTO = userController.getCurrUser();
+        ArrayList<String> events = userDTO.getEvents();
+
+        for(int i = 0; i<events.size(); i++){
+            if(events.get(i).equals(eventId)){
+                events.remove(i);
+            }
+        }
+        userController.getCurrUser().setEvents(events);
+
+        userDAO.updateUser(userController.getCurrUser());
+
+       /* if(bool  == 1){
+            chatDAO.deleteChat(new ChatDAO.FirestoreCallback() {
+                @Override
+                public void onCallback(ChatDTO dto) {
+
+                }
+            }, chatId);
+
+        } */
+
+
     }
     public void iniRepost(createEvent1_frag ctx){
         Log.d(TAG, "onCreateView: (jbe) repost spottet!");

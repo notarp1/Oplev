@@ -1,6 +1,8 @@
 package com.A4.oplev._Adapters;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
@@ -46,13 +48,13 @@ public class OwnEvents_Adapter2 extends RecyclerView.Adapter<OwnEvents_Adapter2.
     private IEventDAO eventDAO = new EventDAO();
     private IUserDAO userDAO = new UserDAO();
     private UserController userController = UserController.getInstance();
-    private Context mContext;
+    private Context mContext, ctx;
     private ArrayList<Date> eventDate;
     private ArrayList<Integer> eventApplicantsSize;
     private ArrayList<String> eventHeaders, eventEventPic, eventApplicantPic, eventOwnerPic, eventFirstApplicants,eventID, eventParticipant, eventParticipantName;
 
 
-    public OwnEvents_Adapter2(@NonNull Context context, @NonNull ArrayList<String> eventEventPic, @NonNull ArrayList<String> eventHeaders, @NonNull ArrayList<String> eventOwnerPic, @NonNull ArrayList<String> eventFirstApplicants, @NonNull ArrayList<String> eventApplicantPic, @NonNull ArrayList<Integer> eventApplicantsSize, ArrayList<String> eventID, ArrayList<Date> eventDate, ArrayList<String> eventParticipant, ArrayList<String> eventParticipantName ) {
+    public OwnEvents_Adapter2(Context ctx, @NonNull Context context, @NonNull ArrayList<String> eventEventPic, @NonNull ArrayList<String> eventHeaders, @NonNull ArrayList<String> eventOwnerPic, @NonNull ArrayList<String> eventFirstApplicants, @NonNull ArrayList<String> eventApplicantPic, @NonNull ArrayList<Integer> eventApplicantsSize, ArrayList<String> eventID, ArrayList<Date> eventDate, ArrayList<String> eventParticipant, ArrayList<String> eventParticipantName ) {
         this.mContext = context;
         this.eventHeaders = eventHeaders;
         this.eventApplicantsSize = eventApplicantsSize;
@@ -61,6 +63,7 @@ public class OwnEvents_Adapter2 extends RecyclerView.Adapter<OwnEvents_Adapter2.
         this.eventOwnerPic = eventOwnerPic;
         this.eventFirstApplicants = eventFirstApplicants;
         this.eventID = eventID;
+        this.ctx = ctx;
         this.eventDate = eventDate;
         this.eventParticipant = eventParticipant;
         this.eventParticipantName = eventParticipantName;
@@ -238,13 +241,40 @@ public class OwnEvents_Adapter2 extends RecyclerView.Adapter<OwnEvents_Adapter2.
             }else if(v == delete){
                 //Delete
 
-                eventDAO.getEvent(new CallbackEvent() {
-                    @Override
-                    public void onCallback(EventDTO event) {
-                        EventController eventController = EventController.getInstance();
-                        eventController.deleteEvent(event.getEventId());
+                AlertDialog.Builder builder = new AlertDialog.Builder(ctx);
+
+                builder.setTitle("Slet Event");
+                builder.setMessage("Er du sikker på du vil slette dit event? ");
+
+                builder.setPositiveButton("JA, SLET EVENT.", new DialogInterface.OnClickListener() {
+
+                    public void onClick(DialogInterface dialog, int which) {
+                        // Do nothing but close the dialog
+                        eventDAO.getEvent(new CallbackEvent() {
+                            @Override
+                            public void onCallback(EventDTO event) {
+                                EventController eventController = EventController.getInstance();
+
+                                if(event.getParticipant().equals(""))eventController.deleteEvent(event.getEventId(), 0);
+                                else eventController.deleteEvent(event.getEventId(), 1);
+
+
+                            }
+                        }, eventID.get(getPosition()));
+
+                        dialog.dismiss();
                     }
-                }, eventID.get(getPosition()));
+                });
+
+                builder.setNegativeButton("NEJ, BEHOLD EVENT.", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+
+                AlertDialog alert = builder.create();
+                alert.show();
 
             }
         }

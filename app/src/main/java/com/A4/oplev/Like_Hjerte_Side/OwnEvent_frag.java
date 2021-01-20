@@ -332,7 +332,7 @@ public class OwnEvent_frag extends Fragment {
                 this.eventParticipantNames = tempEventParticipantName;
 
                 LinearLayoutManager layoutManager = new LinearLayoutManager(root2.getContext(), LinearLayoutManager.VERTICAL, false);
-                OwnEvents_Adapter2 eventAdapter = new OwnEvents_Adapter2(root2.getContext(), tempEventPic, tempEventHeaders, tempEventOwnerPic, tempEventFirstApplicants, tempEventApplicantPic, tempEventApplicantsSize, tempEventID, tempDate, tempEventParticipant, tempEventParticipantName);
+                OwnEvents_Adapter2 eventAdapter = new OwnEvents_Adapter2(getActivity(), root2.getContext(), tempEventPic, tempEventHeaders, tempEventOwnerPic, tempEventFirstApplicants, tempEventApplicantPic, tempEventApplicantsSize, tempEventID, tempDate, tempEventParticipant, tempEventParticipantName);
                 recyclerView.setLayoutManager(layoutManager);
                 recyclerView.setAdapter(eventAdapter);
                 if (recyclerView.getAdapter().getItemCount() == 0){
