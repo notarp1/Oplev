@@ -1,6 +1,7 @@
 package com.A4.oplev;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
@@ -44,6 +45,7 @@ public class Activity_Event extends AppCompatActivity implements View.OnClickLis
     String eventId;
     int height, width, currentPic, maxPic, minPic, maxPicPrint;
     public SharedPreferences prefs;
+    private Context context;
 
 
     @SuppressLint("ClickableViewAccessibility")
@@ -71,6 +73,7 @@ public class Activity_Event extends AppCompatActivity implements View.OnClickLis
         eventPname = findViewById(R.id.event_person_name);
         box = findViewById(R.id.buttons_on_event);
         like = findViewById(R.id.btn_like);
+        context = this;
 
 
         //Knapper til billeder, repost og join
@@ -187,10 +190,9 @@ public class Activity_Event extends AppCompatActivity implements View.OnClickLis
                             userController.getCurrUser().setRequestedEvents(requested);
                             userController.getCurrUser().setChatId(user.getChatId());
                             userController.updateUserSimple(userController.getCurrUser());
+                            Toast.makeText(context,"Du har ansøgt om at joine!",Toast.LENGTH_SHORT).show();
                         }
                     }, userController.getCurrUser().getUserId());
-
-                    finish();
                 } else {
                     Toast.makeText(this, "Du har allerede ansøgt om at deltage", Toast.LENGTH_SHORT).show();
                 }
