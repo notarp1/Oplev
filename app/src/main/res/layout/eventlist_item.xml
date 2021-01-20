@@ -111,7 +111,7 @@
         android:autoSizeMaxTextSize="100sp"
         android:autoSizeMinTextSize="12sp"
         android:autoSizeTextType="uniform"
-        android:inputType="textMultiLine"
+        android:inputType="textNoSuggestions"
         android:maxLines="1"
         android:minLines="1"
         android:text="Leverposteg med mig"
