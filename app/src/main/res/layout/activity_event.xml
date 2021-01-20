@@ -304,6 +304,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
                 android:layout_marginLeft="10dp"
+                android:layout_marginBottom="10dp"
+                android:layout_marginRight="10dp"
                 android:text="Typen der altid løber efter bussen, og altid ender med at komme i alt for god tid"
                 android:textColor="#B5DEF6"
                 android:textSize="16sp" />
