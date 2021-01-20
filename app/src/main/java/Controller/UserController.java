@@ -57,11 +57,11 @@ public class UserController {
     private ArrayList<String> pictures;
 
 
-    private UserController(){
+    private UserController(IUserDAO userDAO, IChatDAO chatDAO, IEventDAO eventDAO){
 
-        this.chatDAO = new ChatDAO();
-        this.userDAO = new UserDAO();
-        this.eventDAO = new EventDAO();
+        this.chatDAO = chatDAO;
+        this.userDAO = userDAO;
+        this.eventDAO = eventDAO;
         indexNumbers = 0;
         pictureCount = 0;
         setSafe(true);
@@ -73,8 +73,13 @@ public class UserController {
 
     }
 
+    public static UserController getInstance(UserDAO userDAO, IChatDAO chatDAO, IEventDAO eventDAO){
+        if (instance == null) {
+            instance = new UserController(userDAO, chatDAO, eventDAO);
+        }
+        return instance;
+    }
     public static UserController getInstance(){
-        if (instance == null) instance = new UserController();
         return instance;
     }
 
