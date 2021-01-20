@@ -104,10 +104,11 @@ public class Activity_Profile extends AppCompatActivity implements View.OnClickL
 
 
         System.out.println(j);
-
+        settingBtn.setVisibility(View.VISIBLE);
         currentSelection = selection1;
         if(j == 1 || j == 2){
             edit.setVisibility(View.INVISIBLE);
+            settingBtn.setVisibility(View.INVISIBLE);
             if(j==2) {
                 confirmationBox.setVisibility(View.VISIBLE);
                 int numbers = myIntent.getIntExtra("numberOfApplicants",0);
