@@ -218,7 +218,7 @@ public class Search_filter_frag extends Fragment{
 
     public void updateSwitches(){
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        motionSwitch.setChecked(prefs.getBoolean("motionswitch",true));
+        motionSwitch.setChecked(prefs.getBoolean("motionSwitch",true));
         underholdningSwitch.setChecked(prefs.getBoolean("underholdningSwitch",true));
         madDrikkeSwitch.setChecked(prefs.getBoolean("madDrikkeSwitch",true));
         kulturSwitch.setChecked(prefs.getBoolean("kulturSwitch",true));
