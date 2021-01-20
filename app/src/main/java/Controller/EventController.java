@@ -340,6 +340,6 @@ public class EventController {
         return target;
     }
     public void editEvent(EventDTO event, Uri newImageUri){
-        ((EventDAO)eventDAO).editEvent(event, newImageUri);
+        eventDAO.editEvent(event, newImageUri);
     }
 }

@@ -358,6 +358,7 @@ public class EventDAO implements IEventDAO {
         eventObject.put("type", event.getType());
         eventObject.put("coordinates", event.getCoordinates());
         eventObject.put("chatId", event.getChatId());
+        Log.d(TAG, "updateEvent: (jbe) participant: " + event.getParticipant());
 
         db.collection("events").document(event.getEventId())
                 .set(eventObject)
@@ -379,6 +380,7 @@ public class EventDAO implements IEventDAO {
                 });
     }
 
+    @Override
     public void editEvent(EventDTO event, Uri newImageUri) {
         Map<String, Object> eventObject = new HashMap<>();
         eventObject.put("ownerId", event.getOwnerId());
