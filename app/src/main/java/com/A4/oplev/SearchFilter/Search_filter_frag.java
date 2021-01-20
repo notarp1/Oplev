@@ -112,7 +112,26 @@ public class Search_filter_frag extends Fragment{
                     blivKlogereSwitch.setChecked(true);
                     gratisSwitch.setChecked(true);
 
-                    prefs.edit().putBoolean("Motionswitch", motionSwitch.isChecked()).apply();
+                    prefs.edit().putBoolean("motionSwitch", motionSwitch.isChecked()).apply();
+                    prefs.edit().putBoolean("underholdningSwitch", underholdningSwitch.isChecked()).apply();
+                    prefs.edit().putBoolean("madDrikkeSwitch", madDrikkeSwitch.isChecked()).apply();
+                    prefs.edit().putBoolean("kulturSwitch", kulturSwitch.isChecked()).apply();
+                    prefs.edit().putBoolean("musikNattelivSwitch", musikNattelivSwitch.isChecked()).apply();
+                    prefs.edit().putBoolean("blivKlogereSwitch", blivKlogereSwitch.isChecked()).apply();
+                    prefs.edit().putBoolean("gratisSwitch", gratisSwitch.isChecked()).apply();
+                    onUpdate(prefs);
+                }
+
+                else {
+                    motionSwitch.setChecked(false);
+                    underholdningSwitch.setChecked(false);
+                    madDrikkeSwitch.setChecked(false);
+                    kulturSwitch.setChecked(false);
+                    musikNattelivSwitch.setChecked(false);
+                    blivKlogereSwitch.setChecked(false);
+                    gratisSwitch.setChecked(false);
+
+                    prefs.edit().putBoolean("motionSwitch", motionSwitch.isChecked()).apply();
                     prefs.edit().putBoolean("underholdningSwitch", underholdningSwitch.isChecked()).apply();
                     prefs.edit().putBoolean("madDrikkeSwitch", madDrikkeSwitch.isChecked()).apply();
                     prefs.edit().putBoolean("kulturSwitch", kulturSwitch.isChecked()).apply();
@@ -126,7 +145,7 @@ public class Search_filter_frag extends Fragment{
 
         motionSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked){
-                prefs.edit().putBoolean("motionswitch", motionSwitch.isChecked()).apply();
+                prefs.edit().putBoolean("motionSwitch", motionSwitch.isChecked()).apply();
                 onUpdate(prefs);
             }
         });

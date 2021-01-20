@@ -131,7 +131,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="25sp"
                     android:layout_marginRight="25sp"
-                    android:checked="false"
+                    android:checked="true"
                     app:layout_constraintBottom_toBottomOf="@+id/sf_textViewAllEventTypes"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="@+id/sf_textViewAllEventTypes" />
