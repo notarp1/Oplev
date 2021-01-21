@@ -53,6 +53,7 @@ public class OwnEvents_Adapter2 extends RecyclerView.Adapter<OwnEvents_Adapter2.
     private ArrayList<Integer> eventApplicantsSize;
     private ArrayList<String> eventHeaders, eventEventPic, eventApplicantPic, eventOwnerPic, eventFirstApplicants,eventID, eventParticipant, eventParticipantName;
 
+    // Adapter for loading own events into list.
 
     public OwnEvents_Adapter2(Context ctx, @NonNull Context context, @NonNull ArrayList<String> eventEventPic, @NonNull ArrayList<String> eventHeaders, @NonNull ArrayList<String> eventOwnerPic, @NonNull ArrayList<String> eventFirstApplicants, @NonNull ArrayList<String> eventApplicantPic, @NonNull ArrayList<Integer> eventApplicantsSize, ArrayList<String> eventID, ArrayList<Date> eventDate, ArrayList<String> eventParticipant, ArrayList<String> eventParticipantName ) {
         this.mContext = context;

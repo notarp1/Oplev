@@ -106,7 +106,6 @@ public class OwnEvent_frag extends Fragment {
                                 eventEventPic.add(event.getEventPic());
                                 eventParticipantNames.add("");
                                 eventFirstApplicants.add(firstApplicant);
-                                Log.d("eventSize test1",  eventApplicantsSize.toString());
                                 eventEventID.add(event.getEventId());
                                 eventParticipant.add(event.getParticipant());
                                 // hvis det er den sidste event OG vi ikke henter noget fra databasen så kan vi køre den her kode
@@ -124,9 +123,7 @@ public class OwnEvent_frag extends Fragment {
                                 userController.getUser(user -> {
                                     eventApplicantPic.add(user.getUserPicture());
                                     eventApplicantsSize.add(event.getApplicants().size());
-                                    Log.d("eventSize test2",  eventApplicantsSize.toString());
                                     eventParticipantNames.add(user.getfName());
-                                    Log.d("name", "eventParticipantNames: ");
 
                                     eventHeaders.add(event.getTitle());
                                     eventOwnerPic.add(event.getOwnerPic());
@@ -172,7 +169,6 @@ public class OwnEvent_frag extends Fragment {
 
      public void setListView_events(@NonNull ArrayList<String> eventEventPic, @NonNull ArrayList<String> eventHeaders, @NonNull ArrayList<String> eventOwnerPic, @NonNull ArrayList<String> eventFirstApplicants, @NonNull ArrayList<String> eventApplicantPic, @NonNull ArrayList<Integer> eventApplicantsSize, @NonNull ArrayList<String> eventEventID, @NonNull ArrayList<Date> dates, @NonNull ArrayList<String> eventParticipant,@NonNull ArrayList<String> eventParticipantNames)
         {
-            Log.d("name2", eventParticipantNames.toString());
             if (mContext != null) {
                 ArrayList<String> tempEventPic = new ArrayList<>(), tempEventHeaders = new ArrayList<>(), tempEventOwnerPic = new ArrayList<>(), tempEventFirstApplicants = new ArrayList<>(), tempEventApplicantPic = new ArrayList<>(), tempEventID = new ArrayList<>(), tempEventParticipant = new ArrayList<>(), tempEventParticipantName= new ArrayList<>();
                 ArrayList<Integer> tempEventApplicantsSize = new ArrayList<>();
@@ -191,7 +187,6 @@ public class OwnEvent_frag extends Fragment {
                         tempDate.add(dates.get(i));
                         tempEventParticipant.add(eventParticipant.get(i));
                         tempEventParticipantName.add(eventParticipantNames.get(i));
-                        Log.d("list1", String.valueOf(eventApplicantsSize.size()));
                     }
                     // hvis der findes en participant
                     else if (!eventParticipant.get(i).equals("")) {
