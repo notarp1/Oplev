@@ -153,7 +153,6 @@ public class OwnEvent_frag extends Fragment {
         };
 
 
-        // Todo Få onSwipe til at virke på recylerView
       recyclerView.setOnTouchListener(new OnSwipeTouchListener(getContext()){
             @Override
             public void onSwipeLeft() {
@@ -171,9 +170,7 @@ public class OwnEvent_frag extends Fragment {
         return root;
     }
 
-
-// Todo - Listing virker ikke efter hensigten endnu.
-        public void setListView_events(@NonNull ArrayList<String> eventEventPic, @NonNull ArrayList<String> eventHeaders, @NonNull ArrayList<String> eventOwnerPic, @NonNull ArrayList<String> eventFirstApplicants, @NonNull ArrayList<String> eventApplicantPic, @NonNull ArrayList<Integer> eventApplicantsSize, @NonNull ArrayList<String> eventEventID, @NonNull ArrayList<Date> dates, @NonNull ArrayList<String> eventParticipant,@NonNull ArrayList<String> eventParticipantNames)
+     public void setListView_events(@NonNull ArrayList<String> eventEventPic, @NonNull ArrayList<String> eventHeaders, @NonNull ArrayList<String> eventOwnerPic, @NonNull ArrayList<String> eventFirstApplicants, @NonNull ArrayList<String> eventApplicantPic, @NonNull ArrayList<Integer> eventApplicantsSize, @NonNull ArrayList<String> eventEventID, @NonNull ArrayList<Date> dates, @NonNull ArrayList<String> eventParticipant,@NonNull ArrayList<String> eventParticipantNames)
         {
             Log.d("name2", eventParticipantNames.toString());
             if (mContext != null) {

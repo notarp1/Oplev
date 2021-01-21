@@ -53,7 +53,6 @@ public class Event_Adapter extends RecyclerView.Adapter<Event_Adapter.ViewHolder
 
     Boolean dataChanged = false;
     Context ctx;
-    // TODO Lav classen om så den kun henter Event en gang, og ikke 2 - 3 gange Alexander skal lave det når der er tid.
     //EventDTO eventDTO;
 
     public static Event_Adapter getInstance( List<String> ids, Context frame, int height, int width) {
