@@ -60,7 +60,7 @@ public class Search_filter_frag extends Fragment{
         distanceText.setText(Integer.toString(currDistance)+ " km");
         distanceBar.setProgress(currDistance);
 
-
+        // Onclick on distancebar
         distanceBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
@@ -80,6 +80,7 @@ public class Search_filter_frag extends Fragment{
         //update ageBar UI thumbs
         ageBar.getThumb(0).setValue(currMinAge);
         ageBar.getThumb(1).setValue(currMaxAge);
+        // Agebar onCHangeListener.
         ageBar.setOnThumbValueChangeListener(new MultiSlider.OnThumbValueChangeListener() {
             @Override
             public void onValueChanged(MultiSlider multiSlider,
@@ -212,6 +213,7 @@ public class Search_filter_frag extends Fragment{
         currMaxAge = prefs.getInt("maxAge", 99);
     }
 
+    // update switches.
     public void updateSwitches(){
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
         motionSwitch.setChecked(prefs.getBoolean("motionSwitch",true));
